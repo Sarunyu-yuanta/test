@@ -1,19 +1,19 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
-import * as Popover from "@radix-ui/react-popover";
 import { Clock, Minus } from "@phosphor-icons/react";
-import { useIsMobile } from "./ui/use-mobile";
+import * as Popover from "@radix-ui/react-popover";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Button } from "./Button";
 import {
   Drawer,
   DrawerContent,
-  DrawerTrigger,
   DrawerTitle,
+  DrawerTrigger,
 } from "./ui/drawer";
-import { Button } from "./Button";
+import { useIsMobile } from "./ui/use-mobile";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export type TimeInputState =
@@ -265,11 +265,10 @@ function RangeSlotPicker({
             <div
               key={idx}
               onClick={() => onSelect(slot)}
-              className={`content-stretch flex h-[25px] items-center justify-center relative rounded-[4px] shrink-0 cursor-pointer select-none transition-colors duration-100 ${
-                isSelected
+              className={`content-stretch flex h-[25px] items-center justify-center relative rounded-[4px] shrink-0 cursor-pointer select-none transition-colors duration-100 ${isSelected
                   ? "bg-[#0a6ee7]"
                   : "hover:bg-[rgba(10,110,231,0.06)]"
-              }`}
+                }`}
               style={{ padding: "2px 8px" }}
             >
               <p

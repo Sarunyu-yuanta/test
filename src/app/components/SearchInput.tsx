@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
 import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { useRef, useState } from "react";
 
 export type SearchInputSize = "lg" | "sm";
 

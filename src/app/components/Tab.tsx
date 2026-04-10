@@ -1,4 +1,3 @@
-import React from "react";
 
 export type TabSize = "lg" | "md" | "sm";
 
@@ -21,8 +20,8 @@ interface TabProps {
 
 const sizeClasses: Record<TabSize, { pad: string; text: string; leading: string; font: string }> = {
   lg: { pad: "px-[12px] py-[10px]", text: "text-[14px]", leading: "leading-[20px]", font: "font-bold" },
-  md: { pad: "px-[10px] py-[8px]",  text: "text-[14px]", leading: "leading-[20px]", font: "font-bold" },
-  sm: { pad: "px-[8px] py-[6px]",   text: "text-[12px]", leading: "leading-[16px]", font: "font-semibold" },
+  md: { pad: "px-[10px] py-[8px]", text: "text-[14px]", leading: "leading-[20px]", font: "font-bold" },
+  sm: { pad: "px-[8px] py-[6px]", text: "text-[12px]", leading: "leading-[16px]", font: "font-semibold" },
 };
 
 export function Tab({ title = "Tab", size = "md", active = false, disabled = false, onClick, className = "" }: TabProps) {
@@ -31,8 +30,8 @@ export function Tab({ title = "Tab", size = "md", active = false, disabled = fal
   const textColor = disabled
     ? "text-[#99a1af]"
     : active
-    ? "text-[#0a6ee7]"
-    : "text-[#6a7282]";
+      ? "text-[#0a6ee7]"
+      : "text-[#6a7282]";
 
   const borderColor = active && !disabled ? "border-[#0a6ee7]" : "border-[rgba(0,0,0,0.1)]";
 

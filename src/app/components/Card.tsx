@@ -1,5 +1,4 @@
-import React from "react";
-import { Lock, CalendarBlank, MapPin, Users } from "@phosphor-icons/react";
+import { CalendarBlank, Lock, MapPin, Users } from "@phosphor-icons/react";
 const imgBanner = "";
 
 export type CardVariant = "desktop" | "tablet" | "mobile";
@@ -50,8 +49,8 @@ function AudienceIcon() {
 
 const tagConfig: Record<CardTagStatus, { bg: string; text: string; label: string }> = {
   "not-registered": { bg: "#f3f4f6", text: "#99a1af", label: "ยังไม่ลงทะเบียน" },
-  "registered":     { bg: "#ecfdf5", text: "#059669", label: "ลงทะเบียนแล้ว"   },
-  "full":           { bg: "#fff1f2", text: "#e7000b", label: "เต็มแล้ว"         },
+  "registered": { bg: "#ecfdf5", text: "#059669", label: "ลงทะเบียนแล้ว" },
+  "full": { bg: "#fff1f2", text: "#e7000b", label: "เต็มแล้ว" },
 };
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
@@ -73,12 +72,12 @@ export function Card({
   const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
   // Variant-specific sizing
-  const widthClass    = variant === "desktop" ? "w-[308px]" : variant === "tablet" ? "w-[224px]" : "w-[163px]";
-  const padding       = variant === "desktop" ? "p-[16px]"  : variant === "tablet" ? "p-[12px]"  : "p-[10px]";
-  const titleGap      = variant === "desktop" ? "gap-[6px]" : "gap-[4px]";
+  const widthClass = variant === "desktop" ? "w-[308px]" : variant === "tablet" ? "w-[224px]" : "w-[163px]";
+  const padding = variant === "desktop" ? "p-[16px]" : variant === "tablet" ? "p-[12px]" : "p-[10px]";
+  const titleGap = variant === "desktop" ? "gap-[6px]" : "gap-[4px]";
 
   // Banner: desktop has a fixed height, tablet/mobile use aspect-video
-  const bannerClass   = variant === "desktop" ? "h-[173px]" : "aspect-video w-full";
+  const bannerClass = variant === "desktop" ? "h-[173px]" : "aspect-video w-full";
 
   const tag = tagConfig[tagStatus];
   const bannerSrc = image ?? imgBanner;
