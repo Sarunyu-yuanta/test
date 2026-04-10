@@ -122,7 +122,7 @@ export function Button({
   onPointerLeave,
   ...props
 }: ButtonProps) {
-  const isDisabled  = variant === "disabled" || disabled;
+  const isDisabled  = variant === "disabled" || !!disabled;
   const isGhost     = variant === "outline-black" || variant === "plain-black";
   const isIconOnly  = size.startsWith("icon-");
 

@@ -1,0 +1,7 @@
+@import '../styles/fonts.css';
+
+@import 'tailwindcss' source(none);
+@source '../app/components/**/*.{tsx,ts}';
+@import 'tw-animate-css';
+
+@import '../styles/theme.css';

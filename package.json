@@ -1,10 +1,32 @@
 {
-  "name": "@figma/my-make-file",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@yuanta/system-one",
+  "version": "0.1.0",
   "type": "module",
+  "description": "Custom design system components",
+  "keywords": [
+    "react",
+    "design-system",
+    "ui",
+    "components"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "vite build",
+    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/lib/styles.css --output dist/style.css --minify",
     "dev": "vite"
   },
   "dependencies": {
@@ -66,22 +88,17 @@
     "vaul": "1.1.2"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
     "@tailwindcss/vite": "4.1.12",
     "@vitejs/plugin-react": "4.7.0",
     "tailwindcss": "4.1.12",
-    "vite": "^6.4.2"
+    "typescript": "^6.0.2",
+    "vite": "^6.4.2",
+    "vite-plugin-dts": "^4.5.4"
   },
   "peerDependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "pnpm": {
     "overrides": {
