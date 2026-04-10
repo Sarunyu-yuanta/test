@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TimeInput, TimeInputState, TimeInputMode, TimeValue } from "./TimeInput";
+import { TimeInput, TimeInputState, TimeInputMode, TimeValue } from "@/components/time-input";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 

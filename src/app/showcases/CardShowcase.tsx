@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardVariant, CardTagStatus } from "./Card";
+import { Card, CardVariant, CardTagStatus } from "@/components/card";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 

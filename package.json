@@ -2,24 +2,29 @@
   "name": "@sarunyu/system-one",
   "version": "1.0.0",
   "type": "module",
-  "description": "Custom design system components",
+  "description": "A flexible React design system built for AI-powered web generation tools (v0, Lovable, Figma Make). Tailwind CSS v4 + CSS variables for full theming support.",
   "keywords": [
     "react",
     "design-system",
     "ui",
-    "components"
+    "components",
+    "tailwindcss",
+    "v0",
+    "lovable",
+    "figma",
+    "ai-friendly"
   ],
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
-  "types": "./dist/src/lib/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/src/lib/index.d.ts",
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./style.css": "./dist/style.css"
+    "./styles.css": "./dist/style.css"
   },
   "sideEffects": [
     "*.css"
@@ -28,9 +33,9 @@
     "dist"
   ],
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
-    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/lib/styles.css --output dist/style.css --minify && rm -rf dist/src",
-    "dev": "vite"
+    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/styles/globals.css --output dist/style.css --minify"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -104,6 +109,12 @@
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "tailwindcss": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
   }
 }

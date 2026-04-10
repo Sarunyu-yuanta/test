@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, forwardRef } from "react";
+import { cn } from "../lib/utils";
 
 export type ButtonLabelSize = "xs" | "sm" | "md" | "lg" | "xl";
 export type ButtonIconSize  = "icon-xs" | "icon-sm" | "icon-md" | "icon-lg" | "icon-xl";
@@ -6,7 +9,7 @@ export type ButtonSize      = ButtonLabelSize | ButtonIconSize;
 
 export type ButtonVariant = "primary" | "outline" | "plain" | "outline-black" | "plain-black" | "disabled";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?:     ButtonSize;
   variant?:  ButtonVariant;
   children?: React.ReactNode;
@@ -53,7 +56,7 @@ function getPaddingClasses(
   size: ButtonLabelSize,
   hasLeft: boolean,
   hasRight: boolean,
-): string {
+): readonly [string, string, string] {
   const pyMap: Record<ButtonLabelSize, string> = {
     xs: "py-[4px]",
     sm: "py-[4px]",
@@ -75,7 +78,11 @@ function getPaddingClasses(
     lg: { l: "pl-[10px]", r: "pr-[10px]" },
     xl: { l: "pl-[12px]", r: "pr-[12px]" },
   };
-  return `${hasLeft ? reducedMap[size].l : pxMap[size].l} ${hasRight ? reducedMap[size].r : pxMap[size].r} ${pyMap[size]}`;
+  return [
+    hasLeft ? reducedMap[size].l : pxMap[size].l,
+    hasRight ? reducedMap[size].r : pxMap[size].r,
+    pyMap[size],
+  ] as const;
 }
 
 // ─── Icon-size specs (from Figma) ─────────────────────────────────────────────
@@ -91,37 +98,40 @@ const iconSizeSpec: Record<ButtonIconSize, { btn: string; icon: number; rounded:
 function getVariantClasses(variant: ButtonVariant, isDisabled: boolean): string {
   if (isDisabled) {
     if (variant === "outline" || variant === "outline-black")
-      return "bg-[#f3f4f6] text-[#99a1af] border border-[rgba(0,0,0,0.05)] cursor-not-allowed";
-    return "bg-[#f3f4f6] text-[#99a1af] cursor-not-allowed";
+      return "bg-disabled-bg text-disabled border border-border-disabled cursor-not-allowed";
+    return "bg-disabled-bg text-disabled cursor-not-allowed";
   }
   if (variant === "outline")
-    return "bg-white text-[#0a6ee7] border border-[rgba(0,0,0,0.1)] hover:bg-[#f9fafb] active:bg-[#f3f4f6]";
+    return "bg-white text-primary-action border border-border hover:bg-hover-bg active:bg-disabled-bg";
   if (variant === "plain")
-    return "bg-transparent text-[#0a6ee7] hover:bg-[#f9fafb] active:bg-[#f3f4f6]";
+    return "bg-transparent text-primary-action hover:bg-hover-bg active:bg-disabled-bg";
   // Black label variants — hover only, no active state (by design)
   if (variant === "outline-black")
-    return "bg-white text-[#101828] border border-[rgba(0,0,0,0.1)] hover:bg-[#f9fafb]";
+    return "bg-white text-foreground border border-border hover:bg-hover-bg";
   if (variant === "plain-black")
-    return "bg-transparent text-[#101828] hover:bg-[#f9fafb]";
+    return "bg-transparent text-foreground hover:bg-hover-bg";
   // primary
-  return "bg-[#0a6ee7] text-white hover:bg-[#095ec4] active:bg-[#074ea4]";
+  return "bg-primary-action text-white hover:bg-primary-action-hover active:bg-primary-action-active";
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export function Button({
-  size      = "md",
-  variant   = "primary",
-  children,
-  leftIcon,
-  rightIcon,
-  disabled,
-  className = "",
-  // Destructure pointer events so we can merge with ghost-icon active handlers
-  onPointerDown,
-  onPointerUp,
-  onPointerLeave,
-  ...props
-}: ButtonProps) {
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  {
+    size      = "md",
+    variant   = "primary",
+    children,
+    leftIcon,
+    rightIcon,
+    disabled,
+    className = "",
+    // Destructure pointer events so we can merge with ghost-icon active handlers
+    onPointerDown,
+    onPointerUp,
+    onPointerLeave,
+    ...props
+  },
+  ref,
+) {
   const isDisabled  = variant === "disabled" || !!disabled;
   const isGhost     = variant === "outline-black" || variant === "plain-black";
   const isIconOnly  = size.startsWith("icon-");
@@ -135,7 +145,7 @@ export function Button({
   const needsGhostPress = isGhost && isIconOnly && !isDisabled;
 
   const ghostPressStyle: React.CSSProperties | undefined = needsGhostPress && ghostPressed
-    ? { backgroundColor: "#f3f4f6", color: "#99a1af" }
+    ? { backgroundColor: "var(--disabled-bg)", color: "var(--disabled)" }
     : undefined;
 
   // Merged pointer handlers (preserve any consumer-supplied handlers)
@@ -159,7 +169,16 @@ export function Button({
     const spec = iconSizeSpec[size as ButtonIconSize];
     return (
       <button
-        className={`${baseClasses} ${spec.rounded} ${spec.btn} shrink-0 ${variantClasses} ${cursorClass} ${className}`}
+        ref={ref}
+        className={cn(
+          baseClasses,
+          spec.rounded,
+          spec.btn,
+          "shrink-0",
+          variantClasses,
+          cursorClass,
+          className,
+        )}
         style={ghostPressStyle}
         disabled={isDisabled}
         aria-label="icon button"
@@ -169,7 +188,7 @@ export function Button({
         {...props}
       >
         <span
-          className="flex items-center justify-center"
+          className={cn("flex items-center justify-center")}
           aria-hidden="true"
           style={{ width: spec.icon, height: spec.icon }}
         >
@@ -183,13 +202,23 @@ export function Button({
   const labelSize = size as ButtonLabelSize;
   const hasLeft   = Boolean(leftIcon);
   const hasRight  = Boolean(rightIcon);
-  const padding   = getPaddingClasses(labelSize, hasLeft, hasRight);
-  const gap       = hasLeft || hasRight ? gapClass[labelSize] : "";
+  const paddingParts = getPaddingClasses(labelSize, hasLeft, hasRight);
 
   return (
     <button
-      className={`${baseClasses} ${roundedLabelClass[labelSize]} ${padding} ${gap} ${variantClasses} ${cursorClass} ${textSizeClass[labelSize]} ${className}`}
-      style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}
+      ref={ref}
+      className={cn(
+        baseClasses,
+        roundedLabelClass[labelSize],
+        paddingParts[0],
+        paddingParts[1],
+        paddingParts[2],
+        hasLeft || hasRight ? gapClass[labelSize] : undefined,
+        variantClasses,
+        cursorClass,
+        textSizeClass[labelSize],
+        className,
+      )}
       disabled={isDisabled}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
@@ -198,7 +227,10 @@ export function Button({
     >
       {hasLeft && (
         <span
-          className={`flex items-center justify-center shrink-0 overflow-hidden ${labelIconSizeClass[labelSize]}`}
+          className={cn(
+            "flex items-center justify-center shrink-0 overflow-hidden",
+            labelIconSizeClass[labelSize],
+          )}
           aria-hidden="true"
         >
           {leftIcon}
@@ -209,7 +241,10 @@ export function Button({
 
       {hasRight && (
         <span
-          className={`flex items-center justify-center shrink-0 overflow-hidden ${labelIconSizeClass[labelSize]}`}
+          className={cn(
+            "flex items-center justify-center shrink-0 overflow-hidden",
+            labelIconSizeClass[labelSize],
+          )}
           aria-hidden="true"
         >
           {rightIcon}
@@ -217,4 +252,6 @@ export function Button({
       )}
     </button>
   );
-}
+});
+
+Button.displayName = "Button";

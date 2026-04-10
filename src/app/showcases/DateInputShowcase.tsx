@@ -5,7 +5,7 @@ import {
   DateInputMode,
   DatePickerVariant,
   DateRange,
-} from "./DateInput";
+} from "@/components/date-input";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 

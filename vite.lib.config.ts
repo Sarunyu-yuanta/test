@@ -20,15 +20,13 @@ export default defineConfig({
     tailwindcss(),
     dts({
       include: [
+        "src/index.ts",
         "src/lib",
-        "src/app/components/*.tsx",
-        "src/app/components/ui/drawer.tsx",
-        "src/app/components/ui/use-mobile.ts",
-        "src/app/components/ui/utils.ts",
+        "src/components/*.tsx",
+        "src/components/ui/drawer.tsx",
+        "src/components/ui/use-mobile.ts",
       ],
-      exclude: ["src/app/components/**/*Showcase*"],
       insertTypesEntry: true,
-      rollupTypes: true,
     }),
   ],
   resolve: {
@@ -38,8 +36,8 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/lib/index.ts"),
-      name: "DesignSystem",
+      entry: path.resolve(__dirname, "src/index.ts"),
+      name: "SystemOne",
       formats: ["es", "cjs"],
       fileName: (format) => (format === "es" ? "index.js" : "index.cjs"),
     },

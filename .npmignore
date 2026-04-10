@@ -8,3 +8,7 @@ src/
 index.html
 guidelines/
 tsconfig.json
+tsconfig.lib.json
+
+# Demo app
+demo/

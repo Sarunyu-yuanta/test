@@ -1,4 +1,4 @@
-import { TabShowcase } from "../components/TabShowcase";
+import { TabShowcase } from "../showcases/TabShowcase";
 
 export function TabPage() {
   return <TabShowcase />;
