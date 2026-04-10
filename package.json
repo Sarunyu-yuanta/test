@@ -35,7 +35,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/styles/globals.css --output dist/style.css --minify"
+    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/styles/globals.css --output dist/style.css --minify && node scripts/strip-layers.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
