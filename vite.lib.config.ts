@@ -27,6 +27,8 @@ export default defineConfig({
         "src/app/components/ui/utils.ts",
       ],
       exclude: ["src/app/components/**/*Showcase*"],
+      insertTypesEntry: true,
+      rollupTypes: true,
     }),
   ],
   resolve: {

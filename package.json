@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/lib/styles.css --output dist/style.css --minify",
+    "build:lib": "vite build --config vite.lib.config.ts && tailwindcss --input src/lib/styles.css --output dist/style.css --minify && rm -rf dist/src",
     "dev": "vite"
   },
   "dependencies": {
