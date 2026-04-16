@@ -86,7 +86,7 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
   },
   ref
 ) {
-  const s = sizeClasses[size];
+  const s = sizeClasses[size] ?? sizeClasses.md;
   const hasIcon = Boolean(icon);
   const hasNotification = notification !== undefined && notification !== null;
   const renderedIcon = icon === true ? <DefaultTabIcon className={s.iconSize} /> : icon;
@@ -164,7 +164,8 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
 Tab.displayName = "Tab";
 
 export interface TabGroupProps {
-  items: TabItem[];
+  /** Tab definitions. Defaults to `[]` if omitted (invalid usage at runtime). */
+  items?: TabItem[];
   activeId?: string;
   size?: TabSize;
   onChange?: (id: string) => void;
@@ -173,7 +174,7 @@ export interface TabGroupProps {
 
 export const TabGroup = forwardRef<HTMLDivElement, TabGroupProps>(
   function TabGroup(
-    { items, activeId, size = "md", onChange, className },
+    { items = [], activeId, size = "md", onChange, className },
     ref
   ) {
     return (
