@@ -1,4 +1,4 @@
-import { DropdownMultipleShowcase } from "../components/DropdownMultipleShowcase";
+import { DropdownMultipleShowcase } from "../showcases/DropdownMultipleShowcase";
 
 export function DropdownMultiplePage() {
   return <DropdownMultipleShowcase />;

@@ -1,0 +1,14 @@
+# Source files (not needed in published package)
+src/
+*.config.ts
+*.config.mjs
+index.html
+guidelines/
+tsconfig.json
+tsconfig.lib.json
+
+# Build scripts
+scripts/
+
+# Demo app
+demo/
