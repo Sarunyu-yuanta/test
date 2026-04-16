@@ -1,6 +1,6 @@
 {
   "name": "@sarunyu/system-one",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "description": "A flexible React design system built for AI-powered web generation tools (v0, Lovable, Figma Make). Tailwind CSS v4 + CSS variables for full theming support.",
   "keywords": [
