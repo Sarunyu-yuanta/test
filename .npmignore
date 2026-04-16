@@ -1,6 +1,3 @@
-# Exclude leftover intermediate type declaration folders
-dist/src/
-
 # Source files (not needed in published package)
 src/
 *.config.ts
@@ -8,3 +5,10 @@ src/
 index.html
 guidelines/
 tsconfig.json
+tsconfig.lib.json
+
+# Build scripts
+scripts/
+
+# Demo app
+demo/

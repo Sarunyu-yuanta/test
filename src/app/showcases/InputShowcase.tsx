@@ -1,29 +1,35 @@
 import React, { useState } from "react";
-import {
-  DropdownMultiple,
-  DropdownMultipleState,
-  DropdownMultipleOption,
-} from "./DropdownMultiple";
+import { Circle } from "@phosphor-icons/react";
+import { Input, InputState } from "@/components/input";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
 // ─── State columns ────────────────────────────────────────────────────────────
-const STATES: {
-  label: string;
-  state: DropdownMultipleState;
-}[] = [
+const STATES: { label: string; state: InputState }[] = [
   { label: "Default", state: "default" },
   { label: "Focus", state: "focus" },
   { label: "Error", state: "error" },
   { label: "Disabled", state: "disabled" },
 ];
 
-// ─── Row definitions ──────────────────────────────────────────────────────────
+// ─── Icon — colour changes for disabled ───────────────────────────────────────
+function CircleIcon({ state }: { state: InputState }) {
+  return (
+    <Circle
+      size={24}
+      weight="regular"
+      color={state === "disabled" ? "#99A1AF" : "#6A7282"}
+    />
+  );
+}
+
+// ─── Row / Group definitions ──────────────────────────────────────────────────
 interface RowDef {
   label: string;
-  required?: boolean;
+  useIcon?: boolean;
+  unit?: string;
   helperText?: string;
-  externalLabel?: boolean;
+  showCount?: boolean;
 }
 interface GroupDef {
   title: string;
@@ -35,47 +41,57 @@ const GROUPS: GroupDef[] = [
     title: "1. Default",
     rows: [
       { label: "Default" },
-      { label: "Default (Require)", required: true },
+      { label: "Icon", useIcon: true },
+      { label: "Unit", unit: "Unit" },
     ],
   },
   {
     title: "2. Helper",
     rows: [
-      { label: "Helper", helperText: "Helper text" },
+      { label: "Default", helperText: "Helper text" },
       {
-        label: "Helper (Require)",
-        required: true,
+        label: "Icon",
         helperText: "Helper text",
+        useIcon: true,
+      },
+      {
+        label: "Unit",
+        helperText: "Helper text",
+        unit: "Unit",
       },
     ],
   },
   {
-    title: "3. Label",
+    title: "3. Count",
     rows: [
-      { label: "Label", externalLabel: true },
-      { label: "Label (Require)", required: true, externalLabel: true },
+      { label: "Default", showCount: true },
+      { label: "Icon", showCount: true, useIcon: true },
+      { label: "Unit", showCount: true, unit: "Unit" },
+    ],
+  },
+  {
+    title: "4. Helper + Count",
+    rows: [
+      {
+        label: "Default",
+        helperText: "Helper text",
+        showCount: true,
+      },
+      {
+        label: "Icon",
+        helperText: "Helper text",
+        showCount: true,
+        useIcon: true,
+      },
+      {
+        label: "Unit",
+        helperText: "Helper text",
+        showCount: true,
+        unit: "Unit",
+      },
     ],
   },
 ];
-
-// ─── Showcase filled values ───────────────────────────────────────────────────
-const FILLED_VALUES = [
-  "tag1",
-  "tag2",
-  "tag3",
-  "tag4",
-  "tag5",
-  "tag6",
-  "tag7",
-  "tag8",
-  "tag9",
-  "tag10",
-];
-const FILLED_OPTIONS: DropdownMultipleOption[] =
-  FILLED_VALUES.map((v, i) => ({
-    label: `Tag ${i + 1}`,
-    value: v,
-  }));
 
 // ─── Column headers ───────────────────────────────────────────────────────────
 function ColHeaders() {
@@ -97,30 +113,37 @@ function ColHeaders() {
 // ─── Single row ───────────────────────────────────────────────────────────────
 function ShowcaseRow({
   row,
-  filledValues,
+  filledValue,
 }: {
   row: RowDef;
-  filledValues?: string[];
+  filledValue?: string;
 }) {
   return (
     <div className="flex items-start gap-6 mb-7">
+      {/* Row label */}
       <div
         className="w-[108px] shrink-0 text-[13px] text-[#6b7280] pt-[14px]"
         style={FONT}
       >
         {row.label}
       </div>
+
+      {/* 4 state cells */}
       {STATES.map(({ state }) => (
-        <div key={state} className="w-full max-w-[343px]">
-          <DropdownMultiple
+        <div key={state} className="w-[280px] shrink-0">
+          <Input
             forceState={state}
-            placeholder="Placeholder"
-            required={row.required}
+            placeholder="Text label"
+            value={filledValue}
+            rightIcon={
+              row.useIcon ? (
+                <CircleIcon state={state} />
+              ) : undefined
+            }
+            unit={row.unit}
             helperText={row.helperText}
+            showCount={row.showCount}
             errorMessage="Error message"
-            value={filledValues}
-            options={filledValues ? FILLED_OPTIONS : []}
-            label={row.externalLabel ? "Text label" : undefined}
           />
         </div>
       ))}
@@ -128,14 +151,14 @@ function ShowcaseRow({
   );
 }
 
-// ─── Group block ──────────────────────────────────────────────────────────────
+// ─── Reusable group block ─────────────────────────────────────────────────────
 function GroupBlock({
   group,
-  filledValues,
+  filledValue,
   isLast,
 }: {
   group: GroupDef;
-  filledValues?: string[];
+  filledValue?: string;
   isLast: boolean;
 }) {
   return (
@@ -151,7 +174,7 @@ function GroupBlock({
           <ShowcaseRow
             key={`${group.title}-${row.label}`}
             row={row}
-            filledValues={filledValues}
+            filledValue={filledValue}
           />
         ))}
       </div>
@@ -162,30 +185,16 @@ function GroupBlock({
   );
 }
 
-// ─── Sample options for interactive section ───────────────────────────────────
-const SAMPLE_OPTIONS: DropdownMultipleOption[] = [
-  { label: "tag 1", value: "a" },
-  { label: "tag 2", value: "b" },
-  { label: "tag 3", value: "c" },
-  { label: "tag 4", value: "d" },
-  { label: "tag 5", value: "e" },
-  { label: "tag 6", value: "f" },
-  { label: "tag 7", value: "g" },
-  { label: "tag 8", value: "h" },
-  { label: "tag 9", value: "i" },
-  { label: "tag 10", value: "j" },
-  { label: "tag 11", value: "k" },
-  { label: "tag 12", value: "l" },
-];
-
 // ─── Showcase ─────────────────────────────────────────────────────────────────
-export function DropdownMultipleShowcase() {
-  const [interVal, setInterVal] = useState<string[]>([]);
-  const [required, setRequired] = useState(false);
+export function InputShowcase() {
+  const [interVal, setInterVal] = useState("");
+  const [showIcon, setShowIcon] = useState(false);
+  const [showUnit, setShowUnit] = useState(false);
   const [helper, setHelper] = useState(false);
+  const [count, setCount] = useState(false);
+  const [required, setRequired] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [showLabel, setShowLabel] = useState(false);
 
   const forceState = isDisabled
     ? ("disabled" as const)
@@ -196,7 +205,7 @@ export function DropdownMultipleShowcase() {
   return (
     <div className="bg-white min-h-full">
       <h1 className="mb-1" style={FONT}>
-        Dropdown Multiple Component
+        Input Component
       </h1>
       <p
         className="text-[#6b7280] mb-12 text-[14px]"
@@ -206,7 +215,7 @@ export function DropdownMultipleShowcase() {
       </p>
 
       <div className="overflow-x-auto">
-        <div className="">
+        <div className="min-w-max">
           {/* ── Empty ── */}
           <div
             className="mb-3 text-[11px] text-[#9ca3af] uppercase tracking-wider"
@@ -238,7 +247,7 @@ export function DropdownMultipleShowcase() {
             <GroupBlock
               key={`filled-${group.title}`}
               group={group}
-              filledValues={FILLED_VALUES}
+              filledValue="Filled message"
               isLast={gi === GROUPS.length - 1}
             />
           ))}
@@ -254,23 +263,35 @@ export function DropdownMultipleShowcase() {
             className="text-[#6b7280] mb-8 text-[13px]"
             style={FONT}
           >
-            Click the dropdown, type to filter, select multiple
-            options. Click × on tags to remove.
+            Type into the input and toggle options to see live
+            behaviour
           </p>
 
           <div className="flex gap-10 items-start pl-2 pb-2">
-            {/* Live dropdown */}
-            <div className="w-[343px] shrink-0">
-              <DropdownMultiple
-                placeholder="Placeholder"
+            {/* Live input */}
+            <div className="w-[320px] shrink-0">
+              <Input
+                placeholder="Text label"
                 value={interVal}
                 onChange={setInterVal}
                 required={required}
                 forceState={forceState}
+                rightIcon={
+                  showIcon ? (
+                    <Circle
+                      size={24}
+                      weight="regular"
+                      color={isDisabled ? "#99A1AF" : "#6A7282"}
+                    />
+                  ) : undefined
+                }
+                unit={
+                  showUnit && !showIcon ? "Unit" : undefined
+                }
                 helperText={helper ? "Helper text" : undefined}
+                showCount={count}
+                maxCount={50}
                 errorMessage="Error message"
-                options={SAMPLE_OPTIONS}
-                label={showLabel ? "Text label" : undefined}
               />
             </div>
 
@@ -281,9 +302,11 @@ export function DropdownMultipleShowcase() {
             >
               {(
                 [
-                  ["Required", required, setRequired],
+                  ["Icon", showIcon, setShowIcon],
+                  ["Unit", showUnit, setShowUnit],
                   ["Helper", helper, setHelper],
-                  ["Label", showLabel, setShowLabel],
+                  ["Count", count, setCount],
+                  ["Required", required, setRequired],
                   ["Error", isError, setIsError],
                   ["Disabled", isDisabled, setIsDisabled],
                 ] as [
@@ -307,16 +330,6 @@ export function DropdownMultipleShowcase() {
               ))}
             </div>
           </div>
-
-          {/* Selected display */}
-          {interVal.length > 0 && (
-            <div
-              className="mt-4 pl-2 text-[13px] text-[#6b7280]"
-              style={FONT}
-            >
-              Selected: {interVal.join(", ")}
-            </div>
-          )}
         </div>
       </div>
     </div>

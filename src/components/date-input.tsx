@@ -1,8 +1,11 @@
+"use client";
+
 import React, {
   useState,
   useRef,
   useEffect,
   useCallback,
+  forwardRef,
 } from "react";
 import type { DateRange, CaptionProps } from "react-day-picker";
 import { DayPicker, useNavigation } from "react-day-picker";
@@ -13,9 +16,10 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
-import svgPaths from "../../imports/svg-loajaibmku";
+import { CalendarBlank, Minus } from "@phosphor-icons/react";
+import { cn } from "../lib/utils";
 import { useIsMobile } from "./ui/use-mobile";
-import { Button } from "./Button";
+import { Button } from "./button";
 import {
   Drawer,
   DrawerContent,
@@ -59,7 +63,6 @@ export interface DateInputProps {
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const FONT = "'Noto Sans Thai', sans-serif";
 
 const THAI_MONTHS_SHORT = [
   "ม.ค.",
@@ -95,75 +98,6 @@ function formatThaiDate(date: Date): string {
   return `${date.getDate()} ${THAI_MONTHS_SHORT[date.getMonth()]} ${date.getFullYear() + 543}`;
 }
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
-function CalendarIconLarge({
-  color = "#6A7282",
-}: {
-  color?: string;
-}) {
-  return (
-    <div className="overflow-clip relative shrink-0 size-[24px]">
-      <div
-        className="absolute"
-        style={{ inset: "6.25% 12.5% 12.5% 12.5%" }}
-      >
-        <svg
-          className="absolute block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 18 19.5"
-        >
-          <path d={svgPaths.p36b70e00} fill={color} />
-        </svg>
-      </div>
-    </div>
-  );
-}
-
-function CalendarIconSmall({
-  color = "#6A7282",
-}: {
-  color?: string;
-}) {
-  return (
-    <div className="overflow-clip relative shrink-0 size-[22px]">
-      <div
-        className="absolute"
-        style={{ inset: "6.25% 12.5% 12.5% 12.5%" }}
-      >
-        <svg
-          className="absolute block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 16.5 17.875"
-        >
-          <path d={svgPaths.p3d3fa800} fill={color} />
-        </svg>
-      </div>
-    </div>
-  );
-}
-
-function MinusIcon({ color = "#101828" }: { color?: string }) {
-  return (
-    <div className="overflow-clip relative shrink-0 size-[20px]">
-      <div
-        className="absolute"
-        style={{ inset: "46.88% 12.5%" }}
-      >
-        <svg
-          className="absolute block size-full"
-          fill="none"
-          preserveAspectRatio="none"
-          viewBox="0 0 15 1.25"
-        >
-          <path d={svgPaths.p1bc5b600} fill={color} />
-        </svg>
-      </div>
-    </div>
-  );
-}
-
 // ─── Context: tells Caption it's inside a Drawer range picker ────────────────
 const DrawerRangeCtx = React.createContext(false);
 
@@ -174,12 +108,12 @@ interface DisabledDatesCtxValue {
 const DisabledDatesCtx = React.createContext<DisabledDatesCtxValue>({});
 
 // ─── Custom Caption with << < label > >> ─────────────────────────────────────
-const NAV_BTN_CLASS = [
+const NAV_BTN_CLASS = cn(
   "h-[28px] w-[28px] inline-flex items-center justify-center",
-  "rounded-[6px] bg-transparent border border-[rgba(0,0,0,0.1)] cursor-pointer",
-  "text-[#6a7282] hover:bg-[#f3f4f6] transition-colors duration-100",
+  "rounded-[6px] bg-transparent border border-border cursor-pointer",
+  "text-muted-foreground hover:bg-disabled-bg transition-colors duration-100",
   "p-0 outline-none",
-].join(" ");
+);
 
 type CaptionView = "days" | "months" | "years";
 
@@ -220,14 +154,10 @@ function CustomCaption({
   // ── Drawer range: non-first months show only centered label ──
   if (isDrawerRange && !isFirst) {
     return (
-      <div
-        className="flex items-center justify-center pt-3 mb-2"
-        style={{ fontFamily: FONT }}
-      >
+      <div className="flex items-center justify-center pt-3 mb-2">
         <button
           type="button"
-          className="text-[14px] leading-[20px] text-[#101828] font-medium hover:text-[#0A6EE7] cursor-pointer bg-transparent border-0 outline-none transition-colors"
-          style={{ fontFamily: FONT }}
+          className="text-[14px] leading-[20px] text-foreground font-medium hover:text-primary-action cursor-pointer bg-transparent border-0 outline-none transition-colors"
           onClick={() => {
             setPickerYear(displayMonth.getFullYear());
             setView("months");
@@ -272,7 +202,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setYearRangeStart((s) => s - 12)}
       >
-        <ChevronLeft size={16} className="text-[#0A6EE7]" />
+        <ChevronLeft size={16} className="text-primary-action" />
       </button>
     );
     rightNav = (
@@ -281,7 +211,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setYearRangeStart((s) => s + 12)}
       >
-        <ChevronRight size={16} className="text-[#0A6EE7]" />
+        <ChevronRight size={16} className="text-primary-action" />
       </button>
     );
   } else if (view === "months") {
@@ -291,7 +221,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setPickerYear((y) => y - 1)}
       >
-        <ChevronLeft size={16} className="text-[#0A6EE7]" />
+        <ChevronLeft size={16} className="text-primary-action" />
       </button>
     );
     rightNav = (
@@ -300,7 +230,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setPickerYear((y) => y + 1)}
       >
-        <ChevronRight size={16} className="text-[#0A6EE7]" />
+        <ChevronRight size={16} className="text-primary-action" />
       </button>
     );
   } else if (isDrawerRange) {
@@ -311,7 +241,7 @@ function CustomCaption({
           className={NAV_BTN_CLASS}
           onClick={handlePrevYear}
         >
-          <ChevronsLeft size={16} className="text-[#0A6EE7]" />
+          <ChevronsLeft size={16} className="text-primary-action" />
         </button>
         <button
           type="button"
@@ -320,7 +250,7 @@ function CustomCaption({
             previousMonth && goToMonth(previousMonth)
           }
         >
-          <ChevronLeft size={16} className="text-[#0A6EE7]" />
+          <ChevronLeft size={16} className="text-primary-action" />
         </button>
       </>
     );
@@ -331,14 +261,14 @@ function CustomCaption({
           className={NAV_BTN_CLASS}
           onClick={() => nextMonth && goToMonth(nextMonth)}
         >
-          <ChevronRight size={16} className="text-[#0A6EE7]" />
+          <ChevronRight size={16} className="text-primary-action" />
         </button>
         <button
           type="button"
           className={NAV_BTN_CLASS}
           onClick={handleNextYear}
         >
-          <ChevronsRight size={16} className="text-[#0A6EE7]" />
+          <ChevronsRight size={16} className="text-primary-action" />
         </button>
       </>
     );
@@ -353,7 +283,7 @@ function CustomCaption({
           >
             <ChevronsLeft
               size={16}
-              className="text-[#0A6EE7]"
+              className="text-primary-action"
             />
           </button>
           <button
@@ -363,7 +293,7 @@ function CustomCaption({
               previousMonth && goToMonth(previousMonth)
             }
           >
-            <ChevronLeft size={16} className="text-[#0A6EE7]" />
+            <ChevronLeft size={16} className="text-primary-action" />
           </button>
         </>
       );
@@ -378,7 +308,7 @@ function CustomCaption({
           >
             <ChevronRight
               size={16}
-              className="text-[#0A6EE7]"
+              className="text-primary-action"
             />
           </button>
           <button
@@ -388,7 +318,7 @@ function CustomCaption({
           >
             <ChevronsRight
               size={16}
-              className="text-[#0A6EE7]"
+              className="text-primary-action"
             />
           </button>
         </>
@@ -403,27 +333,24 @@ function CustomCaption({
     isToday: boolean,
     isItemDisabled = false,
   ) =>
-    `py-[10px] text-[13px] rounded-[6px] border-0 outline-none transition-colors ${
+    cn(
+      "py-[10px] text-[13px] rounded-[6px] border-0 outline-none transition-colors",
       isItemDisabled
-        ? "bg-[#F3F4F6] text-[#99a1af] cursor-not-allowed"
+        ? "bg-disabled-bg text-disabled cursor-not-allowed"
         : active
-          ? "bg-[#0A6EE7] text-white cursor-pointer"
+          ? "bg-primary-action text-white cursor-pointer"
           : isToday
-            ? "bg-[rgba(10,110,231,0.1)] text-[#0A6EE7] cursor-pointer"
-            : "bg-transparent text-[#101828] hover:bg-[#f3f4f6] cursor-pointer"
-    }`;
+            ? "bg-primary-action-muted text-primary-action cursor-pointer"
+            : "bg-transparent text-foreground hover:bg-disabled-bg cursor-pointer",
+    );
 
   return (
     <>
-      <div
-        className="flex items-center justify-between pt-1 mb-2"
-        style={{ fontFamily: FONT }}
-      >
+      <div className="flex items-center justify-between pt-1 mb-2">
         <div className="flex gap-1">{leftNav}</div>
         <button
           type="button"
-          className="text-[14px] leading-[20px] text-[#101828] font-medium hover:text-[#0A6EE7] cursor-pointer bg-transparent border-0 outline-none transition-colors"
-          style={{ fontFamily: FONT }}
+          className="text-[14px] leading-[20px] text-foreground font-medium hover:text-primary-action cursor-pointer bg-transparent border-0 outline-none transition-colors"
           onClick={onHeaderClick}
         >
           {headerText}
@@ -434,7 +361,7 @@ function CustomCaption({
       {view === "months" && (
         <div
           className="absolute left-0 right-0 z-10 bg-white grid grid-cols-3 gap-1 p-2 content-center"
-          style={{ top: "42px", bottom: "0", fontFamily: FONT }}
+          style={{ top: "42px", bottom: "0" }}
         >
           {THAI_MONTHS_SHORT.map((name, i) => {
             const isCurrent =
@@ -452,7 +379,6 @@ function CustomCaption({
                   setView("days");
                 }}
                 className={gridBtnClass(isCurrent, isToday)}
-                style={{ fontFamily: FONT }}
               >
                 {name}
               </button>
@@ -464,7 +390,7 @@ function CustomCaption({
       {view === "years" && (
         <div
           className="absolute left-0 right-0 z-10 bg-white grid grid-cols-3 gap-1 p-2 content-center"
-          style={{ top: "42px", bottom: "0", fontFamily: FONT }}
+          style={{ top: "42px", bottom: "0" }}
         >
           {Array.from({ length: 12 }, (_, i) => {
             const year = yearRangeStart + i;
@@ -483,7 +409,6 @@ function CustomCaption({
                   setView("months");
                 }}
                 className={gridBtnClass(isCurrent, isToday, isYearDisabled)}
-                style={{ fontFamily: FONT }}
               >
                 {year + 543}
               </button>
@@ -501,26 +426,26 @@ const DAY_PICKER_CLASSES = {
   month: "space-y-2 relative",
   caption:
     "flex justify-center pt-1 relative items-center mb-2",
-  caption_label: "text-[14px] leading-[20px] text-[#101828]",
+  caption_label: "text-[14px] leading-[20px] text-foreground",
   nav: "hidden",
-  nav_button: [
+  nav_button: cn(
     "h-[28px] w-[28px] inline-flex items-center justify-center",
-    "rounded-[6px] bg-transparent border border-[rgba(0,0,0,0.1)] cursor-pointer",
-    "text-[#6a7282] hover:bg-[#f3f4f6] transition-colors duration-100",
+    "rounded-[6px] bg-transparent border border-border cursor-pointer",
+    "text-muted-foreground hover:bg-disabled-bg transition-colors duration-100",
     "p-0 outline-none",
-  ].join(" "),
+  ),
   nav_button_previous: "absolute left-1",
   nav_button_next: "absolute right-1",
   table: "w-full border-collapse",
   head_row: "flex",
   head_cell:
-    "w-[36px] h-[32px] inline-flex items-center justify-center text-[12px] text-[#99a1af] font-normal",
+    "w-[36px] h-[32px] inline-flex items-center justify-center text-[12px] text-disabled font-normal",
   row: "flex w-full mt-1",
-  cell: [
+  cell: cn(
     "h-[36px] w-[36px] text-center p-0 relative overflow-hidden",
-    "[&:has(.day-range-middle)]:bg-[#DAE9FB]",
-    "[&:has(.day-range-start)]:bg-[#DAE9FB]",
-    "[&:has(.day-range-end)]:bg-[#DAE9FB]",
+    "[&:has(.day-range-middle)]:bg-range-bg",
+    "[&:has(.day-range-start)]:bg-range-bg",
+    "[&:has(.day-range-end)]:bg-range-bg",
     "[&:has(.day-range-start)]:rounded-l-[6px]",
     "[&:has(.day-range-end)]:rounded-r-[6px]",
     "[&:first-child:has(.day-range-middle)]:rounded-l-[6px]",
@@ -528,27 +453,27 @@ const DAY_PICKER_CLASSES = {
     "[&:first-child:has(.day-range-end)]:rounded-l-[6px]",
     "[&:last-child:has(.day-range-start)]:rounded-r-[6px]",
     "focus-within:relative focus-within:z-20",
-  ].join(" "),
-  day: [
+  ),
+  day: cn(
     "h-[36px] w-[36px] inline-flex items-center justify-center",
-    "text-[14px] text-[#101828] rounded-[6px]",
+    "text-[14px] text-foreground rounded-[6px]",
     "border-0 bg-transparent cursor-pointer",
-    "hover:bg-[#f3f4f6] transition-colors duration-100",
+    "hover:bg-disabled-bg transition-colors duration-100",
     "outline-none aria-selected:opacity-100 p-0",
-  ].join(" "),
+  ),
   day_range_start:
-    "day-range-start !bg-[#0A6EE7] !text-white !rounded-l-[6px] !rounded-r-none",
+    "day-range-start !bg-primary-action !text-white !rounded-l-[6px] !rounded-r-none",
   day_range_end:
-    "day-range-end !bg-[#0A6EE7] !text-white !rounded-r-[6px] !rounded-l-none",
+    "day-range-end !bg-primary-action !text-white !rounded-r-[6px] !rounded-l-none",
   day_selected:
-    "!bg-[#0A6EE7] text-[#FFFFFF] hover:!bg-[#0A6EE7] focus:!bg-[#0A6EE7] rounded-[6px]",
+    "!bg-primary-action text-white hover:!bg-primary-action focus:!bg-primary-action rounded-[6px]",
   day_today:
-    "[&:not([aria-selected=true])]:!bg-[#0A6EE7]/5 [&:not([aria-selected=true])]:text-[#101828] rounded-[6px]",
+    "[&:not([aria-selected=true])]:!bg-primary-action-light [&:not([aria-selected=true])]:text-foreground rounded-[6px]",
   day_outside:
-    "day-outside text-[#99a1af] opacity-50 aria-selected:bg-transparent aria-selected:opacity-30",
-  day_disabled: "text-[#99a1af] opacity-50 cursor-not-allowed",
+    "day-outside text-disabled opacity-50 aria-selected:bg-transparent aria-selected:opacity-30",
+  day_disabled: "text-disabled opacity-50 cursor-not-allowed",
   day_range_middle:
-    "day-range-middle !bg-[#DAE9FB] !text-[#00A2D9] !rounded-none",
+    "day-range-middle !bg-range-bg !text-range-text !rounded-none",
   day_hidden: "invisible",
 };
 
@@ -559,13 +484,13 @@ const DRAWER_DAY_PICKER_CLASSES: typeof DAY_PICKER_CLASSES = {
   table: "w-full border-collapse table-fixed",
   head_row: "flex w-full",
   head_cell:
-    "flex-1 h-[40px] inline-flex items-center justify-center text-[13px] text-[#99a1af] font-normal",
+    "flex-1 h-[40px] inline-flex items-center justify-center text-[13px] text-disabled font-normal",
   row: "flex w-full mt-1",
-  cell: [
+  cell: cn(
     "h-[44px] flex-1 text-center p-0 relative overflow-hidden",
-    "[&:has(.day-range-middle)]:bg-[#DAE9FB]",
-    "[&:has(.day-range-start)]:bg-[#DAE9FB]",
-    "[&:has(.day-range-end)]:bg-[#DAE9FB]",
+    "[&:has(.day-range-middle)]:bg-range-bg",
+    "[&:has(.day-range-start)]:bg-range-bg",
+    "[&:has(.day-range-end)]:bg-range-bg",
     "[&:has(.day-range-start)]:rounded-l-[8px]",
     "[&:has(.day-range-end)]:rounded-r-[8px]",
     "[&:first-child:has(.day-range-middle)]:rounded-l-[8px]",
@@ -573,14 +498,14 @@ const DRAWER_DAY_PICKER_CLASSES: typeof DAY_PICKER_CLASSES = {
     "[&:first-child:has(.day-range-end)]:rounded-l-[8px]",
     "[&:last-child:has(.day-range-start)]:rounded-r-[8px]",
     "focus-within:relative focus-within:z-20",
-  ].join(" "),
-  day: [
+  ),
+  day: cn(
     "h-[44px] w-full inline-flex items-center justify-center",
-    "text-[16px] text-[#101828] rounded-[8px]",
+    "text-[16px] text-foreground rounded-[8px]",
     "border-0 bg-transparent cursor-pointer",
-    "hover:bg-[#f3f4f6] transition-colors duration-100",
+    "hover:bg-disabled-bg transition-colors duration-100",
     "outline-none aria-selected:opacity-100 p-0",
-  ].join(" "),
+  ),
 };
 
 // ─── Scroll Date Picker ────────────────────────────────────────────────────────
@@ -731,10 +656,9 @@ function DateScrollColumn({
           >
             <span
               style={{
-                fontFamily: FONT,
                 fontSize: isSel ? 32 : 14,
                 lineHeight: 1,
-                color: isSel ? "#101828" : "#99a1af",
+                color: isSel ? "var(--foreground)" : "var(--disabled)",
                 transition: "font-size 0.1s, color 0.1s",
                 whiteSpace: "nowrap",
               }}
@@ -798,10 +722,10 @@ function ScrollDatePickerContent({
   );
 
   return (
-    <div className="relative w-full" style={{ fontFamily: FONT }}>
+    <div className="relative w-full">
       {/* Highlight band – centred over the selected row */}
       <div
-        className="absolute left-0 right-0 rounded-[4px] bg-[#f3f8fe] pointer-events-none"
+        className="absolute left-0 right-0 rounded-[4px] bg-selected-light-bg pointer-events-none"
         style={{
           top: "50%",
           transform: "translateY(-50%)",
@@ -837,415 +761,420 @@ function ScrollDatePickerContent({
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
-export function DateInput({
-  mode = "single",
-  placeholder = "Text label",
-  required = false,
-  forceState,
-  errorMessage = "Error message",
-  helperText,
-  pickerVariant = "calendar",
-  value,
-  onChange,
-  dateRange,
-  onRangeChange,
-  disabledYears,
-  className = "",
-}: DateInputProps) {
-  const [open, setOpen] = useState(false);
-  const [internalDate, setInternalDate] = useState<
-    Date | undefined
-  >(undefined);
-  const [internalRange, setInternalRange] = useState<
-    DateRange | undefined
-  >(undefined);
-  const isMobile = useIsMobile();
+export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
+  function DateInput(
+    {
+      mode = "single",
+      placeholder = "Text label",
+      required = false,
+      forceState,
+      errorMessage = "Error message",
+      helperText,
+      pickerVariant = "calendar",
+      value,
+      onChange,
+      dateRange,
+      onRangeChange,
+      disabledYears,
+      className,
+    },
+    ref,
+  ) {
+    const [open, setOpen] = useState(false);
+    const [internalDate, setInternalDate] = useState<
+      Date | undefined
+    >(undefined);
+    const [internalRange, setInternalRange] = useState<
+      DateRange | undefined
+    >(undefined);
+    const isMobile = useIsMobile();
 
-  // Draft values – live-updated while picker is open; committed on ตกลง
-  const [draftDate, setDraftDate] = useState<Date | undefined>(
-    undefined,
-  );
-  const [draftRange, setDraftRange] = useState<
-    DateRange | undefined
-  >(undefined);
-  const [draftScrollValue, setDraftScrollValue] = useState<{
-    year: number;
-    month: number;
-    day: number;
-  }>(dateToScrollValue(undefined));
+    // Draft values – live-updated while picker is open; committed on ตกลง
+    const [draftDate, setDraftDate] = useState<Date | undefined>(
+      undefined,
+    );
+    const [draftRange, setDraftRange] = useState<
+      DateRange | undefined
+    >(undefined);
+    const [draftScrollValue, setDraftScrollValue] = useState<{
+      year: number;
+      month: number;
+      day: number;
+    }>(dateToScrollValue(undefined));
 
-  const isStatic = Boolean(forceState);
-  const isDisabled = forceState === "disabled";
+    const isStatic = Boolean(forceState);
+    const isDisabled = forceState === "disabled";
 
-  // Controlled vs uncontrolled
-  const currentDate =
-    value !== undefined ? value : internalDate;
-  const currentRange =
-    dateRange !== undefined ? dateRange : internalRange;
+    // Controlled vs uncontrolled
+    const currentDate =
+      value !== undefined ? value : internalDate;
+    const currentRange =
+      dateRange !== undefined ? dateRange : internalRange;
 
-  const state: DateInputState =
-    forceState ?? (open ? "focus" : "default");
-  const isError = state === "error";
-  const isFocus = state === "focus";
+    const state: DateInputState =
+      forceState ?? (open ? "focus" : "default");
+    const isError = state === "error";
+    const isFocus = state === "focus";
 
-  const isFilled =
-    mode === "single"
-      ? Boolean(currentDate)
-      : Boolean(currentRange?.from);
+    const isFilled =
+      mode === "single"
+        ? Boolean(currentDate)
+        : Boolean(currentRange?.from);
 
-  // ── Colours ─────────────────────────────────────────────────────────────────
-  const bgClass = isDisabled ? "bg-[#f3f4f6]" : "bg-white";
-  const labelColor = isDisabled ? "#99a1af" : "#6a7282";
-  const valueColor = isDisabled ? "#99a1af" : "#101828";
-  const iconColor = isDisabled ? "#99A1AF" : "#6A7282";
-  const minusColor = isDisabled ? "#99A1AF" : "#101828";
-  const asteriskColorEmpty = isDisabled ? "#99a1af" : "#c10007";
-  const asteriskColorFilled = isDisabled
-    ? "#99a1af"
-    : "#c10007";
+    // ── Colours ─────────────────────────────────────────────────────────────────
+    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-white";
+    const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
+    const valueColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const iconColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
+    const minusColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const asteriskColorEmpty = isDisabled ? "var(--disabled)" : "var(--error-dark)";
+    const asteriskColorFilled = isDisabled
+      ? "var(--disabled)"
+      : "var(--error-dark)";
 
-  // ── Border overlay ───────────────────────────────────────────────────────────
-  const borderInset = isFocus || isError ? "-1px" : "0px";
-  const borderRad = isFocus || isError ? "9px" : "8px";
-  const borderColor = isDisabled
-    ? "rgba(0,0,0,0.05)"
-    : isError
-      ? "#e7000b"
-      : isFocus
-        ? "#0a6ee7"
-        : "rgba(0,0,0,0.1)";
+    // ── Border overlay ───────────────────────────────────────────────────────────
+    const borderInset = isFocus || isError ? "-1px" : "0px";
+    const borderRad = isFocus || isError ? "9px" : "8px";
+    const borderColor = isDisabled
+      ? "var(--border-disabled)"
+      : isError
+        ? "var(--destructive)"
+        : isFocus
+          ? "var(--primary-action)"
+          : "var(--border)";
 
-  const showBelow = isError || Boolean(helperText);
-  const leftText = isError ? errorMessage : (helperText ?? "");
-  const leftColor = isError ? "#c10007" : "#6a7282";
+    const showBelow = isError || Boolean(helperText);
+    const leftText = isError ? errorMessage : (helperText ?? "");
+    const leftColor = isError ? "var(--error-dark)" : "var(--muted-foreground)";
 
-  // ── Handlers ─────────────────────────────────────────────────────────────────
-  const handleDateSelect = (date: Date | undefined) => {
-    setDraftDate(date);
-  };
+    // ── Handlers ─────────────────────────────────────────────────────────────────
+    const handleDateSelect = (date: Date | undefined) => {
+      setDraftDate(date);
+    };
 
-  const handleRangeSelect = (range: DateRange | undefined) => {
-    setDraftRange(range);
-  };
+    const handleRangeSelect = (range: DateRange | undefined) => {
+      setDraftRange(range);
+    };
 
-  const handleCancel = () => setOpen(false);
+    const handleCancel = () => setOpen(false);
 
-  const handleConfirm = () => {
-    if (pickerVariant === "scroll") {
-      const d = scrollValueToDate(draftScrollValue);
-      if (value === undefined) setInternalDate(d);
-      onChange?.(d);
-    } else if (mode === "single") {
-      if (value === undefined) setInternalDate(draftDate);
-      onChange?.(draftDate);
-    } else {
-      if (dateRange === undefined) setInternalRange(draftRange);
-      onRangeChange?.(draftRange);
-    }
-    setOpen(false);
-  };
+    const handleConfirm = () => {
+      if (pickerVariant === "scroll") {
+        const d = scrollValueToDate(draftScrollValue);
+        if (value === undefined) setInternalDate(d);
+        onChange?.(d);
+      } else if (mode === "single") {
+        if (value === undefined) setInternalDate(draftDate);
+        onChange?.(draftDate);
+      } else {
+        if (dateRange === undefined) setInternalRange(draftRange);
+        onRangeChange?.(draftRange);
+      }
+      setOpen(false);
+    };
 
-  // ── Trigger content ──────────────────────────────────────────────────────────
-  const renderContent = () => {
-    if (isFilled) {
-      // Floating label row
-      const floatingLabel = required ? (
-        <div className="flex gap-[2px] items-center relative shrink-0 w-full">
-          <p
-            className="leading-[16px] not-italic relative shrink-0 text-[12px] whitespace-nowrap"
-            style={{ color: labelColor, fontFamily: FONT }}
-          >
-            {placeholder}
-          </p>
-          <p
-            className="leading-[1.5] not-italic relative shrink-0 text-[9px] w-[7px]"
-            style={{
-              color: asteriskColorFilled,
-              fontFamily: FONT,
-            }}
-          >
-            *
-          </p>
-        </div>
-      ) : (
-        <p
-          className="leading-[16px] not-italic relative shrink-0 text-[12px] w-full"
-          style={{ color: labelColor, fontFamily: FONT }}
-        >
-          {placeholder}
-        </p>
-      );
-
-      // Value row
-      const valueRow =
-        mode === "single" && currentDate ? (
-          <p
-            className="leading-[20px] not-italic relative shrink-0 text-[16px] w-full"
-            style={{ color: valueColor, fontFamily: FONT }}
-          >
-            {formatThaiDate(currentDate)}
-          </p>
-        ) : mode === "range" && currentRange?.from ? (
-          <div className="flex gap-[8px] items-center relative shrink-0 w-full">
+    // ── Trigger content ──────────────────────────────────────────────────────────
+    const renderContent = () => {
+      if (isFilled) {
+        // Floating label row
+        const floatingLabel = required ? (
+          <div className="flex gap-[2px] items-center relative shrink-0 w-full">
             <p
-              className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
-              style={{ color: valueColor, fontFamily: FONT }}
+              className="leading-[16px] not-italic relative shrink-0 text-[12px] whitespace-nowrap"
+              style={{ color: labelColor }}
             >
-              {formatThaiDate(currentRange.from)}
+              {placeholder}
             </p>
-            <MinusIcon color={minusColor} />
             <p
-              className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
-              style={{ color: valueColor, fontFamily: FONT }}
+              className="leading-[1.5] not-italic relative shrink-0 text-[9px] w-[7px]"
+              style={{ color: asteriskColorFilled }}
             >
-              {currentRange.to
-                ? formatThaiDate(currentRange.to)
-                : "..."}
+              *
             </p>
           </div>
-        ) : null;
-
-      return (
-        <div className="content-stretch flex flex-1 flex-col items-center justify-center min-h-px min-w-px relative">
-          {floatingLabel}
-          {valueRow}
-        </div>
-      );
-    }
-
-    // Empty – required
-    if (required) {
-      return (
-        <div
-          className="content-stretch flex flex-1 min-w-px min-h-px gap-[2px] items-center relative"
-          style={{ fontFamily: FONT }}
-        >
+        ) : (
           <p
-            className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+            className="leading-[16px] not-italic relative shrink-0 text-[12px] w-full"
             style={{ color: labelColor }}
           >
             {placeholder}
           </p>
-          <p
-            className="font-normal h-full leading-[1.5] not-italic relative shrink-0 text-[12px] w-[7px]"
-            style={{ color: asteriskColorEmpty }}
-          >
-            *
-          </p>
+        );
+
+        // Value row
+        const valueRow =
+          mode === "single" && currentDate ? (
+            <p
+              className="leading-[20px] not-italic relative shrink-0 text-[16px] w-full"
+              style={{ color: valueColor }}
+            >
+              {formatThaiDate(currentDate)}
+            </p>
+          ) : mode === "range" && currentRange?.from ? (
+            <div className="flex gap-[8px] items-center relative shrink-0 w-full">
+              <p
+                className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+                style={{ color: valueColor }}
+              >
+                {formatThaiDate(currentRange.from)}
+              </p>
+              <Minus size={20} weight="bold" color={minusColor} />
+              <p
+                className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+                style={{ color: valueColor }}
+              >
+                {currentRange.to
+                  ? formatThaiDate(currentRange.to)
+                  : "..."}
+              </p>
+            </div>
+          ) : null;
+
+        return (
+          <div className="content-stretch flex flex-1 flex-col items-center justify-center min-h-px min-w-px relative">
+            {floatingLabel}
+            {valueRow}
+          </div>
+        );
+      }
+
+      // Empty – required
+      if (required) {
+        return (
+          <div className="content-stretch flex flex-1 min-w-px min-h-px gap-[2px] items-center relative">
+            <p
+              className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+              style={{ color: labelColor }}
+            >
+              {placeholder}
+            </p>
+            <p
+              className="font-normal h-full leading-[1.5] not-italic relative shrink-0 text-[12px] w-[7px]"
+              style={{ color: asteriskColorEmpty }}
+            >
+              *
+            </p>
+          </div>
+        );
+      }
+
+      // Empty – plain placeholder
+      return (
+        <p
+          className="flex-1 min-w-0 min-h-px text-[16px] leading-[20px] not-italic overflow-hidden text-ellipsis whitespace-nowrap relative"
+          style={{ color: labelColor }}
+        >
+          {placeholder}
+        </p>
+      );
+    };
+
+    // ── Shared trigger inner markup (used by both static div and interactive button)
+    const triggerInner = (
+      <>
+        {/* Border overlay */}
+        <div
+          aria-hidden="true"
+          className="absolute pointer-events-none border border-solid"
+          style={{
+            inset: borderInset,
+            borderRadius: borderRad,
+            borderColor,
+          }}
+        />
+        {renderContent()}
+        {/* Calendar icon */}
+        <div
+          className={cn(
+            "flex flex-row items-center shrink-0",
+            isFilled && "self-stretch",
+          )}
+        >
+          {isFilled ? (
+            <CalendarBlank size={22} weight="regular" color={iconColor} />
+          ) : (
+            <CalendarBlank size={24} weight="regular" color={iconColor} />
+          )}
+        </div>
+      </>
+    );
+
+    const triggerBaseClasses = cn(
+      "relative flex gap-[8px] items-center rounded-[8px]",
+      bgClass,
+      "px-[14px]",
+      isFilled ? "py-[6px]" : "py-[12px]",
+      "w-full",
+    );
+
+    // ── Below message ─────────────────────────────────────────────────────────────
+    const belowMessage = showBelow && (
+      <div className="flex items-start px-[4px] text-[12px] leading-[16px]">
+        <span
+          className="flex-1 min-w-0"
+          style={{ color: leftColor }}
+        >
+          {leftText}
+        </span>
+      </div>
+    );
+
+    // ── Static showcase (forceState set) ─────────────────────────────────────────
+    if (isStatic) {
+      return (
+        <div
+          ref={ref}
+          className={cn("flex flex-col gap-[4px] w-full", className)}
+        >
+          <div className={triggerBaseClasses}>{triggerInner}</div>
+          {belowMessage}
         </div>
       );
     }
 
-    // Empty – plain placeholder
-    return (
-      <p
-        className="flex-1 min-w-0 min-h-px text-[16px] leading-[20px] not-italic overflow-hidden text-ellipsis whitespace-nowrap relative"
-        style={{ color: labelColor, fontFamily: FONT }}
-      >
-        {placeholder}
-      </p>
-    );
-  };
+    // ── Picker content ────────────────────────────────────────────────────────────
+    const isScrollVariant = pickerVariant === "scroll" && mode === "single";
 
-  // ── Shared trigger inner markup (used by both static div and interactive button)
-  const triggerInner = (
-    <>
-      {/* Border overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute pointer-events-none border border-solid"
-        style={{
-          inset: borderInset,
-          borderRadius: borderRad,
-          borderColor,
-        }}
+    const pickerClasses = isMobile
+      ? DRAWER_DAY_PICKER_CLASSES
+      : DAY_PICKER_CLASSES;
+
+    const pickerInner = isScrollVariant ? (
+      <ScrollDatePickerContent
+        value={draftScrollValue}
+        onChange={setDraftScrollValue}
       />
-      {renderContent()}
-      {/* Calendar icon */}
-      <div
-        className={`flex flex-row items-center shrink-0 ${isFilled ? "self-stretch" : ""}`}
-      >
-        {isFilled ? (
-          <CalendarIconSmall color={iconColor} />
-        ) : (
-          <CalendarIconLarge color={iconColor} />
-        )}
+    ) : mode === "single" ? (
+      <DayPicker
+        mode="single"
+        selected={draftDate}
+        onSelect={handleDateSelect}
+        showOutsideDays
+        classNames={pickerClasses}
+        formatters={{
+          formatWeekdayName: (date) =>
+            THAI_WEEKDAYS[date.getDay()],
+        }}
+        components={{ Caption: CustomCaption }}
+      />
+    ) : (
+      <DayPicker
+        mode="range"
+        selected={draftRange}
+        onSelect={handleRangeSelect}
+        numberOfMonths={2}
+        showOutsideDays
+        classNames={pickerClasses}
+        formatters={{
+          formatWeekdayName: (date) =>
+            THAI_WEEKDAYS[date.getDay()],
+        }}
+        components={{ Caption: CustomCaption }}
+      />
+    );
+
+    const calendarContent = (
+      <DisabledDatesCtx.Provider value={{ disabledYears }}>
+        {pickerInner}
+      </DisabledDatesCtx.Provider>
+    );
+
+    const actionButtons = (
+      <div className="flex gap-[12px] items-center pt-[12px]">
+        <Button
+          variant="outline"
+          size="lg"
+          className="flex-1"
+          onClick={handleCancel}
+        >
+          ยกเลิก
+        </Button>
+        <Button
+          variant="primary"
+          size="lg"
+          className="flex-1"
+          onClick={handleConfirm}
+        >
+          ตกลง
+        </Button>
       </div>
-    </>
-  );
+    );
 
-  const triggerBaseClasses = `relative flex gap-[8px] items-center rounded-[8px] ${bgClass} px-[14px] ${isFilled ? "py-[6px]" : "py-[12px]"} w-full`;
-
-  // ── Below message ─────────────────────────────────────────────────────────────
-  const belowMessage = showBelow && (
-    <div
-      className="flex items-start px-[4px] text-[12px] leading-[16px]"
-      style={{ fontFamily: FONT }}
-    >
-      <span
-        className="flex-1 min-w-0"
-        style={{ color: leftColor }}
+    const triggerButton = (
+      <button
+        type="button"
+        disabled={isDisabled}
+        className={cn(triggerBaseClasses, "text-left cursor-pointer disabled:cursor-default")}
       >
-        {leftText}
-      </span>
-    </div>
-  );
+        {triggerInner}
+      </button>
+    );
 
-  // ── Static showcase (forceState set) ─────────────────────────────────────────
-  if (isStatic) {
+    const handleOpenChange = (o: boolean) => {
+      if (!isDisabled) {
+        if (o) {
+          // Snapshot committed values into draft when picker opens
+          setDraftDate(currentDate);
+          setDraftRange(currentRange);
+          setDraftScrollValue(dateToScrollValue(currentDate));
+        }
+        setOpen(o);
+      }
+    };
+
+    // ── Interactive ──────────────────────────────────────────────────────────────
     return (
       <div
-        className={`flex flex-col gap-[4px] w-full ${className}`}
+        ref={ref}
+        className={cn("flex flex-col gap-[4px] w-full", className)}
       >
-        <div className={triggerBaseClasses}>{triggerInner}</div>
+        {isMobile ? (
+          <Drawer open={open} onOpenChange={handleOpenChange}>
+            <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
+            <DrawerContent>
+              <DrawerTitle className="sr-only">
+                เลือกวันที่
+              </DrawerTitle>
+              <div className="overflow-auto px-4 pt-2 pb-8 w-full">
+                <DrawerRangeCtx.Provider value={mode === "range"}>
+                  {calendarContent}
+                </DrawerRangeCtx.Provider>
+                {actionButtons}
+              </div>
+            </DrawerContent>
+          </Drawer>
+        ) : (
+          <Popover.Root
+            open={open}
+            onOpenChange={handleOpenChange}
+          >
+            <Popover.Trigger asChild>
+              {triggerButton}
+            </Popover.Trigger>
+
+            <Popover.Portal>
+              <Popover.Content
+                align="start"
+                sideOffset={4}
+                className="z-50 rounded-[8px] bg-white p-3 outline-none"
+                style={{
+                  boxShadow:
+                    "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
+                  border: "1px solid var(--border)",
+                }}
+                onOpenAutoFocus={(e) => e.preventDefault()}
+              >
+                {calendarContent}
+                {actionButtons}
+              </Popover.Content>
+            </Popover.Portal>
+          </Popover.Root>
+        )}
+
         {belowMessage}
       </div>
     );
-  }
+  },
+);
 
-  // ── Picker content ────────────────────────────────────────────────────────────
-  const isScrollVariant = pickerVariant === "scroll" && mode === "single";
-
-  const pickerClasses = isMobile
-    ? DRAWER_DAY_PICKER_CLASSES
-    : DAY_PICKER_CLASSES;
-
-  const pickerInner = isScrollVariant ? (
-    <ScrollDatePickerContent
-      value={draftScrollValue}
-      onChange={setDraftScrollValue}
-    />
-  ) : mode === "single" ? (
-    <DayPicker
-      mode="single"
-      selected={draftDate}
-      onSelect={handleDateSelect}
-      showOutsideDays
-      classNames={pickerClasses}
-      formatters={{
-        formatWeekdayName: (date) =>
-          THAI_WEEKDAYS[date.getDay()],
-      }}
-      components={{ Caption: CustomCaption }}
-    />
-  ) : (
-    <DayPicker
-      mode="range"
-      selected={draftRange}
-      onSelect={handleRangeSelect}
-      numberOfMonths={2}
-      showOutsideDays
-      classNames={pickerClasses}
-      formatters={{
-        formatWeekdayName: (date) =>
-          THAI_WEEKDAYS[date.getDay()],
-      }}
-      components={{ Caption: CustomCaption }}
-    />
-  );
-
-  const calendarContent = (
-    <DisabledDatesCtx.Provider value={{ disabledYears }}>
-      {pickerInner}
-    </DisabledDatesCtx.Provider>
-  );
-
-  const actionButtons = (
-    <div className="flex gap-[12px] items-center pt-[12px]">
-      <Button
-        variant="outline"
-        size="lg"
-        className="flex-1"
-        onClick={handleCancel}
-      >
-        ยกเลิก
-      </Button>
-      <Button
-        variant="primary"
-        size="lg"
-        className="flex-1"
-        onClick={handleConfirm}
-      >
-        ตกลง
-      </Button>
-    </div>
-  );
-
-  const triggerButton = (
-    <button
-      type="button"
-      disabled={isDisabled}
-      className={`${triggerBaseClasses} text-left cursor-pointer disabled:cursor-default`}
-    >
-      {triggerInner}
-    </button>
-  );
-
-  const handleOpenChange = (o: boolean) => {
-    if (!isDisabled) {
-      if (o) {
-        // Snapshot committed values into draft when picker opens
-        setDraftDate(currentDate);
-        setDraftRange(currentRange);
-        setDraftScrollValue(dateToScrollValue(currentDate));
-      }
-      setOpen(o);
-    }
-  };
-
-  // ── Interactive ──────────────────────────────────────────────────────────────
-  return (
-    <div
-      className={`flex flex-col gap-[4px] w-full ${className}`}
-    >
-      {isMobile ? (
-        <Drawer open={open} onOpenChange={handleOpenChange}>
-          <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
-          <DrawerContent>
-            <DrawerTitle className="sr-only">
-              เลือกวันที่
-            </DrawerTitle>
-            <div
-              className="overflow-auto px-4 pt-2 pb-8 w-full"
-              style={{ fontFamily: FONT }}
-            >
-              <DrawerRangeCtx.Provider value={mode === "range"}>
-                {calendarContent}
-              </DrawerRangeCtx.Provider>
-              {actionButtons}
-            </div>
-          </DrawerContent>
-        </Drawer>
-      ) : (
-        <Popover.Root
-          open={open}
-          onOpenChange={handleOpenChange}
-        >
-          <Popover.Trigger asChild>
-            {triggerButton}
-          </Popover.Trigger>
-
-          <Popover.Portal>
-            <Popover.Content
-              align="start"
-              sideOffset={4}
-              className="z-50 rounded-[8px] bg-white p-3 outline-none"
-              style={{
-                boxShadow:
-                  "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
-                border: "1px solid rgba(0,0,0,0.08)",
-                fontFamily: FONT,
-              }}
-              onOpenAutoFocus={(e) => e.preventDefault()}
-            >
-              {calendarContent}
-              {actionButtons}
-            </Popover.Content>
-          </Popover.Portal>
-        </Popover.Root>
-      )}
-
-      {belowMessage}
-    </div>
-  );
-}
+DateInput.displayName = "DateInput";

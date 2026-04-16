@@ -1,4 +1,4 @@
-import { InputShowcase } from "../components/InputShowcase";
+import { InputShowcase } from "../showcases/InputShowcase";
 
 export function InputPage() {
   return <InputShowcase />;

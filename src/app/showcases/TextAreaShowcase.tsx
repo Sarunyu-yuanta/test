@@ -1,22 +1,19 @@
 import React, { useState } from "react";
-import { Dropdown, DropdownState, DropdownOption } from "./Dropdown";
+import { TextArea, TextAreaState } from "@/components/textarea";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
-// ─── State columns ────────────────────────────────────────────────────────────
-const STATES: { label: string; state: DropdownState }[] = [
+const STATES: { label: string; state: TextAreaState }[] = [
   { label: "Default", state: "default" },
   { label: "Focus", state: "focus" },
   { label: "Error", state: "error" },
   { label: "Disabled", state: "disabled" },
 ];
 
-// ─── Row definitions ──────────────────────────────────────────────────────────
 interface RowDef {
   label: string;
-  required?: boolean;
   helperText?: string;
-  externalLabel?: boolean;
+  showCount?: boolean;
 }
 interface GroupDef {
   title: string;
@@ -26,28 +23,28 @@ interface GroupDef {
 const GROUPS: GroupDef[] = [
   {
     title: "1. Default",
+    rows: [{ label: "Default" }],
+  },
+  {
+    title: "2. Helper + Count",
     rows: [
-      { label: "Default" },
-      { label: "Default (Require)", required: true },
+      {
+        label: "Default",
+        helperText: "Helper text",
+        showCount: true,
+      },
     ],
   },
   {
-    title: "2. Helper",
-    rows: [
-      { label: "Helper", helperText: "Helper text" },
-      { label: "Helper (Require)", required: true, helperText: "Helper text" },
-    ],
+    title: "3. Count",
+    rows: [{ label: "Default", showCount: true }],
   },
   {
-    title: "3. Label",
-    rows: [
-      { label: "Label", externalLabel: true },
-      { label: "Label (Require)", required: true, externalLabel: true },
-    ],
+    title: "4. Helper",
+    rows: [{ label: "Default", helperText: "Helper text" }],
   },
 ];
 
-// ─── Column headers ───────────────────────────────────────────────────────────
 function ColHeaders() {
   return (
     <div className="flex items-center gap-6 mb-5 pl-[120px]">
@@ -64,7 +61,6 @@ function ColHeaders() {
   );
 }
 
-// ─── Single row ───────────────────────────────────────────────────────────────
 function ShowcaseRow({
   row,
   filledValue,
@@ -74,7 +70,6 @@ function ShowcaseRow({
 }) {
   return (
     <div className="flex items-start gap-6 mb-7">
-      {/* Row label */}
       <div
         className="w-[108px] shrink-0 text-[13px] text-[#6b7280] pt-[14px]"
         style={FONT}
@@ -82,18 +77,15 @@ function ShowcaseRow({
         {row.label}
       </div>
 
-      {/* 4 state cells */}
       {STATES.map(({ state }) => (
         <div key={state} className="w-[280px] shrink-0">
-          <Dropdown
+          <TextArea
             forceState={state}
-            placeholder="Placeholder"
-            required={row.required}
-            helperText={row.helperText}
-            errorMessage="Error message"
+            placeholder="Text label"
             value={filledValue}
-            options={filledValue ? [{ label: "Option A", value: "a" }] : []}
-            label={row.externalLabel ? "Text label" : undefined}
+            helperText={row.helperText}
+            showCount={row.showCount}
+            errorMessage="Error message"
           />
         </div>
       ))}
@@ -101,7 +93,6 @@ function ShowcaseRow({
   );
 }
 
-// ─── Group block ──────────────────────────────────────────────────────────────
 function GroupBlock({
   group,
   filledValue,
@@ -128,35 +119,20 @@ function GroupBlock({
           />
         ))}
       </div>
-      {!isLast && <div className="border-t border-[#e5e7eb] my-8" />}
+      {!isLast && (
+        <div className="border-t border-[#e5e7eb] my-8" />
+      )}
     </>
   );
 }
 
-// ─── Sample options for interactive section ───────────────────────────────────
-const SAMPLE_OPTIONS: DropdownOption[] = [
-  { label: "Option A", value: "a" },
-  { label: "Option B", value: "b" },
-  { label: "Option C", value: "c" },
-  { label: "Option D", value: "d" },
-  { label: "Option E", value: "e" },
-  { label: "Option F", value: "f" },
-  { label: "Option G", value: "g" },
-  { label: "Option H", value: "h" },
-  { label: "Option I", value: "i" },
-  { label: "Option J", value: "j" },
-  { label: "Option K", value: "k" },
-  { label: "Option L", value: "l" },
-];
-
-// ─── Showcase ─────────────────────────────────────────────────────────────────
-export function DropdownShowcase() {
+export function TextAreaShowcase() {
   const [interVal, setInterVal] = useState("");
+  const [helper, setHelper] = useState(false);
+  const [count, setCount] = useState(false);
   const [required, setRequired] = useState(false);
-  const [helper, setHelper]     = useState(false);
-  const [isError, setIsError]   = useState(false);
+  const [isError, setIsError] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [showLabel, setShowLabel]   = useState(false);
 
   const forceState = isDisabled
     ? ("disabled" as const)
@@ -167,9 +143,12 @@ export function DropdownShowcase() {
   return (
     <div className="bg-white min-h-full">
       <h1 className="mb-1" style={FONT}>
-        Dropdown Component
+        Text Area Component
       </h1>
-      <p className="text-[#6b7280] mb-12 text-[14px]" style={FONT}>
+      <p
+        className="text-[#6b7280] mb-12 text-[14px]"
+        style={FONT}
+      >
         Variants × States
       </p>
 
@@ -206,7 +185,7 @@ export function DropdownShowcase() {
             <GroupBlock
               key={`filled-${group.title}`}
               group={group}
-              filledValue="a"
+              filledValue="Filled message"
               isLast={gi === GROUPS.length - 1}
             />
           ))}
@@ -218,36 +197,38 @@ export function DropdownShowcase() {
           <h2 className="mb-2" style={FONT}>
             Interactive
           </h2>
-          <p className="text-[#6b7280] mb-8 text-[13px]" style={FONT}>
-            Click the dropdown and toggle options to see live behaviour
+          <p
+            className="text-[#6b7280] mb-8 text-[13px]"
+            style={FONT}
+          >
+            Type into the textarea and toggle options to see
+            live behaviour
           </p>
 
           <div className="flex gap-10 items-start pl-2 pb-2">
-            {/* Live dropdown */}
-            <div className="w-[320px] shrink-0">
-              <Dropdown
+            <div className="w-[343px] shrink-0">
+              <TextArea
                 placeholder="Text label"
                 value={interVal}
                 onChange={setInterVal}
                 required={required}
                 forceState={forceState}
                 helperText={helper ? "Helper text" : undefined}
+                showCount={count}
+                maxCount={100}
                 errorMessage="Error message"
-                options={SAMPLE_OPTIONS}
-                label={showLabel ? "Text label" : undefined}
               />
             </div>
 
-            {/* Controls */}
             <div
               className="flex flex-wrap gap-x-6 gap-y-3 text-[13px]"
               style={FONT}
             >
               {(
                 [
-                  ["Required", required, setRequired],
                   ["Helper", helper, setHelper],
-                  ["Label", showLabel, setShowLabel],
+                  ["Count", count, setCount],
+                  ["Required", required, setRequired],
                   ["Error", isError, setIsError],
                   ["Disabled", isDisabled, setIsDisabled],
                 ] as [

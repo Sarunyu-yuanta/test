@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { SearchInput } from "./SearchInput";
-import { OptionList, OptionItem } from "./OptionList";
+import { SearchInput } from "@/components/search-input";
+import { OptionList, OptionItem } from "@/components/option-list";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 

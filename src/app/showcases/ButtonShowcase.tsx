@@ -1,6 +1,6 @@
 import React from "react";
 import { Circle } from "@phosphor-icons/react";
-import { Button, ButtonLabelSize, ButtonIconSize, ButtonVariant } from "./Button";
+import { Button, ButtonLabelSize, ButtonIconSize, ButtonVariant } from "@/components/button";
 
 const labelSizes: ButtonLabelSize[] = ["xs", "sm", "md", "lg", "xl"];
 const iconSizes:  ButtonIconSize[]  = ["icon-xs", "icon-sm", "icon-md", "icon-lg", "icon-xl"];

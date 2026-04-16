@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Circle } from "@phosphor-icons/react";
-import { OptionList, OptionItem } from "./OptionList";
+import { OptionList, OptionItem } from "@/components/option-list";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 

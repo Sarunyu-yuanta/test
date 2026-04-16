@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tab, TabGroup, TabSize } from "./Tab";
+import { Tab, TabGroup, TabSize } from "@/components/tab";
 
 const sizes: TabSize[] = ["lg", "md", "sm"];
 
