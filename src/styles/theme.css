@@ -1,3 +1,9 @@
+/*
+ * Runtime theme layer (browser + Tailwind @theme).
+ * JSON under /tokens/ is the Figma-aligned source of truth; keep values in sync when primitives/semantic change.
+ * - Color ramps: tokens/color-primitives.fill.json → tokens-fill.css (--fill-*)
+ * - Semantic UI colors (:root / .dark): mirror tokens/semantic/*.json when you add those files
+ */
 @import "./tokens-fill.css";
 @custom-variant dark (&:is(.dark *));
 
@@ -32,6 +38,9 @@
 
   --destructive: var(--fill-red-600);
   --destructive-foreground: var(--fill-white-1000);
+  /* Figma: visual/red/default — notification badges, counts (not destructive actions) */
+  --visual-red-default: var(--fill-red-500);
+  --on-visual-red: var(--fill-white-1000);
   --error-dark: var(--fill-red-700);
 
   --success: var(--fill-emerald-600);
@@ -40,6 +49,9 @@
 
   --border: var(--fill-black-200);
   --border-disabled: var(--fill-black-100);
+  --border-muted: var(--fill-gray-300);
+  --divider: var(--fill-gray-200);
+  --caption: var(--fill-gray-400);
 
   --input: transparent;
   --input-background: var(--fill-gray-100);
@@ -54,6 +66,25 @@
   --selected-light-bg: var(--fill-p1-100);
   --range-bg: var(--fill-p1-200);
   --range-text: var(--fill-sky-500);
+
+  /* Overlays (brand primary on surface) — nav, chrome */
+  --overlay-primary-4: color-mix(in srgb, var(--primary-action) 4%, transparent);
+  --overlay-primary-6: color-mix(in srgb, var(--primary-action) 6%, transparent);
+  --overlay-primary-8: color-mix(in srgb, var(--primary-action) 8%, transparent);
+  --nav-link: var(--fill-gray-700);
+  --nav-link-active: var(--primary-action);
+  --icon-muted: var(--fill-gray-700);
+
+  /* Text on primary-action surfaces (chips, time picker selection, etc.) */
+  --on-primary-action: var(--fill-white-1000);
+
+  /* Elevation & chrome (referenced by @theme shadow-* utilities) */
+  --elevation-popover: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --elevation-card: 0px 0px 2px 0px rgba(102, 102, 102, 0.16), 0px 4px 8px 0px rgba(102, 102, 102, 0.12);
+
+  /* Surfaces (match tokens/color-primitives.fill.json → tokens-fill.css) */
+  --surface-clear-hover: var(--fill-gray-200);
+  --surface-chip-disabled: var(--fill-zinc-50);
 
   --switch-background: var(--fill-slate-300);
   --font-weight-medium: 500;
@@ -131,7 +162,7 @@
 @theme inline {
   --font-sans: var(--font-sans);
 
-  /* Effect tokens */
+  /* Blur + shadows — tokens/effect-mode-1.json (add px in CSS) */
   --blur-xs: 4px;
   --blur-sm: 8px;
   --blur-md: 12px;
@@ -146,8 +177,10 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -4px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-popover: var(--elevation-popover);
+  --shadow-card: var(--elevation-card);
 
-  /* Tailwind spacing scale (Size.Mode 1) */
+  /* Spacing — tokens/size-mode-1.json → sizeMode1.spacing */
   --spacing-0: 0px;
   --spacing-0_5: 2px;
   --spacing-1: 4px;
@@ -169,7 +202,7 @@
   --spacing-16: 64px;
   --spacing-20: 80px;
 
-  /* Tailwind border radius scale (Radius) */
+  /* Radius — tokens/size-mode-1.json → sizeMode1.radius (--radius default 4px is :root --radius) */
   --radius-none: 0px;
   --radius-sm: 2px;
   --radius-md: 6px;
@@ -179,7 +212,7 @@
   --radius-3xl: 24px;
   --radius-full: 999px;
 
-  /* Tailwind font-size scale (Typography Size) */
+  /* Font size — tokens/typography-primitives.mode-1.json → typographyPrimitives.fontSize */
   --text-xxs: 9px;
   --text-xs: 12px;
   --text-sm: 14px;
@@ -195,7 +228,7 @@
   --text-8xl: 72px;
   --text-9xl: 80px;
 
-  /* Tailwind line-height scale (Typography Line-height) */
+  /* Line height — tokens/typography-primitives.mode-1.json → typographyPrimitives.lineHeight */
   --leading-none: 1;
   --leading-3: 14px;
   --leading-4: 16px;
@@ -234,12 +267,17 @@
   --color-accent-orange: var(--accent-orange);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-visual-red-default: var(--visual-red-default);
+  --color-on-visual-red: var(--on-visual-red);
   --color-error-dark: var(--error-dark);
   --color-success: var(--success);
   --color-success-bg: var(--success-bg);
   --color-error-bg: var(--error-bg);
   --color-border: var(--border);
   --color-border-disabled: var(--border-disabled);
+  --color-border-muted: var(--border-muted);
+  --color-divider: var(--divider);
+  --color-caption: var(--caption);
   --color-input: var(--input);
   --color-input-background: var(--input-background);
   --color-disabled: var(--disabled);
@@ -251,6 +289,11 @@
   --color-selected-light-bg: var(--selected-light-bg);
   --color-range-bg: var(--range-bg);
   --color-range-text: var(--range-text);
+  --color-nav-link: var(--nav-link);
+  --color-nav-link-active: var(--nav-link-active);
+  --color-on-primary-action: var(--on-primary-action);
+  --color-surface-clear-hover: var(--surface-clear-hover);
+  --color-surface-chip-disabled: var(--surface-chip-disabled);
   --color-switch-background: var(--switch-background);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);

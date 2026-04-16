@@ -86,7 +86,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
       ref={ref}
       className={cn(
         "flex min-h-[120px] flex-col items-start overflow-clip rounded-[8px]",
-        "shadow-[0px_0px_2px_0px_rgba(102,102,102,0.16),0px_4px_8px_0px_rgba(102,102,102,0.12)]",
+        "shadow-card",
         widthClass,
         className,
       )}

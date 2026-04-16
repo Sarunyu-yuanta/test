@@ -64,7 +64,8 @@ const sizeClasses: Record<
     font: "font-semibold",
     gap: "gap-1",
     iconSize: "h-4 w-4",
-    badgeClass: "px-1 text-[length:var(--text-xxs)] leading-[var(--leading-3)] text-white",
+    badgeClass:
+      "min-h-[14px] px-1 text-[length:var(--text-xxs)] leading-[var(--leading-3)]",
   },
 };
 
@@ -149,7 +150,7 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
       {hasNotification && (
         <span
           className={cn(
-            "relative flex shrink-0 items-center justify-center rounded-[60px] bg-[#fb2c36] text-center font-normal text-white",
+            "relative flex shrink-0 items-center justify-center rounded-[60px] bg-visual-red-default text-center font-normal text-on-visual-red",
             s.badgeClass
           )}
         >

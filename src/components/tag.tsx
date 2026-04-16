@@ -50,28 +50,28 @@ const variantStyles: Record<
   }
 > = {
   blue: {
-    bg: "bg-blue-50",
-    text: "text-blue-700",
+    bg: "bg-[var(--fill-blue-50)]",
+    text: "text-[var(--fill-blue-700)]",
   },
   green: {
-    bg: "bg-green-100",
-    text: "text-green-600",
+    bg: "bg-[var(--fill-green-100)]",
+    text: "text-[var(--fill-green-600)]",
   },
   yellow: {
-    bg: "bg-yellow-100",
-    text: "text-yellow-600",
+    bg: "bg-[var(--fill-yellow-100)]",
+    text: "text-[var(--fill-yellow-600)]",
   },
   red: {
-    bg: "bg-red-100",
-    text: "text-red-600",
+    bg: "bg-[var(--fill-red-100)]",
+    text: "text-[var(--fill-red-600)]",
   },
   gray: {
-    bg: "bg-gray-100",
+    bg: "bg-[var(--fill-gray-100)]",
     text: "text-subtle-text",
   },
   lime: {
-    bg: "bg-lime-100",
-    text: "text-lime-600",
+    bg: "bg-[var(--fill-lime-100)]",
+    text: "text-[var(--fill-lime-600)]",
   },
 };
 
@@ -162,23 +162,23 @@ const statusTagStyles: Record<
 > = {
   stop: {
     label: "Stop",
-    dot: "#81848B",
+    dot: "var(--fill-gray-500)",
   },
   success: {
     label: "Success",
-    dot: "#10B981",
+    dot: "var(--fill-emerald-500)",
   },
   hold: {
     label: "Hold",
-    dot: "#E9B307",
+    dot: "var(--fill-yellow-500)",
   },
   processing: {
     label: "Processing",
-    dot: "#2F7DE6",
+    dot: "var(--fill-blue-500)",
   },
   error: {
     label: "Error",
-    dot: "#F43F5E",
+    dot: "var(--fill-rose-500)",
   },
 };
 

@@ -102,16 +102,16 @@ function getVariantClasses(variant: ButtonVariant, isDisabled: boolean): string 
     return "bg-disabled-bg text-disabled cursor-not-allowed";
   }
   if (variant === "outline")
-    return "bg-white text-primary-action border border-border hover:bg-hover-bg active:bg-disabled-bg";
+    return "bg-background text-primary-action border border-border hover:bg-hover-bg active:bg-disabled-bg";
   if (variant === "plain")
     return "bg-transparent text-primary-action hover:bg-hover-bg active:bg-disabled-bg";
   // Black label variants — hover only, no active state (by design)
   if (variant === "outline-black")
-    return "bg-white text-foreground border border-border hover:bg-hover-bg";
+    return "bg-background text-foreground border border-border hover:bg-hover-bg";
   if (variant === "plain-black")
     return "bg-transparent text-foreground hover:bg-hover-bg";
   // primary
-  return "bg-primary-action text-white hover:bg-primary-action-hover active:bg-primary-action-active";
+  return "bg-primary-action text-on-primary-action hover:bg-primary-action-hover active:bg-primary-action-active";
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -137,7 +137,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const isIconOnly  = size.startsWith("icon-");
 
   // ── Ghost icon-only active state ──────────────────────────────────────────
-  // Ghost icon-only buttons have a Press state: bg #f3f4f6 + icon turns #99a1af.
+  // Ghost icon-only buttons have a Press state: disabled-bg + disabled icon color.
   // We drive this via React state so it works regardless of Tailwind cascade order.
   // Ghost LABEL buttons have no active state (by design).
   const [ghostPressed, setGhostPressed] = useState(false);

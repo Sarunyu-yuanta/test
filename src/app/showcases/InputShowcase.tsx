@@ -18,7 +18,7 @@ function CircleIcon({ state }: { state: InputState }) {
     <Circle
       size={24}
       weight="regular"
-      color={state === "disabled" ? "#99A1AF" : "#6A7282"}
+      color={state === "disabled" ? "var(--disabled)" : "var(--muted-foreground)"}
     />
   );
 }
@@ -100,7 +100,7 @@ function ColHeaders() {
       {STATES.map(({ label }) => (
         <div
           key={label}
-          className="w-[280px] text-[11px] text-[#9ca3af] uppercase tracking-wider"
+          className="w-[280px] text-[11px] text-caption uppercase tracking-wider"
           style={FONT}
         >
           {label}
@@ -122,7 +122,7 @@ function ShowcaseRow({
     <div className="flex items-start gap-6 mb-7">
       {/* Row label */}
       <div
-        className="w-[108px] shrink-0 text-[13px] text-[#6b7280] pt-[14px]"
+        className="w-[108px] shrink-0 text-[13px] text-muted-foreground pt-[14px]"
         style={FONT}
       >
         {row.label}
@@ -164,7 +164,7 @@ function GroupBlock({
   return (
     <>
       <div
-        className="mb-5 text-[13px] text-[#374151]"
+        className="mb-5 text-[13px] text-nav-link"
         style={{ ...FONT, fontWeight: 600 }}
       >
         {group.title}
@@ -179,7 +179,7 @@ function GroupBlock({
         ))}
       </div>
       {!isLast && (
-        <div className="border-t border-[#e5e7eb] my-8" />
+        <div className="border-t border-divider my-8" />
       )}
     </>
   );
@@ -203,12 +203,12 @@ export function InputShowcase() {
       : undefined;
 
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={FONT}>
         Input Component
       </h1>
       <p
-        className="text-[#6b7280] mb-12 text-[14px]"
+        className="text-muted-foreground mb-12 text-[14px]"
         style={FONT}
       >
         Variants × States
@@ -218,7 +218,7 @@ export function InputShowcase() {
         <div className="min-w-max">
           {/* ── Empty ── */}
           <div
-            className="mb-3 text-[11px] text-[#9ca3af] uppercase tracking-wider"
+            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
             style={FONT}
           >
             Empty
@@ -233,11 +233,11 @@ export function InputShowcase() {
           ))}
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Filled ── */}
           <div
-            className="mb-3 text-[11px] text-[#9ca3af] uppercase tracking-wider"
+            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
             style={FONT}
           >
             Filled
@@ -253,14 +253,14 @@ export function InputShowcase() {
           ))}
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Interactive ── */}
           <h2 className="mb-2" style={FONT}>
             Interactive
           </h2>
           <p
-            className="text-[#6b7280] mb-8 text-[13px]"
+            className="text-muted-foreground mb-8 text-[13px]"
             style={FONT}
           >
             Type into the input and toggle options to see live
@@ -281,7 +281,7 @@ export function InputShowcase() {
                     <Circle
                       size={24}
                       weight="regular"
-                      color={isDisabled ? "#99A1AF" : "#6A7282"}
+                      color={isDisabled ? "var(--disabled)" : "var(--muted-foreground)"}
                     />
                   ) : undefined
                 }
@@ -317,13 +317,13 @@ export function InputShowcase() {
               ).map(([label, val, setter]) => (
                 <label
                   key={label}
-                  className="flex items-center gap-2 cursor-pointer select-none text-[#374151]"
+                  className="flex items-center gap-2 cursor-pointer select-none text-nav-link"
                 >
                   <input
                     type="checkbox"
                     checked={val}
                     onChange={() => setter(!val)}
-                    className="accent-[#0a6ee7] w-[16px] h-[16px]"
+                    className="accent-primary-action w-[16px] h-[16px]"
                   />
                   {label}
                 </label>

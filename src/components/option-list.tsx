@@ -57,12 +57,11 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-start overflow-clip rounded-lg bg-white px-2 py-2",
+          "flex flex-col items-start overflow-clip rounded-lg bg-popover px-2 py-2 text-popover-foreground",
           className
         )}
         style={{
-          boxShadow:
-            "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
+          boxShadow: "var(--elevation-popover)",
           ...(isScrollable
             ? { maxHeight, overflowY: "auto" as const }
             : {}),
@@ -76,7 +75,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                 ? "bg-disabled-bg"
                 : selected
                   ? "bg-selected-bg"
-                  : "bg-white hover:bg-selected-bg";
+                  : "bg-popover hover:bg-selected-bg";
             return (
               <div
                 key={opt.value}
@@ -124,7 +123,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
             );
           })
         ) : (
-            <div className="w-full shrink-0 bg-white">
+            <div className="w-full shrink-0 bg-popover">
             <div className="flex w-full items-center p-3.5">
               <p className="min-h-[1px] min-w-0 flex-1 text-sm leading-5 not-italic text-disabled">
                 {emptyText}

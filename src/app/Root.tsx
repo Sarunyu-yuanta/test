@@ -104,13 +104,13 @@ function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
             <div
               className={`h-[36px] flex items-center px-[12px] rounded-[6px] transition-colors duration-150 ${
                 isActive
-                  ? "bg-[rgba(10,110,231,0.08)]"
-                  : "hover:bg-[rgba(10,110,231,0.04)]"
+                  ? "bg-[var(--overlay-primary-8)]"
+                  : "hover:bg-[var(--overlay-primary-4)]"
               }`}
             >
               <span
                 className={`text-[14px] leading-[1.5] whitespace-nowrap ${
-                  isActive ? "text-[#0a6ee7]" : "text-[#374151]"
+                  isActive ? "text-nav-link-active" : "text-nav-link"
                 }`}
               >
                 {label}
@@ -126,7 +126,7 @@ function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
 function MenuToggleIcon({ open }: { open: boolean }) {
   const common = {
     size: 20,
-    className: "text-[#374151]",
+    className: "text-nav-link",
     weight: "regular" as const,
   };
   return open ? <X {...common} /> : <List {...common} />;
@@ -142,18 +142,18 @@ export function Root() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Top nav — 56px */}
-      <header className="sticky top-0 z-20 bg-white h-[56px] px-[24px] flex items-center gap-3">
+      <header className="sticky top-0 z-20 bg-background h-[56px] px-[24px] flex items-center gap-3">
         {/* bottom border overlay */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 border-b border-[rgba(0,0,0,0.1)] pointer-events-none"
+          className="absolute inset-0 border-b border-border pointer-events-none"
         />
         {/* Hamburger — mobile only */}
         <button
           aria-label="Toggle menu"
-          className="lg:hidden relative z-10 -ml-1 p-2 rounded-md hover:bg-[rgba(10,110,231,0.06)] transition-colors"
+          className="lg:hidden relative z-10 -ml-1 p-2 rounded-md hover:bg-[var(--overlay-primary-6)] transition-colors"
           onClick={() => setSidebarOpen((v) => !v)}
         >
           <MenuToggleIcon open={sidebarOpen} />
@@ -175,7 +175,7 @@ export function Root() {
         <aside
           className={`
             fixed top-[56px] left-0 z-10 h-[calc(100vh-56px)] w-[256px] shrink-0
-            bg-white overflow-y-auto border-r border-[rgba(0,0,0,0.1)]
+            bg-background overflow-y-auto border-r border-border
             transform transition-transform duration-200 ease-in-out
             ${sidebarOpen ? "translate-x-0 shadow-xl" : "-translate-x-full"}
             lg:sticky lg:translate-x-0 lg:shadow-none

@@ -17,19 +17,19 @@ const TAG_STATUSES: { label: string; status: CardTagStatus }[] = [
 
 export function CardShowcase() {
   return (
-    <div className="bg-white min-h-screen px-10 py-10">
+    <div className="bg-background min-h-screen px-10 py-10">
       <h1 className="mb-1" style={FONT}>Card Component</h1>
-      <p className="text-[#6b7280] mb-12 text-[14px]" style={FONT}>
+      <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>
         3 responsive variants × lock / location / audience / tag status
       </p>
 
       {/* ── Responsive variants ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-[#374151]" style={FONT}>Responsive Variants</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Responsive Variants</h2>
         <div className="flex flex-wrap gap-8 items-start">
           {VARIANTS.map(({ label, variant }) => (
             <div key={variant} className="flex flex-col gap-3">
-              <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>{label}</p>
+              <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>{label}</p>
               <Card variant={variant} />
             </div>
           ))}
@@ -38,11 +38,11 @@ export function CardShowcase() {
 
       {/* ── Tag status ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-[#374151]" style={FONT}>Tag Status</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Tag Status</h2>
         <div className="flex flex-wrap gap-8 items-start">
           {TAG_STATUSES.map(({ label, status }) => (
             <div key={status} className="flex flex-col gap-3">
-              <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>{label}</p>
+              <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>{label}</p>
               <Card variant="desktop" tagStatus={status} />
             </div>
           ))}
@@ -51,22 +51,22 @@ export function CardShowcase() {
 
       {/* ── Optional rows ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-[#374151]" style={FONT}>Optional Rows</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Optional Rows</h2>
         <div className="flex flex-wrap gap-8 items-start">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>All rows</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>All rows</p>
             <Card variant="desktop" showLocation showAudience locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>No location</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No location</p>
             <Card variant="desktop" showLocation={false} showAudience locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>No audience</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No audience</p>
             <Card variant="desktop" showLocation showAudience={false} locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-[#9ca3af]" style={FONT}>No lock</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No lock</p>
             <Card variant="desktop" showLocation showAudience locked={false} />
           </div>
         </div>
@@ -74,8 +74,8 @@ export function CardShowcase() {
 
       {/* ── All 3 at once (like Figma screenshot) ── */}
       <section>
-        <h2 className="mb-6 text-[16px] text-[#374151]" style={FONT}>Side-by-side Preview</h2>
-        <div className="flex flex-wrap gap-8 items-start bg-[#f9fafb] rounded-[12px] p-8">
+        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Side-by-side Preview</h2>
+        <div className="flex flex-wrap gap-8 items-start bg-hover-bg rounded-[12px] p-8">
           {VARIANTS.map(({ variant }) => (
             <Card key={variant} variant={variant} />
           ))}

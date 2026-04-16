@@ -62,12 +62,12 @@ export function SearchInputShowcase() {
   };
 
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={FONT}>
         Search Input Component
       </h1>
       <p
-        className="text-[#6b7280] mb-12 text-[14px]"
+        className="text-muted-foreground mb-12 text-[14px]"
         style={FONT}
       >
         Interactive Playground
@@ -77,7 +77,7 @@ export function SearchInputShowcase() {
         Interactive
       </h2>
       <p
-        className="text-[#6b7280] mb-8 text-[13px]"
+        className="text-muted-foreground mb-8 text-[13px]"
         style={FONT}
       >
         Click input, type to filter, and select an option
@@ -109,21 +109,21 @@ export function SearchInputShowcase() {
           className="flex flex-wrap gap-x-6 gap-y-3 text-[13px]"
           style={FONT}
         >
-          <label className="flex items-center gap-2 cursor-pointer select-none text-[#374151]">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
             <input
               type="checkbox"
               checked={size === "lg"}
               onChange={() => setSize("lg")}
-              className="accent-[#0a6ee7] w-[16px] h-[16px]"
+              className="accent-primary-action w-[16px] h-[16px]"
             />
             lg
           </label>
-          <label className="flex items-center gap-2 cursor-pointer select-none text-[#374151]">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
             <input
               type="checkbox"
               checked={size === "sm"}
               onChange={() => setSize("sm")}
-              className="accent-[#0a6ee7] w-[16px] h-[16px]"
+              className="accent-primary-action w-[16px] h-[16px]"
             />
             sm
           </label>

@@ -21,7 +21,7 @@ const types: { key: ChipType; label: string }[] = [
 
 export function ChipShowcase() {
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1">Chip Component</h1>
       <p className="text-muted-foreground mb-10">Type x Size x State</p>
 

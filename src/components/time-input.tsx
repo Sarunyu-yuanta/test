@@ -275,7 +275,7 @@ function RangeSlotPicker({
                 style={{
                   fontVariationSettings: "'wdth' 100",
                   color: isSelected
-                    ? "#ffffff"
+                    ? "var(--on-primary-action)"
                     : "var(--foreground)",
                 }}
               >
@@ -474,7 +474,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
       mode === "single" ? Boolean(currentValue) : true;
 
     // ── Colours ──────────────────────────────────────────────────────────────────
-    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-white";
+    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled
       ? "var(--disabled)"
       : "var(--muted-foreground)";
@@ -800,11 +800,10 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
               <Popover.Content
                 align="start"
                 sideOffset={4}
-                className="z-50 rounded-[8px] bg-white p-3 outline-none max-w-[340px]"
+                className="z-50 rounded-[8px] bg-popover p-3 outline-none max-w-[340px] text-popover-foreground"
                 style={{
-                  boxShadow:
-                    "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
-                  border: "1px solid rgba(0,0,0,0.08)",
+                  boxShadow: "var(--elevation-popover)",
+                  border: "1px solid var(--border)",
                   minWidth:
                     mode === "single" ? 327 : undefined,
                 }}

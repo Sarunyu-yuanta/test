@@ -1,3 +1,4 @@
+/* Canonical palette: tokens/color-primitives.fill.json (DTCG-style). Keep CSS names in sync (--fill-<palette>-<step>). */
 :root {
   --fill-p1-100: #f3f8fe;
   --fill-p1-200: #dae9fb;

@@ -54,7 +54,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const isFocus = state === "focus";
   const isFilled = currentValue.length > 0;
 
-  const bg = isDisabled ? "bg-disabled-bg" : "bg-white";
+  const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
   const floatLabel = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
   const filledValue = isDisabled ? "var(--disabled)" : "var(--foreground)";
   const unitColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";

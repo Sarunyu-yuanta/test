@@ -77,11 +77,11 @@ export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
         ? "bg-selected-light-bg border border-transparent"
         : state === "disabled"
           ? "bg-disabled-bg border border-transparent"
-          : "bg-white border border-border";
+          : "bg-background border border-border";
 
   const textClass =
     state === "selected"
-      ? "text-white"
+      ? "text-on-primary-action"
       : state === "selected-disabled"
         ? "text-primary-action/40"
         : state === "disabled"
@@ -90,7 +90,7 @@ export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
 
   const iconClass =
     state === "selected"
-      ? "text-white"
+      ? "text-on-primary-action"
       : state === "selected-disabled"
         ? "text-primary-action/40"
         : state === "disabled"

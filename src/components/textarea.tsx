@@ -83,7 +83,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
         <div
           className={cn(
             "relative h-[116px] rounded-lg",
-            isDisabled ? "bg-disabled-bg" : "bg-white",
+            isDisabled ? "bg-disabled-bg" : "bg-background",
           )}
         >
           <div

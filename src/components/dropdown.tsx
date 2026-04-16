@@ -68,7 +68,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const isFocus = state === "focus";
 
     // ── Colours ─────────────────────────────────────────────────────────────
-    const bg = isDisabled ? "bg-disabled-bg" : "bg-white";
+    const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
     const filledColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
     const caretClassName = isDisabled ? "text-disabled" : "text-muted-foreground";
@@ -200,7 +200,6 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder={isFilled ? selectedLabel : placeholder + (required ? " *" : "")}
-                className="flex-1 min-w-0 min-h-[1px] text-[14px] leading-[20px] not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-disabled"
                 className="flex-1 min-w-0 min-h-[1px] text-sm leading-5 not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-disabled"
                 style={{
                   color: filledColor,
@@ -318,11 +317,11 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         {open && !forceState && options.length > 0 && (
           <div
             className={cn(
-              "relative bg-white rounded-lg overflow-clip p-2 z-20 flex flex-col items-start",
+              "relative bg-popover rounded-lg overflow-clip p-2 z-20 flex flex-col items-start text-popover-foreground",
               filteredOptions.length > 10 && "overflow-y-auto"
             )}
             style={{
-              boxShadow: "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
+              boxShadow: "var(--elevation-popover)",
               ...(filteredOptions.length > 10 ? { maxHeight: 10 * 48 + 16 } : {}),
             }}
           >
@@ -335,7 +334,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                   "w-full shrink-0 rounded-[4px] cursor-pointer transition-colors duration-100",
                     opt.value === currentValue
                       ? "bg-primary-action-light"
-                      : "bg-white hover:bg-disabled-bg"
+                      : "bg-popover hover:bg-disabled-bg"
                   )}
                 >
                   <div className="flex flex-row items-center size-full">
@@ -353,7 +352,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 </div>
               ))
             ) : (
-              <div className="w-full shrink-0 bg-white">
+              <div className="w-full shrink-0 bg-popover">
                 <div className="flex flex-row items-center size-full">
                   <div className="flex items-center p-[14px] relative w-full">
                     <p className="flex-1 min-w-0 min-h-[1px] leading-[20px] not-italic text-[14px] text-disabled">

@@ -57,7 +57,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
       <div
         ref={ref}
         className={cn(
-          "relative flex cursor-text items-center gap-2 rounded-lg bg-white",
+          "relative flex cursor-text items-center gap-2 rounded-lg bg-background",
           padding,
           minHeight,
           className

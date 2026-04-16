@@ -74,7 +74,7 @@ function ColHeaders() {
       {STATES.map(({ label }) => (
         <div
           key={label}
-          className="w-[280px] shrink-0 text-[11px] text-[#9ca3af] uppercase tracking-wider"
+          className="w-[280px] shrink-0 text-[11px] text-caption uppercase tracking-wider"
           style={FONT}
         >
           {label}
@@ -89,7 +89,7 @@ function ShowcaseRow({ row }: { row: RowDef }) {
   return (
     <div className="flex items-start gap-6 mb-7">
       <div
-        className="w-[116px] shrink-0 text-[13px] text-[#6b7280] pt-[13px]"
+        className="w-[116px] shrink-0 text-[13px] text-muted-foreground pt-[13px]"
         style={FONT}
       >
         {row.label}
@@ -116,7 +116,7 @@ function GroupBlock({ group, isLast }: { group: GroupDef; isLast: boolean }) {
   return (
     <>
       <div
-        className="mb-5 text-[13px] text-[#374151]"
+        className="mb-5 text-[13px] text-nav-link"
         style={{ ...FONT, fontWeight: 600 }}
       >
         {group.title}
@@ -126,7 +126,7 @@ function GroupBlock({ group, isLast }: { group: GroupDef; isLast: boolean }) {
           <ShowcaseRow key={`${group.title}-${row.label}`} row={row} />
         ))}
       </div>
-      {!isLast && <div className="border-t border-[#e5e7eb] my-8" />}
+      {!isLast && <div className="border-t border-divider my-8" />}
     </>
   );
 }
@@ -154,11 +154,11 @@ export function DateInputShowcase() {
     mode === "range" ? "calendar" : pickerVariant;
 
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={FONT}>
         Date Input Component
       </h1>
-      <p className="text-[#6b7280] mb-12 text-[14px]" style={FONT}>
+      <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>
         Variants × States
       </p>
 
@@ -174,13 +174,13 @@ export function DateInputShowcase() {
           ))}
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Disabled year demo ── */}
           <h2 className="mb-2" style={FONT}>
             Disabled Years
           </h2>
-          <p className="text-[#6b7280] mb-6 text-[13px]" style={FONT}>
+          <p className="text-muted-foreground mb-6 text-[13px]" style={FONT}>
             ปี 2570 (พ.ศ.) = 2027 (ค.ศ.) ถูก disable — เปิด year picker แล้วหมุนไปดูที่กริด
           </p>
           <div className="flex gap-6 items-start pl-2 mb-2">
@@ -194,13 +194,13 @@ export function DateInputShowcase() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Narrow width / ellipsis ── */}
           <h2 className="mb-2" style={FONT}>
             Narrow width (ellipsis)
           </h2>
-          <p className="text-[#6b7280] mb-6 text-[13px]" style={FONT}>
+          <p className="text-muted-foreground mb-6 text-[13px]" style={FONT}>
             กล่องจำกัดความกว้างด้วยเส้นประ — ข้อความวันที่ในช่องจะถูกตัดด้วย …
             เมื่อไม่พอที่แสดง
           </p>
@@ -264,13 +264,13 @@ export function DateInputShowcase() {
             ).map(({ key, caption, width, node }) => (
               <div key={key}>
                 <p
-                  className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2"
+                  className="text-[11px] text-caption uppercase tracking-wider mb-2"
                   style={FONT}
                 >
                   {caption}
                 </p>
                 <div
-                  className="rounded-[6px] border border-dashed border-[#d1d5db] p-2 bg-[#fafafa]"
+                  className="rounded-[6px] border border-dashed border-border-muted p-2 bg-surface-chip-disabled"
                   style={{ width, maxWidth: "100%" }}
                 >
                   {node}
@@ -280,13 +280,13 @@ export function DateInputShowcase() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Interactive ── */}
           <h2 className="mb-2" style={FONT}>
             Interactive
           </h2>
-          <p className="text-[#6b7280] mb-8 text-[13px]" style={FONT}>
+          <p className="text-muted-foreground mb-8 text-[13px]" style={FONT}>
             Click the field to open the calendar. Use the toggles to change
             variant and state.
           </p>
@@ -315,21 +315,21 @@ export function DateInputShowcase() {
             >
               {/* Mode toggle */}
               <div>
-                <p className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2">
+                <p className="text-[11px] text-caption uppercase tracking-wider mb-2">
                   Mode
                 </p>
                 <div className="flex gap-3">
                   {(["single", "range"] as DateInputMode[]).map((m) => (
                     <label
                       key={m}
-                      className="flex items-center gap-2 cursor-pointer select-none text-[#374151]"
+                      className="flex items-center gap-2 cursor-pointer select-none text-nav-link"
                     >
                       <input
                         type="radio"
                         name="date-mode"
                         checked={mode === m}
                         onChange={() => setMode(m)}
-                        className="accent-[#0a6ee7] w-[14px] h-[14px]"
+                        className="accent-primary-action w-[14px] h-[14px]"
                       />
                       {m === "single" ? "Single" : "Range"}
                     </label>
@@ -339,7 +339,7 @@ export function DateInputShowcase() {
 
               {/* Picker variant */}
               <div>
-                <p className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2">
+                <p className="text-[11px] text-caption uppercase tracking-wider mb-2">
                   Picker
                 </p>
                 <div className="flex gap-3">
@@ -348,7 +348,7 @@ export function DateInputShowcase() {
                     return (
                       <label
                         key={v}
-                        className={`flex items-center gap-2 select-none ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer text-[#374151]"}`}
+                        className={`flex items-center gap-2 select-none ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer text-nav-link"}`}
                       >
                         <input
                           type="radio"
@@ -356,7 +356,7 @@ export function DateInputShowcase() {
                           checked={pickerVariant === v}
                           disabled={disabled}
                           onChange={() => setPickerVariant(v)}
-                          className="accent-[#0a6ee7] w-[14px] h-[14px]"
+                          className="accent-primary-action w-[14px] h-[14px]"
                         />
                         {v === "calendar" ? "Calendar" : "Scroll"}
                       </label>
@@ -364,7 +364,7 @@ export function DateInputShowcase() {
                   })}
                 </div>
                 {mode === "range" && (
-                  <p className="text-[11px] text-[#9ca3af] mt-1">
+                  <p className="text-[11px] text-caption mt-1">
                     Scroll ใช้ได้เฉพาะ Single mode
                   </p>
                 )}
@@ -372,7 +372,7 @@ export function DateInputShowcase() {
 
               {/* Checkboxes */}
               <div>
-                <p className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2">
+                <p className="text-[11px] text-caption uppercase tracking-wider mb-2">
                   State
                 </p>
                 <div className="flex flex-col gap-2">
@@ -385,13 +385,13 @@ export function DateInputShowcase() {
                   ).map(([lbl, val, setter]) => (
                     <label
                       key={lbl}
-                      className="flex items-center gap-2 cursor-pointer select-none text-[#374151]"
+                      className="flex items-center gap-2 cursor-pointer select-none text-nav-link"
                     >
                       <input
                         type="checkbox"
                         checked={val}
                         onChange={() => setter(!val)}
-                        className="accent-[#0a6ee7] w-[16px] h-[16px]"
+                        className="accent-primary-action w-[16px] h-[16px]"
                       />
                       {lbl}
                     </label>
@@ -403,12 +403,12 @@ export function DateInputShowcase() {
 
           {/* Selected value display */}
           {mode === "single" && singleDate && (
-            <div className="mt-4 pl-2 text-[13px] text-[#6b7280]" style={FONT}>
+            <div className="mt-4 pl-2 text-[13px] text-muted-foreground" style={FONT}>
               Selected: {singleDate.toLocaleDateString("th-TH")}
             </div>
           )}
           {mode === "range" && rangeDate?.from && (
-            <div className="mt-4 pl-2 text-[13px] text-[#6b7280]" style={FONT}>
+            <div className="mt-4 pl-2 text-[13px] text-muted-foreground" style={FONT}>
               From: {rangeDate.from.toLocaleDateString("th-TH")}
               {rangeDate.to && ` — To: ${rangeDate.to.toLocaleDateString("th-TH")}`}
             </div>
