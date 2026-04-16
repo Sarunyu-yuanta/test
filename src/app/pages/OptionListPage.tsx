@@ -1,5 +1,5 @@
 import React from "react";
-import { OptionListShowcase } from "../components/OptionListShowcase";
+import { OptionListShowcase } from "../showcases/OptionListShowcase";
 
 export function OptionListPage() {
   return <OptionListShowcase />;

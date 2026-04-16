@@ -1,5 +1,5 @@
 import React from "react";
-import { TimeInputShowcase } from "../components/TimeInputShowcase";
+import { TimeInputShowcase } from "../showcases/TimeInputShowcase";
 
 export function TimeInputPage() {
   return <TimeInputShowcase />;
