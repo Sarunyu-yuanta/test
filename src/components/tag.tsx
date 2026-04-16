@@ -110,8 +110,8 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
   ref
 ) {
   const isDisabled = state === "disabled";
-  const s = sizeStyles[size];
-  const v = variantStyles[variant];
+  const s = sizeStyles[size] ?? sizeStyles.large;
+  const v = variantStyles[variant] ?? variantStyles.gray;
   const bgClass = state === "disabled" ? "bg-disabled-bg" : state === "hover" ? "bg-hover-bg" : v.bg;
   const textClass = isDisabled ? "text-disabled" : v.text;
 
@@ -183,7 +183,7 @@ const statusTagStyles: Record<
 };
 
 export function StatusTag({ type = "stop", text, className }: StatusTagProps) {
-  const style = statusTagStyles[type];
+  const style = statusTagStyles[type] ?? statusTagStyles.stop;
 
   return (
     <div
