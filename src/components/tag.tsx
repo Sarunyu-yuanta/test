@@ -29,16 +29,16 @@ const sizeStyles: Record<
   }
 > = {
   large: {
-    container: "px-[8px] py-[4px]",
-    text: "text-[12px] leading-[16px]",
-    closeIcon: "size-[16px]",
-    closeButton: "size-[16px]",
+    container: "px-2 py-1",
+    text: "text-xs leading-4",
+    closeIcon: "h-4 w-4",
+    closeButton: "h-4 w-4",
   },
   small: {
-    container: "px-[4px] py-[2px]",
-    text: "text-[9px] leading-[14px]",
-    closeIcon: "size-[14px]",
-    closeButton: "size-[14px]",
+    container: "px-1 py-0.5",
+    text: "text-xxs leading-3",
+    closeIcon: "h-3.5 w-3.5",
+    closeButton: "h-3.5 w-3.5",
   },
 };
 
@@ -50,28 +50,28 @@ const variantStyles: Record<
   }
 > = {
   blue: {
-    bg: "bg-[#eff6ff]",
-    text: "text-[#1447e6]",
+    bg: "bg-blue-50",
+    text: "text-blue-700",
   },
   green: {
-    bg: "bg-[#dbfce7]",
-    text: "text-[#00a63e]",
+    bg: "bg-green-100",
+    text: "text-green-600",
   },
   yellow: {
-    bg: "bg-[#fef9c2]",
-    text: "text-[#d08700]",
+    bg: "bg-yellow-100",
+    text: "text-yellow-600",
   },
   red: {
-    bg: "bg-[#ffe2e2]",
-    text: "text-[#e7000b]",
+    bg: "bg-red-100",
+    text: "text-red-600",
   },
   gray: {
-    bg: "bg-[#f3f4f6]",
+    bg: "bg-gray-100",
     text: "text-subtle-text",
   },
   lime: {
-    bg: "bg-[#ecfcca]",
-    text: "text-[#5ea500]",
+    bg: "bg-lime-100",
+    text: "text-lime-600",
   },
 };
 
@@ -80,7 +80,7 @@ function CircleIcon({ disabled }: { disabled: boolean }) {
     <Circle
       aria-hidden="true"
       weight="regular"
-      className="size-[14px] shrink-0"
+      className="h-3.5 w-3.5 shrink-0"
       color={disabled ? "var(--disabled)" : "var(--subtle-text)"}
     />
   );

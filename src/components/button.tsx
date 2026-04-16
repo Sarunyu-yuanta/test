@@ -19,37 +19,37 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   rightIcon?: React.ReactNode;
 }
 
-// ─── Label-size maps ──────────────────────────────────────────────────────────
+// ─── Label-size maps (use token-based Tailwind classes) ───────────────────────
 const labelIconSizeClass: Record<ButtonLabelSize, string> = {
-  xs: "size-[16px]",
-  sm: "size-[18px]",
-  md: "size-[18px]",
-  lg: "size-[20px]",
-  xl: "size-[20px]",
+  xs: "h-4 w-4",     // 16px
+  sm: "h-4.5 w-4.5", // ~18px
+  md: "h-4.5 w-4.5",
+  lg: "h-5 w-5",     // 20px
+  xl: "h-5 w-5",
 };
 
 const gapClass: Record<ButtonLabelSize, string> = {
-  xs: "gap-[2px]",
-  sm: "gap-[2px]",
-  md: "gap-[2px]",
-  lg: "gap-[4px]",
-  xl: "gap-[4px]",
+  xs: "gap-0.5",  // 2px
+  sm: "gap-0.5",
+  md: "gap-0.5",
+  lg: "gap-1",    // 4px
+  xl: "gap-1",
 };
 
 const textSizeClass: Record<ButtonLabelSize, string> = {
-  xs: "text-[12px] leading-[18px]",
-  sm: "text-[14px] leading-[20px]",
-  md: "text-[14px] leading-[20px]",
-  lg: "text-[14px] leading-[20px]",
-  xl: "text-[14px] leading-[20px]",
+  xs: "text-xs leading-4",
+  sm: "text-sm leading-5",
+  md: "text-sm leading-5",
+  lg: "text-sm leading-5",
+  xl: "text-sm leading-5",
 };
 
 const roundedLabelClass: Record<ButtonLabelSize, string> = {
-  xs: "rounded-[4px]",
-  sm: "rounded-[6px]",
-  md: "rounded-[6px]",
-  lg: "rounded-[8px]",
-  xl: "rounded-[8px]",
+  xs: "rounded",
+  sm: "rounded-md",
+  md: "rounded-md",
+  lg: "rounded-lg",
+  xl: "rounded-lg",
 };
 
 function getPaddingClasses(
@@ -58,25 +58,25 @@ function getPaddingClasses(
   hasRight: boolean,
 ): readonly [string, string, string] {
   const pyMap: Record<ButtonLabelSize, string> = {
-    xs: "py-[4px]",
-    sm: "py-[4px]",
-    md: "py-[6px]",
-    lg: "py-[8px]",
-    xl: "py-[10px]",
+    xs: "py-1",    // 4px
+    sm: "py-1",    // 4px
+    md: "py-1.5",  // 6px
+    lg: "py-2",    // 8px
+    xl: "py-2.5",  // 10px
   };
   const pxMap: Record<ButtonLabelSize, { l: string; r: string }> = {
-    xs: { l: "pl-[6px]",  r: "pr-[6px]"  },
-    sm: { l: "pl-[8px]",  r: "pr-[8px]"  },
-    md: { l: "pl-[10px]", r: "pr-[10px]" },
-    lg: { l: "pl-[14px]", r: "pr-[14px]" },
-    xl: { l: "pl-[16px]", r: "pr-[16px]" },
+    xs: { l: "pl-1.5", r: "pr-1.5" }, // 6px
+    sm: { l: "pl-2",   r: "pr-2"   }, // 8px
+    md: { l: "pl-2.5", r: "pr-2.5" }, // 10px
+    lg: { l: "pl-3.5", r: "pr-3.5" }, // 14px
+    xl: { l: "pl-4",   r: "pr-4"   }, // 16px
   };
   const reducedMap: Record<ButtonLabelSize, { l: string; r: string }> = {
-    xs: { l: "pl-[6px]",  r: "pr-[6px]"  },
-    sm: { l: "pl-[6px]",  r: "pr-[6px]"  },
-    md: { l: "pl-[8px]",  r: "pr-[8px]"  },
-    lg: { l: "pl-[10px]", r: "pr-[10px]" },
-    xl: { l: "pl-[12px]", r: "pr-[12px]" },
+    xs: { l: "pl-1.5", r: "pr-1.5" },
+    sm: { l: "pl-1.5", r: "pr-1.5" },
+    md: { l: "pl-2",   r: "pr-2"   },
+    lg: { l: "pl-2.5", r: "pr-2.5" },
+    xl: { l: "pl-3",   r: "pr-3"   },
   };
   return [
     hasLeft ? reducedMap[size].l : pxMap[size].l,
@@ -87,11 +87,11 @@ function getPaddingClasses(
 
 // ─── Icon-size specs (from Figma) ─────────────────────────────────────────────
 const iconSizeSpec: Record<ButtonIconSize, { btn: string; icon: number; rounded: string }> = {
-  "icon-xs": { btn: "size-[26px]", icon: 16, rounded: "rounded-[4px]" },
-  "icon-sm": { btn: "size-[28px]", icon: 18, rounded: "rounded-[6px]" },
-  "icon-md": { btn: "size-[32px]", icon: 18, rounded: "rounded-[6px]" },
-  "icon-lg": { btn: "size-[36px]", icon: 20, rounded: "rounded-[8px]" },
-  "icon-xl": { btn: "size-[40px]", icon: 20, rounded: "rounded-[8px]" },
+  "icon-xs": { btn: "h-6 w-6",  icon: 16, rounded: "rounded" },
+  "icon-sm": { btn: "h-7 w-7",  icon: 18, rounded: "rounded-md" },
+  "icon-md": { btn: "h-8 w-8",  icon: 18, rounded: "rounded-md" },
+  "icon-lg": { btn: "h-9 w-9",  icon: 20, rounded: "rounded-lg" },
+  "icon-xl": { btn: "h-10 w-10", icon: 20, rounded: "rounded-lg" },
 };
 
 // ─── Variant colours ──────────────────────────────────────────────────────────

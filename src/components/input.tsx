@@ -114,10 +114,10 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   };
 
   return (
-    <div ref={ref} className={cn("flex flex-col gap-[4px] w-full", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-1 w-full", className)}>
       <div
         className={cn(
-          "relative rounded-[8px]",
+          "relative rounded-lg",
           padding,
           bg,
           containerFlex,
@@ -143,15 +143,15 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             className={cn(
               "shrink-0 w-full not-italic",
               isFilled
-                ? "leading-[16px] text-[12px]"
-                : "text-[16px] leading-[20px] pointer-events-none",
+                ? "leading-4 text-xs"
+                : "text-base leading-5 pointer-events-none",
             )}
             style={{ color: floatLabel }}
           >
             {placeholder}
             {required && (
               <span
-                className="text-[12px] leading-[16px]"
+                className="text-xs leading-4"
                 style={{
                   color: isDisabled ? "var(--disabled)" : "var(--error-dark)",
                 }}
@@ -173,9 +173,9 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             className={cn(
               "w-full bg-transparent outline-none border-none min-w-0",
               isFilled
-                ? "leading-[20px] not-italic text-[14px] p-0 m-0"
+                ? "leading-5 not-italic text-sm p-0 m-0"
                 : cn(
-                    "absolute inset-0 h-full text-[16px]",
+                    "absolute inset-0 h-full text-base",
                     isDisabled ? "cursor-not-allowed" : "cursor-text",
                   ),
             )}
@@ -222,7 +222,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
         )}
       </div>
       {showBelow && (
-        <div className="flex items-start gap-[8px] px-[4px] text-[12px] leading-[16px]">
+        <div className="flex items-start gap-2 px-1 text-xs leading-4">
           {leftText ? (
             <span className="flex-1 min-w-0" style={{ color: leftColor }}>
               {leftText}

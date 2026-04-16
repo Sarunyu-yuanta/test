@@ -36,7 +36,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
     const iconSize = size === "lg" ? 24 : 22;
     const minHeight = size === "sm" ? "h-[38px]" : "";
     const padding =
-      size === "sm" ? "px-[14px] py-[8px]" : "px-[14px] py-[12px]";
+      size === "sm" ? "px-3.5 py-2" : "px-3.5 py-3";
     const borderInset = focused ? "-1px" : "0px";
     const borderRad = focused ? "9px" : "8px";
     const borderColor = focused
@@ -57,7 +57,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
       <div
         ref={ref}
         className={cn(
-          "relative flex cursor-text items-center gap-[8px] rounded-[8px] bg-white",
+          "relative flex cursor-text items-center gap-2 rounded-lg bg-white",
           padding,
           minHeight,
           className
@@ -85,7 +85,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
         <div className="relative min-w-0 flex-1">
           {!isFilled && (
             <p
-              className="pointer-events-none absolute inset-0 flex items-center text-[16px] leading-[20px] not-italic"
+              className="pointer-events-none absolute inset-0 flex items-center text-base leading-5 not-italic"
               style={{ color: "var(--muted-foreground)" }}
             >
               {placeholder}
@@ -99,7 +99,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
-            className="m-0 w-full border-none bg-transparent p-0 text-[16px] leading-[20px] outline-none"
+            className="m-0 w-full border-none bg-transparent p-0 text-base leading-5 outline-none"
             style={{
               color: isFilled ? "var(--foreground)" : "transparent",
               caretColor: "var(--caret-color)",

@@ -75,8 +75,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   const widthClass =
     variant === "desktop" ? "w-[308px]" : variant === "tablet" ? "w-[224px]" : "w-[163px]";
   const padding =
-    variant === "desktop" ? "p-[16px]" : variant === "tablet" ? "p-[12px]" : "p-[10px]";
-  const titleGap = variant === "desktop" ? "gap-[6px]" : "gap-[4px]";
+    variant === "desktop" ? "p-4" : variant === "tablet" ? "p-3" : "p-2.5";
+  const titleGap = variant === "desktop" ? "gap-1.5" : "gap-1";
   const bannerClass = variant === "desktop" ? "h-[173px]" : "aspect-video w-full";
   const tag = tagConfig[tagStatus];
   const bannerSrc = image ?? imgBanner;
@@ -112,38 +112,38 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
           </div>
         )}
       </div>
-      <div className={cn("w-full shrink-0 bg-white", padding)}>
+      <div className={cn("w-full shrink-0 bg-card", padding)}>
         <div className={cn("flex w-full flex-col items-start", titleGap)}>
-          <div className="flex w-full flex-col items-start gap-[4px]">
+          <div className="flex w-full flex-col items-start gap-1">
             <p
               className={cn(
-                "line-clamp-2 w-full overflow-hidden text-ellipsis text-[14px] leading-[20px] text-foreground",
+                "line-clamp-2 w-full overflow-hidden text-ellipsis text-sm leading-5 text-foreground",
               )}
             >
               {title}
             </p>
-            <div className="flex w-full items-center gap-[8px]">
-              <div className="flex h-[22px] shrink-0 items-center gap-[4px]">
+            <div className="flex w-full items-center gap-2">
+              <div className="flex h-[22px] shrink-0 items-center gap-1">
                 <CalendarIcon />
-                <p className="whitespace-nowrap text-[12px] leading-[16px] text-accent-orange">
+                <p className="whitespace-nowrap text-xs leading-4 text-accent-orange">
                   {date}
                 </p>
               </div>
               <div className="h-[14px] w-px shrink-0 bg-border" />
               <p
                 className={cn(
-                  "min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] leading-[16px] text-subtle-text",
+                  "min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xs leading-4 text-subtle-text",
                 )}
               >
                 {time}
               </p>
             </div>
             {showLocation && (
-              <div className="flex h-[22px] w-full items-center gap-[4px]">
+              <div className="flex h-[22px] w-full items-center gap-1">
                 <LocationIcon />
                 <p
                   className={cn(
-                    "min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-[12px] leading-[16px] text-subtle-text",
+                    "min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-xs leading-4 text-subtle-text",
                   )}
                 >
                   {location}
@@ -151,12 +151,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
               </div>
             )}
             {showAudience && (
-              <div className="flex h-[22px] w-full items-center gap-[4px]">
+              <div className="flex h-[22px] w-full items-center gap-1">
                 <AudienceIcon />
-                <p className="shrink-0 whitespace-nowrap text-[12px] leading-[16px] text-subtle-text">
+                <p className="shrink-0 whitespace-nowrap text-xs leading-4 text-subtle-text">
                   ผู้เข้าร่วม
                 </p>
-                <p className="shrink-0 whitespace-nowrap text-[12px] leading-[16px] text-primary-action">
+                <p className="shrink-0 whitespace-nowrap text-xs leading-4 text-primary-action">
                   {count}
                 </p>
               </div>

@@ -155,13 +155,13 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
-        className={cn("flex flex-col gap-[4px] w-full", className)}
+        className={cn("flex flex-col gap-1 w-full", className)}
       >
         {/* ── External label ── */}
         {label && (
           <div className="relative shrink-0 w-full">
-            <div className="flex items-start px-[4px] w-full">
-              <p className="leading-[20px] not-italic relative shrink-0 text-foreground text-[14px] font-bold whitespace-nowrap">
+            <div className="flex items-start px-1 w-full">
+              <p className="leading-5 not-italic relative shrink-0 text-foreground text-sm font-bold whitespace-nowrap">
                 {label}
               </p>
             </div>
@@ -172,13 +172,13 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         <div
           onClick={handleToggle}
           className={cn(
-            "relative flex gap-[8px] items-center rounded-[8px] px-[14px]",
+            "relative flex gap-2 items-center rounded-lg px-3.5",
             bg,
             hasExternalLabel
               ? "h-[38px]"
               : isFilled && !open
-                ? "py-[6px]"
-                : "p-[14px]",
+                ? "py-1.5"
+                : "p-3.5",
             !isDisabled && !forceState && "cursor-pointer"
           )}
         >
@@ -201,6 +201,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 onKeyDown={handleInputKeyDown}
                 placeholder={isFilled ? selectedLabel : placeholder + (required ? " *" : "")}
                 className="flex-1 min-w-0 min-h-[1px] text-[14px] leading-[20px] not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-disabled"
+                className="flex-1 min-w-0 min-h-[1px] text-sm leading-5 not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-disabled"
                 style={{
                   color: filledColor,
                   caretColor: "var(--caret-color)",
@@ -241,7 +242,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder={placeholder + (required ? " *" : "")}
-                className="flex-1 min-w-0 min-h-[1px] text-[16px] leading-[20px] not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-muted-foreground"
+                className="flex-1 min-w-0 min-h-[1px] text-base leading-5 not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-muted-foreground"
                 style={{
                   color: "var(--foreground)",
                   caretColor: "var(--caret-color)",
@@ -254,7 +255,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             hasExternalLabel ? (
               /* External label → single-line selected value */
               <p
-                className="flex-1 min-w-0 min-h-[1px] leading-[20px] not-italic text-[14px] overflow-hidden text-ellipsis whitespace-nowrap"
+                className="flex-1 min-w-0 min-h-[1px] leading-5 not-italic text-sm overflow-hidden text-ellipsis whitespace-nowrap"
                 style={{ color: filledColor }}
               >
                 {selectedLabel}
@@ -264,14 +265,14 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               /* Default → floating label + selected value */
               <div className="flex flex-col items-start justify-center flex-1 min-w-0 min-h-[1px]">
                 <p
-                  className="shrink-0 w-full leading-[16px] not-italic text-[12px]"
+                  className="shrink-0 w-full leading-4 not-italic text-xs"
                   style={{ color: labelColor }}
                 >
                   {placeholder}
                   {required && <Asterisk color={isDisabled ? "var(--disabled)" : "var(--error-dark)"} />}
                 </p>
                 <p
-                  className="w-full leading-[20px] not-italic text-[14px] min-w-0 min-h-[1px]"
+                  className="w-full leading-5 not-italic text-sm min-w-0 min-h-[1px]"
                   style={{ color: filledColor }}
                 >
                   {selectedLabel}
@@ -283,13 +284,13 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             required ? (
               <div className="flex flex-1 min-w-0 min-h-[1px] gap-[2px] items-center">
                 <p
-                  className="leading-[20px] not-italic text-[16px] whitespace-nowrap"
+                  className="leading-5 not-italic text-base whitespace-nowrap"
                   style={{ color: labelColor }}
                 >
                   {placeholder}
                 </p>
                 <p
-                  className="leading-[16px] not-italic text-[12px] w-[7px]"
+                  className="leading-4 not-italic text-xs w-[7px]"
                   style={{ color: isDisabled ? "var(--disabled)" : "var(--error-dark)" }}
                 >
                   *
@@ -297,7 +298,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               </div>
             ) : (
               <p
-                className="flex-1 min-w-0 min-h-[1px] text-[16px] leading-[20px] not-italic overflow-hidden text-ellipsis whitespace-nowrap"
+                className="flex-1 min-w-0 min-h-[1px] text-base leading-5 not-italic overflow-hidden text-ellipsis whitespace-nowrap"
                 style={{ color: labelColor }}
               >
                 {placeholder}
@@ -317,7 +318,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         {open && !forceState && options.length > 0 && (
           <div
             className={cn(
-              "relative bg-white rounded-[8px] overflow-clip p-[8px] z-20 flex flex-col items-start",
+              "relative bg-white rounded-lg overflow-clip p-2 z-20 flex flex-col items-start",
               filteredOptions.length > 10 && "overflow-y-auto"
             )}
             style={{
@@ -331,17 +332,17 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                   key={opt.value}
                   onClick={() => handleSelect(opt.value)}
                   className={cn(
-                    "w-full shrink-0 rounded-[4px] cursor-pointer transition-colors duration-100",
+                  "w-full shrink-0 rounded-[4px] cursor-pointer transition-colors duration-100",
                     opt.value === currentValue
                       ? "bg-primary-action-light"
                       : "bg-white hover:bg-disabled-bg"
                   )}
                 >
                   <div className="flex flex-row items-center size-full">
-                    <div className="flex items-center p-[14px] relative w-full">
+                    <div className="flex items-center p-3.5 relative w-full">
                       <p
                         className={cn(
-                          "flex-1 min-w-0 min-h-[1px] leading-[20px] not-italic overflow-hidden text-[14px] text-ellipsis whitespace-nowrap",
+                          "flex-1 min-w-0 min-h-[1px] leading-5 not-italic overflow-hidden text-sm text-ellipsis whitespace-nowrap",
                           opt.value === currentValue ? "text-primary-action" : "text-foreground"
                         )}
                       >

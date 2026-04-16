@@ -79,10 +79,10 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
     };
 
     return (
-      <div ref={ref} className={cn("flex w-full flex-col gap-[4px]", className)}>
+      <div ref={ref} className={cn("flex w-full flex-col gap-1", className)}>
         <div
           className={cn(
-            "relative h-[116px] rounded-[8px]",
+            "relative h-[116px] rounded-lg",
             isDisabled ? "bg-disabled-bg" : "bg-white",
           )}
         >
@@ -92,9 +92,9 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
             style={{ inset: borderInset, borderRadius: borderRad, borderColor }}
           />
           {isFilled ? (
-            <div className="flex h-full w-full flex-col p-[14px] pb-[6px]">
+            <div className="flex h-full w-full flex-col px-3.5 pt-3.5 pb-1.5">
               <p
-                className="w-full shrink-0 text-[12px] leading-[16px] not-italic"
+                className="w-full shrink-0 text-xs leading-4 not-italic"
                 style={{ color: floatLabel }}
               >
                 {placeholder}
@@ -125,7 +125,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
                 rows={rows}
                 aria-label={placeholder}
                 className={cn(
-                  "m-0 min-h-0 min-w-0 w-full flex-1 resize-none border-none bg-transparent p-0 text-[14px] leading-[20px] not-italic outline-none",
+                  "m-0 min-h-0 min-w-0 w-full flex-1 resize-none border-none bg-transparent p-0 text-sm leading-5 not-italic outline-none",
                 )}
                 style={{
                   ...textareaProps.style,
@@ -135,9 +135,9 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
               />
             </div>
           ) : (
-            <div className="relative flex size-full items-start p-[14px]">
+            <div className="relative flex size-full items-start p-3.5">
               <p
-                className="pointer-events-none relative h-full min-h-[1px] min-w-0 flex-1 text-[16px] leading-[20px] not-italic"
+                className="pointer-events-none relative h-full min-h-[1px] min-w-0 flex-1 text-base leading-5 not-italic"
                 style={{ color: floatLabel }}
               >
                 {placeholder}
@@ -167,7 +167,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
                   }}
                   rows={rows}
                   className={cn(
-                    "absolute inset-0 h-full w-full cursor-text resize-none border-none bg-transparent text-[16px] outline-none",
+                    "absolute inset-0 h-full w-full cursor-text resize-none border-none bg-transparent text-base outline-none",
                   )}
                   style={{
                     ...textareaProps.style,
@@ -182,9 +182,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
           )}
         </div>
         {showBelow && (
-          <div
-            className="flex items-start gap-[8px] px-[4px] text-[12px] leading-[16px]"
-          >
+          <div className="flex items-start gap-2 px-1 text-xs leading-4">
             {leftText ? (
               <span className="min-w-0 flex-1" style={{ color: leftColor }}>
                 {leftText}

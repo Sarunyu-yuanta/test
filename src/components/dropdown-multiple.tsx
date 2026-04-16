@@ -296,7 +296,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
     const isFocus = state === "focus";
 
     // ── Colours ─────────────────────────────────────────────────────────────
-    const bg = isDisabled ? "bg-disabled-bg" : "bg-white";
+  const bg = isDisabled ? "bg-disabled-bg" : "bg-white";
     const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
     const caretColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
 
@@ -416,7 +416,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
       required ? (
         <div className="flex gap-[2px] items-center shrink-0 w-full">
           <p
-            className="shrink-0 leading-[16px] not-italic text-[12px]"
+            className="shrink-0 leading-4 not-italic text-xs"
             style={{ color: labelColor }}
           >
             {placeholder}
@@ -432,7 +432,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
         </div>
       ) : (
         <p
-          className="shrink-0 w-full leading-[16px] not-italic text-[12px]"
+          className="shrink-0 w-full leading-4 not-italic text-xs"
           style={{ color: labelColor }}
         >
           {placeholder}
@@ -444,13 +444,13 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
       required ? (
         <div className="flex flex-1 min-w-0 min-h-[1px] gap-[2px] items-center">
           <p
-            className="leading-[20px] not-italic text-[16px] whitespace-nowrap"
+            className="leading-5 not-italic text-base whitespace-nowrap"
             style={{ color: labelColor }}
           >
             {placeholder}
           </p>
           <p
-            className="leading-[16px] not-italic text-[12px] w-[7px]"
+            className="leading-4 not-italic text-xs w-[7px]"
             style={{ color: isDisabled ? "var(--disabled)" : "var(--error-dark)" }}
           >
             *
@@ -458,7 +458,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
         </div>
       ) : (
         <p
-          className="flex-1 min-w-0 min-h-[1px] text-[16px] leading-[20px] not-italic overflow-hidden text-ellipsis whitespace-nowrap py-[7px]"
+          className="flex-1 min-w-0 min-h-[1px] text-base leading-5 not-italic overflow-hidden text-ellipsis whitespace-nowrap py-[7px]"
           style={{ color: labelColor }}
         >
           {placeholder}
@@ -470,7 +470,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
       <div
         ref={measureRef}
         aria-hidden
-        className="absolute flex gap-[4px] items-center pointer-events-none"
+        className="absolute flex gap-1 items-center pointer-events-none"
         style={{
           visibility: "hidden",
           top: 0,
@@ -630,8 +630,8 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
           className={cn(
             "relative flex gap-[8px] items-center rounded-[8px]",
             bg,
-            "px-[14px]",
-            hasExternalLabel ? "h-[40px]" : "py-[4px] min-h-[48px]",
+            "px-3.5",
+            hasExternalLabel ? "h-10" : "py-1 min-h-12",
             !isDisabled && !isStatic && "cursor-pointer",
           )}
         >

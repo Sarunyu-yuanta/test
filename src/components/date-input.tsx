@@ -1005,16 +1005,16 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     );
 
     const triggerBaseClasses = cn(
-      "relative flex gap-[8px] items-center rounded-[8px] min-w-0",
+      "relative flex gap-2 items-center rounded-lg min-w-0",
       bgClass,
-      "px-[14px]",
-      isFilled ? "py-[6px]" : "py-[12px]",
+      "px-3.5",
+      isFilled ? "py-1.5" : "py-3",
       "w-full",
     );
 
     // ── Below message ─────────────────────────────────────────────────────────────
     const belowMessage = showBelow && (
-      <div className="flex items-start px-[4px] text-[12px] leading-[16px]">
+      <div className="flex items-start px-1 text-xs leading-4">
         <span
           className="flex-1 min-w-0"
           style={{ color: leftColor }}
