@@ -5,11 +5,11 @@ This folder is the **canonical JSON** for variables exported from Figma (DTCG-st
 
 ## Layers (recommended)
 
-| Layer | Role | Files |
-|--------|------|--------|
-| **Primitives** | Raw scales (no product meaning) | `color-primitives.fill.json`, `typography-primitives.mode-1.json`, `size-mode-1.json`, `effect-mode-1.json` |
-| **Semantic** | Roles: BG, Text, Border… with references to primitives | `semantic/*.json` (paste Figma exports here) |
-| **Theme / app** | `:root`, `.dark`, `@theme inline` | `src/styles/theme.css` |
+| Layer           | Role                                                   | Files                                                                                                       |
+| --------------- | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| **Primitives**  | Raw scales (no product meaning)                        | `color-primitives.fill.json`, `typography-primitives.mode-1.json`, `size-mode-1.json`, `effect-mode-1.json` |
+| **Semantic**    | Roles: BG, Text, Border… with references to primitives | `semantic/*.json` (paste Figma exports here)                                                                |
+| **Theme / app** | `:root`, `.dark`, `@theme inline`                      | `src/styles/theme.css`                                                                                      |
 
 ## Naming (aligned with this repo)
 
@@ -28,11 +28,11 @@ Figma uses `{Gray.900}`, `{P1.600}`, etc. After normalization:
 
 Place exports from Figma Variables (same content, cleaned names):
 
-| Figma collection | Suggested path |
-|------------------|----------------|
+| Figma collection         | Suggested path                         |
+| ------------------------ | -------------------------------------- |
 | Color.Light (System One) | `semantic/color.system-one.light.json` |
-| Color.Dark (System One) | `semantic/color.system-one.dark.json` |
-| Color.Light (Wealth) | `semantic/color.wealth.light.json` |
+| Color.Dark (System One)  | `semantic/color.system-one.dark.json`  |
+| Color.Light (Wealth)     | `semantic/color.wealth.light.json`     |
 
 Keep **one theme** active in CSS at a time, or map semantic JSON → CSS variables per product.
 
@@ -52,15 +52,15 @@ Keep **one theme** active in CSS at a time, or map semantic JSON → CSS variabl
 
 UI components use **Tailwind classes** wired to `theme.css` (not raw `bg-white` / hex). Summary:
 
-| Area | Classes / vars | Theme source |
-|------|------------------|--------------|
-| Page / field surface | `bg-background` | `--background` |
-| Floating panels (dropdown, popover, option list) | `bg-popover`, `text-popover-foreground` | `--popover`, `--popover-foreground` |
-| Cards | `bg-card`, `text-card-foreground` | `--card` |
-| Primary CTA / filled chip / calendar selection | `bg-primary-action`, `text-on-primary-action` | `--primary-action`, `--on-primary-action` |
-| Borders | `border-border`, `border-border-disabled` | `--border`, `--border-disabled` |
-| Muted / disabled text | `text-muted-foreground`, `text-disabled` | `--muted-foreground`, `--disabled` |
-| Elevation | `shadow-card`, `shadow-popover` (where used) | `--elevation-*` via `@theme` |
-| Raw palette (tags, rare cases) | `bg-[var(--fill-*)]` | `tokens-fill.css` |
+| Area                                             | Classes / vars                                | Theme source                              |
+| ------------------------------------------------ | --------------------------------------------- | ----------------------------------------- |
+| Page / field surface                             | `bg-background`                               | `--background`                            |
+| Floating panels (dropdown, popover, option list) | `bg-popover`, `text-popover-foreground`       | `--popover`, `--popover-foreground`       |
+| Cards                                            | `bg-card`, `text-card-foreground`             | `--card`                                  |
+| Primary CTA / filled chip / calendar selection   | `bg-primary-action`, `text-on-primary-action` | `--primary-action`, `--on-primary-action` |
+| Borders                                          | `border-border`, `border-border-disabled`     | `--border`, `--border-disabled`           |
+| Muted / disabled text                            | `text-muted-foreground`, `text-disabled`      | `--muted-foreground`, `--disabled`        |
+| Elevation                                        | `shadow-card`, `shadow-popover` (where used)  | `--elevation-*` via `@theme`              |
+| Raw palette (tags, rare cases)                   | `bg-[var(--fill-*)]`                          | `tokens-fill.css`                         |
 
 Primitives file: `color-primitives.fill.json` → `--fill-*` only; semantic meaning stays in `theme.css` and the classes above.

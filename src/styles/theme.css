@@ -9,7 +9,7 @@
 
 :root {
   --font-size: 16px;
-  --font-sans: 'Noto Sans Thai', sans-serif;
+  --font-sans: "Noto Sans Thai", sans-serif;
 
   --background: var(--fill-white-1000);
   --foreground: var(--fill-gray-900);
@@ -23,8 +23,16 @@
   --primary-action: var(--fill-p1-600);
   --primary-action-hover: var(--fill-p1-700);
   --primary-action-active: var(--fill-p1-800);
-  --primary-action-light: color-mix(in srgb, var(--fill-p1-600) 6%, transparent);
-  --primary-action-muted: color-mix(in srgb, var(--fill-p1-600) 10%, transparent);
+  --primary-action-light: color-mix(
+    in srgb,
+    var(--fill-p1-600) 6%,
+    transparent
+  );
+  --primary-action-muted: color-mix(
+    in srgb,
+    var(--fill-p1-600) 10%,
+    transparent
+  );
 
   --secondary: oklch(0.95 0.0058 264.53);
   --secondary-foreground: var(--fill-gray-950);
@@ -68,9 +76,21 @@
   --range-text: var(--fill-sky-500);
 
   /* Overlays (brand primary on surface) — nav, chrome */
-  --overlay-primary-4: color-mix(in srgb, var(--primary-action) 4%, transparent);
-  --overlay-primary-6: color-mix(in srgb, var(--primary-action) 6%, transparent);
-  --overlay-primary-8: color-mix(in srgb, var(--primary-action) 8%, transparent);
+  --overlay-primary-4: color-mix(
+    in srgb,
+    var(--primary-action) 4%,
+    transparent
+  );
+  --overlay-primary-6: color-mix(
+    in srgb,
+    var(--primary-action) 6%,
+    transparent
+  );
+  --overlay-primary-8: color-mix(
+    in srgb,
+    var(--primary-action) 8%,
+    transparent
+  );
   --nav-link: var(--fill-gray-700);
   --nav-link-active: var(--primary-action);
   --icon-muted: var(--fill-gray-700);
@@ -79,8 +99,11 @@
   --on-primary-action: var(--fill-white-1000);
 
   /* Elevation & chrome (referenced by @theme shadow-* utilities) */
-  --elevation-popover: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --elevation-card: 0px 0px 2px 0px rgba(102, 102, 102, 0.16), 0px 4px 8px 0px rgba(102, 102, 102, 0.12);
+  --elevation-popover:
+    0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --elevation-card:
+    0px 0px 2px 0px rgba(102, 102, 102, 0.16),
+    0px 4px 8px 0px rgba(102, 102, 102, 0.12);
 
   /* Surfaces (match tokens/color-primitives.fill.json → tokens-fill.css) */
   --surface-clear-hover: var(--fill-gray-200);
@@ -173,9 +196,12 @@
 
   --shadow-2xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);
   --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -4px rgba(0, 0, 0, 0.1);
+  --shadow-sm:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg:
+    0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -4px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-popover: var(--elevation-popover);
   --shadow-card: var(--elevation-card);
