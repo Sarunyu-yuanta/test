@@ -11,6 +11,8 @@ import { DateInputPage } from "./pages/DateInputPage";
 import { TimeInputPage } from "./pages/TimeInputPage";
 import { SearchInputPage } from "./pages/SearchInputPage";
 import { OptionListPage } from "./pages/OptionListPage";
+import { TagPage } from "./pages/TagPage";
+import { ChipPage } from "./pages/ChipPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -36,6 +38,8 @@ export const router = createBrowserRouter([
       { path: "time-input", Component: TimeInputPage },
       { path: "search-input", Component: SearchInputPage },
       { path: "option-list", Component: OptionListPage },
+      { path: "tag", Component: TagPage },
+      { path: "chip", Component: ChipPage },
     ],
   },
 ]);

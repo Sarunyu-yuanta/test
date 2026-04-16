@@ -16,6 +16,8 @@ const navItems = [
   { to: "/search-input", label: "Search Input" },
   { to: "/option-list", label: "Option List" },
   { to: "/tab", label: "Tab" },
+  { to: "/tag", label: "Tag" },
+  { to: "/chip", label: "Chip" },
   // { to: "/card", label: "Card" },
 ];
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, type ReactNode } from "react";
+import { Circle } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type TabSize = "lg" | "md" | "sm";
@@ -66,16 +67,7 @@ const sizeClasses: Record<
 };
 
 function DefaultTabIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 20 20"
-      fill="none"
-      className={cn("shrink-0", className)}
-    >
-      <circle cx="10" cy="10" r="8.125" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  );
+  return <Circle aria-hidden="true" weight="regular" className={cn("shrink-0", className)} />;
 }
 
 export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(

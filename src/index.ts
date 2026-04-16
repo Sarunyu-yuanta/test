@@ -8,6 +8,7 @@ export { Input } from "./components/input";
 export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
 export { Tab, TabGroup } from "./components/tab";
+export { Tag } from "./components/tag";
 export { TextArea } from "./components/textarea";
 export { TimeInput } from "./components/time-input";
 
@@ -78,6 +79,13 @@ export type {
   TabProps,
   TabGroupProps,
 } from "./components/tab";
+
+// Types — Tag
+export type {
+  TagSize,
+  TagState,
+  TagProps,
+} from "./components/tag";
 
 // Types — TextArea
 export type {
