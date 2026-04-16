@@ -7,11 +7,15 @@ import { cn } from "../lib/utils";
 export type SearchInputSize = "lg" | "sm";
 
 export interface SearchInputProps {
+  /** Placeholder text shown when the input is empty. Default: "Placeholder". */
   placeholder?: string;
   value?: string;
+  /** Called with the new search string on every keystroke. */
   onChange?: (value: string) => void;
+  /** Visual size of the search input. Default: "lg". */
   size?: SearchInputSize;
   className?: string;
+  /** Called when the user clicks the clear (×) button. */
   onClear?: () => void;
 }
 

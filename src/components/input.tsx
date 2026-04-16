@@ -7,14 +7,22 @@ export type InputState = "default" | "focus" | "error" | "disabled";
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
+  /** Override the visual state of the input. Useful for form validation. */
   forceState?: InputState;
+  /** Error message displayed below the input when forceState is "error". Default: "Error message". */
   errorMessage?: string;
   value?: string;
+  /** Called with the new string value on every change. */
   onChange?: (value: string) => void;
+  /** Icon element rendered on the right side of the input. */
   rightIcon?: React.ReactNode;
+  /** Unit label on the right side, e.g. "kg" or "THB". */
   unit?: string;
+  /** Helper text displayed below the input in the default state. */
   helperText?: string;
+  /** Show a character count (charCount / maxCount) below the input. */
   showCount?: boolean;
+  /** Maximum character count enforced when showCount is true. Default: 100. */
   maxCount?: number;
 }
 

@@ -10,13 +10,20 @@ export interface TextAreaProps
     React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     "onChange" | "value" | "rows"
   > {
+  /** Override the visual state of the textarea. Useful for form validation. */
   forceState?: TextAreaState;
+  /** Error message displayed below when forceState is "error". Default: "Error message". */
   errorMessage?: string;
   value?: string;
+  /** Called with the new string value on every change. */
   onChange?: (value: string) => void;
+  /** Helper text shown below the textarea in the default state. */
   helperText?: string;
+  /** Show a character count (charCount / maxCount) below the textarea. */
   showCount?: boolean;
+  /** Maximum character count enforced when showCount is true. Default: 100. */
   maxCount?: number;
+  /** Number of visible text rows. Default: 4. */
   rows?: number;
 }
 

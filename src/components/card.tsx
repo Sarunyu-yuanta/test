@@ -10,16 +10,27 @@ export type CardVariant = "desktop" | "tablet" | "mobile";
 export type CardTagStatus = "not-registered" | "registered" | "full";
 
 export interface CardProps {
+  /** Responsive layout preset. desktop=308px, tablet=224px, mobile=163px. Default: "desktop". */
   variant?: CardVariant;
+  /** Event title (clamped to 2 lines). */
   title?: string;
+  /** Formatted date string, e.g. "Jun 23, 2024". */
   date?: string;
+  /** Time range string, e.g. "08:30 - 12:00". */
   time?: string;
+  /** Location/venue name. */
   location?: string;
+  /** Whether to show the location row. Default: true. */
   showLocation?: boolean;
+  /** Whether to show the audience count row. Default: true. */
   showAudience?: boolean;
+  /** Audience count string, e.g. "200/200". */
   count?: string;
+  /** Shows a lock badge on the banner image. */
   locked?: boolean;
+  /** Registration status shown as a colored tag at the bottom. */
   tagStatus?: CardTagStatus;
+  /** URL for the banner image. */
   image?: string;
   className?: string;
 }

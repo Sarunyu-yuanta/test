@@ -10,12 +10,14 @@ export type ButtonSize      = ButtonLabelSize | ButtonIconSize;
 export type ButtonVariant = "primary" | "outline" | "plain" | "outline-black" | "plain-black" | "disabled";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  size?:     ButtonSize;
-  variant?:  ButtonVariant;
+  /** Button size. Label sizes: xs, sm, md, lg, xl. Icon-only sizes: icon-xs through icon-xl. Default: "md". */
+  size?: ButtonSize;
+  /** Visual style. Use "primary" for the main CTA, "outline" for secondary, "plain" for tertiary. Default: "primary". */
+  variant?: ButtonVariant;
   children?: React.ReactNode;
-  /** Icon to the LEFT of the label (label-size buttons only) */
-  leftIcon?:  React.ReactNode;
-  /** Icon to the RIGHT of the label (label-size buttons only) */
+  /** Icon element rendered to the left of the label. Only applies to label-size buttons. */
+  leftIcon?: React.ReactNode;
+  /** Icon element rendered to the right of the label. Only applies to label-size buttons. */
   rightIcon?: React.ReactNode;
 }
 

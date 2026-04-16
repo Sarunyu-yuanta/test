@@ -8,10 +8,15 @@ export type ChipType = "single" | "multiple";
 export type ChipSize = "large" | "medium" | "small";
 
 export interface ChipProps {
+  /** Label text displayed inside the chip. Default: "Chips Text". */
   label?: string;
+  /** "single" shows no icon; "multiple" shows Plus (unselected) / Check (selected). Default: "single". */
   type?: ChipType;
+  /** Visual size of the chip. Default: "large". */
   size?: ChipSize;
+  /** Whether the chip is in the selected/active state. */
   selected?: boolean;
+  /** Whether the chip is non-interactive. */
   disabled?: boolean;
   onClick?: () => void;
   className?: string;

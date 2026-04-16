@@ -5,19 +5,29 @@ import { Check } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export interface OptionItem {
+  /** Display label for the option. */
   label: string;
+  /** Unique value identifier for the option. */
   value: string;
+  /** Optional icon element shown before the label. */
   icon?: React.ReactNode;
   disabled?: boolean;
 }
 
 export interface OptionListProps {
+  /** Array of selectable options. */
   options: OptionItem[];
+  /** Currently selected value in single-select mode. */
   selectedValue?: string;
+  /** Currently selected values in multi-select mode. */
   selectedValues?: string[];
+  /** Called with the selected value in single-select mode. */
   onSelect?: (value: string) => void;
+  /** Called with the toggled value in multi-select mode. */
   onToggle?: (value: string) => void;
+  /** Max number of items visible before the list scrolls. Default: 10. */
   maxVisible?: number;
+  /** Text displayed when the options array is empty. Default: "No results found". */
   emptyText?: string;
   className?: string;
 }

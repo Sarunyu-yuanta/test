@@ -15,13 +15,19 @@ export interface TabItem {
 }
 
 export interface TabProps {
+  /** Tab label text. Default: "Tab". */
   title?: string;
+  /** Size of the tab. Default: "md". */
   size?: TabSize;
+  /** Whether this tab is currently selected/active. */
   active?: boolean;
+  /** Whether the tab is non-interactive. */
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** Icon rendered before the label. Pass `true` for a default placeholder icon. */
   icon?: ReactNode | boolean;
+  /** Notification badge shown after the label (count or short text). */
   notification?: string | number;
 }
 
@@ -164,10 +170,13 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
 Tab.displayName = "Tab";
 
 export interface TabGroupProps {
-  /** Tab definitions. Defaults to `[]` if omitted (invalid usage at runtime). */
+  /** Array of tab definitions. Each item needs at minimum `id` and `title`. */
   items?: TabItem[];
+  /** ID of the currently active tab. */
   activeId?: string;
+  /** Size applied to all tabs in the group. Default: "md". */
   size?: TabSize;
+  /** Called with the tab ID when a tab is clicked. */
   onChange?: (id: string) => void;
   className?: string;
 }

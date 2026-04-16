@@ -10,11 +10,17 @@ export type TagVariant = "blue" | "green" | "yellow" | "red" | "gray" | "lime";
 export type StatusTagType = "stop" | "success" | "hold" | "processing" | "error";
 
 export interface TagProps {
+  /** Label text displayed inside the tag. Default: "Tag". */
   text?: string;
+  /** Size of the tag. Default: "large". */
   size?: TagSize;
+  /** Visual state. Default: "default". */
   state?: TagState;
+  /** Color variant. Use green=positive, red=danger, yellow=warning, gray=neutral. Default: "gray". */
   variant?: TagVariant;
+  /** Show a small circle dot icon on the left side of the label. */
   icon?: boolean;
+  /** Show a close/remove (×) button on the right side. */
   close?: boolean;
   className?: string;
 }
@@ -148,7 +154,9 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
 Tag.displayName = "Tag";
 
 export interface StatusTagProps {
+  /** Process status type — drives the dot color and default label. Default: "stop". */
   type?: StatusTagType;
+  /** Override the default label for the given type. */
   text?: string;
   className?: string;
 }
