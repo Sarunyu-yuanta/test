@@ -11,12 +11,13 @@ import type { DateRange, CaptionProps } from "react-day-picker";
 import { DayPicker, useNavigation } from "react-day-picker";
 import * as Popover from "@radix-ui/react-popover";
 import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
-import { CalendarBlank, Minus } from "@phosphor-icons/react";
+  CalendarBlank,
+  CaretDoubleLeft,
+  CaretDoubleRight,
+  CaretLeft,
+  CaretRight,
+  Minus,
+} from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 import { useIsMobile } from "./ui/use-mobile";
 import { Button } from "./button";
@@ -202,7 +203,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setYearRangeStart((s) => s - 12)}
       >
-        <ChevronLeft size={16} className="text-primary-action" />
+        <CaretLeft size={16} className="text-primary-action" />
       </button>
     );
     rightNav = (
@@ -211,7 +212,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setYearRangeStart((s) => s + 12)}
       >
-        <ChevronRight size={16} className="text-primary-action" />
+        <CaretRight size={16} className="text-primary-action" />
       </button>
     );
   } else if (view === "months") {
@@ -221,7 +222,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setPickerYear((y) => y - 1)}
       >
-        <ChevronLeft size={16} className="text-primary-action" />
+        <CaretLeft size={16} className="text-primary-action" />
       </button>
     );
     rightNav = (
@@ -230,7 +231,7 @@ function CustomCaption({
         className={NAV_BTN_CLASS}
         onClick={() => setPickerYear((y) => y + 1)}
       >
-        <ChevronRight size={16} className="text-primary-action" />
+        <CaretRight size={16} className="text-primary-action" />
       </button>
     );
   } else if (isDrawerRange) {
@@ -241,7 +242,7 @@ function CustomCaption({
           className={NAV_BTN_CLASS}
           onClick={handlePrevYear}
         >
-          <ChevronsLeft size={16} className="text-primary-action" />
+          <CaretDoubleLeft size={16} className="text-primary-action" />
         </button>
         <button
           type="button"
@@ -250,7 +251,7 @@ function CustomCaption({
             previousMonth && goToMonth(previousMonth)
           }
         >
-          <ChevronLeft size={16} className="text-primary-action" />
+          <CaretLeft size={16} className="text-primary-action" />
         </button>
       </>
     );
@@ -261,14 +262,14 @@ function CustomCaption({
           className={NAV_BTN_CLASS}
           onClick={() => nextMonth && goToMonth(nextMonth)}
         >
-          <ChevronRight size={16} className="text-primary-action" />
+          <CaretRight size={16} className="text-primary-action" />
         </button>
         <button
           type="button"
           className={NAV_BTN_CLASS}
           onClick={handleNextYear}
         >
-          <ChevronsRight size={16} className="text-primary-action" />
+          <CaretDoubleRight size={16} className="text-primary-action" />
         </button>
       </>
     );
@@ -281,7 +282,7 @@ function CustomCaption({
             className={NAV_BTN_CLASS}
             onClick={handlePrevYear}
           >
-            <ChevronsLeft
+            <CaretDoubleLeft
               size={16}
               className="text-primary-action"
             />
@@ -293,7 +294,7 @@ function CustomCaption({
               previousMonth && goToMonth(previousMonth)
             }
           >
-            <ChevronLeft size={16} className="text-primary-action" />
+            <CaretLeft size={16} className="text-primary-action" />
           </button>
         </>
       );
@@ -306,7 +307,7 @@ function CustomCaption({
             className={NAV_BTN_CLASS}
             onClick={() => nextMonth && goToMonth(nextMonth)}
           >
-            <ChevronRight
+            <CaretRight
               size={16}
               className="text-primary-action"
             />
@@ -316,7 +317,7 @@ function CustomCaption({
             className={NAV_BTN_CLASS}
             onClick={handleNextYear}
           >
-            <ChevronsRight
+            <CaretDoubleRight
               size={16}
               className="text-primary-action"
             />
@@ -905,22 +906,26 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
         const valueRow =
           mode === "single" && currentDate ? (
             <p
-              className="leading-[20px] not-italic relative shrink-0 text-[16px] w-full"
+              className="leading-[20px] not-italic relative text-[16px] w-full min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
               style={{ color: valueColor }}
             >
               {formatThaiDate(currentDate)}
             </p>
           ) : mode === "range" && currentRange?.from ? (
-            <div className="flex gap-[8px] items-center relative shrink-0 w-full">
+            <div className="flex gap-[8px] items-center relative w-full min-w-0">
               <p
-                className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+                className="leading-[20px] not-italic relative text-[16px] min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
                 style={{ color: valueColor }}
               >
                 {formatThaiDate(currentRange.from)}
               </p>
-              <Minus size={20} weight="bold" color={minusColor} />
+              <Minus
+                size={20}
+                color={minusColor}
+                className="shrink-0"
+              />
               <p
-                className="leading-[20px] not-italic relative shrink-0 text-[16px] whitespace-nowrap"
+                className="leading-[20px] not-italic relative text-[16px] min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap"
                 style={{ color: valueColor }}
               >
                 {currentRange.to
@@ -931,7 +936,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
           ) : null;
 
         return (
-          <div className="content-stretch flex flex-1 flex-col items-center justify-center min-h-px min-w-px relative">
+          <div className="content-stretch flex flex-1 flex-col items-center justify-center min-h-px min-w-0 overflow-hidden relative w-full">
             {floatingLabel}
             {valueRow}
           </div>
@@ -1000,7 +1005,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     );
 
     const triggerBaseClasses = cn(
-      "relative flex gap-[8px] items-center rounded-[8px]",
+      "relative flex gap-[8px] items-center rounded-[8px] min-w-0",
       bgClass,
       "px-[14px]",
       isFilled ? "py-[6px]" : "py-[12px]",
@@ -1104,7 +1109,10 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
       <button
         type="button"
         disabled={isDisabled}
-        className={cn(triggerBaseClasses, "text-left cursor-pointer disabled:cursor-default")}
+        className={cn(
+          triggerBaseClasses,
+          "text-left cursor-pointer disabled:cursor-default",
+        )}
       >
         {triggerInner}
       </button>

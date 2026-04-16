@@ -36,6 +36,13 @@ const FILLED_RANGE: DateRange = {
   to: new Date(2024, 0, 5),
 };
 
+/** Long labels + wide date span — good for ellipsis demos */
+const FILLED_DATE_LONG: Date = new Date(2024, 10, 28);
+const FILLED_RANGE_LONG: DateRange = {
+  from: new Date(2023, 11, 15),
+  to: new Date(2024, 10, 28),
+};
+
 const GROUPS: GroupDef[] = [
   {
     title: "1. Default",
@@ -184,6 +191,92 @@ export function DateInputShowcase() {
                 disabledYears={[2027]}
               />
             </div>
+          </div>
+
+          {/* ── Divider ── */}
+          <div className="border-t-2 border-[#e5e7eb] my-12" />
+
+          {/* ── Narrow width / ellipsis ── */}
+          <h2 className="mb-2" style={FONT}>
+            Narrow width (ellipsis)
+          </h2>
+          <p className="text-[#6b7280] mb-6 text-[13px]" style={FONT}>
+            กล่องจำกัดความกว้างด้วยเส้นประ — ข้อความวันที่ในช่องจะถูกตัดด้วย …
+            เมื่อไม่พอที่แสดง
+          </p>
+          <div className="flex flex-col gap-8 pl-2 mb-2">
+            {(
+              [
+                {
+                  key: "single-112",
+                  caption: "Single — กว้าง 112px",
+                  width: 112,
+                  node: (
+                    <DateInput
+                      mode="single"
+                      forceState="default"
+                      placeholder="วันที่นัดหมาย"
+                      value={FILLED_DATE_LONG}
+                    />
+                  ),
+                },
+                {
+                  key: "single-80",
+                  caption: "Single — กว้าง 80px",
+                  width: 80,
+                  node: (
+                    <DateInput
+                      mode="single"
+                      forceState="default"
+                      placeholder="Label"
+                      value={FILLED_DATE_LONG}
+                    />
+                  ),
+                },
+                {
+                  key: "range-160",
+                  caption: "Range — กว้าง 160px",
+                  width: 160,
+                  node: (
+                    <DateInput
+                      mode="range"
+                      forceState="default"
+                      placeholder="ช่วงวันที่"
+                      dateRange={FILLED_RANGE_LONG}
+                    />
+                  ),
+                },
+                {
+                  key: "range-req-200",
+                  caption: "Range (required) — กว้าง 200px",
+                  width: 200,
+                  node: (
+                    <DateInput
+                      mode="range"
+                      forceState="default"
+                      placeholder="ช่วงวันที่"
+                      required
+                      dateRange={FILLED_RANGE_LONG}
+                    />
+                  ),
+                },
+              ] as const
+            ).map(({ key, caption, width, node }) => (
+              <div key={key}>
+                <p
+                  className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2"
+                  style={FONT}
+                >
+                  {caption}
+                </p>
+                <div
+                  className="rounded-[6px] border border-dashed border-[#d1d5db] p-2 bg-[#fafafa]"
+                  style={{ width, maxWidth: "100%" }}
+                >
+                  {node}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* ── Divider ── */}

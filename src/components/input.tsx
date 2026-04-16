@@ -37,6 +37,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
     onFocus: onFocusProp,
     onBlur: onBlurProp,
     disabled: _disabledProp,
+    maxLength: maxLengthProp,
     ...inputRest
   },
   ref,
@@ -72,7 +73,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const padding = isFilled
     ? "px-[14px] py-[6px]"
     : hasRight
-      ? "px-[14px] py-[12px]"
+      ? "px-[14px] py-[14px]"
       : "p-[14px]";
 
   const charCount = currentValue.length;
@@ -81,8 +82,13 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!controlled) setInternalValue(e.target.value);
-    onChange?.(e.target.value);
+    if (isDisabled) return;
+    let next = e.target.value;
+    if (showCount && maxCount >= 0 && next.length > maxCount) {
+      next = next.slice(0, maxCount);
+    }
+    if (!controlled) setInternalValue(next);
+    onChange?.(next);
   };
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -143,8 +149,9 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             style={{ color: floatLabel }}
           >
             {placeholder}
-            {required && !isFilled && (
+            {required && (
               <span
+                className="text-[12px] leading-[16px]"
                 style={{
                   color: isDisabled ? "var(--disabled)" : "var(--error-dark)",
                 }}
@@ -153,34 +160,36 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
               </span>
             )}
           </p>
-          {!isDisabled && (
-            <input
-              {...inputRest}
-              type={type}
-              value={currentValue}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              disabled={isDisabled}
-              aria-label={placeholder}
-              className={cn(
-                "w-full bg-transparent outline-none border-none min-w-0",
-                isFilled
-                  ? "leading-[20px] not-italic text-[14px] p-0 m-0"
-                  : "absolute inset-0 h-full cursor-text text-[16px]",
-              )}
-              style={
-                isFilled
-                  ? { ...inputStyleProp, color: filledValue, ...inputCaretStyle }
-                  : {
-                      ...inputStyleProp,
-                      color: "transparent",
-                      caretColor: isFocus ? "var(--caret-color)" : "transparent",
-                      padding: hasRight ? "12px 14px" : "14px",
-                    }
-              }
-            />
-          )}
+          <input
+            {...inputRest}
+            type={type}
+            value={currentValue}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            disabled={isDisabled}
+            maxLength={showCount ? maxCount : maxLengthProp}
+            aria-label={placeholder}
+            className={cn(
+              "w-full bg-transparent outline-none border-none min-w-0",
+              isFilled
+                ? "leading-[20px] not-italic text-[14px] p-0 m-0"
+                : cn(
+                    "absolute inset-0 h-full text-[16px]",
+                    isDisabled ? "cursor-not-allowed" : "cursor-text",
+                  ),
+            )}
+            style={
+              isFilled
+                ? { ...inputStyleProp, color: filledValue, ...inputCaretStyle }
+                : {
+                    ...inputStyleProp,
+                    color: "transparent",
+                    caretColor: isFocus ? "var(--caret-color)" : "transparent",
+                    padding: hasRight ? "12px 14px" : "14px",
+                  }
+            }
+          />
         </div>
 
         {rightIcon && (
@@ -199,7 +208,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
         {unit && !rightIcon && (
           <p
             className={cn(
-              "shrink-0 whitespace-nowrap text-[16px]",
+              "shrink-0 whitespace-nowrap text-[16px] leading-[20px]",
               !isFilled && "relative",
             )}
             style={{

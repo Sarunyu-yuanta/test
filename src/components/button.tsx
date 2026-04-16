@@ -21,17 +21,17 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 // ─── Label-size maps ──────────────────────────────────────────────────────────
 const labelIconSizeClass: Record<ButtonLabelSize, string> = {
-  xs: "size-[13px]",
-  sm: "size-[15px]",
-  md: "size-[15px]",
-  lg: "size-[16px]",
-  xl: "size-[16px]",
+  xs: "size-[16px]",
+  sm: "size-[18px]",
+  md: "size-[18px]",
+  lg: "size-[20px]",
+  xl: "size-[20px]",
 };
 
 const gapClass: Record<ButtonLabelSize, string> = {
-  xs: "gap-[4px]",
-  sm: "gap-[4px]",
-  md: "gap-[4px]",
+  xs: "gap-[2px]",
+  sm: "gap-[2px]",
+  md: "gap-[2px]",
   lg: "gap-[4px]",
   xl: "gap-[4px]",
 };
@@ -162,7 +162,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const variantClasses = getVariantClasses(variant, isDisabled);
   const cursorClass    = isDisabled ? "cursor-not-allowed" : "cursor-pointer";
   const baseClasses    =
-    "inline-flex items-center justify-center font-semibold whitespace-nowrap transition-colors duration-150 select-none";
+    "inline-flex items-center justify-center font-medium whitespace-nowrap transition-colors duration-150 select-none";
 
   // ── Icon-only (size = "icon-*") ────────────────────────────────────────────
   if (isIconOnly) {

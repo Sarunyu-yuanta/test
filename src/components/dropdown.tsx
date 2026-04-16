@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, forwardRef } from "react";
+import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type DropdownState = "default" | "focus" | "error" | "disabled";
@@ -29,24 +30,6 @@ export interface DropdownProps {
   /** Options list */
   options?: DropdownOption[];
   className?: string;
-}
-
-// ── Chevron icons ───────────────────────────────────────────────────────────
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" className={className}>
-      <path d="M7 9L11 13L15 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronUpIcon({ className }: { className?: string }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" className={className}>
-      <path d="M7 13L11 9L15 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
 }
 
 // ── Component ───────────────────────────────────────────────────────────────
@@ -324,9 +307,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
           {/* Caret */}
           {isFocus ? (
-            <ChevronUpIcon className={cn("shrink-0", caretClassName)} />
+            <CaretUp size={22} className={cn("shrink-0", caretClassName)} />
           ) : (
-            <ChevronDownIcon className={cn("shrink-0", caretClassName)} />
+            <CaretDown size={22} className={cn("shrink-0", caretClassName)} />
           )}
         </div>
 

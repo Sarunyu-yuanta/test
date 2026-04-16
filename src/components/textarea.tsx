@@ -92,12 +92,22 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
             style={{ inset: borderInset, borderRadius: borderRad, borderColor }}
           />
           {isFilled ? (
-            <div className="flex h-full w-full flex-col items-start p-[14px] pb-[6px]">
+            <div className="flex h-full w-full flex-col p-[14px] pb-[6px]">
               <p
                 className="w-full shrink-0 text-[12px] leading-[16px] not-italic"
                 style={{ color: floatLabel }}
               >
                 {placeholder}
+                {required && (
+                  <span
+                    style={{
+                      color: isDisabled ? "var(--disabled)" : "var(--error-dark)",
+                    }}
+                  >
+                    {" "}
+                    *
+                  </span>
+                )}
               </p>
               <textarea
                 {...textareaProps}
@@ -115,7 +125,7 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
                 rows={rows}
                 aria-label={placeholder}
                 className={cn(
-                  "m-0 min-w-0 flex-1 resize-none border-none bg-transparent p-0 text-[14px] leading-[20px] not-italic outline-none",
+                  "m-0 min-h-0 min-w-0 w-full flex-1 resize-none border-none bg-transparent p-0 text-[14px] leading-[20px] not-italic outline-none",
                 )}
                 style={{
                   ...textareaProps.style,

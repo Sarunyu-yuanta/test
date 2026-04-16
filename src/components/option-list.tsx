@@ -1,6 +1,7 @@
 "use client";
 
-import React, { forwardRef, SVGProps } from "react";
+import React, { forwardRef } from "react";
+import { Check } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export interface OptionItem {
@@ -19,26 +20,6 @@ export interface OptionListProps {
   maxVisible?: number;
   emptyText?: string;
   className?: string;
-}
-
-function CheckIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      width="16"
-      height="11"
-      viewBox="0 0 16 11"
-      fill="none"
-      {...props}
-    >
-      <path
-        d="M1 5.5L5.5 10L15 1"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
 }
 
 export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
@@ -131,7 +112,11 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                   </p>
                   {selected && (
                     <span className="flex size-[20px] shrink-0 items-center justify-center">
-                      <CheckIcon className="text-primary-action" />
+                      <Check
+                        size={16}
+                        weight="bold"
+                        className="text-primary-action"
+                      />
                     </span>
                   )}
                 </div>

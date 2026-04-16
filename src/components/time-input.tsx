@@ -580,7 +580,6 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
               <Minus
                 size={20}
                 color={minusColor}
-                weight="bold"
               />
               <p
                 className="leading-[20px] not-italic shrink-0 text-[16px] whitespace-nowrap"

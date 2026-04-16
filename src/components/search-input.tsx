@@ -34,7 +34,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
     const currentValue = controlled ? value : internalValue;
     const isFilled = currentValue.length > 0;
     const iconSize = size === "lg" ? 24 : 22;
-    const minHeight = size === "sm" ? "min-h-[32px]" : "";
+    const minHeight = size === "sm" ? "h-[38px]" : "";
     const padding =
       size === "sm" ? "px-[14px] py-[8px]" : "px-[14px] py-[12px]";
     const borderInset = focused ? "-1px" : "0px";
@@ -76,7 +76,9 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
         <span className="flex shrink-0 items-center justify-center">
           <MagnifyingGlass
             size={iconSize}
-            color="var(--muted-foreground)"
+            color={
+              focused ? "var(--subtle-text)" : "var(--muted-foreground)"
+            }
             weight="regular"
           />
         </span>

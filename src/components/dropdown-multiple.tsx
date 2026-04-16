@@ -9,6 +9,7 @@ import React, {
   useMemo,
   useLayoutEffect,
 } from "react";
+import { CaretDown, CaretUp, Check, X } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export type DropdownMultipleState =
@@ -45,44 +46,6 @@ export interface DropdownMultipleProps {
 
 const TAG_GAP = 4;
 const MAX_COMPONENT_WIDTH = 343;
-
-// ── Chevron icons ────────────────────────────────────────────────────────────
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" className={className}>
-      <path d="M7 9L11 13L15 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronUpIcon({ className }: { className?: string }) {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" className={className}>
-      <path d="M7 13L11 9L15 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-// ── X icon for tag remove ───────────────────────────────────────────────────
-function XIcon({ color = "var(--muted-foreground)" }: { color?: string }) {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      className="shrink-0"
-    >
-      <path
-        d="M9 3L3 9M3 3L9 9"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 // ── Tag chip (removable) ────────────────────────────────────────────────────
 function RemovableTag({
@@ -124,7 +87,12 @@ function RemovableTag({
           }}
           className="absolute right-[4px] top-1/2 -translate-y-1/2 flex items-center justify-center rounded-[2px] p-[1px] cursor-pointer opacity-0 group-hover:opacity-100 transition-all duration-150 bg-[#e5e7eb]"
         >
-          <XIcon color={iconColor} />
+          <X
+            size={12}
+            weight="bold"
+            color={iconColor}
+            className="shrink-0"
+          />
         </button>
       )}
     </div>
@@ -185,27 +153,6 @@ function OverflowBadge({
         +{count}
       </p>
     </div>
-  );
-}
-
-// ── Checkmark icon ──────────────────────────────────────────────────────────
-function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      width="10"
-      height="8"
-      viewBox="0 0 10 8"
-      fill="none"
-      {...props}
-    >
-      <path
-        d="M1 4L3.5 6.5L9 1"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
@@ -711,7 +658,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
           )}
 
           <span className="shrink-0" style={{ color: caretColor }}>
-            {isFocus ? <ChevronUpIcon /> : <ChevronDownIcon />}
+            {isFocus ? <CaretUp size={22} /> : <CaretDown size={22} />}
           </span>
         </div>
 
@@ -771,7 +718,11 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
                             )}
                           >
                             {isSelected && (
-                              <CheckIcon className="text-primary-action" />
+                              <Check
+                                size={12}
+                                weight="bold"
+                                className="text-primary-action"
+                              />
                             )}
                           </div>
                         </div>
