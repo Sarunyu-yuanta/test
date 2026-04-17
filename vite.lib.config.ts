@@ -44,6 +44,8 @@ export default defineConfig({
     rollupOptions: {
       external: (id) => externalRegExp.test(id),
       output: {
+        // Next.js App Router: bundled entry must declare client boundary (createContext, hooks, etc.)
+        banner: '"use client";',
         globals: {
           react: "React",
           "react-dom": "ReactDOM",

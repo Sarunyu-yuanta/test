@@ -25,31 +25,31 @@ type Row = { label: string; variant: ButtonVariant; forceClass?: string };
 
 const primaryRows: Row[] = [
   { label: "Default",  variant: "primary" },
-  { label: "Hover",    variant: "primary",  forceClass: "!bg-[#095ec4]" },
-  { label: "Active",   variant: "primary",  forceClass: "!bg-[#074ea4]" },
+  { label: "Hover",    variant: "primary",  forceClass: "!bg-primary-action-hover" },
+  { label: "Active",   variant: "primary",  forceClass: "!bg-primary-action-active" },
   { label: "Disabled", variant: "disabled" },
 ];
 const outlineRows: Row[] = [
   { label: "Default",  variant: "outline" },
-  { label: "Hover",    variant: "outline",  forceClass: "!bg-[#f9fafb]" },
-  { label: "Active",   variant: "outline",  forceClass: "!bg-[#f3f4f6]" },
-  { label: "Disabled", variant: "outline",  forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af] !border-[rgba(0,0,0,0.05)]" },
+  { label: "Hover",    variant: "outline",  forceClass: "!bg-hover-bg" },
+  { label: "Active",   variant: "outline",  forceClass: "!bg-disabled-bg" },
+  { label: "Disabled", variant: "outline",  forceClass: "pointer-events-none !bg-disabled-bg !text-disabled !border-border-disabled" },
 ];
 const plainRows: Row[] = [
   { label: "Default",  variant: "plain" },
-  { label: "Hover",    variant: "plain",    forceClass: "!bg-[#f9fafb]" },
-  { label: "Active",   variant: "plain",    forceClass: "!bg-[#f3f4f6]" },
-  { label: "Disabled", variant: "plain",    forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af]" },
+  { label: "Hover",    variant: "plain",    forceClass: "!bg-hover-bg" },
+  { label: "Active",   variant: "plain",    forceClass: "!bg-disabled-bg" },
+  { label: "Disabled", variant: "plain",    forceClass: "pointer-events-none !bg-disabled-bg !text-disabled" },
 ];
 const outlineBlackRows: Row[] = [
   { label: "Default",  variant: "outline-black" },
-  { label: "Hover",    variant: "outline-black", forceClass: "!bg-[#f9fafb]" },
-  { label: "Disabled", variant: "outline-black", forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af] !border-[rgba(0,0,0,0.05)]" },
+  { label: "Hover",    variant: "outline-black", forceClass: "!bg-hover-bg" },
+  { label: "Disabled", variant: "outline-black", forceClass: "pointer-events-none !bg-disabled-bg !text-disabled !border-border-disabled" },
 ];
 const plainBlackRows: Row[] = [
   { label: "Default",  variant: "plain-black" },
-  { label: "Hover",    variant: "plain-black",  forceClass: "!bg-[#f9fafb]" },
-  { label: "Disabled", variant: "plain-black",  forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af]" },
+  { label: "Hover",    variant: "plain-black",  forceClass: "!bg-hover-bg" },
+  { label: "Disabled", variant: "plain-black",  forceClass: "pointer-events-none !bg-disabled-bg !text-disabled" },
 ];
 
 // ─── Column header row ────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ function ColHeaders({ sizes, indent }: { sizes: string[]; indent: string }) {
       {sizes.map((s) => (
         <div
           key={s}
-          className="w-[80px] text-center text-[12px] text-[#9ca3af] uppercase tracking-wider"
+          className="w-[80px] text-center text-[12px] text-caption uppercase tracking-wider"
           style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}
         >
           {s}
@@ -83,13 +83,13 @@ function VariantSection({ title, rows, iconSlot }: {
         {rows.map((row) => {
           const isDisabled  = row.variant === "disabled" || row.label === "Disabled";
           const isBlack     = row.variant === "outline-black" || row.variant === "plain-black";
-          const iconColor   = isDisabled ? "#99A1AF"
+          const iconColor   = isDisabled ? "var(--disabled)"
                             : row.variant === "primary" ? "white"
-                            : isBlack ? "#101828"
-                            : "#0a6ee7";
+                            : isBlack ? "var(--foreground)"
+                            : "var(--primary-action)";
           return (
             <div key={row.label} className="flex items-center gap-10">
-              <div className="w-[90px] shrink-0 text-[13px] text-[#6b7280]"
+              <div className="w-[90px] shrink-0 text-[13px] text-muted-foreground"
                 style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
                 {row.label}
               </div>
@@ -125,48 +125,48 @@ const iconOnlyVariants: IconOnlyVariant[] = [
     title: "Primary",
     rows: [
       { label: "Default",  variant: "primary",  iconColor: "white" },
-      { label: "Hover",    variant: "primary",  iconColor: "white",   forceClass: "!bg-[#095ec4]" },
-      { label: "Active",   variant: "primary",  iconColor: "white",   forceClass: "!bg-[#074ea4]" },
-      { label: "Disabled", variant: "disabled", iconColor: "#99A1AF" },
+      { label: "Hover",    variant: "primary",  iconColor: "white",   forceClass: "!bg-primary-action-hover" },
+      { label: "Active",   variant: "primary",  iconColor: "white",   forceClass: "!bg-primary-action-active" },
+      { label: "Disabled", variant: "disabled", iconColor: "var(--disabled)" },
     ],
   },
   {
     title: "Outline",
     rows: [
-      { label: "Default",  variant: "outline", iconColor: "#0a6ee7" },
-      { label: "Hover",    variant: "outline", iconColor: "#0a6ee7", forceClass: "!bg-[#f9fafb]" },
-      { label: "Active",   variant: "outline", iconColor: "#0a6ee7", forceClass: "!bg-[#f3f4f6]" },
-      { label: "Disabled", variant: "outline", iconColor: "#99A1AF", forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af] !border-[rgba(0,0,0,0.05)]" },
+      { label: "Default",  variant: "outline", iconColor: "var(--primary-action)" },
+      { label: "Hover",    variant: "outline", iconColor: "var(--primary-action)", forceClass: "!bg-hover-bg" },
+      { label: "Active",   variant: "outline", iconColor: "var(--primary-action)", forceClass: "!bg-disabled-bg" },
+      { label: "Disabled", variant: "outline", iconColor: "var(--disabled)", forceClass: "pointer-events-none !bg-disabled-bg !text-disabled !border-border-disabled" },
     ],
   },
   {
     title: "Plain",
     rows: [
-      { label: "Default",  variant: "plain", iconColor: "#0a6ee7" },
-      { label: "Hover",    variant: "plain", iconColor: "#0a6ee7", forceClass: "!bg-[#f9fafb]" },
-      { label: "Active",   variant: "plain", iconColor: "#0a6ee7", forceClass: "!bg-[#f3f4f6]" },
-      { label: "Disabled", variant: "plain", iconColor: "#99A1AF", forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af]" },
+      { label: "Default",  variant: "plain", iconColor: "var(--primary-action)" },
+      { label: "Hover",    variant: "plain", iconColor: "var(--primary-action)", forceClass: "!bg-hover-bg" },
+      { label: "Active",   variant: "plain", iconColor: "var(--primary-action)", forceClass: "!bg-disabled-bg" },
+      { label: "Disabled", variant: "plain", iconColor: "var(--disabled)", forceClass: "pointer-events-none !bg-disabled-bg !text-disabled" },
     ],
   },
   {
     title: "Outline Black",
     rows: [
-      // Icon uses currentColor — button's text-[#101828] drives the default colour.
-      // On press the Button component applies inline color:#99a1af via React state.
+      // Icon uses currentColor — button text-foreground drives the default colour.
+      // On press the Button component applies inline disabled color via React state.
       { label: "Default",  variant: "outline-black", iconColor: "currentColor" },
-      { label: "Hover",    variant: "outline-black", iconColor: "currentColor", forceClass: "!bg-[#f9fafb]" },
+      { label: "Hover",    variant: "outline-black", iconColor: "currentColor", forceClass: "!bg-hover-bg" },
       // Static active row: manually set both bg and icon colour (button not truly pressed)
-      { label: "Active",   variant: "outline-black", iconColor: "#99A1AF",      forceClass: "!bg-[#f3f4f6]" },
-      { label: "Disabled", variant: "outline-black", iconColor: "currentColor", forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af] !border-[rgba(0,0,0,0.05)]" },
+      { label: "Active",   variant: "outline-black", iconColor: "var(--disabled)", forceClass: "!bg-disabled-bg" },
+      { label: "Disabled", variant: "outline-black", iconColor: "currentColor", forceClass: "pointer-events-none !bg-disabled-bg !text-disabled !border-border-disabled" },
     ],
   },
   {
     title: "Plain Black",
     rows: [
       { label: "Default",  variant: "plain-black", iconColor: "currentColor" },
-      { label: "Hover",    variant: "plain-black", iconColor: "currentColor", forceClass: "!bg-[#f9fafb]" },
-      { label: "Active",   variant: "plain-black", iconColor: "#99A1AF",      forceClass: "!bg-[#f3f4f6]" },
-      { label: "Disabled", variant: "plain-black", iconColor: "currentColor", forceClass: "pointer-events-none !bg-[#f3f4f6] !text-[#99a1af]" },
+      { label: "Hover",    variant: "plain-black", iconColor: "currentColor", forceClass: "!bg-hover-bg" },
+      { label: "Active",   variant: "plain-black", iconColor: "var(--disabled)", forceClass: "!bg-disabled-bg" },
+      { label: "Disabled", variant: "plain-black", iconColor: "currentColor", forceClass: "pointer-events-none !bg-disabled-bg !text-disabled" },
     ],
   },
 ];
@@ -175,8 +175,8 @@ function IconOnlySection() {
   return (
     <div className="mb-14">
       <h2 className="mb-1" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>Icon Only</h2>
-      <p className="text-[#6b7280] mb-8 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
-        Square icon-only button — <code className="bg-[#f3f4f6] px-1 rounded text-[11px]">size="icon-xs|sm|md|lg|xl"</code>
+      <p className="text-muted-foreground mb-8 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
+        Square icon-only button — <code className="bg-disabled-bg px-1 rounded text-[11px]">size="icon-xs|sm|md|lg|xl"</code>
       </p>
 
       <ColHeaders sizes={iconSizes} indent="pl-[100px]" />
@@ -184,7 +184,7 @@ function IconOnlySection() {
       {iconOnlyVariants.map((v, vi) => (
         <React.Fragment key={v.title}>
           <div
-            className="text-[13px] text-[#374151] mb-4"
+            className="text-[13px] text-nav-link mb-4"
             style={{ fontFamily: "'Noto Sans Thai', sans-serif", fontWeight: 600 }}
           >
             {v.title}
@@ -192,7 +192,7 @@ function IconOnlySection() {
           <div className="flex flex-col gap-7 mb-10">
             {v.rows.map((row) => (
               <div key={row.label} className="flex items-center gap-10">
-                <div className="w-[90px] shrink-0 text-[13px] text-[#6b7280]"
+                <div className="w-[90px] shrink-0 text-[13px] text-muted-foreground"
                   style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
                   {row.label}
                 </div>
@@ -211,7 +211,7 @@ function IconOnlySection() {
             ))}
           </div>
           {vi < iconOnlyVariants.length - 1 && (
-            <div className="border-t border-dashed border-[#e5e7eb] mb-8" />
+            <div className="border-t border-dashed border-divider mb-8" />
           )}
         </React.Fragment>
       ))}
@@ -222,59 +222,59 @@ function IconOnlySection() {
 // ─── Showcase ─────────────────────────────────────────────────────────────────
 export function ButtonShowcase() {
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
         Button Component
       </h1>
-      <p className="text-[#6b7280] mb-12" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
+      <p className="text-muted-foreground mb-12" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
         Sizes × States × Variants
       </p>
 
       {/* ── No icon ── */}
       <VariantSection title="Primary"      rows={primaryRows} />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Outline"      rows={outlineRows} />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain"        rows={plainRows} />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
 
       {/* ── Right icon ── */}
       <VariantSection title="Primary · Right Icon"      rows={primaryRows}      iconSlot="right" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Outline · Right Icon"      rows={outlineRows}      iconSlot="right" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain · Right Icon"        rows={plainRows}        iconSlot="right" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
 
       {/* ── Left icon ── */}
       <VariantSection title="Primary · Left Icon"       rows={primaryRows}      iconSlot="left" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Outline · Left Icon"       rows={outlineRows}      iconSlot="left" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain · Left Icon"         rows={plainRows}        iconSlot="left" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
 
       {/* ── Icon Only ── */}
       <IconOnlySection />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
 
       {/* ── Black variants ── */}
       <VariantSection title="Outline Black"                   rows={outlineBlackRows} />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Outline Black · Right Icon"      rows={outlineBlackRows} iconSlot="right" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Outline Black · Left Icon"       rows={outlineBlackRows} iconSlot="left" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain Black"                     rows={plainBlackRows} />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain Black · Right Icon"        rows={plainBlackRows}   iconSlot="right" />
-      <div className="border-t border-[#e5e7eb] mb-14" />
+      <div className="border-t border-divider mb-14" />
       <VariantSection title="Plain Black · Left Icon"         rows={plainBlackRows}   iconSlot="left" />
-      <div className="border-t border-[#e5e7eb] mb-10" />
+      <div className="border-t border-divider mb-10" />
 
       {/* ── Interactive ── */}
       <h2 className="mb-2" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>Interactive</h2>
-      <p className="text-[#6b7280] mb-10 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
+      <p className="text-muted-foreground mb-10 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
         All variants · All icon slots · All sizes — hover and click to see states
       </p>
 
@@ -303,14 +303,14 @@ export function ButtonShowcase() {
         { label: "Plain Black · Disabled",   variant: "plain-black"   as const, icon: undefined, disabled: true  },
       ] as const).map((row) => {
         const isBlack      = row.variant === "outline-black" || row.variant === "plain-black";
-        const iconColor    = row.variant === "primary" ? "white" : isBlack ? "#101828" : "#0a6ee7";
+        const iconColor    = row.variant === "primary" ? "white" : isBlack ? "var(--foreground)" : "var(--primary-action)";
         const isGroupStart = row.label === "Outline" || row.label === "Plain"
                           || row.label === "Outline Black" || row.label === "Plain Black";
         return (
           <React.Fragment key={row.label}>
-            {isGroupStart && <div className="border-t border-[#e5e7eb] my-8" />}
+            {isGroupStart && <div className="border-t border-divider my-8" />}
             <div className="flex items-center gap-10 mb-6">
-              <div className="w-[150px] shrink-0 text-[13px] text-[#6b7280]"
+              <div className="w-[150px] shrink-0 text-[13px] text-muted-foreground"
                 style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
                 {row.label}
               </div>
@@ -320,8 +320,8 @@ export function ButtonShowcase() {
                     size={size}
                     variant={row.variant}
                     disabled={row.disabled}
-                    leftIcon={row.icon === "left"  ? <LabelCircle size={size} color={row.disabled ? "#99a1af" : iconColor} /> : undefined}
-                    rightIcon={row.icon === "right" ? <LabelCircle size={size} color={row.disabled ? "#99a1af" : iconColor} /> : undefined}
+                    leftIcon={row.icon === "left"  ? <LabelCircle size={size} color={row.disabled ? "var(--disabled)" : iconColor} /> : undefined}
+                    rightIcon={row.icon === "right" ? <LabelCircle size={size} color={row.disabled ? "var(--disabled)" : iconColor} /> : undefined}
                   >
                     Button
                   </Button>
@@ -333,18 +333,18 @@ export function ButtonShowcase() {
       })}
 
       {/* Icon-only interactive rows */}
-      <div className="border-t border-[#e5e7eb] my-8" />
-      <p className="text-[#6b7280] mb-6 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
+      <div className="border-t border-divider my-8" />
+      <p className="text-muted-foreground mb-6 text-[13px]" style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
         Icon Only — hover and click to see states
       </p>
       <ColHeaders sizes={iconSizes} indent="pl-[160px]" />
       {([
         { label: "Primary · Icon Only",               variant: "primary"       as const, iconColor: "white",        disabled: false },
-        { label: "Primary · Icon Only Disabled",      variant: "disabled"      as const, iconColor: "#99A1AF",      disabled: false },
-        { label: "Outline · Icon Only",               variant: "outline"       as const, iconColor: "#0a6ee7",      disabled: false },
-        { label: "Outline · Icon Only Disabled",      variant: "outline"       as const, iconColor: "#99A1AF",      disabled: true  },
-        { label: "Plain · Icon Only",                 variant: "plain"         as const, iconColor: "#0a6ee7",      disabled: false },
-        { label: "Plain · Icon Only Disabled",        variant: "plain"         as const, iconColor: "#99A1AF",      disabled: true  },
+        { label: "Primary · Icon Only Disabled",      variant: "disabled"      as const, iconColor: "var(--disabled)", disabled: false },
+        { label: "Outline · Icon Only",               variant: "outline"       as const, iconColor: "var(--primary-action)", disabled: false },
+        { label: "Outline · Icon Only Disabled",      variant: "outline"       as const, iconColor: "var(--disabled)", disabled: true  },
+        { label: "Plain · Icon Only",                 variant: "plain"         as const, iconColor: "var(--primary-action)", disabled: false },
+        { label: "Plain · Icon Only Disabled",        variant: "plain"         as const, iconColor: "var(--disabled)", disabled: true  },
         { label: "Outline Black · Icon Only",         variant: "outline-black" as const, iconColor: "currentColor", disabled: false },
         { label: "Outline Black · Icon Only Disabled",variant: "outline-black" as const, iconColor: "currentColor", disabled: true  },
         { label: "Plain Black · Icon Only",           variant: "plain-black"   as const, iconColor: "currentColor", disabled: false },
@@ -353,9 +353,9 @@ export function ButtonShowcase() {
         const isGroupStart = i === 2 || i === 4 || i === 6 || i === 8;
         return (
           <React.Fragment key={row.label}>
-            {isGroupStart && <div className="border-t border-[#e5e7eb] my-6" />}
+            {isGroupStart && <div className="border-t border-divider my-6" />}
             <div className="flex items-center gap-10 mb-6">
-              <div className="w-[150px] shrink-0 text-[13px] text-[#6b7280]"
+              <div className="w-[150px] shrink-0 text-[13px] text-muted-foreground"
                 style={{ fontFamily: "'Noto Sans Thai', sans-serif" }}>
                 {row.label}
               </div>

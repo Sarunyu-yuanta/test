@@ -3,7 +3,8 @@ src/
 *.config.ts
 *.config.mjs
 index.html
-guidelines/
+docs/
+.mcp.json
 tsconfig.json
 tsconfig.lib.json
 
@@ -12,3 +13,6 @@ scripts/
 
 # Demo app
 demo/
+
+# Design tokens (source files)
+tokens/

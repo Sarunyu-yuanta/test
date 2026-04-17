@@ -8,10 +8,15 @@ export type ChipType = "single" | "multiple";
 export type ChipSize = "large" | "medium" | "small";
 
 export interface ChipProps {
+  /** Label text displayed inside the chip. Default: "Chips Text". */
   label?: string;
+  /** "single" shows no icon; "multiple" shows Plus (unselected) / Check (selected). Default: "single". */
   type?: ChipType;
+  /** Visual size of the chip. Default: "large". */
   size?: ChipSize;
+  /** Whether the chip is in the selected/active state. */
   selected?: boolean;
+  /** Whether the chip is non-interactive. */
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
@@ -26,19 +31,19 @@ const sizeStyles: Record<
   }
 > = {
   large: {
-    container: "h-[36px] px-[12px] gap-[4px]",
-    text: "text-[14px] leading-[20px]",
-    icon: "size-[20px]",
+    container: "h-9 px-3 gap-1",
+    text: "text-sm leading-5",
+    icon: "icon-lg",
   },
   medium: {
-    container: "h-[32px] px-[12px] gap-[4px]",
-    text: "text-[14px] leading-[20px]",
-    icon: "size-[20px]",
+    container: "h-8 px-3 gap-1",
+    text: "text-sm leading-5",
+    icon: "icon-lg",
   },
   small: {
-    container: "h-[28px] px-[10px] gap-[2px]",
-    text: "text-[12px] leading-[16px]",
-    icon: "size-[16px]",
+    container: "h-7 px-2.5 gap-0.5",
+    text: "text-xs leading-4",
+    icon: "icon-md",
   },
 };
 
@@ -77,11 +82,11 @@ export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
         ? "bg-selected-light-bg border border-transparent"
         : state === "disabled"
           ? "bg-disabled-bg border border-transparent"
-          : "bg-white border border-border";
+          : "bg-background border border-border";
 
   const textClass =
     state === "selected"
-      ? "text-white"
+      ? "text-on-primary-action"
       : state === "selected-disabled"
         ? "text-primary-action/40"
         : state === "disabled"
@@ -90,7 +95,7 @@ export const Chip = forwardRef<HTMLButtonElement, ChipProps>(function Chip(
 
   const iconClass =
     state === "selected"
-      ? "text-white"
+      ? "text-on-primary-action"
       : state === "selected-disabled"
         ? "text-primary-action/40"
         : state === "disabled"

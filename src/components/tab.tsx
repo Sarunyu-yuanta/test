@@ -15,13 +15,19 @@ export interface TabItem {
 }
 
 export interface TabProps {
+  /** Tab label text. Default: "Tab". */
   title?: string;
+  /** Size of the tab. Default: "md". */
   size?: TabSize;
+  /** Whether this tab is currently selected/active. */
   active?: boolean;
+  /** Whether the tab is non-interactive. */
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  /** Icon rendered before the label. Pass `true` for a default placeholder icon. */
   icon?: ReactNode | boolean;
+  /** Notification badge shown after the label (count or short text). */
   notification?: string | number;
 }
 
@@ -38,31 +44,34 @@ const sizeClasses: Record<
   }
 > = {
   lg: {
-    pad: "px-[12px] py-[10px]",
-    text: "text-[14px]",
-    leading: "leading-[20px]",
+    pad: "px-3 py-2.5",
+    text: "text-sm",
+    leading: "leading-5",
     font: "font-bold",
-    gap: "gap-[6px]",
-    iconSize: "size-[16.25px]",
-    badgeClass: "min-w-[18px] px-[5.5px] text-[12px] leading-[16px]",
+    gap: "gap-1.5",
+    iconSize: "h-5 w-5",
+    badgeClass:
+      "min-w-[18px] px-[5.5px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
   },
   md: {
-    pad: "px-[10px] py-[8px]",
-    text: "text-[14px]",
-    leading: "leading-[20px]",
+    pad: "px-2.5 py-2",
+    text: "text-sm",
+    leading: "leading-5",
     font: "font-bold",
-    gap: "gap-[6px]",
-    iconSize: "size-[14.63px]",
-    badgeClass: "min-w-[18px] px-[5.5px] text-[12px] leading-[16px]",
+    gap: "gap-1.5",
+    iconSize: "h-[18px] w-[18px]",
+    badgeClass:
+      "min-w-[18px] px-[5.5px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
   },
   sm: {
-    pad: "px-[8px] py-[6px]",
-    text: "text-[12px]",
-    leading: "leading-[16px]",
+    pad: "px-2 py-1.5",
+    text: "text-xs",
+    leading: "leading-4",
     font: "font-semibold",
-    gap: "gap-[4px]",
-    iconSize: "size-[13px]",
-    badgeClass: "size-[14px] text-[9px] leading-[14px]",
+    gap: "gap-1",
+    iconSize: "h-4 w-4",
+    badgeClass:
+      "min-h-[14px] px-1 text-[length:var(--text-xxs)] leading-[var(--leading-3)]",
   },
 };
 
@@ -83,7 +92,7 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
   },
   ref
 ) {
-  const s = sizeClasses[size];
+  const s = sizeClasses[size] ?? sizeClasses.md;
   const hasIcon = Boolean(icon);
   const hasNotification = notification !== undefined && notification !== null;
   const renderedIcon = icon === true ? <DefaultTabIcon className={s.iconSize} /> : icon;
@@ -105,7 +114,7 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
       aria-disabled={disabled}
       onClick={!disabled ? onClick : undefined}
       className={cn(
-        "relative flex min-w-[80px] select-none items-center justify-center bg-white transition-colors duration-150",
+        "relative flex min-w-[80px] select-none items-center justify-center bg-background transition-colors duration-150",
         s.pad,
         (hasIcon || hasNotification) && s.gap,
         cursor,
@@ -147,7 +156,7 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
       {hasNotification && (
         <span
           className={cn(
-            "relative flex shrink-0 items-center justify-center rounded-[60px] bg-[#FB2C36] text-center font-normal text-white",
+            "relative flex shrink-0 items-center justify-center rounded-[60px] bg-visual-red-default text-center font-normal text-on-visual-red",
             s.badgeClass
           )}
         >
@@ -161,16 +170,20 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
 Tab.displayName = "Tab";
 
 export interface TabGroupProps {
-  items: TabItem[];
+  /** Array of tab definitions. Each item needs at minimum `id` and `title`. */
+  items?: TabItem[];
+  /** ID of the currently active tab. */
   activeId?: string;
+  /** Size applied to all tabs in the group. Default: "md". */
   size?: TabSize;
+  /** Called with the tab ID when a tab is clicked. */
   onChange?: (id: string) => void;
   className?: string;
 }
 
 export const TabGroup = forwardRef<HTMLDivElement, TabGroupProps>(
   function TabGroup(
-    { items, activeId, size = "md", onChange, className },
+    { items = [], activeId, size = "md", onChange, className },
     ref
   ) {
     return (

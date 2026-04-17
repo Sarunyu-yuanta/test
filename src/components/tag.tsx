@@ -10,11 +10,17 @@ export type TagVariant = "blue" | "green" | "yellow" | "red" | "gray" | "lime";
 export type StatusTagType = "stop" | "success" | "hold" | "processing" | "error";
 
 export interface TagProps {
+  /** Label text displayed inside the tag. Default: "Tag". */
   text?: string;
+  /** Size of the tag. Default: "large". */
   size?: TagSize;
+  /** Visual state. Default: "default". */
   state?: TagState;
+  /** Color variant. Use green=positive, red=danger, yellow=warning, gray=neutral. Default: "gray". */
   variant?: TagVariant;
+  /** Show a small circle dot icon on the left side of the label. */
   icon?: boolean;
+  /** Show a close/remove (×) button on the right side. */
   close?: boolean;
   className?: string;
 }
@@ -29,16 +35,16 @@ const sizeStyles: Record<
   }
 > = {
   large: {
-    container: "px-[8px] py-[4px]",
-    text: "text-[12px] leading-[16px]",
-    closeIcon: "size-[16px]",
-    closeButton: "size-[16px]",
+    container: "px-2 py-1",
+    text: "text-xs leading-4",
+    closeIcon: "h-4 w-4",
+    closeButton: "h-4 w-4",
   },
   small: {
-    container: "px-[4px] py-[2px]",
-    text: "text-[9px] leading-[14px]",
-    closeIcon: "size-[14px]",
-    closeButton: "size-[14px]",
+    container: "px-1 py-0.5",
+    text: "text-xxs leading-3",
+    closeIcon: "h-3.5 w-3.5",
+    closeButton: "h-3.5 w-3.5",
   },
 };
 
@@ -50,28 +56,28 @@ const variantStyles: Record<
   }
 > = {
   blue: {
-    bg: "bg-[#eff6ff]",
-    text: "text-[#1447e6]",
+    bg: "bg-[var(--fill-blue-50)]",
+    text: "text-[var(--fill-blue-700)]",
   },
   green: {
-    bg: "bg-[#dbfce7]",
-    text: "text-[#00a63e]",
+    bg: "bg-[var(--fill-green-100)]",
+    text: "text-[var(--fill-green-600)]",
   },
   yellow: {
-    bg: "bg-[#fef9c2]",
-    text: "text-[#d08700]",
+    bg: "bg-[var(--fill-yellow-100)]",
+    text: "text-[var(--fill-yellow-600)]",
   },
   red: {
-    bg: "bg-[#ffe2e2]",
-    text: "text-[#e7000b]",
+    bg: "bg-[var(--fill-red-100)]",
+    text: "text-[var(--fill-red-600)]",
   },
   gray: {
-    bg: "bg-[#f3f4f6]",
+    bg: "bg-[var(--fill-gray-100)]",
     text: "text-subtle-text",
   },
   lime: {
-    bg: "bg-[#ecfcca]",
-    text: "text-[#5ea500]",
+    bg: "bg-[var(--fill-lime-100)]",
+    text: "text-[var(--fill-lime-600)]",
   },
 };
 
@@ -80,7 +86,7 @@ function CircleIcon({ disabled }: { disabled: boolean }) {
     <Circle
       aria-hidden="true"
       weight="regular"
-      className="size-[14px] shrink-0"
+      className="h-3.5 w-3.5 shrink-0"
       color={disabled ? "var(--disabled)" : "var(--subtle-text)"}
     />
   );
@@ -110,8 +116,8 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
   ref
 ) {
   const isDisabled = state === "disabled";
-  const s = sizeStyles[size];
-  const v = variantStyles[variant];
+  const s = sizeStyles[size] ?? sizeStyles.large;
+  const v = variantStyles[variant] ?? variantStyles.gray;
   const bgClass = state === "disabled" ? "bg-disabled-bg" : state === "hover" ? "bg-hover-bg" : v.bg;
   const textClass = isDisabled ? "text-disabled" : v.text;
 
@@ -148,7 +154,9 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
 Tag.displayName = "Tag";
 
 export interface StatusTagProps {
+  /** Process status type — drives the dot color and default label. Default: "stop". */
   type?: StatusTagType;
+  /** Override the default label for the given type. */
   text?: string;
   className?: string;
 }
@@ -162,28 +170,28 @@ const statusTagStyles: Record<
 > = {
   stop: {
     label: "Stop",
-    dot: "#81848B",
+    dot: "var(--fill-gray-500)",
   },
   success: {
     label: "Success",
-    dot: "#10B981",
+    dot: "var(--fill-emerald-500)",
   },
   hold: {
     label: "Hold",
-    dot: "#E9B307",
+    dot: "var(--fill-yellow-500)",
   },
   processing: {
     label: "Processing",
-    dot: "#2F7DE6",
+    dot: "var(--fill-blue-500)",
   },
   error: {
     label: "Error",
-    dot: "#F43F5E",
+    dot: "var(--fill-rose-500)",
   },
 };
 
 export function StatusTag({ type = "stop", text, className }: StatusTagProps) {
-  const style = statusTagStyles[type];
+  const style = statusTagStyles[type] ?? statusTagStyles.stop;
 
   return (
     <div

@@ -7,14 +7,22 @@ export type InputState = "default" | "focus" | "error" | "disabled";
 
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
+  /** Override the visual state of the input. Useful for form validation. */
   forceState?: InputState;
+  /** Error message displayed below the input when forceState is "error". Default: "Error message". */
   errorMessage?: string;
   value?: string;
+  /** Called with the new string value on every change. */
   onChange?: (value: string) => void;
+  /** Icon element rendered on the right side of the input. */
   rightIcon?: React.ReactNode;
+  /** Unit label on the right side, e.g. "kg" or "THB". */
   unit?: string;
+  /** Helper text displayed below the input in the default state. */
   helperText?: string;
+  /** Show a character count (charCount / maxCount) below the input. */
   showCount?: boolean;
+  /** Maximum character count enforced when showCount is true. Default: 100. */
   maxCount?: number;
 }
 
@@ -54,7 +62,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const isFocus = state === "focus";
   const isFilled = currentValue.length > 0;
 
-  const bg = isDisabled ? "bg-disabled-bg" : "bg-white";
+  const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
   const floatLabel = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
   const filledValue = isDisabled ? "var(--disabled)" : "var(--foreground)";
   const unitColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
@@ -114,10 +122,10 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   };
 
   return (
-    <div ref={ref} className={cn("flex flex-col gap-[4px] w-full", className)}>
+    <div ref={ref} className={cn("flex flex-col gap-1 w-full", className)}>
       <div
         className={cn(
-          "relative rounded-[8px]",
+          "relative rounded-lg",
           padding,
           bg,
           containerFlex,
@@ -143,15 +151,15 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             className={cn(
               "shrink-0 w-full not-italic",
               isFilled
-                ? "leading-[16px] text-[12px]"
-                : "text-[16px] leading-[20px] pointer-events-none",
+                ? "leading-4 text-xs"
+                : "text-base leading-5 pointer-events-none",
             )}
             style={{ color: floatLabel }}
           >
             {placeholder}
             {required && (
               <span
-                className="text-[12px] leading-[16px]"
+                className="text-xs leading-4"
                 style={{
                   color: isDisabled ? "var(--disabled)" : "var(--error-dark)",
                 }}
@@ -173,9 +181,9 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             className={cn(
               "w-full bg-transparent outline-none border-none min-w-0",
               isFilled
-                ? "leading-[20px] not-italic text-[14px] p-0 m-0"
+                ? "leading-5 not-italic text-sm p-0 m-0"
                 : cn(
-                    "absolute inset-0 h-full text-[16px]",
+                    "absolute inset-0 h-full text-base",
                     isDisabled ? "cursor-not-allowed" : "cursor-text",
                   ),
             )}
@@ -222,7 +230,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
         )}
       </div>
       {showBelow && (
-        <div className="flex items-start gap-[8px] px-[4px] text-[12px] leading-[16px]">
+        <div className="flex items-start gap-2 px-1 text-xs leading-4">
           {leftText ? (
             <span className="flex-1 min-w-0" style={{ color: leftColor }}>
               {leftText}
