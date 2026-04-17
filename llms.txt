@@ -370,6 +370,167 @@ import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/s
 
 ---
 
+## Page Layout Patterns
+
+**Components alone do not make a page.** The library styles components but does **not** style page layout. Without the rules below, AI tools produce pages where everything sits flush against neighbors and the result looks broken. Apply these defaults on every page you generate.
+
+### Spacing scale
+
+Use Tailwind spacing (1 unit = 4px). Pick from these standard gaps — do not invent arbitrary values.
+
+| Purpose | Class | Pixels |
+|---|---|---|
+| Between label and input | `gap-1` or `gap-2` | 4–8px |
+| Between fields in a form | `gap-4` | 16px |
+| Between related elements (button row, chip row) | `gap-2` or `gap-3` | 8–12px |
+| Between a heading and its content | `mb-4` or `mb-6` | 16–24px |
+| Between paragraphs | `gap-3` or `gap-4` | 12–16px |
+| Between subsections of a page | `gap-8` or `gap-10` | 32–40px |
+| Between top-level page sections | `gap-12` or `gap-16` | 48–64px |
+| Section vertical padding (hero, feature blocks) | `py-16` or `py-20` | 64–80px |
+
+### Page container
+
+Every page needs a horizontal container. Default pattern:
+
+```tsx
+<main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10">
+  {/* page content */}
+</main>
+```
+
+- `max-w-[1200px]` for wide apps/marketing. Use `max-w-[960px]` for content-heavy, `max-w-[640px]` for forms/auth.
+- Always pair `mx-auto` with a `max-w-*` — otherwise content stretches edge-to-edge on large screens.
+- `px-6 md:px-8` keeps content off the viewport edge on mobile.
+
+### Section rhythm
+
+Stack page sections vertically with `flex flex-col gap-12` (or `gap-16` for marketing pages). Never let sections touch.
+
+```tsx
+<main className="mx-auto w-full max-w-[1200px] px-6 py-10 flex flex-col gap-12">
+  <section>{/* hero */}</section>
+  <section>{/* features */}</section>
+  <section>{/* cta */}</section>
+</main>
+```
+
+### Typography
+
+`h1` / `h2` / `h3` / `h4` are already styled by the library (size + weight + line-height). Just use them — do **not** add `text-2xl font-medium` manually.
+
+- `h1` = page title (one per page)
+- `h2` = section heading
+- `h3` = subsection heading
+- `h4` = minor heading / card title
+- Body text = default (no class needed) or `text-muted-foreground` for secondary
+
+Standard heading + content block:
+
+```tsx
+<section className="flex flex-col gap-6">
+  <div className="flex flex-col gap-2">
+    <h2>Section title</h2>
+    <p className="text-muted-foreground">Short description that explains what this section does.</p>
+  </div>
+  {/* content */}
+</section>
+```
+
+### Form layout
+
+Vertical stack. Never put inputs side-by-side unless they are logically paired (first/last name, date range).
+
+```tsx
+<form className="flex flex-col gap-4 max-w-[480px]">
+  <Input placeholder="Email" value={email} onChange={setEmail} />
+  <Input placeholder="Password" type="password" value={pw} onChange={setPw} />
+  <div className="flex gap-3 pt-2">
+    <Button variant="primary" size="md">Sign in</Button>
+    <Button variant="outline" size="md">Cancel</Button>
+  </div>
+</form>
+```
+
+Paired inputs:
+
+```tsx
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <Input placeholder="First name" />
+  <Input placeholder="Last name" />
+</div>
+```
+
+### Card grid
+
+Cards in a responsive grid. Always gap at least `gap-6` between cards.
+
+```tsx
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="registered" />
+  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="not-registered" />
+  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="full" />
+</div>
+```
+
+### Toolbar / filter row
+
+Chips, search, dropdowns above a list. Use `flex flex-wrap gap-3 items-center`.
+
+```tsx
+<div className="flex flex-wrap items-center gap-3">
+  <SearchInput placeholder="Search..." value={q} onChange={setQ} className="max-w-[320px]" />
+  <Chip label="All" selected={f === "all"} onClick={() => setF("all")} />
+  <Chip label="Active" selected={f === "active"} onClick={() => setF("active")} />
+  <Chip label="Archived" selected={f === "archived"} onClick={() => setF("archived")} />
+</div>
+```
+
+### Full page template
+
+Copy-paste starting point. Replace content, keep the structure.
+
+```tsx
+export default function Page() {
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-12">
+      {/* Page header */}
+      <header className="flex flex-col gap-2">
+        <h1>Events</h1>
+        <p className="text-muted-foreground">Browse and register for upcoming events.</p>
+      </header>
+
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-center gap-3">
+        <SearchInput placeholder="Search events..." value={q} onChange={setQ} className="max-w-[320px]" />
+        <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
+        <Chip label="This week" selected={filter === "week"} onClick={() => setFilter("week")} />
+      </div>
+
+      {/* Content */}
+      <section className="flex flex-col gap-6">
+        <h2>Upcoming</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.map((e) => <Card key={e.id} variant="desktop" {...e} />)}
+        </div>
+      </section>
+    </main>
+  );
+}
+```
+
+### Layout rules (do / don't)
+
+- **Do** wrap every page in a `max-w-* mx-auto` container with horizontal padding.
+- **Do** use `flex flex-col gap-*` to stack sections — never rely on default margins.
+- **Do** group a heading with its content in a smaller `gap-2`/`gap-4` block, then separate groups with `gap-8`+.
+- **Don't** place components directly adjacent without a `gap-*` or padding parent.
+- **Don't** mix arbitrary spacing values (`gap-[13px]`, `mt-7`) — stick to `2 / 3 / 4 / 6 / 8 / 10 / 12 / 16`.
+- **Don't** full-bleed text content on desktop — cap reading widths at `max-w-[720px]` for paragraphs.
+- **Don't** override heading sizes with utility classes — `h1`–`h4` are already sized by the library.
+
+---
+
 ## Notes
 
 - No provider or wrapper needed — just import the stylesheet and use components
