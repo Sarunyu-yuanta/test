@@ -11,9 +11,26 @@ Designed for AI-powered generation tools: **Figma Make**, **Lovable**, and **V0*
 npm install @sarunyu/system-one
 ```
 
-Import styles once in the app root (required):
+### v0 / Next.js (App Router)
 
 ```tsx
+// app/layout.tsx
+import "@sarunyu/system-one/styles.css";
+```
+
+Components are pre-annotated with `"use client"`. Safe to import in Server Components, Client Components, and pages without any extra wrapper.
+
+### Next.js (Pages Router)
+
+```tsx
+// pages/_app.tsx
+import "@sarunyu/system-one/styles.css";
+```
+
+### Figma Make / Lovable / Vite
+
+```tsx
+// src/main.tsx
 import "@sarunyu/system-one/styles.css";
 ```
 
@@ -22,6 +39,13 @@ Import components directly — no provider or wrapper needed:
 ```tsx
 import { Button, Input, Tag, TabGroup, Chip } from "@sarunyu/system-one";
 ```
+
+> **Font note:** The library defaults to Noto Sans Thai. If the project uses a different font, override `--font-sans` after the import:
+> ```css
+> :root { --font-sans: "Inter", sans-serif; }
+> ```
+
+> **Tailwind note:** The library ships pre-built CSS — no Tailwind config needed in the consuming project. If the project already uses Tailwind, styles coexist without conflict.
 
 ---
 

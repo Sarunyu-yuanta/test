@@ -38,7 +38,8 @@
     "*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "scripts": {
     "dev": "vite",
