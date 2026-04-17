@@ -51,7 +51,7 @@ const sizeClasses: Record<
     gap: "gap-1.5",
     iconSize: "h-5 w-5",
     badgeClass:
-      "min-w-[18px] px-[5.5px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
+      "min-w-[16px] h-[16px] px-[3px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
   },
   md: {
     pad: "px-2.5 py-2",
@@ -61,7 +61,7 @@ const sizeClasses: Record<
     gap: "gap-1.5",
     iconSize: "h-[18px] w-[18px]",
     badgeClass:
-      "min-w-[18px] px-[5.5px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
+      "min-w-[16px] h-[16px] px-[3px] text-[length:var(--text-xs)] leading-[var(--leading-4)]",
   },
   sm: {
     pad: "px-2 py-1.5",
@@ -71,7 +71,7 @@ const sizeClasses: Record<
     gap: "gap-1",
     iconSize: "h-4 w-4",
     badgeClass:
-      "min-h-[14px] px-1 text-[length:var(--text-xxs)] leading-[var(--leading-3)]",
+      "min-w-[14px] h-[14px] px-1 text-[length:var(--text-xxs)] leading-[var(--leading-3)]",
   },
 };
 
@@ -101,8 +101,11 @@ export const Tab = forwardRef<HTMLDivElement, TabProps>(function Tab(
     : active
       ? "text-primary-action"
       : "text-muted-foreground";
-  const borderColor =
-    active && !disabled ? "border-primary-action" : "border-border";
+  const borderColor = disabled
+    ? "border-border-disabled"
+    : active
+      ? "border-primary-action"
+      : "border-border";
   const cursor = disabled ? "cursor-not-allowed" : "cursor-pointer";
   const hoverBg = !disabled && !active ? "hover:bg-hover-bg" : "";
 
