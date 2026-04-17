@@ -37,6 +37,9 @@ import "@sarunyu/system-one/styles.css"
 
 ```tsx
 import {
+  // Layout primitives (always use these for page structure)
+  Page, PageHeader, Section, Toolbar, CardGrid, Stack,
+  // Components
   Button, Input, TextArea, SearchInput,
   Dropdown, DropdownMultiple, OptionList,
   Tag, StatusTag, Chip,
@@ -372,162 +375,167 @@ import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/s
 
 ## Page Layout Patterns
 
-**Components alone do not make a page.** The library styles components but does **not** style page layout. Without the rules below, AI tools produce pages where everything sits flush against neighbors and the result looks broken. Apply these defaults on every page you generate.
+**REQUIRED: every page must be built from the layout primitives below (`Page`, `PageHeader`, `Section`, `Toolbar`, `CardGrid`, `Stack`).** Do not hand-roll page containers with raw `<main>` / `<div>` / Tailwind utilities. These primitives bake in the correct max-width, padding, section spacing, and typographic rhythm — if you skip them, the result will look broken (edge-to-edge content, no section gap, misaligned toolbars).
 
-### Spacing scale
+### Layout primitives — API
 
-Use Tailwind spacing (1 unit = 4px). Pick from these standard gaps — do not invent arbitrary values.
-
-| Purpose | Class | Pixels |
-|---|---|---|
-| Between label and input | `gap-1` or `gap-2` | 4–8px |
-| Between fields in a form | `gap-4` | 16px |
-| Between related elements (button row, chip row) | `gap-2` or `gap-3` | 8–12px |
-| Between a heading and its content | `mb-4` or `mb-6` | 16–24px |
-| Between paragraphs | `gap-3` or `gap-4` | 12–16px |
-| Between subsections of a page | `gap-8` or `gap-10` | 32–40px |
-| Between top-level page sections | `gap-12` or `gap-16` | 48–64px |
-| Section vertical padding (hero, feature blocks) | `py-16` or `py-20` | 64–80px |
-
-### Page container
-
-Every page needs a horizontal container. Default pattern:
+**`<Page>`** — top-level page container. Handles max-width, horizontal padding, vertical padding, and the gap between sections.
 
 ```tsx
-<main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10">
-  {/* page content */}
-</main>
+<Page>                  {/* default width="lg" = 1200px */}
+<Page width="sm">       {/* 640px — forms, auth, content */}
+<Page width="md">       {/* 960px — articles */}
+<Page width="lg">       {/* 1200px — default app pages */}
+<Page width="xl">       {/* 1440px — dashboards */}
+<Page width="full">     {/* no max-width */}
 ```
 
-- `max-w-[1200px]` for wide apps/marketing. Use `max-w-[960px]` for content-heavy, `max-w-[640px]` for forms/auth.
-- Always pair `mx-auto` with a `max-w-*` — otherwise content stretches edge-to-edge on large screens.
-- `px-6 md:px-8` keeps content off the viewport edge on mobile.
-
-### Section rhythm
-
-Stack page sections vertically with `flex flex-col gap-12` (or `gap-16` for marketing pages). Never let sections touch.
+**`<PageHeader>`** — the top block of a page: title, description, and optional right-side action buttons.
 
 ```tsx
-<main className="mx-auto w-full max-w-[1200px] px-6 py-10 flex flex-col gap-12">
-  <section>{/* hero */}</section>
-  <section>{/* features */}</section>
-  <section>{/* cta */}</section>
-</main>
+<PageHeader
+  title="Events"
+  description="Browse and register for upcoming events."
+  actions={<Button variant="primary" size="md">New event</Button>}
+  eyebrow={<Tag text="Live" variant="green" size="small" />}
+/>
 ```
 
-### Typography
+Props: `title` (required), `description`, `actions`, `eyebrow`.
 
-`h1` / `h2` / `h3` / `h4` are already styled by the library (size + weight + line-height). Just use them — do **not** add `text-2xl font-medium` manually.
-
-- `h1` = page title (one per page)
-- `h2` = section heading
-- `h3` = subsection heading
-- `h4` = minor heading / card title
-- Body text = default (no class needed) or `text-muted-foreground` for secondary
-
-Standard heading + content block:
+**`<Section>`** — a content block with an optional heading row. Stacks heading + body with the correct gap.
 
 ```tsx
-<section className="flex flex-col gap-6">
-  <div className="flex flex-col gap-2">
-    <h2>Section title</h2>
-    <p className="text-muted-foreground">Short description that explains what this section does.</p>
-  </div>
-  {/* content */}
-</section>
+<Section title="Upcoming" description="Events in the next 30 days.">
+  {/* body content */}
+</Section>
+
+<Section title="Filters" actions={<Button variant="plain" size="sm">Reset</Button>}>
+  <Toolbar>…</Toolbar>
+</Section>
 ```
 
-### Form layout
+Props: `title`, `description`, `actions`. All optional — omit all for an unlabelled content block.
 
-Vertical stack. Never put inputs side-by-side unless they are logically paired (first/last name, date range).
-
-```tsx
-<form className="flex flex-col gap-4 max-w-[480px]">
-  <Input placeholder="Email" value={email} onChange={setEmail} />
-  <Input placeholder="Password" type="password" value={pw} onChange={setPw} />
-  <div className="flex gap-3 pt-2">
-    <Button variant="primary" size="md">Sign in</Button>
-    <Button variant="outline" size="md">Cancel</Button>
-  </div>
-</form>
-```
-
-Paired inputs:
+**`<Toolbar>`** — horizontal wrap-friendly row for search, filters, chips. Auto `flex-wrap` so it stays usable on narrow widths.
 
 ```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-  <Input placeholder="First name" />
-  <Input placeholder="Last name" />
-</div>
-```
-
-### Card grid
-
-Cards in a responsive grid. Always gap at least `gap-6` between cards.
-
-```tsx
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="registered" />
-  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="not-registered" />
-  <Card variant="desktop" title="..." date="..." time="..." location="..." tagStatus="full" />
-</div>
-```
-
-### Toolbar / filter row
-
-Chips, search, dropdowns above a list. Use `flex flex-wrap gap-3 items-center`.
-
-```tsx
-<div className="flex flex-wrap items-center gap-3">
-  <SearchInput placeholder="Search..." value={q} onChange={setQ} className="max-w-[320px]" />
+<Toolbar end={<Button variant="outline" size="md">Export</Button>}>
+  <SearchInput placeholder="Search…" value={q} onChange={setQ} className="max-w-[320px]" />
   <Chip label="All" selected={f === "all"} onClick={() => setF("all")} />
   <Chip label="Active" selected={f === "active"} onClick={() => setF("active")} />
-  <Chip label="Archived" selected={f === "archived"} onClick={() => setF("archived")} />
-</div>
+</Toolbar>
 ```
 
-### Full page template
+The `end` prop pushes content to the right with `ml-auto`.
 
-Copy-paste starting point. Replace content, keep the structure.
+**`<CardGrid>`** — responsive grid for cards. Handles breakpoints + gap.
 
 ```tsx
-export default function Page() {
-  return (
-    <main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-12">
-      {/* Page header */}
-      <header className="flex flex-col gap-2">
-        <h1>Events</h1>
-        <p className="text-muted-foreground">Browse and register for upcoming events.</p>
-      </header>
+<CardGrid cols={3}>          {/* 1 → 2 → 3 columns */}
+<CardGrid cols={2}>          {/* 1 → 2 columns */}
+<CardGrid cols={4}>          {/* 1 → 2 → 3 → 4 columns */}
+```
 
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-3">
-        <SearchInput placeholder="Search events..." value={q} onChange={setQ} className="max-w-[320px]" />
+**`<Stack>`** — generic vertical/horizontal flex container. Use when you need a gap between arbitrary elements inside a `Section` body.
+
+```tsx
+<Stack gap={4}>                             {/* vertical, 16px gap */}
+<Stack direction="row" gap={3} wrap>        {/* horizontal, 12px gap, wraps */}
+<Stack gap={6} align="center" justify="between">
+```
+
+Props: `direction` (`"col"` default | `"row"`), `gap` (1, 2, 3, 4, 6, 8, 10, 12 — default 4), `align`, `justify`, `wrap`.
+
+### The required page skeleton
+
+Every generated page must follow this shape. Replace content — keep the structure.
+
+```tsx
+import { Page, PageHeader, Section, Toolbar, CardGrid, Button, SearchInput, Chip, Card } from "@sarunyu/system-one";
+
+export default function EventsPage() {
+  return (
+    <Page>
+      <PageHeader
+        title="Events"
+        description="Browse and register for upcoming events."
+        actions={<Button variant="primary" size="md">New event</Button>}
+      />
+
+      <Toolbar>
+        <SearchInput placeholder="Search events…" value={q} onChange={setQ} className="max-w-[320px]" />
         <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
         <Chip label="This week" selected={filter === "week"} onClick={() => setFilter("week")} />
-      </div>
+      </Toolbar>
 
-      {/* Content */}
-      <section className="flex flex-col gap-6">
-        <h2>Upcoming</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Section title="Upcoming">
+        <CardGrid cols={3}>
           {events.map((e) => <Card key={e.id} variant="desktop" {...e} />)}
-        </div>
-      </section>
-    </main>
+        </CardGrid>
+      </Section>
+    </Page>
   );
 }
 ```
 
+### Forms — use `<Stack>` inside `<Section>`
+
+```tsx
+<Page width="sm">
+  <PageHeader title="Sign in" description="Welcome back." />
+  <Section>
+    <Stack gap={4} className="max-w-[480px]">
+      <Input placeholder="Email" value={email} onChange={setEmail} />
+      <Input placeholder="Password" type="password" value={pw} onChange={setPw} />
+      <Stack direction="row" gap={3}>
+        <Button variant="primary" size="md">Sign in</Button>
+        <Button variant="outline" size="md">Cancel</Button>
+      </Stack>
+    </Stack>
+  </Section>
+</Page>
+```
+
+### Hero section — use `<PageHeader>` + actions
+
+Do not build a custom hero. Use `PageHeader` with `eyebrow` and `actions` — it already handles title size, description max-width, and action alignment.
+
+```tsx
+<Page>
+  <PageHeader
+    eyebrow={<><Tag text="LIVE" variant="green" size="small" /><Tag text="SET +0.82%" variant="lime" size="small" /></>}
+    title="ลงทุนหุ้นอย่างชาญฉลาด ด้วยข้อมูลเรียลไทม์"
+    description="ติดตามราคา วิเคราะห์เทคนิคอล รับสัญญาณซื้อขาย บนแพลตฟอร์มเดียว"
+    actions={<><Button variant="primary" size="lg">เริ่มต้นใช้งานฟรี</Button><Button variant="outline" size="lg">ดูแผนพรีเมียม</Button></>}
+  />
+  {/* rest of page */}
+</Page>
+```
+
 ### Layout rules (do / don't)
 
-- **Do** wrap every page in a `max-w-* mx-auto` container with horizontal padding.
-- **Do** use `flex flex-col gap-*` to stack sections — never rely on default margins.
-- **Do** group a heading with its content in a smaller `gap-2`/`gap-4` block, then separate groups with `gap-8`+.
-- **Don't** place components directly adjacent without a `gap-*` or padding parent.
-- **Don't** mix arbitrary spacing values (`gap-[13px]`, `mt-7`) — stick to `2 / 3 / 4 / 6 / 8 / 10 / 12 / 16`.
-- **Don't** full-bleed text content on desktop — cap reading widths at `max-w-[720px]` for paragraphs.
-- **Don't** override heading sizes with utility classes — `h1`–`h4` are already sized by the library.
+- **Do** always wrap a page in `<Page>`. Never return a naked `<div>` or `<main>` at the top level.
+- **Do** use `<PageHeader>` for the page title — never hand-roll `<h1>` + description + buttons.
+- **Do** use `<Section>` for each content block. Stack multiple `<Section>` children directly inside `<Page>` — the gap is automatic.
+- **Do** use `<Toolbar>` for search/filter rows and `<CardGrid>` for card collections.
+- **Don't** add manual spacing like `mt-8` / `mb-12` between sections — `<Page>` already provides section gap.
+- **Don't** wrap `<Section>` in another flex container — it breaks the rhythm.
+- **Don't** override heading sizes with utility classes — `h1`–`h4` inside these primitives are already sized.
+- **Don't** use `max-w-*` on `<Page>` via className — use the `width` prop instead.
+
+### Spacing scale (used internally by primitives — reference only)
+
+| Purpose | Value |
+|---|---|
+| Between label and input | gap-1 / gap-2 (4–8px) |
+| Between fields in a form | gap-4 (16px) — default `<Stack>` |
+| Between heading and content | gap-6 (24px) — built into `<Section>` |
+| Between top-level sections | gap-12 (48px) — built into `<Page>` |
+| Page horizontal padding | px-6 md:px-8 — built into `<Page>` |
+| Page vertical padding | py-10 — built into `<Page>` |
+
+If you need a custom gap, use `<Stack gap={N}>` with a value from: 1, 2, 3, 4, 6, 8, 10, 12.
 
 ---
 
