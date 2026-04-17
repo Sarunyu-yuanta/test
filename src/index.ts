@@ -1,6 +1,9 @@
+"use client";
+
 // Components
 export { Button } from "./components/button";
 export { Card } from "./components/card";
+export { Chip } from "./components/chip";
 export { DateInput } from "./components/date-input";
 export { Dropdown } from "./components/dropdown";
 export { DropdownMultiple } from "./components/dropdown-multiple";
@@ -8,7 +11,7 @@ export { Input } from "./components/input";
 export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
 export { Tab, TabGroup } from "./components/tab";
-export { Tag } from "./components/tag";
+export { Tag, StatusTag } from "./components/tag";
 export { TextArea } from "./components/textarea";
 export { TimeInput } from "./components/time-input";
 
@@ -30,6 +33,13 @@ export type {
   CardVariant,
   CardTagStatus,
 } from "./components/card";
+
+// Types — Chip
+export type {
+  ChipType,
+  ChipSize,
+  ChipProps,
+} from "./components/chip";
 
 // Types — DateInput
 export type {
@@ -84,7 +94,10 @@ export type {
 export type {
   TagSize,
   TagState,
+  TagVariant,
   TagProps,
+  StatusTagType,
+  StatusTagProps,
 } from "./components/tag";
 
 // Types — TextArea

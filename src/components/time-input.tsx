@@ -275,7 +275,7 @@ function RangeSlotPicker({
                 style={{
                   fontVariationSettings: "'wdth' 100",
                   color: isSelected
-                    ? "#ffffff"
+                    ? "var(--on-primary-action)"
                     : "var(--foreground)",
                 }}
               >
@@ -474,7 +474,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
       mode === "single" ? Boolean(currentValue) : true;
 
     // ── Colours ──────────────────────────────────────────────────────────────────
-    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-white";
+    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled
       ? "var(--disabled)"
       : "var(--muted-foreground)";
@@ -630,10 +630,10 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
     const isTriggerFilled =
       isFilled && (mode === "range" || currentValue);
     const triggerPadding = isTriggerFilled
-      ? "py-[6px]"
-      : "py-[12px]";
+      ? "py-1.5"
+      : "py-3";
     const triggerBase = cn(
-      "relative flex gap-[8px] items-center rounded-[8px] px-[14px] w-full",
+      "relative flex gap-2 items-center rounded-lg px-3.5 w-full",
       bgClass,
       triggerPadding,
     );
@@ -666,7 +666,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
     );
 
     const belowMsg = showBelow && (
-      <div className="flex items-start px-[4px] text-[12px] leading-[16px]">
+      <div className="flex items-start px-1 text-xs leading-4">
         <span
           className="flex-1 min-w-0"
           style={{ color: leftColor }}
@@ -800,11 +800,10 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
               <Popover.Content
                 align="start"
                 sideOffset={4}
-                className="z-50 rounded-[8px] bg-white p-3 outline-none max-w-[340px]"
+                className="z-50 rounded-[8px] bg-popover p-3 outline-none max-w-[340px] text-popover-foreground"
                 style={{
-                  boxShadow:
-                    "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
-                  border: "1px solid rgba(0,0,0,0.08)",
+                  boxShadow: "var(--elevation-popover)",
+                  border: "1px solid var(--border)",
                   minWidth:
                     mode === "single" ? 327 : undefined,
                 }}

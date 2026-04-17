@@ -38,7 +38,7 @@ const statusTagTypes: StatusTagType[] = ["stop", "success", "hold", "processing"
 
 export function TagShowcase() {
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1">Tag Component</h1>
       <p className="text-muted-foreground mb-10">Size x State x Variant</p>
 

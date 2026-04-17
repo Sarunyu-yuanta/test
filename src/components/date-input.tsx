@@ -339,7 +339,7 @@ function CustomCaption({
       isItemDisabled
         ? "bg-disabled-bg text-disabled cursor-not-allowed"
         : active
-          ? "bg-primary-action text-white cursor-pointer"
+          ? "bg-primary-action text-on-primary-action cursor-pointer"
           : isToday
             ? "bg-primary-action-muted text-primary-action cursor-pointer"
             : "bg-transparent text-foreground hover:bg-disabled-bg cursor-pointer",
@@ -361,7 +361,7 @@ function CustomCaption({
 
       {view === "months" && (
         <div
-          className="absolute left-0 right-0 z-10 bg-white grid grid-cols-3 gap-1 p-2 content-center"
+          className="absolute left-0 right-0 z-10 bg-background grid grid-cols-3 gap-1 p-2 content-center"
           style={{ top: "42px", bottom: "0" }}
         >
           {THAI_MONTHS_SHORT.map((name, i) => {
@@ -390,7 +390,7 @@ function CustomCaption({
 
       {view === "years" && (
         <div
-          className="absolute left-0 right-0 z-10 bg-white grid grid-cols-3 gap-1 p-2 content-center"
+          className="absolute left-0 right-0 z-10 bg-background grid grid-cols-3 gap-1 p-2 content-center"
           style={{ top: "42px", bottom: "0" }}
         >
           {Array.from({ length: 12 }, (_, i) => {
@@ -463,11 +463,11 @@ const DAY_PICKER_CLASSES = {
     "outline-none aria-selected:opacity-100 p-0",
   ),
   day_range_start:
-    "day-range-start !bg-primary-action !text-white !rounded-l-[6px] !rounded-r-none",
+    "day-range-start !bg-primary-action !text-on-primary-action !rounded-l-[6px] !rounded-r-none",
   day_range_end:
-    "day-range-end !bg-primary-action !text-white !rounded-r-[6px] !rounded-l-none",
+    "day-range-end !bg-primary-action !text-on-primary-action !rounded-r-[6px] !rounded-l-none",
   day_selected:
-    "!bg-primary-action text-white hover:!bg-primary-action focus:!bg-primary-action rounded-[6px]",
+    "!bg-primary-action text-on-primary-action hover:!bg-primary-action focus:!bg-primary-action rounded-[6px]",
   day_today:
     "[&:not([aria-selected=true])]:!bg-primary-action-light [&:not([aria-selected=true])]:text-foreground rounded-[6px]",
   day_outside:
@@ -823,7 +823,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
         : Boolean(currentRange?.from);
 
     // ── Colours ─────────────────────────────────────────────────────────────────
-    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-white";
+    const bgClass = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
     const valueColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
     const iconColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
@@ -1005,16 +1005,16 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     );
 
     const triggerBaseClasses = cn(
-      "relative flex gap-[8px] items-center rounded-[8px] min-w-0",
+      "relative flex gap-2 items-center rounded-lg min-w-0",
       bgClass,
-      "px-[14px]",
-      isFilled ? "py-[6px]" : "py-[12px]",
+      "px-3.5",
+      isFilled ? "py-1.5" : "py-3",
       "w-full",
     );
 
     // ── Below message ─────────────────────────────────────────────────────────────
     const belowMessage = showBelow && (
-      <div className="flex items-start px-[4px] text-[12px] leading-[16px]">
+      <div className="flex items-start px-1 text-xs leading-4">
         <span
           className="flex-1 min-w-0"
           style={{ color: leftColor }}
@@ -1164,10 +1164,9 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               <Popover.Content
                 align="start"
                 sideOffset={4}
-                className="z-50 rounded-[8px] bg-white p-3 outline-none"
+                className="z-50 rounded-[8px] bg-popover p-3 outline-none text-popover-foreground"
                 style={{
-                  boxShadow:
-                    "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
+                  boxShadow: "var(--elevation-popover)",
                   border: "1px solid var(--border)",
                 }}
                 onOpenAutoFocus={(e) => e.preventDefault()}

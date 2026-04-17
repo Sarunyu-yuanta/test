@@ -57,7 +57,7 @@ function ColHeaders() {
   return (
     <div className="flex items-center gap-6 mb-5 pl-[128px]">
       {STATES.map(({ label }) => (
-        <div key={label} className="w-[280px] shrink-0 text-[11px] text-[#9ca3af] uppercase tracking-wider" style={FONT}>
+        <div key={label} className="w-[280px] shrink-0 text-[11px] text-caption uppercase tracking-wider" style={FONT}>
           {label}
         </div>
       ))}
@@ -69,7 +69,7 @@ function ColHeaders() {
 function ShowcaseRow({ row }: { row: RowDef }) {
   return (
     <div className="flex items-start gap-6 mb-7">
-      <div className="w-[116px] shrink-0 text-[13px] text-[#6b7280] pt-[13px]" style={FONT}>
+      <div className="w-[116px] shrink-0 text-[13px] text-muted-foreground pt-[13px]" style={FONT}>
         {row.label}
       </div>
       {STATES.map(({ state }) => (
@@ -94,7 +94,7 @@ function ShowcaseRow({ row }: { row: RowDef }) {
 function GroupBlock({ group, isLast }: { group: GroupDef; isLast: boolean }) {
   return (
     <>
-      <div className="mb-5 text-[13px] text-[#374151]" style={{ ...FONT, fontWeight: 600 }}>
+      <div className="mb-5 text-[13px] text-nav-link" style={{ ...FONT, fontWeight: 600 }}>
         {group.title}
       </div>
       <div className="flex flex-col">
@@ -102,7 +102,7 @@ function GroupBlock({ group, isLast }: { group: GroupDef; isLast: boolean }) {
           <ShowcaseRow key={`${group.title}-${row.label}`} row={row} />
         ))}
       </div>
-      {!isLast && <div className="border-t border-[#e5e7eb] my-8" />}
+      {!isLast && <div className="border-t border-divider my-8" />}
     </>
   );
 }
@@ -125,9 +125,9 @@ export function TimeInputShowcase() {
     : undefined;
 
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={FONT}>Time Input Component</h1>
-      <p className="text-[#6b7280] mb-12 text-[14px]" style={FONT}>Variants × States</p>
+      <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>Variants × States</p>
 
       <div className="overflow-x-auto">
         <div className="min-w-max">
@@ -138,11 +138,11 @@ export function TimeInputShowcase() {
           ))}
 
           {/* Divider */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* Interactive */}
           <h2 className="mb-2" style={FONT}>Interactive</h2>
-          <p className="text-[#6b7280] mb-8 text-[13px]" style={FONT}>
+          <p className="text-muted-foreground mb-8 text-[13px]" style={FONT}>
             Click the field to open the time picker. Scroll or click a number to select.
           </p>
 
@@ -168,16 +168,16 @@ export function TimeInputShowcase() {
             <div className="flex flex-col gap-4 text-[13px]" style={FONT}>
               {/* Mode */}
               <div>
-                <p className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2">Mode</p>
+                <p className="text-[11px] text-caption uppercase tracking-wider mb-2">Mode</p>
                 <div className="flex gap-3">
                   {(["single", "range"] as TimeInputMode[]).map((m) => (
-                    <label key={m} className="flex items-center gap-2 cursor-pointer select-none text-[#374151]">
+                    <label key={m} className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
                       <input
                         type="radio"
                         name="time-mode"
                         checked={mode === m}
                         onChange={() => setMode(m)}
-                        className="accent-[#0a6ee7] w-[14px] h-[14px]"
+                        className="accent-primary-action w-[14px] h-[14px]"
                       />
                       {m === "single" ? "Single" : "Range"}
                     </label>
@@ -187,7 +187,7 @@ export function TimeInputShowcase() {
 
               {/* State toggles */}
               <div>
-                <p className="text-[11px] text-[#9ca3af] uppercase tracking-wider mb-2">State</p>
+                <p className="text-[11px] text-caption uppercase tracking-wider mb-2">State</p>
                 <div className="flex flex-col gap-2">
                   {(
                     [
@@ -196,12 +196,12 @@ export function TimeInputShowcase() {
                       ["Disabled", isDisabled,  setIsDisabled],
                     ] as [string, boolean, React.Dispatch<React.SetStateAction<boolean>>][]
                   ).map(([lbl, val, setter]) => (
-                    <label key={lbl} className="flex items-center gap-2 cursor-pointer select-none text-[#374151]">
+                    <label key={lbl} className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
                       <input
                         type="checkbox"
                         checked={val}
                         onChange={() => setter(!val)}
-                        className="accent-[#0a6ee7] w-[16px] h-[16px]"
+                        className="accent-primary-action w-[16px] h-[16px]"
                       />
                       {lbl}
                     </label>
@@ -213,12 +213,12 @@ export function TimeInputShowcase() {
 
           {/* Selected value */}
           {mode === "single" && singleVal && (
-            <div className="mt-4 pl-2 text-[13px] text-[#6b7280]" style={FONT}>
+            <div className="mt-4 pl-2 text-[13px] text-muted-foreground" style={FONT}>
               Selected: {singleVal.hour.toString().padStart(2,"0")}:{singleVal.minute.toString().padStart(2,"0")}
             </div>
           )}
           {mode === "range" && (
-            <div className="mt-4 pl-2 text-[13px] text-[#6b7280]" style={FONT}>
+            <div className="mt-4 pl-2 text-[13px] text-muted-foreground" style={FONT}>
               Start: {startVal.hour.toString().padStart(2,"0")}:{startVal.minute.toString().padStart(2,"0")}
               {" — "}
               End: {endVal.hour.toString().padStart(2,"0")}:{endVal.minute.toString().padStart(2,"0")}

@@ -63,11 +63,11 @@ export function OptionListShowcase() {
   };
 
   return (
-    <div className="bg-white min-h-full">
+    <div className="bg-background min-h-full">
       <h1 className="mb-1" style={FONT}>
         Option List Component
       </h1>
-      <p className="text-[#6b7280] mb-12 text-[14px]" style={FONT}>
+      <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>
         4 States × 2 Variants
       </p>
 
@@ -75,7 +75,7 @@ export function OptionListShowcase() {
         <div className="min-w-max">
           {/* ── Default (No Icon) ── */}
           <div
-            className="mb-3 text-[11px] text-[#9ca3af] uppercase tracking-wider"
+            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
             style={FONT}
           >
             Default
@@ -84,7 +84,7 @@ export function OptionListShowcase() {
             {STATES.map((s) => (
               <div
                 key={s}
-                className="w-[343px] text-[11px] text-[#9ca3af] uppercase tracking-wider"
+                className="w-[343px] text-[11px] text-caption uppercase tracking-wider"
                 style={FONT}
               >
                 {s}
@@ -99,7 +99,7 @@ export function OptionListShowcase() {
 
           {/* ── Default (Icon) ── */}
           <div
-            className="mb-3 text-[11px] text-[#9ca3af] uppercase tracking-wider"
+            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
             style={FONT}
           >
             Default (Icon)
@@ -108,7 +108,7 @@ export function OptionListShowcase() {
             {STATES.map((s) => (
               <div
                 key={s}
-                className="w-[343px] text-[11px] text-[#9ca3af] uppercase tracking-wider"
+                className="w-[343px] text-[11px] text-caption uppercase tracking-wider"
                 style={FONT}
               >
                 {s}
@@ -122,13 +122,13 @@ export function OptionListShowcase() {
           </div>
 
           {/* ── Divider ── */}
-          <div className="border-t-2 border-[#e5e7eb] my-12" />
+          <div className="border-t-2 border-divider my-12" />
 
           {/* ── Interactive ── */}
           <h2 className="mb-2" style={FONT}>
             Interactive
           </h2>
-          <p className="text-[#6b7280] mb-8 text-[13px]" style={FONT}>
+          <p className="text-muted-foreground mb-8 text-[13px]" style={FONT}>
             Click options to select. Last item is disabled.
           </p>
 
@@ -161,13 +161,13 @@ export function OptionListShowcase() {
               ).map(([label, checked, onToggle]) => (
                 <label
                   key={label}
-                  className="flex items-center gap-2 cursor-pointer select-none text-[#374151]"
+                  className="flex items-center gap-2 cursor-pointer select-none text-nav-link"
                 >
                   <input
                     type="checkbox"
                     checked={checked}
                     onChange={onToggle}
-                    className="accent-[#0a6ee7] w-[16px] h-[16px]"
+                    className="accent-primary-action w-[16px] h-[16px]"
                   />
                   {label}
                 </label>

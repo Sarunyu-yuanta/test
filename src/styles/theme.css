@@ -1,60 +1,115 @@
+/*
+ * Runtime theme layer (browser + Tailwind @theme).
+ * JSON under /tokens/ is the Figma-aligned source of truth; keep values in sync when primitives/semantic change.
+ * - Color ramps: tokens/color-primitives.fill.json → tokens-fill.css (--fill-*)
+ * - Semantic UI colors (:root / .dark): mirror tokens/semantic/*.json when you add those files
+ */
+@import "./tokens-fill.css";
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-size: 16px;
-  --font-sans: 'Noto Sans Thai', sans-serif;
+  --font-sans: "Noto Sans Thai", sans-serif;
 
-  --background: #ffffff;
-  --foreground: #101828;
-  --card: #ffffff;
-  --card-foreground: #101828;
-  --popover: #ffffff;
-  --popover-foreground: #101828;
+  --background: var(--fill-white-1000);
+  --foreground: var(--fill-gray-900);
+  --card: var(--fill-white-1000);
+  --card-foreground: var(--fill-gray-900);
+  --popover: var(--fill-white-1000);
+  --popover-foreground: var(--fill-gray-900);
 
-  --primary: #030213;
-  --primary-foreground: #ffffff;
-  --primary-action: #0a6ee7;
-  --primary-action-hover: #095ec4;
-  --primary-action-active: #074ea4;
-  --primary-action-light: rgba(10, 110, 231, 0.06);
-  --primary-action-muted: rgba(10, 110, 231, 0.1);
+  --primary: var(--fill-gray-950);
+  --primary-foreground: var(--fill-white-1000);
+  --primary-action: var(--fill-p1-600);
+  --primary-action-hover: var(--fill-p1-700);
+  --primary-action-active: var(--fill-p1-800);
+  --primary-action-light: color-mix(
+    in srgb,
+    var(--fill-p1-600) 6%,
+    transparent
+  );
+  --primary-action-muted: color-mix(
+    in srgb,
+    var(--fill-p1-600) 10%,
+    transparent
+  );
 
   --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
+  --secondary-foreground: var(--fill-gray-950);
 
-  --muted: #ececf0;
-  --muted-foreground: #6a7282;
+  --muted: var(--fill-gray-100);
+  --muted-foreground: var(--fill-gray-500);
 
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --accent-orange: #eb6101;
+  --accent: var(--fill-gray-100);
+  --accent-foreground: var(--fill-gray-950);
+  --accent-orange: var(--fill-s1-600);
 
-  --destructive: #e7000b;
-  --destructive-foreground: #ffffff;
-  --error-dark: #c10007;
+  --destructive: var(--fill-red-600);
+  --destructive-foreground: var(--fill-white-1000);
+  /* Figma: visual/red/default — notification badges, counts (not destructive actions) */
+  --visual-red-default: var(--fill-red-500);
+  --on-visual-red: var(--fill-white-1000);
+  --error-dark: var(--fill-red-700);
 
-  --success: #059669;
-  --success-bg: #ecfdf5;
-  --error-bg: #fff1f2;
+  --success: var(--fill-emerald-600);
+  --success-bg: var(--fill-emerald-50);
+  --error-bg: var(--fill-rose-50);
 
-  --border: rgba(0, 0, 0, 0.1);
-  --border-disabled: rgba(0, 0, 0, 0.05);
+  --border: var(--fill-black-200);
+  --border-disabled: var(--fill-black-100);
+  --border-muted: var(--fill-gray-300);
+  --divider: var(--fill-gray-200);
+  --caption: var(--fill-gray-400);
 
   --input: transparent;
-  --input-background: #f3f4f6;
+  --input-background: var(--fill-gray-100);
 
-  --disabled: #99a1af;
-  --disabled-bg: #f3f4f6;
-  --hover-bg: #f9fafb;
-  --subtle-text: #4a5565;
-  --caret-color: #0246a6;
+  --disabled: var(--fill-gray-400);
+  --disabled-bg: var(--fill-gray-100);
+  --hover-bg: var(--fill-gray-50);
+  --subtle-text: var(--fill-gray-600);
+  --caret-color: var(--fill-blue-700);
 
-  --selected-bg: #eff6ff;
-  --selected-light-bg: #f3f8fe;
-  --range-bg: #DAE9FB;
-  --range-text: #00A2D9;
+  --selected-bg: var(--fill-blue-50);
+  --selected-light-bg: var(--fill-p1-100);
+  --range-bg: var(--fill-p1-200);
+  --range-text: var(--fill-sky-500);
 
-  --switch-background: #cbced4;
+  /* Overlays (brand primary on surface) — nav, chrome */
+  --overlay-primary-4: color-mix(
+    in srgb,
+    var(--primary-action) 4%,
+    transparent
+  );
+  --overlay-primary-6: color-mix(
+    in srgb,
+    var(--primary-action) 6%,
+    transparent
+  );
+  --overlay-primary-8: color-mix(
+    in srgb,
+    var(--primary-action) 8%,
+    transparent
+  );
+  --nav-link: var(--fill-gray-700);
+  --nav-link-active: var(--primary-action);
+  --icon-muted: var(--fill-gray-700);
+
+  /* Text on primary-action surfaces (chips, time picker selection, etc.) */
+  --on-primary-action: var(--fill-white-1000);
+
+  /* Elevation & chrome (referenced by @theme shadow-* utilities) */
+  --elevation-popover:
+    0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --elevation-card:
+    0px 0px 2px 0px rgba(102, 102, 102, 0.16),
+    0px 4px 8px 0px rgba(102, 102, 102, 0.12);
+
+  /* Surfaces (match tokens/color-primitives.fill.json → tokens-fill.css) */
+  --surface-clear-hover: var(--fill-gray-200);
+  --surface-chip-disabled: var(--fill-zinc-50);
+
+  --switch-background: var(--fill-slate-300);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
 
@@ -64,7 +119,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
+  --radius: 4px;
 
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: #101828;
@@ -130,6 +185,92 @@
 @theme inline {
   --font-sans: var(--font-sans);
 
+  /* Blur + shadows — tokens/effect-mode-1.json (add px in CSS) */
+  --blur-xs: 4px;
+  --blur-sm: 8px;
+  --blur-md: 12px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+  --blur-2xl: 40px;
+  --blur-3xl: 64px;
+
+  --shadow-2xs: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm:
+    0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg:
+    0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 10px -4px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-popover: var(--elevation-popover);
+  --shadow-card: var(--elevation-card);
+
+  /* Spacing — tokens/size-mode-1.json → sizeMode1.spacing */
+  --spacing-0: 0px;
+  --spacing-0_5: 2px;
+  --spacing-1: 4px;
+  --spacing-1_5: 6px;
+  --spacing-2: 8px;
+  --spacing-2_5: 10px;
+  --spacing-3: 12px;
+  --spacing-3_5: 14px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-9: 36px;
+  --spacing-10: 40px;
+  --spacing-11: 44px;
+  --spacing-12: 48px;
+  --spacing-13: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+
+  /* Radius — tokens/size-mode-1.json → sizeMode1.radius (--radius default 4px is :root --radius) */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-full: 999px;
+
+  /* Font size — tokens/typography-primitives.mode-1.json → typographyPrimitives.fontSize */
+  --text-xxs: 9px;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+  --text-5xl: 48px;
+  --text-6xl: 56px;
+  --text-7xl: 64px;
+  --text-8xl: 72px;
+  --text-9xl: 80px;
+
+  /* Line height — tokens/typography-primitives.mode-1.json → typographyPrimitives.lineHeight */
+  --leading-none: 1;
+  --leading-3: 14px;
+  --leading-4: 16px;
+  --leading-5: 20px;
+  --leading-ct: 22px;
+  --leading-6: 24px;
+  --leading-7: 28px;
+  --leading-8: 30px;
+  --leading-9: 36px;
+  --leading-10: 40px;
+  --leading-11: 48px;
+  --leading-12: 56px;
+  --leading-13: 60px;
+  --leading-14: 72px;
+  --leading-15: 84px;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -152,12 +293,17 @@
   --color-accent-orange: var(--accent-orange);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-visual-red-default: var(--visual-red-default);
+  --color-on-visual-red: var(--on-visual-red);
   --color-error-dark: var(--error-dark);
   --color-success: var(--success);
   --color-success-bg: var(--success-bg);
   --color-error-bg: var(--error-bg);
   --color-border: var(--border);
   --color-border-disabled: var(--border-disabled);
+  --color-border-muted: var(--border-muted);
+  --color-divider: var(--divider);
+  --color-caption: var(--caption);
   --color-input: var(--input);
   --color-input-background: var(--input-background);
   --color-disabled: var(--disabled);
@@ -169,6 +315,11 @@
   --color-selected-light-bg: var(--selected-light-bg);
   --color-range-bg: var(--range-bg);
   --color-range-text: var(--range-text);
+  --color-nav-link: var(--nav-link);
+  --color-nav-link-active: var(--nav-link-active);
+  --color-on-primary-action: var(--on-primary-action);
+  --color-surface-clear-hover: var(--surface-clear-hover);
+  --color-surface-chip-disabled: var(--surface-chip-disabled);
   --color-switch-background: var(--switch-background);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
@@ -176,10 +327,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius: 4px;
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -244,5 +392,22 @@
     font-size: var(--text-base);
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
+  }
+}
+
+@layer utilities {
+  .icon-sm {
+    width: 14px;
+    height: 14px;
+  }
+
+  .icon-md {
+    width: 16px;
+    height: 16px;
+  }
+
+  .icon-lg {
+    width: 20px;
+    height: 20px;
   }
 }

@@ -5,19 +5,29 @@ import { Check } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
 export interface OptionItem {
+  /** Display label for the option. */
   label: string;
+  /** Unique value identifier for the option. */
   value: string;
+  /** Optional icon element shown before the label. */
   icon?: React.ReactNode;
   disabled?: boolean;
 }
 
 export interface OptionListProps {
+  /** Array of selectable options. */
   options: OptionItem[];
+  /** Currently selected value in single-select mode. */
   selectedValue?: string;
+  /** Currently selected values in multi-select mode. */
   selectedValues?: string[];
+  /** Called with the selected value in single-select mode. */
   onSelect?: (value: string) => void;
+  /** Called with the toggled value in multi-select mode. */
   onToggle?: (value: string) => void;
+  /** Max number of items visible before the list scrolls. Default: 10. */
   maxVisible?: number;
+  /** Text displayed when the options array is empty. Default: "No results found". */
   emptyText?: string;
   className?: string;
 }
@@ -57,12 +67,11 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
       <div
         ref={ref}
         className={cn(
-          "flex flex-col items-start overflow-clip rounded-[8px] bg-white px-[8px] py-[8px]",
+          "flex flex-col items-start overflow-clip rounded-lg bg-popover px-2 py-2 text-popover-foreground",
           className
         )}
         style={{
-          boxShadow:
-            "0px 20px 25px -5px rgba(0,0,0,0.1), 0px 8px 10px -6px rgba(0,0,0,0.1)",
+          boxShadow: "var(--elevation-popover)",
           ...(isScrollable
             ? { maxHeight, overflowY: "auto" as const }
             : {}),
@@ -72,11 +81,11 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
           options.map((opt) => {
             const selected = isSelected(opt.value);
             const disabled = opt.disabled === true;
-            const rowBg = disabled
-              ? "bg-disabled-bg"
-              : selected
-                ? "bg-selected-bg"
-                : "bg-white hover:bg-selected-bg";
+              const rowBg = disabled
+                ? "bg-disabled-bg"
+                : selected
+                  ? "bg-selected-bg"
+                  : "bg-popover hover:bg-selected-bg";
             return (
               <div
                 key={opt.value}
@@ -87,10 +96,10 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                   disabled ? "cursor-default" : "cursor-pointer"
                 )}
               >
-                <div className="flex w-full items-center gap-[8px] p-[14px]">
+                <div className="flex w-full items-center gap-2 p-3.5">
                   {opt.icon && (
                     <span
-                      className="flex size-[20px] shrink-0 items-center justify-center overflow-clip"
+                      className="flex h-5 w-5 shrink-0 items-center justify-center overflow-clip"
                       style={{
                         color: disabled
                           ? "var(--disabled)"
@@ -101,7 +110,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                     </span>
                   )}
                   <p
-                    className="min-h-[1px] min-w-0 flex-1 overflow-hidden text-[14px] leading-[20px] text-ellipsis whitespace-nowrap not-italic"
+                    className="min-h-[1px] min-w-0 flex-1 overflow-hidden text-sm leading-5 text-ellipsis whitespace-nowrap not-italic"
                     style={{
                       color: disabled
                         ? "var(--disabled)"
@@ -111,7 +120,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                     {opt.label}
                   </p>
                   {selected && (
-                    <span className="flex size-[20px] shrink-0 items-center justify-center">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center">
                       <Check
                         size={16}
                         weight="bold"
@@ -124,9 +133,9 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
             );
           })
         ) : (
-          <div className="w-full shrink-0 bg-white">
-            <div className="flex w-full items-center p-[14px]">
-              <p className="min-h-[1px] min-w-0 flex-1 text-[14px] leading-[20px] not-italic text-disabled">
+            <div className="w-full shrink-0 bg-popover">
+            <div className="flex w-full items-center p-3.5">
+              <p className="min-h-[1px] min-w-0 flex-1 text-sm leading-5 not-italic text-disabled">
                 {emptyText}
               </p>
             </div>

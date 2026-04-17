@@ -1,0 +1,471 @@
+# @sarunyu/system-one
+
+React component library. Tailwind CSS v4 + CSS custom properties. 13 production-ready components. Built for AI-powered generation tools (v0, Lovable, Figma Make).
+
+## Install
+
+```bash
+npm install @sarunyu/system-one
+```
+
+## Setup by Platform
+
+### v0 / Next.js (App Router)
+
+```tsx
+// app/layout.tsx
+import "@sarunyu/system-one/styles.css"
+```
+
+Components are pre-annotated with `"use client"`. Safe to import anywhere — Server Components, Client Components, pages.
+
+### Next.js (Pages Router)
+
+```tsx
+// pages/_app.tsx
+import "@sarunyu/system-one/styles.css"
+```
+
+### Figma Make / Lovable / Vite
+
+```tsx
+// src/main.tsx
+import "@sarunyu/system-one/styles.css"
+```
+
+## Import
+
+```tsx
+import {
+  Button, Input, TextArea, SearchInput,
+  Dropdown, DropdownMultiple, OptionList,
+  Tag, StatusTag, Chip,
+  Tab, TabGroup,
+  Card,
+  DateInput, TimeInput,
+  cn
+} from "@sarunyu/system-one"
+```
+
+---
+
+## Components
+
+### Button
+
+Variants: `primary` | `outline` | `plain` | `outline-black` | `plain-black`
+Label sizes: `xs` | `sm` | `md` | `lg` | `xl`
+Icon-only sizes: `icon-xs` | `icon-sm` | `icon-md` | `icon-lg` | `icon-xl`
+
+```tsx
+<Button variant="primary" size="md">Submit</Button>
+<Button variant="outline" size="md" onClick={fn}>Cancel</Button>
+<Button variant="plain" size="sm">Learn more</Button>
+<Button variant="primary" size="md" leftIcon={<Icon />}>Add item</Button>
+<Button variant="outline" size="md" rightIcon={<Icon />}>Continue</Button>
+<Button size="icon-md" aria-label="Settings"><GearIcon /></Button>
+```
+
+Props: `variant`, `size`, `leftIcon`, `rightIcon`, `disabled`, `onClick`, `className`, `children`
+
+---
+
+### Input
+
+Floating-label text input with validation states.
+
+```tsx
+<Input placeholder="Email" value={email} onChange={setEmail} />
+<Input placeholder="Amount" unit="THB" />
+<Input placeholder="Password" type="password" />
+<Input placeholder="Bio" showCount maxCount={160} />
+<Input forceState="error" errorMessage="This field is required" placeholder="Email" />
+<Input forceState="disabled" placeholder="Read only" />
+```
+
+Props: `placeholder`, `value`, `onChange`, `type`, `unit`, `showCount`, `maxCount`, `forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `required`, `className`
+
+---
+
+### TextArea
+
+Multi-line input. API mirrors Input.
+
+```tsx
+<TextArea placeholder="Description" value={text} onChange={setText} />
+<TextArea placeholder="Tweet" showCount maxCount={280} />
+<TextArea forceState="error" errorMessage="Required" placeholder="Notes" />
+```
+
+Props: `placeholder`, `value`, `onChange`, `showCount`, `maxCount`, `forceState`, `errorMessage`, `required`, `className`
+
+---
+
+### SearchInput
+
+Search field with icon and clear button.
+
+```tsx
+<SearchInput placeholder="Search events..." value={q} onChange={setQ} />
+<SearchInput size="sm" placeholder="Filter by name..." />
+```
+
+Props: `placeholder`, `value`, `onChange`, `size` (`"lg"` | `"sm"`), `className`
+
+---
+
+### Dropdown
+
+Single-select dropdown.
+
+```tsx
+<Dropdown
+  placeholder="Select category"
+  options={[
+    { label: "Option A", value: "a" },
+    { label: "Option B", value: "b" },
+    { label: "Disabled", value: "c", disabled: true },
+  ]}
+  value={selected}
+  onChange={setSelected}
+/>
+```
+
+Props: `placeholder`, `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `value`, `onChange`, `disabled`, `className`
+
+---
+
+### DropdownMultiple
+
+Multi-select dropdown with checkboxes.
+
+```tsx
+<DropdownMultiple
+  placeholder="Select tags"
+  options={options}
+  values={selected}
+  onChange={setSelected}
+/>
+```
+
+Props: `placeholder`, `options`, `values`, `onChange`, `disabled`, `className`
+
+---
+
+### Tag
+
+Compact colored label. Use for categories, statuses, filters.
+
+Variants: `blue` | `green` | `yellow` | `red` | `gray` | `lime`
+Sizes: `large` (default) | `small`
+
+Color semantics: `green` → positive/active, `red` → error/danger, `yellow` → warning/pending, `blue` → informational, `gray` → neutral/inactive
+
+```tsx
+<Tag text="Active" variant="green" />
+<Tag text="Draft" variant="yellow" />
+<Tag text="Error" variant="red" size="small" />
+<Tag text="Filter" close onClose={fn} />
+```
+
+Props: `text`, `variant`, `size`, `close`, `onClose`, `className`
+
+---
+
+### StatusTag
+
+Process-flow state indicator with colored dot.
+
+Types: `stop` | `success` | `hold` | `processing` | `error`
+
+```tsx
+<StatusTag type="success" />
+<StatusTag type="processing" text="In progress" />
+<StatusTag type="hold" />
+<StatusTag type="error" />
+```
+
+Props: `type`, `text`, `className`
+
+Use `StatusTag` for workflow states. Use `Tag` for categorical labels.
+
+---
+
+### Chip
+
+Toggleable filter/selection chip. Always use in groups of 2+.
+
+Types: `single` (default) | `multiple`
+Sizes: `large` | `medium` | `small`
+
+```tsx
+{/* Single-select group */}
+<div className="flex gap-2">
+  <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
+  <Chip label="Active" selected={filter === "active"} onClick={() => setFilter("active")} />
+  <Chip label="Archived" selected={filter === "archived"} onClick={() => setFilter("archived")} />
+</div>
+
+{/* Multi-select */}
+<Chip label="Design" type="multiple" selected={tags.includes("design")} onClick={() => toggle("design")} />
+```
+
+Props: `label`, `selected`, `onClick`, `type`, `size`, `disabled`, `className`
+
+---
+
+### TabGroup
+
+Tabbed navigation. Always use `TabGroup`, not bare `Tab`.
+
+Sizes: `lg` | `md` (default) | `sm`
+
+```tsx
+<TabGroup
+  items={[
+    { id: "overview", title: "Overview" },
+    { id: "details", title: "Details", icon: true },
+    { id: "history", title: "History", notification: 3 },
+    { id: "settings", title: "Settings", disabled: true },
+  ]}
+  activeId={activeTab}
+  onChange={setActiveTab}
+  size="md"
+/>
+```
+
+Props: `items` (`Array<{ id: string, title: string, icon?: boolean, notification?: number, disabled?: boolean }>`), `activeId`, `onChange`, `size`, `className`
+
+---
+
+### Card
+
+Responsive event/content card.
+
+Variants: `desktop` (308px wide) | `tablet` (224px wide) | `mobile` (163px wide)
+tagStatus: `not-registered` | `registered` | `full`
+
+```tsx
+<Card
+  variant="desktop"
+  title="Annual Conference 2024"
+  date="Jun 23, 2024"
+  time="08:30 - 12:00"
+  location="Main Hall, Floor 7"
+  count="150/200"
+  tagStatus="registered"
+  image="/banner.jpg"
+/>
+```
+
+Props: `variant`, `title`, `date`, `time`, `location`, `count`, `tagStatus`, `image`, `className`
+
+Match variant to viewport: `desktop` on wide layouts, `tablet` / `mobile` on narrow.
+
+---
+
+### DateInput
+
+Calendar date picker.
+
+Modes: `single` | `range` | `multiple`
+Variants: `popover` (default) | `modal`
+
+```tsx
+<DateInput placeholder="Select date" mode="single" value={date} onChange={setDate} />
+<DateInput mode="range" value={range} onChange={setRange} />
+<DateInput mode="multiple" value={dates} onChange={setDates} />
+```
+
+Props: `placeholder`, `mode`, `value`, `onChange`, `variant`, `disabled`, `className`
+
+---
+
+### TimeInput
+
+24-hour time picker.
+
+Modes: `single` | `range`
+
+```tsx
+<TimeInput placeholder="Start time" value={time} onChange={setTime} />
+<TimeInput mode="range" value={timeRange} onChange={setTimeRange} />
+```
+
+Props: `placeholder`, `mode`, `value`, `onChange`, `disabled`, `className`
+
+---
+
+### OptionList
+
+Scrollable option list for custom dropdowns.
+
+```tsx
+{/* Single-select */}
+<OptionList
+  options={[{ label: "Item A", value: "a" }, { label: "Item B", value: "b" }]}
+  selectedValue={value}
+  onSelect={setValue}
+/>
+
+{/* Multi-select */}
+<OptionList
+  options={options}
+  selectedValues={values}
+  onToggle={toggleValue}
+/>
+```
+
+Props: `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `selectedValue`, `onSelect`, `selectedValues`, `onToggle`, `className`
+
+---
+
+## Design Tokens
+
+All tokens are CSS custom properties. Override after the stylesheet import:
+
+```css
+:root {
+  --primary-action: #7c3aed;        /* brand color */
+  --primary-action-hover: #6d28d9;
+  --primary-action-active: #5b21b6;
+  --font-sans: "Inter", sans-serif; /* override library default (Noto Sans Thai) */
+  --radius: 8px;                    /* border radius base */
+}
+```
+
+Key tokens:
+- `--primary-action` — brand color (primary buttons, links, active states)
+- `--background` / `--foreground` — page surface and text
+- `--border` — default border color
+- `--muted-foreground` — placeholder and secondary text
+- `--destructive` — error/danger red
+- `--success` — success green
+- `--font-sans` — font family (default: Noto Sans Thai)
+- `--radius` — base border radius (default: 4px)
+
+---
+
+## Dark Mode
+
+Add `.dark` to `<html>` or any ancestor:
+
+```tsx
+// Next.js
+<html className={isDark ? "dark" : ""}>
+
+// Vite
+document.documentElement.classList.toggle("dark", isDark)
+```
+
+All components adapt automatically.
+
+---
+
+## TypeScript
+
+```ts
+import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/system-one"
+```
+
+---
+
+## Notes
+
+- No provider or wrapper needed — just import the stylesheet and use components
+- The library ships pre-built CSS — no Tailwind config required in the consuming project
+- If the project already uses Tailwind and you see font differences, override `--font-sans` in your CSS
+- CSS custom properties can be referenced in Tailwind classes: `bg-[var(--primary-action)]`
+
+---
+
+## Component Usage Guide
+
+### Button
+
+Buttons are interactive elements that allow users to click or tap to perform actions — such as submitting a form, saving data, navigating to another page, or opening a popup.
+
+Types: `primary` — main CTA, use once per context. `outline` — secondary action, supports primary without affecting main flow. `plain` — no background or border, low-priority actions. `secondary` (outline-black) — same as outline but black, use when blue is not appropriate.
+
+Sizes: `base` recommended for Desktop. `xl` recommended for Mobile.
+
+States: Default, Hover, Press, Disabled.
+
+### Input
+
+Floating Label Input is a single-line or multi-line field with a label that floats inside.
+
+Types: `Input` — single-line, general text/numeric. `TextArea` — multi-line, for comments or addresses. `Dropdown` — predefined list selection, displays as OptionList.
+
+States: Default, Focus, Error, Disabled.
+
+### Tab
+
+Tabs allow users to switch between different content sections within the same page.
+
+Types: Default (text only), Icon (with icon), Notification (with badge).
+
+States: Default, Active (selected), Disabled.
+
+Sizes: `lg` (default), `md`, `sm`. Always use the same size within one tab group.
+
+### Tag
+
+Tags display categories, types, or short metadata. Status Tags communicate process state.
+
+Tag types: Default (text only), Icon (with icon), Remove (dismissible).
+Tag states: Default, Hover/Press, Disabled.
+Tag sizes: Large, Small.
+
+Status Tag variants: `success` — process completed. `processing` — in progress. `hold` — temporarily paused. `stop` — stopped. `error` — failed.
+
+### Chip
+
+Chips are toggleable filter/selection elements. Always use in groups of 2+.
+
+Types: `single` — one selection at a time. `multiple` — multiple selections simultaneously.
+
+States: Default, Active, Disabled (Default), Disabled (Active).
+
+Sizes: `large`, `medium`, `small`.
+
+---
+
+## Design Rules
+
+### Button Rules
+
+- Maximum width is 343px (`max-w-[343px]`). Never remove or override. Do not detach the component.
+- Do not manually recreate or modify padding (`py-[10px] px-[16px]`) or border-radius (`rounded-[8px]`).
+- Use Primary only once per context. Never place two Primary buttons side-by-side. Use Outline/Secondary for supporting actions.
+- Hug width is correct for short labels only. For long labels, use Fill width or set explicit max-w-[343px].
+
+### Input Rules
+
+- Never override input border or background colors manually — use built-in state variants (Default, Focus, Error, Disabled).
+- Do not recreate input styles manually or adjust gap/height outside the component's tokens.
+- Use Dropdown Tags only for multi-select. For single-select, use standard Dropdown.
+- Keep labelText short enough to fit on one line. Long labels break the floating label layout.
+- Do not show Helper Text and Error Message simultaneously. Error state replaces helper text.
+- Use Option List only when there are multiple selectable values.
+- Always follow the system date format (DD MMM YYYY). Do not mix Thai month names with C.E. year or reorder day/month/year.
+
+### Tab Rules
+
+- Do not override padding, gap, border-radius, element order, or colors inside the tab bar.
+- All tabs in one group must use the same size prop. Never mix sizes.
+- Do not add extra gap or margin between tabs — use built-in spacing tokens only.
+
+### Tag Rules
+
+- Do not override height, padding, or layout of Tag or StatusTag.
+- All tags in the same context must use the same size.
+- Do not reorder internal elements (icon, label, badge) inside Tag or StatusTag.
+- Always use the correct StatusTag variant for its semantic meaning. Never override the color.
+
+### Chip Rules
+
+- Keep chip labels short and single-purpose. Long labels cause overflow.
+- Do not override padding, gap, radius, height, element order, or colors.
+- All chips in the same group must share the same size and spacing.
+- Use Chip only for groups with 2+ options. For single options, use a toggle or checkbox instead.
