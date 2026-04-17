@@ -37,9 +37,6 @@ import "@sarunyu/system-one/styles.css"
 
 ```tsx
 import {
-  // Layout primitives (always use these for page structure)
-  Page, PageHeader, Section, Toolbar, CardGrid, Stack,
-  // Components
   Button, Input, TextArea, SearchInput,
   Dropdown, DropdownMultiple, OptionList,
   Tag, StatusTag, Chip,
@@ -373,169 +370,42 @@ import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/s
 
 ---
 
-## Page Layout Patterns
+## Design Guidance
 
-**REQUIRED: every page must be built from the layout primitives below (`Page`, `PageHeader`, `Section`, `Toolbar`, `CardGrid`, `Stack`).** Do not hand-roll page containers with raw `<main>` / `<div>` / Tailwind utilities. These primitives bake in the correct max-width, padding, section spacing, and typographic rhythm — if you skip them, the result will look broken (edge-to-edge content, no section gap, misaligned toolbars).
+**You design the layout. The library provides the components.** Compose, arrange, and style page structure freely using Tailwind — the library does not dictate layout. Focus instead on using the components below correctly (right variants, right semantics, right props) so the visual language stays consistent with the design system.
 
-### Layout primitives — API
+### Anchors the library provides
 
-**`<Page>`** — top-level page container. Handles max-width, horizontal padding, vertical padding, and the gap between sections.
+These are all you need to keep a page visually coherent with the system:
 
-```tsx
-<Page>                  {/* default width="lg" = 1200px */}
-<Page width="sm">       {/* 640px — forms, auth, content */}
-<Page width="md">       {/* 960px — articles */}
-<Page width="lg">       {/* 1200px — default app pages */}
-<Page width="xl">       {/* 1440px — dashboards */}
-<Page width="full">     {/* no max-width */}
-```
+- **Typography** — `<h1>`–`<h4>` are pre-styled (size, weight, line-height). Use them as-is; do not add `text-*` or `font-*` classes to override.
+- **Text color** — body text inherits from `--foreground`. Secondary text: `text-muted-foreground`. Don't hard-code hex colors.
+- **Surfaces** — use `bg-background` / `bg-card` / `bg-muted` so dark mode works automatically.
+- **Brand color** — reference via `--primary-action`, or Tailwind `text-primary-action` / `bg-primary-action`.
+- **Spacing** — Tailwind spacing scale (4px units). Pick whatever gaps/paddings look right; the design system has no prescribed rhythm.
+- **Radius** — `rounded-md` (6px), `rounded-lg` (8px), `rounded-xl` (12px), `rounded-full`.
 
-**`<PageHeader>`** — the top block of a page: title, description, and optional right-side action buttons.
+### Component usage — the only hard rules
 
-```tsx
-<PageHeader
-  title="Events"
-  description="Browse and register for upcoming events."
-  actions={<Button variant="primary" size="md">New event</Button>}
-  eyebrow={<Tag text="Live" variant="green" size="small" />}
-/>
-```
+Use the library's components for these elements. Do **not** recreate them with raw HTML or Tailwind:
 
-Props: `title` (required), `description`, `actions`, `eyebrow`.
+- Buttons → `<Button>` (never `<button>` with utility classes)
+- Text inputs / textareas / search → `<Input>`, `<TextArea>`, `<SearchInput>`
+- Single / multi select → `<Dropdown>`, `<DropdownMultiple>`, `<OptionList>`
+- Date / time pickers → `<DateInput>`, `<TimeInput>`
+- Labels / statuses / filters → `<Tag>`, `<StatusTag>`, `<Chip>`
+- Tabs → `<TabGroup>` (never `<Tab>` alone)
+- Event/content cards → `<Card>`
 
-**`<Section>`** — a content block with an optional heading row. Stacks heading + body with the correct gap.
+Pick the correct variant / prop for the semantic role (e.g. `StatusTag type="success"` for success, `Button variant="primary"` once per context). The per-component rules below in "Design Rules" are the full reference.
 
-```tsx
-<Section title="Upcoming" description="Events in the next 30 days.">
-  {/* body content */}
-</Section>
+### Layout freedom
 
-<Section title="Filters" actions={<Button variant="plain" size="sm">Reset</Button>}>
-  <Toolbar>…</Toolbar>
-</Section>
-```
+Structure the page however you like — any combination of flex, grid, max-width containers, custom spacing, hero compositions, sidebars, split layouts, dashboards, etc. Use aesthetic judgement: generous padding, clear hierarchy, balanced whitespace. The only layout constraint is that content shouldn't sit flush against viewport edges or adjacent blocks without breathing room.
 
-Props: `title`, `description`, `actions`. All optional — omit all for an unlabelled content block.
+### Optional: layout helper components
 
-**`<Toolbar>`** — horizontal wrap-friendly row for search, filters, chips. Auto `flex-wrap` so it stays usable on narrow widths.
-
-```tsx
-<Toolbar end={<Button variant="outline" size="md">Export</Button>}>
-  <SearchInput placeholder="Search…" value={q} onChange={setQ} className="max-w-[320px]" />
-  <Chip label="All" selected={f === "all"} onClick={() => setF("all")} />
-  <Chip label="Active" selected={f === "active"} onClick={() => setF("active")} />
-</Toolbar>
-```
-
-The `end` prop pushes content to the right with `ml-auto`.
-
-**`<CardGrid>`** — responsive grid for cards. Handles breakpoints + gap.
-
-```tsx
-<CardGrid cols={3}>          {/* 1 → 2 → 3 columns */}
-<CardGrid cols={2}>          {/* 1 → 2 columns */}
-<CardGrid cols={4}>          {/* 1 → 2 → 3 → 4 columns */}
-```
-
-**`<Stack>`** — generic vertical/horizontal flex container. Use when you need a gap between arbitrary elements inside a `Section` body.
-
-```tsx
-<Stack gap={4}>                             {/* vertical, 16px gap */}
-<Stack direction="row" gap={3} wrap>        {/* horizontal, 12px gap, wraps */}
-<Stack gap={6} align="center" justify="between">
-```
-
-Props: `direction` (`"col"` default | `"row"`), `gap` (1, 2, 3, 4, 6, 8, 10, 12 — default 4), `align`, `justify`, `wrap`.
-
-### The required page skeleton
-
-Every generated page must follow this shape. Replace content — keep the structure.
-
-```tsx
-import { Page, PageHeader, Section, Toolbar, CardGrid, Button, SearchInput, Chip, Card } from "@sarunyu/system-one";
-
-export default function EventsPage() {
-  return (
-    <Page>
-      <PageHeader
-        title="Events"
-        description="Browse and register for upcoming events."
-        actions={<Button variant="primary" size="md">New event</Button>}
-      />
-
-      <Toolbar>
-        <SearchInput placeholder="Search events…" value={q} onChange={setQ} className="max-w-[320px]" />
-        <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
-        <Chip label="This week" selected={filter === "week"} onClick={() => setFilter("week")} />
-      </Toolbar>
-
-      <Section title="Upcoming">
-        <CardGrid cols={3}>
-          {events.map((e) => <Card key={e.id} variant="desktop" {...e} />)}
-        </CardGrid>
-      </Section>
-    </Page>
-  );
-}
-```
-
-### Forms — use `<Stack>` inside `<Section>`
-
-```tsx
-<Page width="sm">
-  <PageHeader title="Sign in" description="Welcome back." />
-  <Section>
-    <Stack gap={4} className="max-w-[480px]">
-      <Input placeholder="Email" value={email} onChange={setEmail} />
-      <Input placeholder="Password" type="password" value={pw} onChange={setPw} />
-      <Stack direction="row" gap={3}>
-        <Button variant="primary" size="md">Sign in</Button>
-        <Button variant="outline" size="md">Cancel</Button>
-      </Stack>
-    </Stack>
-  </Section>
-</Page>
-```
-
-### Hero section — use `<PageHeader>` + actions
-
-Do not build a custom hero. Use `PageHeader` with `eyebrow` and `actions` — it already handles title size, description max-width, and action alignment.
-
-```tsx
-<Page>
-  <PageHeader
-    eyebrow={<><Tag text="LIVE" variant="green" size="small" /><Tag text="SET +0.82%" variant="lime" size="small" /></>}
-    title="ลงทุนหุ้นอย่างชาญฉลาด ด้วยข้อมูลเรียลไทม์"
-    description="ติดตามราคา วิเคราะห์เทคนิคอล รับสัญญาณซื้อขาย บนแพลตฟอร์มเดียว"
-    actions={<><Button variant="primary" size="lg">เริ่มต้นใช้งานฟรี</Button><Button variant="outline" size="lg">ดูแผนพรีเมียม</Button></>}
-  />
-  {/* rest of page */}
-</Page>
-```
-
-### Layout rules (do / don't)
-
-- **Do** always wrap a page in `<Page>`. Never return a naked `<div>` or `<main>` at the top level.
-- **Do** use `<PageHeader>` for the page title — never hand-roll `<h1>` + description + buttons.
-- **Do** use `<Section>` for each content block. Stack multiple `<Section>` children directly inside `<Page>` — the gap is automatic.
-- **Do** use `<Toolbar>` for search/filter rows and `<CardGrid>` for card collections.
-- **Don't** add manual spacing like `mt-8` / `mb-12` between sections — `<Page>` already provides section gap.
-- **Don't** wrap `<Section>` in another flex container — it breaks the rhythm.
-- **Don't** override heading sizes with utility classes — `h1`–`h4` inside these primitives are already sized.
-- **Don't** use `max-w-*` on `<Page>` via className — use the `width` prop instead.
-
-### Spacing scale (used internally by primitives — reference only)
-
-| Purpose | Value |
-|---|---|
-| Between label and input | gap-1 / gap-2 (4–8px) |
-| Between fields in a form | gap-4 (16px) — default `<Stack>` |
-| Between heading and content | gap-6 (24px) — built into `<Section>` |
-| Between top-level sections | gap-12 (48px) — built into `<Page>` |
-| Page horizontal padding | px-6 md:px-8 — built into `<Page>` |
-| Page vertical padding | py-10 — built into `<Page>` |
-
-If you need a custom gap, use `<Stack gap={N}>` with a value from: 1, 2, 3, 4, 6, 8, 10, 12.
+The library also ships a small set of layout primitives (`Page`, `PageHeader`, `Section`, `Toolbar`, `CardGrid`, `Stack`) that some users prefer for rapid scaffolding. They are entirely optional — skip them and design your own layout if that produces a better result. If you do use them, they apply sensible defaults (centered container, 48px section gap, responsive card grid). Full API is in the TypeScript types.
 
 ---
 
