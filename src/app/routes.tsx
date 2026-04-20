@@ -13,6 +13,8 @@ import { SearchInputPage } from "./pages/SearchInputPage";
 import { OptionListPage } from "./pages/OptionListPage";
 import { TagPage } from "./pages/TagPage";
 import { ChipPage } from "./pages/ChipPage";
+import { CheckboxPage } from "./pages/CheckboxPage";
+import { RadioPage } from "./pages/RadioPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -40,6 +42,8 @@ export const router = createBrowserRouter([
       { path: "option-list", Component: OptionListPage },
       { path: "tag", Component: TagPage },
       { path: "chip", Component: ChipPage },
+      { path: "checkbox", Component: CheckboxPage },
+      { path: "radio", Component: RadioPage },
     ],
   },
 ]);

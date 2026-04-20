@@ -3,6 +3,8 @@
 // Components
 export { Button } from "./components/button";
 export { Card } from "./components/card";
+export { Checkbox } from "./components/checkbox";
+export { Radio } from "./components/radio";
 export {
   Page,
   PageHeader,
@@ -57,6 +59,16 @@ export type {
   StackAlign,
   StackJustify,
 } from "./components/layout";
+
+// Types — Checkbox
+export type {
+  CheckboxChecked,
+  CheckboxVariant,
+  CheckboxProps,
+} from "./components/checkbox";
+
+// Types — Radio
+export type { RadioVariant, RadioProps } from "./components/radio";
 
 // Types — Chip
 export type {

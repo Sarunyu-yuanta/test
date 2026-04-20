@@ -18,6 +18,8 @@ const navItems = [
   { to: "/tab", label: "Tab" },
   { to: "/tag", label: "Tag" },
   { to: "/chip", label: "Chip" },
+  { to: "/checkbox", label: "Checkbox" },
+  { to: "/radio", label: "Radio" },
   // { to: "/card", label: "Card" },
 ];
 
