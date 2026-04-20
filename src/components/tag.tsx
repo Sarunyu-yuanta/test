@@ -42,7 +42,7 @@ const sizeStyles: Record<
   },
   small: {
     container: "px-1 py-0.5",
-    text: "text-xxs leading-3",
+    text: "text-[9px] leading-3",
     closeIcon: "h-3.5 w-3.5",
     closeButton: "h-3.5 w-3.5",
   },
