@@ -1,6 +1,27 @@
-# @sarunyu/system-one
+# @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 13 production-ready components. Built for AI-powered generation tools (v0, Lovable, Figma Make).
+React component library. Tailwind CSS v4 + CSS custom properties. 17 components.
+Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
+
+**This file is the contract.** Read it top-to-bottom before generating any screen
+that uses this library. The rules are non-negotiable.
+
+---
+
+## The 3 rules
+
+1. **Use library components for every element it provides.** Never recreate
+   Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Radio, DateInput, TimeInput,
+   Table, SearchInput, TextArea, Chip as raw HTML.
+2. **Use design-token classes for color and typography.** Never `text-blue-600`,
+   `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
+   color you need is not in it, use `text-foreground` / `bg-card`.
+3. **Layout is free.** Build page structure with plain `<div>` + Tailwind
+   (flex, grid, container, max-w-*, gap-*, p-*, mx-auto). The library does
+   NOT ship layout primitives. Do not import `Page`, `Section`, `Stack`,
+   `CardGrid`, `Toolbar` — they don't exist.
+
+---
 
 ## Install
 
@@ -8,82 +29,166 @@ React component library. Tailwind CSS v4 + CSS custom properties. 13 production-
 npm install @sarunyu/system-one
 ```
 
-## Setup by Platform
+Peer dep: `react >= 18`.
 
-### v0 / Next.js (App Router)
-
-```tsx
-// app/layout.tsx
-import "@sarunyu/system-one/styles.css"
-```
-
-Components are pre-annotated with `"use client"`. Safe to import anywhere — Server Components, Client Components, pages.
-
-### Next.js (Pages Router)
+## Setup
 
 ```tsx
-// pages/_app.tsx
-import "@sarunyu/system-one/styles.css"
+// Next.js App Router: app/layout.tsx
+// Next.js Pages: pages/_app.tsx
+// Vite / Figma Make / Lovable: src/main.tsx
+import "@sarunyu/system-one/styles.css";
 ```
 
-### Figma Make / Lovable / Vite
+No provider, no wrapper. Components ship with `"use client"`.
+
+## Dark mode
+
+Add `.dark` to any ancestor. All components and tokens adapt.
 
 ```tsx
-// src/main.tsx
-import "@sarunyu/system-one/styles.css"
+<html className={isDark ? "dark" : ""}>
 ```
 
-## Import
+---
+
+## Available imports
 
 ```tsx
 import {
-  Button, Input, TextArea, SearchInput,
+  // Actions
+  Button,
+  // Form
+  Input, TextArea, SearchInput,
   Dropdown, DropdownMultiple, OptionList,
+  Checkbox, Radio,
+  DateInput, TimeInput,
+  // Display
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
-  DateInput, TimeInput,
-  cn
-} from "@sarunyu/system-one"
+  Table, TableRow, TableHeaderCell, TableCell,
+  // Utility
+  cn,
+} from "@sarunyu/system-one";
 ```
+
+---
+
+## Token reference (memorize this)
+
+All values are CSS custom properties → exposed as Tailwind utilities.
+Use the Tailwind class. Never hard-code colors.
+
+### Text color
+
+| Use for | Class |
+|---|---|
+| Body text, headings | `text-foreground` |
+| Secondary / placeholder | `text-muted-foreground` |
+| Disabled text | `text-disabled` |
+| Subtle captions | `text-caption` |
+| Brand / link / active state | `text-primary-action` |
+| Destructive / error | `text-destructive` |
+| Success | `text-success` |
+| On primary-action surfaces | `text-on-primary-action` |
+
+### Background
+
+| Use for | Class |
+|---|---|
+| Page | `bg-background` |
+| Card / popover surface | `bg-card` |
+| Neutral fill (inputs, chips) | `bg-muted` or `bg-input-background` |
+| Hover on neutral | `bg-hover-bg` |
+| Disabled fill | `bg-disabled-bg` |
+| Brand action (primary buttons) | `bg-primary-action` / `hover:bg-primary-action-hover` / `active:bg-primary-action-active` |
+| Tinted primary surface | `bg-primary-action-light` / `bg-primary-action-muted` |
+| Selection / active row | `bg-selected-bg` / `bg-selected-light-bg` |
+| Destructive fill | `bg-destructive` |
+| Success / error soft | `bg-success-bg` / `bg-error-bg` |
+
+### Border
+
+| Use for | Class |
+|---|---|
+| Default border | `border-border` |
+| Subtle divider | `border-divider` |
+| Disabled border | `border-border-disabled` |
+| Muted border | `border-border-muted` |
+
+### Radius
+
+`rounded-sm` (2px) · `rounded` (4px, default `--radius`) · `rounded-md` (6px) · `rounded-lg` (8px) · `rounded-xl` (12px) · `rounded-2xl` (16px) · `rounded-3xl` (24px) · `rounded-full`
+
+### Shadow
+
+`shadow-xs` · `shadow-sm` · `shadow-md` · `shadow-lg` · `shadow-card` (event/content cards) · `shadow-popover` (dropdowns, menus)
+
+### Typography
+
+Pre-styled HTML headings: `<h1>` (24px) · `<h2>` (20px) · `<h3>` (18px) · `<h4>` (16px). Do NOT add `text-*` / `font-*` to override.
+
+Body text inherits `--foreground`. Font family is `--font-sans` (Noto Sans Thai by default — override via `--font-sans` to change globally).
+
+### Spacing / sizing
+
+Standard Tailwind scale (4px units). Fine-grained: `p-0.5` (2px), `p-1.5` (6px), `p-2.5` (10px), `p-3.5` (14px), `p-13` (56px).
 
 ---
 
 ## Components
 
+Every example below assumes state is managed by the caller via `useState`.
+
 ### Button
 
-Variants: `primary` | `outline` | `plain` | `outline-black` | `plain-black`
-Label sizes: `xs` | `sm` | `md` | `lg` | `xl`
-Icon-only sizes: `icon-xs` | `icon-sm` | `icon-md` | `icon-lg` | `icon-xl`
+Actions only. Never `<button>` with utility classes.
 
 ```tsx
+type ButtonVariant = "primary" | "outline" | "plain" | "outline-black" | "plain-black";
+type ButtonLabelSize = "xs" | "sm" | "md" | "lg" | "xl";
+type ButtonIconSize  = "icon-xs" | "icon-sm" | "icon-md" | "icon-lg" | "icon-xl";
+
 <Button variant="primary" size="md">Submit</Button>
-<Button variant="outline" size="md" onClick={fn}>Cancel</Button>
+<Button variant="outline" size="md" onClick={save}>Save draft</Button>
 <Button variant="plain" size="sm">Learn more</Button>
-<Button variant="primary" size="md" leftIcon={<Icon />}>Add item</Button>
-<Button variant="outline" size="md" rightIcon={<Icon />}>Continue</Button>
+<Button variant="primary" size="lg" leftIcon={<PlusIcon />}>Add item</Button>
 <Button size="icon-md" aria-label="Settings"><GearIcon /></Button>
+<Button variant="primary" size="md" disabled>Can't submit</Button>
 ```
 
-Props: `variant`, `size`, `leftIcon`, `rightIcon`, `disabled`, `onClick`, `className`, `children`
+**Semantics** — `primary` = main CTA (one per context). `outline` = secondary action.
+`plain` = tertiary / low-priority. `outline-black` / `plain-black` = same as outline/plain
+but in neutral tone (use when brand color shouldn't compete, e.g. toolbar actions).
+
+**Sizing** — `md` desktop default. `xl` mobile default. `xs`/`sm` for dense toolbars. Icon-only sizes match label sizes 1:1.
+
+Props: `variant`, `size`, `leftIcon`, `rightIcon`, `disabled`, `onClick`, `className`, plus all native `<button>` props.
 
 ---
 
 ### Input
 
-Floating-label text input with validation states.
+Floating-label text input. Never `<input>` with utility classes.
 
 ```tsx
 <Input placeholder="Email" value={email} onChange={setEmail} />
-<Input placeholder="Amount" unit="THB" />
-<Input placeholder="Password" type="password" />
-<Input placeholder="Bio" showCount maxCount={160} />
-<Input forceState="error" errorMessage="This field is required" placeholder="Email" />
-<Input forceState="disabled" placeholder="Read only" />
+<Input placeholder="Password" type="password" value={pw} onChange={setPw} />
+<Input placeholder="Amount" unit="THB" value={amount} onChange={setAmount} />
+<Input placeholder="Bio" showCount maxCount={160} value={bio} onChange={setBio} />
+<Input placeholder="Email" required />
+<Input placeholder="Email" forceState="error" errorMessage="Invalid email" value={email} onChange={setEmail} />
+<Input placeholder="Email" forceState="disabled" value="locked@example.com" />
+<Input placeholder="Search" helperText="Press Enter to search" value={q} onChange={setQ} />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `type`, `unit`, `showCount`, `maxCount`, `forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `required`, `className`
+**Important** — `onChange` receives `(value: string)`, **not** an event. The placeholder
+IS the label (it floats up when filled — don't add a separate `<label>`).
+
+Props: `placeholder`, `value`, `onChange(value)`, `type`, `unit`, `showCount`, `maxCount`,
+`forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `helperText`,
+`required`, `rightIcon`, `className`.
 
 ---
 
@@ -93,24 +198,25 @@ Multi-line input. API mirrors Input.
 
 ```tsx
 <TextArea placeholder="Description" value={text} onChange={setText} />
-<TextArea placeholder="Tweet" showCount maxCount={280} />
-<TextArea forceState="error" errorMessage="Required" placeholder="Notes" />
+<TextArea placeholder="Tweet" showCount maxCount={280} value={post} onChange={setPost} />
+<TextArea placeholder="Feedback" forceState="error" errorMessage="Required" />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `showCount`, `maxCount`, `forceState`, `errorMessage`, `required`, `className`
+Props: `placeholder`, `value`, `onChange(value)`, `showCount`, `maxCount`, `forceState`,
+`errorMessage`, `helperText`, `required`, `className`.
 
 ---
 
 ### SearchInput
 
-Search field with icon and clear button.
+Search field with icon + clear button.
 
 ```tsx
-<SearchInput placeholder="Search events..." value={q} onChange={setQ} />
-<SearchInput size="sm" placeholder="Filter by name..." />
+<SearchInput placeholder="Search events…" value={q} onChange={setQ} />
+<SearchInput size="sm" placeholder="Filter…" value={q} onChange={setQ} />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `size` (`"lg"` | `"sm"`), `className`
+Props: `placeholder`, `value`, `onChange(value)`, `size` (`"lg"` default | `"sm"`), `className`.
 
 ---
 
@@ -131,9 +237,8 @@ Single-select dropdown.
 />
 ```
 
-Props: `placeholder`, `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `value`, `onChange`, `disabled`, `className`
-
----
+Props: `placeholder`, `options: { label, value, disabled? }[]`, `value`, `onChange(value)`,
+`disabled`, `className`.
 
 ### DropdownMultiple
 
@@ -142,115 +247,130 @@ Multi-select dropdown with checkboxes.
 ```tsx
 <DropdownMultiple
   placeholder="Select tags"
-  options={options}
+  options={tagOptions}
   values={selected}
   onChange={setSelected}
 />
 ```
 
-Props: `placeholder`, `options`, `values`, `onChange`, `disabled`, `className`
+Props: `placeholder`, `options`, `values: string[]`, `onChange(values)`, `disabled`, `className`.
+
+---
+
+### Checkbox
+
+```tsx
+<Checkbox checked={agreed} onCheckedChange={setAgreed} label="I agree to the terms" />
+<Checkbox checked="indeterminate" onCheckedChange={setAll} label="Select all" />
+<Checkbox checked={sub} onCheckedChange={setSub} label="Subscribe" disabled />
+```
+
+`checked` is `boolean | "indeterminate"`. Always provide `label` — don't wrap Checkbox in a `<label>`.
+
+### Radio
+
+Render a group — use `name` to bind siblings.
+
+```tsx
+<div className="flex flex-col gap-2">
+  <Radio name="plan" value="free" checked={plan === "free"} onChange={setPlan} label="Free" />
+  <Radio name="plan" value="pro"  checked={plan === "pro"}  onChange={setPlan} label="Pro" />
+</div>
+```
 
 ---
 
 ### Tag
 
-Compact colored label. Use for categories, statuses, filters.
-
-Variants: `blue` | `green` | `yellow` | `red` | `gray` | `lime`
-Sizes: `large` (default) | `small`
-
-Color semantics: `green` → positive/active, `red` → error/danger, `yellow` → warning/pending, `blue` → informational, `gray` → neutral/inactive
+Compact categorical label.
 
 ```tsx
+type TagVariant = "blue" | "green" | "yellow" | "red" | "gray" | "lime";
+// green=positive, red=danger, yellow=warning, blue=info, gray=neutral
+
 <Tag text="Active" variant="green" />
 <Tag text="Draft" variant="yellow" />
-<Tag text="Error" variant="red" size="small" />
-<Tag text="Filter" close onClose={fn} />
+<Tag text="Filter: Design" close onClose={remove} />
+<Tag text="Small" variant="blue" size="small" />
 ```
 
-Props: `text`, `variant`, `size`, `close`, `onClose`, `className`
-
----
+Props: `text`, `variant`, `size` (`"large"` default | `"small"`), `close`, `onClose`, `className`.
 
 ### StatusTag
 
-Process-flow state indicator with colored dot.
-
-Types: `stop` | `success` | `hold` | `processing` | `error`
+Workflow/process state with colored dot. Use this (not Tag) for statuses.
 
 ```tsx
+type StatusTagType = "stop" | "success" | "hold" | "processing" | "error";
+
 <StatusTag type="success" />
-<StatusTag type="processing" text="In progress" />
-<StatusTag type="hold" />
+<StatusTag type="processing" text="Uploading…" />
 <StatusTag type="error" />
 ```
 
-Props: `type`, `text`, `className`
-
-Use `StatusTag` for workflow states. Use `Tag` for categorical labels.
-
----
+**When to pick which** — workflow state (order flow, job status) → StatusTag.
+Category / label / filter pill → Tag.
 
 ### Chip
 
-Toggleable filter/selection chip. Always use in groups of 2+.
-
-Types: `single` (default) | `multiple`
-Sizes: `large` | `medium` | `small`
+Toggleable filter selection. Always use in groups of 2+.
 
 ```tsx
-{/* Single-select group */}
-<div className="flex gap-2">
-  <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
-  <Chip label="Active" selected={filter === "active"} onClick={() => setFilter("active")} />
-  <Chip label="Archived" selected={filter === "archived"} onClick={() => setFilter("archived")} />
+// Single-select filter bar
+<div className="flex flex-wrap gap-2">
+  {["all", "active", "archived"].map(v => (
+    <Chip key={v} label={v} selected={filter === v} onClick={() => setFilter(v)} />
+  ))}
 </div>
 
-{/* Multi-select */}
-<Chip label="Design" type="multiple" selected={tags.includes("design")} onClick={() => toggle("design")} />
+// Multi-select tag picker
+<div className="flex flex-wrap gap-2">
+  {tags.map(t => (
+    <Chip key={t} label={t} type="multiple" size="medium"
+          selected={picked.has(t)} onClick={() => toggle(t)} />
+  ))}
+</div>
 ```
 
-Props: `label`, `selected`, `onClick`, `type`, `size`, `disabled`, `className`
+Props: `label`, `selected`, `onClick`, `type` (`"single"` default | `"multiple"`),
+`size` (`"large"` | `"medium"` | `"small"`), `disabled`, `className`.
 
 ---
 
 ### TabGroup
 
-Tabbed navigation. Always use `TabGroup`, not bare `Tab`.
-
-Sizes: `lg` | `md` (default) | `sm`
+Tabbed navigation. Always use `TabGroup` (never bare `<Tab>`).
 
 ```tsx
 <TabGroup
   items={[
     { id: "overview", title: "Overview" },
-    { id: "details", title: "Details", icon: true },
-    { id: "history", title: "History", notification: 3 },
+    { id: "details",  title: "Details", icon: true },
+    { id: "history",  title: "History", notification: 3 },
     { id: "settings", title: "Settings", disabled: true },
   ]}
-  activeId={activeTab}
-  onChange={setActiveTab}
+  activeId={active}
+  onChange={setActive}
   size="md"
 />
 ```
 
-Props: `items` (`Array<{ id: string, title: string, icon?: boolean, notification?: number, disabled?: boolean }>`), `activeId`, `onChange`, `size`, `className`
+Props: `items`, `activeId`, `onChange(id)`, `size` (`"lg"` | `"md"` default | `"sm"`), `className`.
+
+All tabs in one group must share the same size.
 
 ---
 
 ### Card
 
-Responsive event/content card.
-
-Variants: `desktop` (308px wide) | `tablet` (224px wide) | `mobile` (163px wide)
-tagStatus: `not-registered` | `registered` | `full`
+Event/content card. Self-contained — don't wrap in another card.
 
 ```tsx
 <Card
   variant="desktop"
   title="Annual Conference 2024"
   date="Jun 23, 2024"
-  time="08:30 - 12:00"
+  time="08:30 – 12:00"
   location="Main Hall, Floor 7"
   count="150/200"
   tagStatus="registered"
@@ -258,253 +378,340 @@ tagStatus: `not-registered` | `registered` | `full`
 />
 ```
 
-Props: `variant`, `title`, `date`, `time`, `location`, `count`, `tagStatus`, `image`, `className`
+Variants set width: `desktop` (308px) · `tablet` (224px) · `mobile` (163px).
+Pick based on viewport breakpoint, not aesthetic.
 
-Match variant to viewport: `desktop` on wide layouts, `tablet` / `mobile` on narrow.
+`tagStatus`: `"not-registered"` | `"registered"` | `"full"`.
+
+### Table
+
+Data tables. Compose with TableRow + TableHeaderCell + TableCell.
+
+```tsx
+<Table>
+  <TableRow header>
+    <TableHeaderCell>Name</TableHeaderCell>
+    <TableHeaderCell>Role</TableHeaderCell>
+    <TableHeaderCell>Status</TableHeaderCell>
+  </TableRow>
+  {users.map(u => (
+    <TableRow key={u.id}>
+      <TableCell>{u.name}</TableCell>
+      <TableCell>{u.role}</TableCell>
+      <TableCell><StatusTag type={u.status} /></TableCell>
+    </TableRow>
+  ))}
+</Table>
+```
+
+Align numeric columns `right`, status center. Don't stuff StatusTag inside the Table header.
 
 ---
 
-### DateInput
-
-Calendar date picker.
-
-Modes: `single` | `range` | `multiple`
-Variants: `popover` (default) | `modal`
+### DateInput / TimeInput
 
 ```tsx
 <DateInput placeholder="Select date" mode="single" value={date} onChange={setDate} />
-<DateInput mode="range" value={range} onChange={setRange} />
+<DateInput mode="range"    value={range} onChange={setRange} />
 <DateInput mode="multiple" value={dates} onChange={setDates} />
-```
 
-Props: `placeholder`, `mode`, `value`, `onChange`, `variant`, `disabled`, `className`
-
----
-
-### TimeInput
-
-24-hour time picker.
-
-Modes: `single` | `range`
-
-```tsx
 <TimeInput placeholder="Start time" value={time} onChange={setTime} />
 <TimeInput mode="range" value={timeRange} onChange={setTimeRange} />
 ```
 
-Props: `placeholder`, `mode`, `value`, `onChange`, `disabled`, `className`
-
----
+Always format `"DD MMM YYYY"` for display (system format). Don't mix Thai month names with C.E. year.
 
 ### OptionList
 
-Scrollable option list for custom dropdowns.
+Raw option rows. Use when you need a custom dropdown or a sidebar menu — otherwise use `Dropdown` / `DropdownMultiple`.
 
 ```tsx
-{/* Single-select */}
 <OptionList
   options={[{ label: "Item A", value: "a" }, { label: "Item B", value: "b" }]}
   selectedValue={value}
   onSelect={setValue}
 />
-
-{/* Multi-select */}
-<OptionList
-  options={options}
-  selectedValues={values}
-  onToggle={toggleValue}
-/>
 ```
-
-Props: `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `selectedValue`, `onSelect`, `selectedValues`, `onToggle`, `className`
 
 ---
 
-## Design Tokens
+## Layout — you design it
 
-All tokens are CSS custom properties. Override after the stylesheet import:
+The library ships zero layout components. Compose page structure with plain
+Tailwind. Example scaffolds:
 
-```css
-:root {
-  --primary-action: #7c3aed;        /* brand color */
-  --primary-action-hover: #6d28d9;
-  --primary-action-active: #5b21b6;
-  --font-sans: "Inter", sans-serif; /* override library default (Noto Sans Thai) */
-  --radius: 8px;                    /* border radius base */
+```tsx
+// Centered content page
+<main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-12">
+  <header className="flex items-start justify-between gap-4">
+    <div className="flex flex-col gap-2">
+      <h1>Dashboard</h1>
+      <p className="text-muted-foreground">Overview of your activity</p>
+    </div>
+    <Button variant="primary" size="md">New item</Button>
+  </header>
+  <section className="flex flex-col gap-6">{/* ... */}</section>
+</main>
+```
+
+```tsx
+// Sidebar + content
+<div className="flex min-h-screen">
+  <aside className="w-64 shrink-0 border-r border-divider bg-card p-6">{/* nav */}</aside>
+  <main className="flex-1 p-8">{/* content */}</main>
+</div>
+```
+
+```tsx
+// Responsive card grid
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {events.map(e => <Card key={e.id} {...e} />)}
+</div>
+```
+
+**Rules for layout:**
+- Use `bg-background` / `bg-card` — never hard-code colors.
+- Leave breathing room: `gap-4` inner clusters, `gap-6`–`gap-12` between sections, `py-10`+ page padding.
+- Max-width the content column (`max-w-[640px]` forms, `max-w-[1200px]` dashboards).
+- Use `<h1>`…`<h4>` directly. They are pre-styled.
+
+---
+
+## DO / DON'T
+
+| DO | DON'T |
+|---|---|
+| `<Button variant="primary" size="md">Save</Button>` | `<button className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>` |
+| `<Input placeholder="Email" value={e} onChange={setE} />` | `<label>Email</label><input className="border…" />` |
+| `<Tag text="Active" variant="green" />` | `<span className="bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>` |
+| `text-muted-foreground` | `text-gray-500` |
+| `bg-primary-action` | `bg-blue-600` / `bg-[#3b82f6]` |
+| `<h1>Title</h1>` | `<h1 className="text-3xl font-bold">Title</h1>` |
+| `<div className="flex flex-col gap-6">` | `import { Stack } from "@sarunyu/system-one"` |
+| One `variant="primary"` per context | Two primary buttons side-by-side |
+| `onChange={setValue}` (value, not event) | `onChange={e => setValue(e.target.value)}` |
+
+---
+
+## Full page recipes
+
+### Login form
+
+```tsx
+import { Button, Input, Checkbox } from "@sarunyu/system-one";
+import { useState } from "react";
+
+export function LoginPage() {
+  const [email, setEmail]   = useState("");
+  const [pw, setPw]         = useState("");
+  const [remember, setRmb]  = useState(false);
+
+  return (
+    <main className="min-h-screen grid place-items-center bg-background p-6">
+      <div className="w-full max-w-[400px] flex flex-col gap-6 bg-card p-8 rounded-xl shadow-card">
+        <div className="flex flex-col gap-1">
+          <h1>Welcome back</h1>
+          <p className="text-muted-foreground">Sign in to continue</p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <Input placeholder="Email" type="email" value={email} onChange={setEmail} required />
+          <Input placeholder="Password" type="password" value={pw} onChange={setPw} required />
+          <Checkbox checked={remember} onCheckedChange={setRmb} label="Remember me" />
+        </div>
+        <Button variant="primary" size="lg" className="w-full">Sign in</Button>
+        <p className="text-center text-sm text-muted-foreground">
+          No account? <a className="text-primary-action">Sign up</a>
+        </p>
+      </div>
+    </main>
+  );
 }
 ```
 
-Key tokens:
-- `--primary-action` — brand color (primary buttons, links, active states)
-- `--background` / `--foreground` — page surface and text
-- `--border` — default border color
-- `--muted-foreground` — placeholder and secondary text
-- `--destructive` — error/danger red
-- `--success` — success green
-- `--font-sans` — font family (default: Noto Sans Thai)
-- `--radius` — base border radius (default: 4px)
-
----
-
-## Dark Mode
-
-Add `.dark` to `<html>` or any ancestor:
+### Event list page
 
 ```tsx
-// Next.js
-<html className={isDark ? "dark" : ""}>
+import { Button, SearchInput, Chip, Card, TabGroup } from "@sarunyu/system-one";
+import { useState } from "react";
 
-// Vite
-document.documentElement.classList.toggle("dark", isDark)
+export function EventsPage() {
+  const [tab, setTab]       = useState("upcoming");
+  const [query, setQuery]   = useState("");
+  const [filter, setFilter] = useState("all");
+
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-8">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-2">
+          <h1>Events</h1>
+          <p className="text-muted-foreground">Browse and register</p>
+        </div>
+        <Button variant="primary" size="md" leftIcon={<PlusIcon />}>New event</Button>
+      </header>
+
+      <TabGroup
+        items={[
+          { id: "upcoming", title: "Upcoming" },
+          { id: "past",     title: "Past", notification: 12 },
+        ]}
+        activeId={tab}
+        onChange={setTab}
+      />
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <SearchInput placeholder="Search events…" value={query} onChange={setQuery} />
+        <div className="flex flex-wrap gap-2">
+          {["all", "conference", "workshop", "meetup"].map(v => (
+            <Chip key={v} label={v} selected={filter === v} onClick={() => setFilter(v)} />
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map(e => <Card key={e.id} variant="desktop" {...e} />)}
+      </div>
+    </main>
+  );
+}
 ```
 
-All components adapt automatically.
+### Settings form
 
----
+```tsx
+import { Input, TextArea, Dropdown, DropdownMultiple, DateInput, Button } from "@sarunyu/system-one";
 
-## TypeScript
+export function SettingsPage() {
+  return (
+    <main className="mx-auto w-full max-w-[640px] px-6 py-10 flex flex-col gap-8">
+      <header className="flex flex-col gap-2">
+        <h1>Account settings</h1>
+        <p className="text-muted-foreground">Manage your profile and preferences</p>
+      </header>
 
-```ts
-import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/system-one"
+      <section className="flex flex-col gap-6">
+        <h2>Profile</h2>
+        <Input placeholder="Full name"  value={name}  onChange={setName} required />
+        <Input placeholder="Email"      value={email} onChange={setEmail} required />
+        <TextArea placeholder="Bio" value={bio} onChange={setBio} showCount maxCount={160} />
+      </section>
+
+      <section className="flex flex-col gap-6">
+        <h2>Preferences</h2>
+        <Dropdown
+          placeholder="Timezone"
+          options={timezones}
+          value={tz}
+          onChange={setTz}
+        />
+        <DropdownMultiple
+          placeholder="Interests"
+          options={interests}
+          values={picked}
+          onChange={setPicked}
+        />
+        <DateInput placeholder="Birthday" mode="single" value={dob} onChange={setDob} />
+      </section>
+
+      <div className="flex justify-end gap-3">
+        <Button variant="outline" size="md">Cancel</Button>
+        <Button variant="primary" size="md">Save changes</Button>
+      </div>
+    </main>
+  );
+}
+```
+
+### Data table page
+
+```tsx
+import {
+  SearchInput, Button, Table, TableRow, TableHeaderCell, TableCell, StatusTag,
+} from "@sarunyu/system-one";
+
+export function OrdersPage() {
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-6 py-10 flex flex-col gap-6">
+      <header className="flex items-center justify-between">
+        <h1>Orders</h1>
+        <Button variant="primary" size="md">Export</Button>
+      </header>
+      <div className="flex items-center gap-3">
+        <SearchInput placeholder="Search orders…" value={q} onChange={setQ} />
+      </div>
+      <Table>
+        <TableRow header>
+          <TableHeaderCell>Order</TableHeaderCell>
+          <TableHeaderCell>Customer</TableHeaderCell>
+          <TableHeaderCell>Amount</TableHeaderCell>
+          <TableHeaderCell>Status</TableHeaderCell>
+        </TableRow>
+        {orders.map(o => (
+          <TableRow key={o.id}>
+            <TableCell>#{o.id}</TableCell>
+            <TableCell>{o.customer}</TableCell>
+            <TableCell>{o.amount}</TableCell>
+            <TableCell><StatusTag type={o.status} /></TableCell>
+          </TableRow>
+        ))}
+      </Table>
+    </main>
+  );
+}
 ```
 
 ---
 
-## Design Guidance
+## Theming
 
-**You design the layout. The library provides the components.** Compose, arrange, and style page structure freely using Tailwind — the library does not dictate layout. Focus instead on using the components below correctly (right variants, right semantics, right props) so the visual language stays consistent with the design system.
+Override tokens after importing the stylesheet. **You must override both
+`:root` (light mode) and `.dark` (dark mode) — they are independent.**
 
-### Anchors the library provides
+```css
+/* Light mode */
+:root {
+  --primary-action: #7c3aed;
+  --primary-action-hover: #6d28d9;
+  --primary-action-active: #5b21b6;
+  /* -light / -muted derive from --primary-action via color-mix(), so they
+     cascade automatically in :root. No need to override them here. */
 
-These are all you need to keep a page visually coherent with the system:
+  --font-sans: "Inter", sans-serif;  /* replace default Noto Sans Thai */
+}
 
-- **Typography** — `<h1>`–`<h4>` are pre-styled (size, weight, line-height). Use them as-is; do not add `text-*` or `font-*` classes to override.
-- **Text color** — body text inherits from `--foreground`. Secondary text: `text-muted-foreground`. Don't hard-code hex colors.
-- **Surfaces** — use `bg-background` / `bg-card` / `bg-muted` so dark mode works automatically.
-- **Brand color** — reference via `--primary-action`, or Tailwind `text-primary-action` / `bg-primary-action`.
-- **Spacing** — Tailwind spacing scale (4px units). Pick whatever gaps/paddings look right; the design system has no prescribed rhythm.
-- **Radius** — `rounded-md` (6px), `rounded-lg` (8px), `rounded-xl` (12px), `rounded-full`.
+/* Dark mode — override separately. The library's .dark block hard-codes
+   these to a blue palette, so setting only :root leaves dark mode unchanged. */
+.dark {
+  --primary-action: #a78bfa;
+  --primary-action-hover: #c4b5fd;
+  --primary-action-active: #8b5cf6;
+  --primary-action-light: color-mix(in srgb, #a78bfa 10%, transparent);
+  --primary-action-muted: color-mix(in srgb, #a78bfa 15%, transparent);
+}
+```
 
-### Component usage — the only hard rules
+Every component that uses `--primary-action` will pick up your brand color
+in both modes.
 
-Use the library's components for these elements. Do **not** recreate them with raw HTML or Tailwind:
+**Do not try to override `--radius`.** It is a legacy var kept for
+compatibility and is not referenced by any Tailwind utility. To change
+corner rounding per element, apply a different utility (`rounded-lg`
+→ `rounded-xl`). To change it globally, fork the library.
 
-- Buttons → `<Button>` (never `<button>` with utility classes)
-- Text inputs / textareas / search → `<Input>`, `<TextArea>`, `<SearchInput>`
-- Single / multi select → `<Dropdown>`, `<DropdownMultiple>`, `<OptionList>`
-- Date / time pickers → `<DateInput>`, `<TimeInput>`
-- Labels / statuses / filters → `<Tag>`, `<StatusTag>`, `<Chip>`
-- Tabs → `<TabGroup>` (never `<Tab>` alone)
-- Event/content cards → `<Card>`
+## If you need a component the library doesn't provide
 
-Pick the correct variant / prop for the semantic role (e.g. `StatusTag type="success"` for success, `Button variant="primary"` once per context). The per-component rules below in "Design Rules" are the full reference.
+Build it with tokens, not hard-coded colors. Example — a custom badge:
 
-### Layout freedom
+```tsx
+<span className="inline-flex items-center gap-1 rounded-full bg-primary-action-light text-primary-action px-2 py-0.5 text-xs">
+  {text}
+</span>
+```
 
-Structure the page however you like — any combination of flex, grid, max-width containers, custom spacing, hero compositions, sidebars, split layouts, dashboards, etc. Use aesthetic judgement: generous padding, clear hierarchy, balanced whitespace. The only layout constraint is that content shouldn't sit flush against viewport edges or adjacent blocks without breathing room.
+Rules for custom components:
+- Colors → always from the token table above.
+- Radius → one of `rounded-sm`/`rounded-md`/`rounded-lg`/`rounded-xl`/`rounded-full`.
+- Shadow → `shadow-card` for resting surfaces, `shadow-popover` for floating.
+- Border → `border-border` (or `border-divider` for light separators).
+- Typography → use `<h1>`…`<h4>` and body text inherits from `--foreground`.
 
-### Optional: layout helper components
-
-The library also ships a small set of layout primitives (`Page`, `PageHeader`, `Section`, `Toolbar`, `CardGrid`, `Stack`) that some users prefer for rapid scaffolding. They are entirely optional — skip them and design your own layout if that produces a better result. If you do use them, they apply sensible defaults (centered container, 48px section gap, responsive card grid). Full API is in the TypeScript types.
-
----
-
-## Notes
-
-- No provider or wrapper needed — just import the stylesheet and use components
-- The library ships pre-built CSS — no Tailwind config required in the consuming project
-- If the project already uses Tailwind and you see font differences, override `--font-sans` in your CSS
-- CSS custom properties can be referenced in Tailwind classes: `bg-[var(--primary-action)]`
-
----
-
-## Component Usage Guide
-
-### Button
-
-Buttons are interactive elements that allow users to click or tap to perform actions — such as submitting a form, saving data, navigating to another page, or opening a popup.
-
-Types: `primary` — main CTA, use once per context. `outline` — secondary action, supports primary without affecting main flow. `plain` — no background or border, low-priority actions. `secondary` (outline-black) — same as outline but black, use when blue is not appropriate.
-
-Sizes: `base` recommended for Desktop. `xl` recommended for Mobile.
-
-States: Default, Hover, Press, Disabled.
-
-### Input
-
-Floating Label Input is a single-line or multi-line field with a label that floats inside.
-
-Types: `Input` — single-line, general text/numeric. `TextArea` — multi-line, for comments or addresses. `Dropdown` — predefined list selection, displays as OptionList.
-
-States: Default, Focus, Error, Disabled.
-
-### Tab
-
-Tabs allow users to switch between different content sections within the same page.
-
-Types: Default (text only), Icon (with icon), Notification (with badge).
-
-States: Default, Active (selected), Disabled.
-
-Sizes: `lg` (default), `md`, `sm`. Always use the same size within one tab group.
-
-### Tag
-
-Tags display categories, types, or short metadata. Status Tags communicate process state.
-
-Tag types: Default (text only), Icon (with icon), Remove (dismissible).
-Tag states: Default, Hover/Press, Disabled.
-Tag sizes: Large, Small.
-
-Status Tag variants: `success` — process completed. `processing` — in progress. `hold` — temporarily paused. `stop` — stopped. `error` — failed.
-
-### Chip
-
-Chips are toggleable filter/selection elements. Always use in groups of 2+.
-
-Types: `single` — one selection at a time. `multiple` — multiple selections simultaneously.
-
-States: Default, Active, Disabled (Default), Disabled (Active).
-
-Sizes: `large`, `medium`, `small`.
-
----
-
-## Design Rules
-
-### Button Rules
-
-- Maximum width is 343px (`max-w-[343px]`). Never remove or override. Do not detach the component.
-- Do not manually recreate or modify padding (`py-[10px] px-[16px]`) or border-radius (`rounded-[8px]`).
-- Use Primary only once per context. Never place two Primary buttons side-by-side. Use Outline/Secondary for supporting actions.
-- Hug width is correct for short labels only. For long labels, use Fill width or set explicit max-w-[343px].
-
-### Input Rules
-
-- Never override input border or background colors manually — use built-in state variants (Default, Focus, Error, Disabled).
-- Do not recreate input styles manually or adjust gap/height outside the component's tokens.
-- Use Dropdown Tags only for multi-select. For single-select, use standard Dropdown.
-- Keep labelText short enough to fit on one line. Long labels break the floating label layout.
-- Do not show Helper Text and Error Message simultaneously. Error state replaces helper text.
-- Use Option List only when there are multiple selectable values.
-- Always follow the system date format (DD MMM YYYY). Do not mix Thai month names with C.E. year or reorder day/month/year.
-
-### Tab Rules
-
-- Do not override padding, gap, border-radius, element order, or colors inside the tab bar.
-- All tabs in one group must use the same size prop. Never mix sizes.
-- Do not add extra gap or margin between tabs — use built-in spacing tokens only.
-
-### Tag Rules
-
-- Do not override height, padding, or layout of Tag or StatusTag.
-- All tags in the same context must use the same size.
-- Do not reorder internal elements (icon, label, badge) inside Tag or StatusTag.
-- Always use the correct StatusTag variant for its semantic meaning. Never override the color.
-
-### Chip Rules
-
-- Keep chip labels short and single-purpose. Long labels cause overflow.
-- Do not override padding, gap, radius, height, element order, or colors.
-- All chips in the same group must share the same size and spacing.
-- Use Chip only for groups with 2+ options. For single options, use a toggle or checkbox instead.
+If the thing you're building is conceptually a button/input/tag/chip/tab/card/table — **do not build a custom one. Use the library's component.** The only reason to build custom is when the library truly doesn't cover the concept (e.g. a bespoke hero section, a custom chart, a breadcrumb).

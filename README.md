@@ -1,7 +1,10 @@
 # @sarunyu/system-one
 
 A production-ready React design system built with **Tailwind CSS v4** and CSS custom properties.
-Designed for AI-powered web generation tools — **Figma Make**, **Lovable**, and **V0**.
+Designed for AI-powered UI generation — **Figma Make**, **Lovable**, **v0**, **Cursor**.
+
+> **Using this library from an AI tool?** Read [`llms.txt`](./llms.txt) and
+> [`AGENTS.md`](./AGENTS.md). They are the contract for correct use.
 
 ## Install
 
@@ -9,90 +12,117 @@ Designed for AI-powered web generation tools — **Figma Make**, **Lovable**, an
 npm install @sarunyu/system-one
 ```
 
-**Peer dependencies:** React ≥ 18
+Peer dep: `react >= 18`.
 
 ## Setup
 
-Import the stylesheet once in your app root:
+One import in your app entry:
 
 ```tsx
-// Next.js: app/layout.tsx or pages/_app.tsx
-// Vite: src/main.tsx
+// Next.js App Router: app/layout.tsx
+// Next.js Pages:      pages/_app.tsx
+// Vite / Figma Make:  src/main.tsx
 import "@sarunyu/system-one/styles.css";
 ```
 
-Then use components anywhere — no provider or wrapper needed:
+No provider, no wrapper. Components ship with `"use client"`.
+
+## Use
 
 ```tsx
-import { Button, Input, Tag, TabGroup, Chip } from "@sarunyu/system-one";
+import { Button, Input, Tag, TabGroup } from "@sarunyu/system-one";
 
 export default function Example() {
   return (
-    <div>
-      <Button variant="primary" size="md">Get started</Button>
-      <Button variant="outline" size="md">Learn more</Button>
+    <div className="flex flex-col gap-4 p-6">
+      <h1>Hello</h1>
+      <Input placeholder="Email" />
+      <Button variant="primary" size="md">Continue</Button>
     </div>
   );
 }
 ```
 
+## Philosophy — components strict, layout free
+
+The library is responsible for **components**: every Button, Input, Tag, Card, etc.
+must come from the library — never hand-rolled from raw HTML + utility classes.
+That keeps the visual language consistent.
+
+The library is **not** responsible for **layout**. Design page structure yourself
+using plain `<div>` + Tailwind (`flex`, `grid`, `max-w-*`, `gap-*`). The library
+ships no `Page`/`Section`/`Stack` primitives — use whatever layout looks right.
+
 ## Components
 
-| Component | Description |
+| Component | Purpose |
 |---|---|
-| `Button` | Action button — 6 variants, 10 sizes (label + icon-only) |
-| `Input` | Floating-label text input with validation states |
-| `TextArea` | Multi-line text input with character counter |
-| `SearchInput` | Search field with clear button |
-| `Dropdown` | Single-select dropdown |
-| `DropdownMultiple` | Multi-select dropdown with checkboxes |
-| `Tag` | Compact colored label for status and categories |
-| `StatusTag` | Process-state indicator with colored dot |
-| `Chip` | Toggleable filter/selection chip |
-| `Tab` / `TabGroup` | Tabbed navigation with notification badges |
-| `Card` | Responsive event/content card |
-| `DateInput` | Calendar date picker (single, range, multiple modes) |
-| `TimeInput` | 24-hour time picker |
-| `OptionList` | Scrollable option list for custom dropdowns |
+| `Button` | Action button — 5 variants, 10 sizes |
+| `Input` / `TextArea` / `SearchInput` | Text input, multiline, search field |
+| `Dropdown` / `DropdownMultiple` / `OptionList` | Select controls |
+| `Checkbox` / `Radio` | Boolean / single-choice |
+| `DateInput` / `TimeInput` | Date and time pickers |
+| `Tag` / `StatusTag` / `Chip` | Labels, workflow states, filter chips |
+| `Tab` / `TabGroup` | Tabbed navigation |
+| `Card` | Event/content card (desktop / tablet / mobile variants) |
+| `Table` | Data tables (`TableRow` / `TableHeaderCell` / `TableCell`) |
 
-## Dark Mode
+Full prop reference: [`llms.txt`](./llms.txt).
 
-Add `.dark` class to any ancestor element to activate dark theme:
+## Dark mode
+
+Add `.dark` to any ancestor:
 
 ```tsx
-<html className="dark">
+<html className={isDark ? "dark" : ""}>
 ```
 
-All components adapt automatically.
+All components and tokens adapt.
 
 ## Theming
 
-All design tokens are CSS custom properties. Override them after the stylesheet import:
+Override CSS custom properties after importing the stylesheet. **Override
+both `:root` and `.dark` — they are independent blocks.**
 
 ```css
 :root {
-  --primary-action: #7c3aed;       /* brand color */
+  --primary-action: #7c3aed;
   --primary-action-hover: #6d28d9;
+  --primary-action-active: #5b21b6;
   --font-sans: "Inter", sans-serif;
+}
+
+.dark {
+  --primary-action: #a78bfa;
+  --primary-action-hover: #c4b5fd;
+  --primary-action-active: #8b5cf6;
+  --primary-action-light: color-mix(in srgb, #a78bfa 10%, transparent);
+  --primary-action-muted: color-mix(in srgb, #a78bfa 15%, transparent);
 }
 ```
 
-Key tokens: `--primary-action`, `--background`, `--foreground`, `--border`, `--muted-foreground`, `--destructive`, `--success`.
+Key tokens: `--primary-action`, `--background`, `--foreground`, `--border`,
+`--muted-foreground`, `--destructive`, `--success`. See [`llms.txt`](./llms.txt)
+for the full token table mapped to Tailwind utility classes.
 
 ## TypeScript
 
-Full type definitions included:
+Full types included:
 
 ```ts
-import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/system-one";
+import type {
+  ButtonVariant, ButtonSize,
+  TagVariant, ChipSize,
+  InputProps, DropdownOption,
+} from "@sarunyu/system-one";
 ```
 
 ## Development
 
 ```bash
 npm install
-npm run dev        # start demo server
-npm run build:lib  # build the library
+npm run dev         # showcase demo
+npm run build:lib   # build the library
 ```
 
 ## License

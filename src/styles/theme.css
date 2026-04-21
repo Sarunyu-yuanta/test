@@ -1,64 +1,152 @@
 /*
  * Runtime theme layer (browser + Tailwind @theme).
- * JSON under /tokens/ is the Figma-aligned source of truth; keep values in sync when primitives/semantic change.
- * - Color ramps: tokens/color-primitives.fill.json → tokens-fill.css (--fill-*)
- * - Semantic UI colors (:root / .dark): mirror tokens/semantic/*.json when you add those files
+ *
+ * Source of truth: /tokens/*.json (Figma-aligned DTCG).
+ *   - Color primitives (ramps): tokens/color.json          → tokens-fill.css (--fill-*)
+ *   - Color semantic (light/dark): Figma "Color.Light/Dark (System One)"
+ *   - Size / radius / spacing:    tokens/size.json
+ *   - Effect / shadow / blur:     tokens/effect.json
+ *   - Typography:                  tokens/typography.json
+ *
+ * Layering inside :root / .dark:
+ *   1) Figma-aligned semantic tokens (--bg-*, --text-*, --icon-*, --border-*)
+ *      — canonical, mirror Color.Light / Color.Dark (System One) 1:1.
+ *   2) Legacy aliases (--background, --foreground, --primary-action, --border, ...)
+ *      — preserved for existing components; each one references (1).
+ *
+ * Prefer writing new code against the semantic names in (1). When theming for a
+ * different brand (e.g. Wealth: Midnight Blue + Burnt Sienna), only override the
+ * primitives or the --bg-brand-* / --text-brand-* semantics — not the aliases.
  */
 @import "./tokens-fill.css";
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* ------------------------------------------------------------------ */
+  /* Typography primitives                                               */
+  /* ------------------------------------------------------------------ */
   --font-size: 16px;
   --font-sans: "Noto Sans Thai", sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
 
-  --background: var(--fill-white-1000);
-  --foreground: var(--fill-gray-900);
-  --card: var(--fill-white-1000);
-  --card-foreground: var(--fill-gray-900);
-  --popover: var(--fill-white-1000);
-  --popover-foreground: var(--fill-gray-900);
+  /* ================================================================== */
+  /* Figma semantic tokens — Color.Light (System One)                    */
+  /* ================================================================== */
+
+  /* Background */
+  --bg-default-primary: var(--fill-white-1000);
+  --bg-default-secondary: var(--fill-gray-50);
+  --bg-default-tertiary: var(--fill-gray-100);
+  --bg-default-disabled: var(--fill-gray-100);
+  --bg-default-hover: var(--fill-gray-50);
+  --bg-default-pressed: var(--fill-gray-100);
+
+  --bg-brand-primary: var(--fill-p1-600);
+  --bg-brand-hover: var(--fill-p1-700);
+  --bg-brand-pressed: var(--fill-p1-800);
+  --bg-brand-light: var(--fill-p1-100);
+  --bg-brand-muted: color-mix(in srgb, var(--fill-p1-600) 10%, transparent);
+
+  --bg-danger-primary: var(--fill-red-500);
+  --bg-danger-hover: var(--fill-red-600);
+  --bg-danger-light: var(--fill-red-50);
+
+  --bg-warning-primary: var(--fill-amber-500);
+  --bg-warning-hover: var(--fill-amber-600);
+  --bg-warning-light: var(--fill-amber-50);
+
+  --bg-success-primary: var(--fill-green-500);
+  --bg-success-hover: var(--fill-green-600);
+  --bg-success-light: var(--fill-green-50);
+
+  --bg-info-primary: var(--fill-blue-500);
+  --bg-info-hover: var(--fill-blue-600);
+  --bg-info-light: var(--fill-blue-50);
+
+  /* Text */
+  --text-default-primary: var(--fill-gray-900);
+  --text-default-secondary: var(--fill-gray-700);
+  --text-default-tertiary: var(--fill-gray-500);
+  --text-default-placeholder: var(--fill-gray-400);
+  --text-default-disabled: var(--fill-gray-400);
+  --text-default-inverse: var(--fill-white-1000);
+
+  --text-brand-primary: var(--fill-p1-600);
+  --text-brand-link: var(--fill-p1-600);
+  --text-brand-on-brand: var(--fill-white-1000);
+
+  --text-danger-primary: var(--fill-red-700);
+  --text-warning-primary: var(--fill-amber-700);
+  --text-success-primary: var(--fill-green-700);
+  --text-info-primary: var(--fill-blue-700);
+
+  /* Icon */
+  --icon-default-primary: var(--fill-gray-900);
+  --icon-default-secondary: var(--fill-gray-700);
+  --icon-default-tertiary: var(--fill-gray-500);
+  --icon-default-disabled: var(--fill-gray-400);
+  --icon-brand-primary: var(--fill-p1-600);
+  --icon-brand-on-brand: var(--fill-white-1000);
+  --icon-danger: var(--fill-red-500);
+  --icon-warning: var(--fill-amber-500);
+  --icon-success: var(--fill-green-500);
+  --icon-info: var(--fill-blue-500);
+
+  /* Border */
+  --border-default: var(--fill-black-200);
+  --border-strong: var(--fill-gray-300);
+  --border-divider: var(--fill-gray-200);
+  --border-brand: var(--fill-p1-600);
+  --border-danger: var(--fill-red-500);
+  --border-warning: var(--fill-amber-500);
+  --border-success: var(--fill-green-500);
+  --border-info: var(--fill-blue-500);
+  --border-disabled: var(--fill-black-100);
+
+  /* ================================================================== */
+  /* Legacy aliases — kept for existing component code.                  */
+  /* Each references the Figma semantic tokens above.                    */
+  /* ================================================================== */
+  --background: var(--bg-default-primary);
+  --foreground: var(--text-default-primary);
+  --card: var(--bg-default-primary);
+  --card-foreground: var(--text-default-primary);
+  --popover: var(--bg-default-primary);
+  --popover-foreground: var(--text-default-primary);
 
   --primary: var(--fill-gray-950);
   --primary-foreground: var(--fill-white-1000);
-  --primary-action: var(--fill-p1-600);
-  --primary-action-hover: var(--fill-p1-700);
-  --primary-action-active: var(--fill-p1-800);
-  --primary-action-light: color-mix(
-    in srgb,
-    var(--fill-p1-600) 6%,
-    transparent
-  );
-  --primary-action-muted: color-mix(
-    in srgb,
-    var(--fill-p1-600) 10%,
-    transparent
-  );
+  --primary-action: var(--bg-brand-primary);
+  --primary-action-hover: var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+  --primary-action-light: color-mix(in srgb, var(--bg-brand-primary) 6%, transparent);
+  --primary-action-muted: color-mix(in srgb, var(--bg-brand-primary) 10%, transparent);
 
-  --secondary: oklch(0.95 0.0058 264.53);
+  --secondary: var(--fill-gray-100);
   --secondary-foreground: var(--fill-gray-950);
 
   --muted: var(--fill-gray-100);
-  --muted-foreground: var(--fill-gray-500);
+  --muted-foreground: var(--text-default-tertiary);
 
   --accent: var(--fill-gray-100);
   --accent-foreground: var(--fill-gray-950);
   --accent-orange: var(--fill-s1-600);
 
-  --destructive: var(--fill-red-600);
+  --destructive: var(--bg-danger-primary);
   --destructive-foreground: var(--fill-white-1000);
   /* Figma: visual/red/default — notification badges, counts (not destructive actions) */
   --visual-red-default: var(--fill-red-500);
   --on-visual-red: var(--fill-white-1000);
   --error-dark: var(--fill-red-700);
 
-  --success: var(--fill-emerald-600);
-  --success-bg: var(--fill-emerald-50);
-  --error-bg: var(--fill-rose-50);
+  --success: var(--bg-success-primary);
+  --success-bg: var(--bg-success-light);
+  --error-bg: var(--bg-danger-light);
 
-  --border: var(--fill-black-200);
-  --border-disabled: var(--fill-black-100);
-  --border-muted: var(--fill-gray-300);
-  --divider: var(--fill-gray-200);
+  --border: var(--border-default);
+  --border-muted: var(--border-strong);
+  --divider: var(--border-divider);
   --caption: var(--fill-gray-400);
 
   --input: transparent;
@@ -66,7 +154,7 @@
 
   --disabled: var(--fill-gray-400);
   --disabled-bg: var(--fill-gray-100);
-  --hover-bg: var(--fill-gray-50);
+  --hover-bg: var(--bg-default-hover);
   --subtle-text: var(--fill-gray-600);
   --caret-color: var(--fill-blue-700);
 
@@ -76,21 +164,10 @@
   --range-text: var(--fill-sky-500);
 
   /* Overlays (brand primary on surface) — nav, chrome */
-  --overlay-primary-4: color-mix(
-    in srgb,
-    var(--primary-action) 4%,
-    transparent
-  );
-  --overlay-primary-6: color-mix(
-    in srgb,
-    var(--primary-action) 6%,
-    transparent
-  );
-  --overlay-primary-8: color-mix(
-    in srgb,
-    var(--primary-action) 8%,
-    transparent
-  );
+  --overlay-primary-4: color-mix(in srgb, var(--primary-action) 4%, transparent);
+  --overlay-primary-6: color-mix(in srgb, var(--primary-action) 6%, transparent);
+  --overlay-primary-8: color-mix(in srgb, var(--primary-action) 8%, transparent);
+
   --nav-link: var(--fill-gray-700);
   --nav-link-active: var(--primary-action);
   --icon-muted: var(--fill-gray-700);
@@ -105,87 +182,198 @@
     0px 0px 2px 0px rgba(102, 102, 102, 0.16),
     0px 4px 8px 0px rgba(102, 102, 102, 0.12);
 
-  /* Surfaces (match tokens/color-primitives.fill.json → tokens-fill.css) */
+  /* Surfaces */
   --surface-clear-hover: var(--fill-gray-200);
   --surface-chip-disabled: var(--fill-zinc-50);
-
   --switch-background: var(--fill-slate-300);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
 
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --ring: var(--fill-gray-400);
+  --chart-1: var(--fill-p1-600);
+  --chart-2: var(--fill-s1-500);
+  --chart-3: var(--fill-emerald-500);
+  --chart-4: var(--fill-amber-500);
+  --chart-5: var(--fill-purple-500);
+
+  /* Legacy no-op — does NOT drive Tailwind rounded-* utilities; see @theme --radius-* below */
   --radius: 4px;
 
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: #101828;
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: var(--fill-gray-50);
+  --sidebar-foreground: var(--text-default-primary);
+  --sidebar-primary: var(--bg-brand-primary);
+  --sidebar-primary-foreground: var(--fill-white-1000);
+  --sidebar-accent: var(--fill-gray-100);
+  --sidebar-accent-foreground: var(--text-default-primary);
+  --sidebar-border: var(--border-default);
+  --sidebar-ring: var(--fill-gray-400);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --primary-action: #3b8ef5;
-  --primary-action-hover: #5ba3f7;
-  --primary-action-active: #2178e4;
-  --primary-action-light: rgba(59, 142, 245, 0.1);
-  --primary-action-muted: rgba(59, 142, 245, 0.15);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --border-disabled: oklch(0.2 0 0);
-  --input: oklch(0.269 0 0);
-  --input-background: oklch(0.22 0 0);
-  --disabled: oklch(0.5 0 0);
-  --disabled-bg: oklch(0.22 0 0);
-  --hover-bg: oklch(0.24 0 0);
-  --subtle-text: oklch(0.65 0 0);
-  --caret-color: #5ba3f7;
-  --selected-bg: rgba(59, 142, 245, 0.12);
-  --selected-light-bg: rgba(59, 142, 245, 0.08);
-  --ring: oklch(0.439 0 0);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  /* ================================================================== */
+  /* Figma semantic tokens — Color.Dark (System One)                     */
+  /* ================================================================== */
+
+  /* Background */
+  --bg-default-primary: var(--fill-gray-900);
+  --bg-default-secondary: var(--fill-gray-800);
+  --bg-default-tertiary: var(--fill-gray-700);
+  --bg-default-disabled: var(--fill-gray-800);
+  --bg-default-hover: var(--fill-gray-800);
+  --bg-default-pressed: var(--fill-gray-700);
+
+  --bg-brand-primary: var(--fill-p1-500);
+  --bg-brand-hover: var(--fill-p1-400);
+  --bg-brand-pressed: var(--fill-p1-600);
+  --bg-brand-light: color-mix(in srgb, var(--fill-p1-500) 15%, transparent);
+  --bg-brand-muted: color-mix(in srgb, var(--fill-p1-500) 20%, transparent);
+
+  --bg-danger-primary: var(--fill-red-500);
+  --bg-danger-hover: var(--fill-red-400);
+  --bg-danger-light: var(--fill-red-950);
+
+  --bg-warning-primary: var(--fill-amber-500);
+  --bg-warning-hover: var(--fill-amber-400);
+  --bg-warning-light: var(--fill-amber-950);
+
+  --bg-success-primary: var(--fill-green-500);
+  --bg-success-hover: var(--fill-green-400);
+  --bg-success-light: var(--fill-green-950);
+
+  --bg-info-primary: var(--fill-blue-500);
+  --bg-info-hover: var(--fill-blue-400);
+  --bg-info-light: var(--fill-blue-950);
+
+  /* Text */
+  --text-default-primary: var(--fill-gray-50);
+  --text-default-secondary: var(--fill-gray-300);
+  --text-default-tertiary: var(--fill-gray-400);
+  --text-default-placeholder: var(--fill-gray-500);
+  --text-default-disabled: var(--fill-gray-700);
+  --text-default-inverse: var(--fill-gray-900);
+
+  --text-brand-primary: var(--fill-p1-400);
+  --text-brand-link: var(--fill-p1-400);
+  --text-brand-on-brand: var(--fill-white-1000);
+
+  --text-danger-primary: var(--fill-red-400);
+  --text-warning-primary: var(--fill-amber-400);
+  --text-success-primary: var(--fill-green-400);
+  --text-info-primary: var(--fill-blue-400);
+
+  /* Icon */
+  --icon-default-primary: var(--fill-gray-50);
+  --icon-default-secondary: var(--fill-gray-300);
+  --icon-default-tertiary: var(--fill-gray-400);
+  --icon-default-disabled: var(--fill-gray-700);
+  --icon-brand-primary: var(--fill-p1-400);
+  --icon-brand-on-brand: var(--fill-white-1000);
+  --icon-danger: var(--fill-red-400);
+  --icon-warning: var(--fill-amber-400);
+  --icon-success: var(--fill-green-400);
+  --icon-info: var(--fill-blue-400);
+
+  /* Border */
+  --border-default: var(--fill-white-200);
+  --border-strong: var(--fill-white-300);
+  --border-divider: var(--fill-white-200);
+  --border-brand: var(--fill-p1-500);
+  --border-danger: var(--fill-red-500);
+  --border-warning: var(--fill-amber-500);
+  --border-success: var(--fill-green-500);
+  --border-info: var(--fill-blue-500);
+  --border-disabled: var(--fill-white-100);
+
+  /* Legacy aliases (same shape as :root, pointing at dark canonical tokens) */
+  --background: var(--bg-default-primary);
+  --foreground: var(--text-default-primary);
+  --card: var(--bg-default-primary);
+  --card-foreground: var(--text-default-primary);
+  --popover: var(--bg-default-primary);
+  --popover-foreground: var(--text-default-primary);
+
+  --primary: var(--fill-gray-50);
+  --primary-foreground: var(--fill-gray-900);
+  --primary-action: var(--bg-brand-primary);
+  --primary-action-hover: var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+  --primary-action-light: var(--bg-brand-light);
+  --primary-action-muted: var(--bg-brand-muted);
+
+  --secondary: var(--fill-gray-800);
+  --secondary-foreground: var(--text-default-primary);
+
+  --muted: var(--fill-gray-800);
+  --muted-foreground: var(--text-default-tertiary);
+
+  --accent: var(--fill-gray-800);
+  --accent-foreground: var(--text-default-primary);
+  --accent-orange: var(--fill-s1-500);
+
+  --destructive: var(--bg-danger-primary);
+  --destructive-foreground: var(--fill-white-1000);
+  --visual-red-default: var(--fill-red-500);
+  --on-visual-red: var(--fill-white-1000);
+  --error-dark: var(--fill-red-400);
+
+  --success: var(--bg-success-primary);
+  --success-bg: var(--bg-success-light);
+  --error-bg: var(--bg-danger-light);
+
+  --border: var(--border-default);
+  --border-muted: var(--border-strong);
+  --divider: var(--border-divider);
+  --caption: var(--fill-gray-500);
+
+  --input: transparent;
+  --input-background: var(--fill-gray-800);
+
+  --disabled: var(--fill-gray-600);
+  --disabled-bg: var(--fill-gray-800);
+  --hover-bg: var(--bg-default-hover);
+  --subtle-text: var(--fill-gray-400);
+  --caret-color: var(--fill-p1-400);
+
+  --selected-bg: color-mix(in srgb, var(--fill-p1-500) 15%, transparent);
+  --selected-light-bg: color-mix(in srgb, var(--fill-p1-500) 10%, transparent);
+  --range-bg: color-mix(in srgb, var(--fill-p1-500) 20%, transparent);
+  --range-text: var(--fill-sky-400);
+
+  --nav-link: var(--fill-gray-300);
+  --nav-link-active: var(--primary-action);
+  --icon-muted: var(--fill-gray-400);
+
+  --on-primary-action: var(--fill-white-1000);
+
+  --elevation-popover:
+    0px 20px 25px -5px rgba(0, 0, 0, 0.5), 0px 8px 10px -6px rgba(0, 0, 0, 0.5);
+  --elevation-card:
+    0px 0px 2px 0px rgba(0, 0, 0, 0.3),
+    0px 4px 8px 0px rgba(0, 0, 0, 0.24);
+
+  --surface-clear-hover: var(--fill-gray-800);
+  --surface-chip-disabled: var(--fill-zinc-900);
+  --switch-background: var(--fill-gray-700);
+
+  --ring: var(--fill-gray-500);
+  --chart-1: var(--fill-p1-400);
+  --chart-2: var(--fill-s1-400);
+  --chart-3: var(--fill-emerald-400);
+  --chart-4: var(--fill-amber-400);
+  --chart-5: var(--fill-purple-400);
+
+  --sidebar: var(--fill-gray-900);
+  --sidebar-foreground: var(--text-default-primary);
+  --sidebar-primary: var(--bg-brand-primary);
+  --sidebar-primary-foreground: var(--fill-white-1000);
+  --sidebar-accent: var(--fill-gray-800);
+  --sidebar-accent-foreground: var(--text-default-primary);
+  --sidebar-border: var(--border-default);
+  --sidebar-ring: var(--fill-gray-500);
 }
 
 @theme inline {
   --font-sans: var(--font-sans);
 
-  /* Blur + shadows — tokens/effect-mode-1.json (add px in CSS) */
+  /* Blur + shadows — tokens/effect.json */
   --blur-xs: 4px;
   --blur-sm: 8px;
   --blur-md: 12px;
@@ -206,7 +394,7 @@
   --shadow-popover: var(--elevation-popover);
   --shadow-card: var(--elevation-card);
 
-  /* Spacing — tokens/size-mode-1.json → sizeMode1.spacing */
+  /* Spacing — tokens/size.json */
   --spacing-0: 0px;
   --spacing-0_5: 2px;
   --spacing-1: 4px;
@@ -228,7 +416,7 @@
   --spacing-16: 64px;
   --spacing-20: 80px;
 
-  /* Radius — tokens/size-mode-1.json → sizeMode1.radius (--radius default 4px is :root --radius) */
+  /* Radius — tokens/size.json */
   --radius-none: 0px;
   --radius-sm: 2px;
   --radius-md: 6px;
@@ -238,7 +426,7 @@
   --radius-3xl: 24px;
   --radius-full: 999px;
 
-  /* Font size — tokens/typography-primitives.mode-1.json → typographyPrimitives.fontSize */
+  /* Font size — tokens/typography.json */
   --text-xxs: 9px;
   --text-xs: 12px;
   --text-sm: 14px;
@@ -254,7 +442,7 @@
   --text-8xl: 72px;
   --text-9xl: 80px;
 
-  /* Line height — tokens/typography-primitives.mode-1.json → typographyPrimitives.lineHeight */
+  /* Line height — tokens/typography.json */
   --leading-none: 1;
   --leading-3: 14px;
   --leading-4: 16px;
@@ -271,6 +459,7 @@
   --leading-14: 72px;
   --leading-15: 84px;
 
+  /* Legacy color utilities (bg-background, text-foreground, etc.) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -327,7 +516,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius: 4px;
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -336,6 +524,65 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Figma semantic utilities (bg-default, bg-brand, text-default, border-brand, ...) */
+  --color-bg-default: var(--bg-default-primary);
+  --color-bg-default-secondary: var(--bg-default-secondary);
+  --color-bg-default-tertiary: var(--bg-default-tertiary);
+  --color-bg-default-disabled: var(--bg-default-disabled);
+  --color-bg-default-hover: var(--bg-default-hover);
+  --color-bg-default-pressed: var(--bg-default-pressed);
+  --color-bg-brand: var(--bg-brand-primary);
+  --color-bg-brand-hover: var(--bg-brand-hover);
+  --color-bg-brand-pressed: var(--bg-brand-pressed);
+  --color-bg-brand-light: var(--bg-brand-light);
+  --color-bg-brand-muted: var(--bg-brand-muted);
+  --color-bg-danger: var(--bg-danger-primary);
+  --color-bg-danger-hover: var(--bg-danger-hover);
+  --color-bg-danger-light: var(--bg-danger-light);
+  --color-bg-warning: var(--bg-warning-primary);
+  --color-bg-warning-hover: var(--bg-warning-hover);
+  --color-bg-warning-light: var(--bg-warning-light);
+  --color-bg-success: var(--bg-success-primary);
+  --color-bg-success-hover: var(--bg-success-hover);
+  --color-bg-success-light: var(--bg-success-light);
+  --color-bg-info: var(--bg-info-primary);
+  --color-bg-info-hover: var(--bg-info-hover);
+  --color-bg-info-light: var(--bg-info-light);
+
+  --color-text-default: var(--text-default-primary);
+  --color-text-default-secondary: var(--text-default-secondary);
+  --color-text-default-tertiary: var(--text-default-tertiary);
+  --color-text-default-placeholder: var(--text-default-placeholder);
+  --color-text-default-disabled: var(--text-default-disabled);
+  --color-text-default-inverse: var(--text-default-inverse);
+  --color-text-brand: var(--text-brand-primary);
+  --color-text-brand-link: var(--text-brand-link);
+  --color-text-on-brand: var(--text-brand-on-brand);
+  --color-text-danger: var(--text-danger-primary);
+  --color-text-warning: var(--text-warning-primary);
+  --color-text-success: var(--text-success-primary);
+  --color-text-info: var(--text-info-primary);
+
+  --color-icon-default: var(--icon-default-primary);
+  --color-icon-default-secondary: var(--icon-default-secondary);
+  --color-icon-default-tertiary: var(--icon-default-tertiary);
+  --color-icon-default-disabled: var(--icon-default-disabled);
+  --color-icon-brand: var(--icon-brand-primary);
+  --color-icon-on-brand: var(--icon-brand-on-brand);
+  --color-icon-danger: var(--icon-danger);
+  --color-icon-warning: var(--icon-warning);
+  --color-icon-success: var(--icon-success);
+  --color-icon-info: var(--icon-info);
+
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-divider: var(--border-divider);
+  --color-border-brand: var(--border-brand);
+  --color-border-danger: var(--border-danger);
+  --color-border-warning: var(--border-warning);
+  --color-border-success: var(--border-success);
+  --color-border-info: var(--border-info);
 }
 
 @layer base {
