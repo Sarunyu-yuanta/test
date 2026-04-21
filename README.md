@@ -84,18 +84,24 @@ All components and tokens adapt.
 Override CSS custom properties after importing the stylesheet. **Override
 both `:root` and `.dark` — they are independent blocks.**
 
+The hex values below are **placeholders for your brand palette** (shown in
+violet for contrast). They are not part of System One — the library's own
+defaults live in `tokens/color.json` (P1 blue).
+
 ```css
+/* Light mode — replace with YOUR brand palette */
 :root {
-  --primary-action: #7c3aed;
-  --primary-action-hover: #6d28d9;
-  --primary-action-active: #5b21b6;
+  --primary-action: #7c3aed;        /* your brand 600 */
+  --primary-action-hover: #6d28d9;  /* your brand 700 */
+  --primary-action-active: #5b21b6; /* your brand 800 */
   --font-sans: "Inter", sans-serif;
 }
 
+/* Dark mode — independent; set separately */
 .dark {
-  --primary-action: #a78bfa;
-  --primary-action-hover: #c4b5fd;
-  --primary-action-active: #8b5cf6;
+  --primary-action: #a78bfa;        /* your brand 400 */
+  --primary-action-hover: #c4b5fd;  /* your brand 300 */
+  --primary-action-active: #8b5cf6; /* your brand 500 */
   --primary-action-light: color-mix(in srgb, #a78bfa 10%, transparent);
   --primary-action-muted: color-mix(in srgb, #a78bfa 15%, transparent);
 }

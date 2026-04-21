@@ -666,12 +666,16 @@ export function OrdersPage() {
 Override tokens after importing the stylesheet. **You must override both
 `:root` (light mode) and `.dark` (dark mode) — they are independent.**
 
+The hex values below are **placeholders for your brand palette** (shown in
+violet for contrast). They are NOT part of System One — the library's own
+defaults live in `tokens/color.json` (P1 blue). Replace with your own values.
+
 ```css
-/* Light mode */
+/* Light mode — replace with YOUR brand palette */
 :root {
-  --primary-action: #7c3aed;
-  --primary-action-hover: #6d28d9;
-  --primary-action-active: #5b21b6;
+  --primary-action: #7c3aed;        /* your brand 600 */
+  --primary-action-hover: #6d28d9;  /* your brand 700 */
+  --primary-action-active: #5b21b6; /* your brand 800 */
   /* -light / -muted derive from --primary-action via color-mix(), so they
      cascade automatically in :root. No need to override them here. */
 
@@ -681,9 +685,9 @@ Override tokens after importing the stylesheet. **You must override both
 /* Dark mode — override separately. The library's .dark block hard-codes
    these to a blue palette, so setting only :root leaves dark mode unchanged. */
 .dark {
-  --primary-action: #a78bfa;
-  --primary-action-hover: #c4b5fd;
-  --primary-action-active: #8b5cf6;
+  --primary-action: #a78bfa;        /* your brand 400 */
+  --primary-action-hover: #c4b5fd;  /* your brand 300 */
+  --primary-action-active: #8b5cf6; /* your brand 500 */
   --primary-action-light: color-mix(in srgb, #a78bfa 10%, transparent);
   --primary-action-muted: color-mix(in srgb, #a78bfa 15%, transparent);
 }

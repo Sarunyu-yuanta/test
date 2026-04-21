@@ -28,11 +28,11 @@ Figma uses `{Gray.900}`, `{P1.600}`, etc. After normalization:
 
 Place exports from Figma Variables (same content, cleaned names):
 
-| Figma collection         | Suggested path                         |
-| ------------------------ | -------------------------------------- |
-| Color.Light (System One) | `semantic/color.system-one.light.json` |
-| Color.Dark (System One)  | `semantic/color.system-one.dark.json`  |
-| Color.Light (Wealth)     | `semantic/color.wealth.light.json`     |
+| Figma collection         | Path                                            | Status                           |
+| ------------------------ | ----------------------------------------------- | -------------------------------- |
+| Color.Light (System One) | `semantic/color.system-one.light.json`          | ✓ present, mirrored in theme.css |
+| Color.Dark (System One)  | `semantic/color.system-one.dark.json`           | pending                          |
+| Color.Light (Wealth)     | `semantic/color.wealth.light.json`              | pending                          |
 
 Keep **one theme** active in CSS at a time, or map semantic JSON → CSS variables per product.
 
