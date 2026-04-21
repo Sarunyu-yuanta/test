@@ -153,6 +153,49 @@ Floating Label Input has 3 types: Input, Text Area, and Dropdown. / Floating Lab
 
 ---
 
+## Table
+
+Table is used to display structured data in rows and columns for easy comparison and scanning. / Table ใช้สำหรับแสดงข้อมูลแบบตาราง (แถวและคอลัมน์) เพื่อให้ผู้ใช้เปรียบเทียบและอ่านข้อมูลได้ง่าย
+
+### วิธีการใช้งาน
+
+Table ประกอบด้วย 3 ส่วนหลัก ได้แก่ Header, Cell และ Fixed column
+
+- **Header** — ใช้กำหนดหัวคอลัมน์ของข้อมูล และรองรับการ sort ตามบริบท
+- **Cell** — ใช้แสดงข้อมูลแต่ละแถว รองรับหลายรูปแบบ เช่น text, text+icon, text+image, tag, button, checkbox
+- **Fixed column** — ใช้ตรึงคอลัมน์ที่สำคัญ (เช่น checkbox หรือข้อมูลอ้างอิงหลัก) เมื่อตารางมีการเลื่อนแนวนอน
+
+### สถานะของ Table
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Default** | Base state when there is no interaction. / สถานะปกติเมื่อยังไม่มีการโต้ตอบ |
+| **Hover** | Appears when a user hovers a row/header to aid focus and scanability. / สถานะเมื่อผู้ใช้ชี้เมาส์บนแถวหรือหัวตารางเพื่อช่วยโฟกัส |
+| **Selected** | Used when a row is selected (commonly via checkbox) and must be visually highlighted. / สถานะเมื่อแถวถูกเลือก (มักเกิดจาก checkbox) และต้องแสดงให้เห็นชัด |
+| **Disabled** | Non-interactive state for rows/cells/headers that should not be changed. / สถานะที่ไม่พร้อมใช้งานและไม่สามารถโต้ตอบได้ |
+| **Sorted** | Indicates active sort direction on the current sortable column. / สถานะของคอลัมน์ที่ถูกจัดเรียงข้อมูลอยู่ (asc/desc) |
+| **Fixed** | Sticky column state used in horizontally scrollable tables, with edge shadow only when overflow exists. / สถานะคอลัมน์แบบตรึง (sticky) สำหรับตารางที่เลื่อนแนวนอน และแสดงเงาเมื่อมีข้อมูลล้นเท่านั้น |
+
+### การออกแบบ Component
+
+| Component | Key Dimension |
+|---|---|
+| **Header & Cell Height** | Large = 48px header, 48/56px cell depending on content density |
+| **Text Column Width** | Default text column = 284px |
+| **Icon / Check Column Width** | Compact column = 56px |
+| **Typography** | Header/Cell uses Noto Sans Thai Body2 (14/20), with bold variants where required |
+| **Container Shadow (Usage block)** | `0 0 2px rgba(102,102,102,0.16), 0 4px 8px rgba(102,102,102,0.12)` |
+
+### Preview
+
+ตัวอย่างการใช้งานควรครอบคลุม:
+- แถวที่มี checkbox พร้อม select-all ที่ header (รองรับ indeterminate)
+- การ sort แบบ `none → asc → desc → none`
+- การ hover และ selected row ทั้งแถว
+- ตารางที่มี fixed column พร้อม shadow เฉพาะตอนมี overflow
+
+---
+
 ## Tab
 
 Tabs are navigation elements that allow users to switch between different content sections within the same page. / Tab เป็นองค์ประกอบนำทางที่ให้ผู้ใช้สลับระหว่างเนื้อหาต่างๆ ภายในหน้าเดียวกัน

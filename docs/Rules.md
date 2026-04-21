@@ -366,3 +366,39 @@ All chips within the same group must share the same size and spacing. Inconsiste
 | **Don't** | Avoid using Chip when only a single value can be selected. / หลีกเลี่ยงการใช้ Chip กับตัวเลือกเพียงค่าเดียว |
 
 Chip is designed for multi-option selection groups. If only one option exists, use a different component (e.g., a toggle or checkbox) instead.
+
+---
+
+## Table
+
+
+### Rule 1 — Alignment Consistency
+
+| | |
+|---|---|
+| **Do** | Keep content alignment consistent between Header and Cell (left-left, center-center, right-right). / จัดตำแหน่งการวางข้อมูลให้สอดคล้องระหว่างข้อมูลใน Header และข้อมูลใน Cell เช่น Header Align ซ้าย ให้ Header Align ซ้ายตาม หรือข้อมูล Align ขวา ให้ Header Align ขวาตาม |
+| **Don't** | Avoid mismatched alignment between Header and Cell (e.g., left header with right-aligned content) because it reduces scanability and readability. / หลีกเลี่ยงการจัดตำแหน่งการวางข้อมูลที่ไม่ตรงกันระหว่าง Header และ Cell เพราะทำให้ผู้ใช้อ่าน หรือเปรียบเทียบข้อมูลได้ยาก |
+
+Table columns must use the same alignment in both header and body cells. Misaligned headers and values make scanning and comparison difficult, especially in dense data tables.
+
+---
+
+### Rule 2 — Layout Token Integrity
+
+| | |
+|---|---|
+| **Do** | Use Table with the spacing, padding, and structure defined by the Design System. / ใช้ Table ตามรูปแบบที่ Design System กำหนดไว้ |
+| **Don't** | Avoid manually adjusting Table padding or gap values because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Padding, Gap ของ Table เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use `<Table>`, `<TableHeaderCell>`, `<TableRow>`, and `<TableCell>` with their built-in spacing tokens. Do not override internal padding, gap, or core layout values.
+
+---
+
+### Rule 3 — Use Correct Table State
+
+| | |
+|---|---|
+| **Do** | Use Table states according to the intended interaction and service context (e.g., default, hover, selected, sorted, fixed). / ใช้สถานะของ Table ให้ตรงตามบริบทการใช้งานที่กำหนด |
+| **Don't** | Avoid using Table states outside their intended meaning, because it can mislead users and make data status unclear. / หลีกเลี่ยงการใช้สถานะของ Table ที่ไม่ตรงตามบริบทการใช้งาน เพราะอาจทำให้ผู้ใช้สับสนสถานะของข้อมูลที่กำลังดู |
+
+Apply states deliberately: row hover for focus, selected rows for active selection, sort state only on the active sortable column, and sticky/fixed behavior only when horizontal overflow exists.
