@@ -36,17 +36,17 @@ function RadioVisual({ checked, disabled }: { checked: boolean; disabled: boolea
       className={cn(
         "w-[18px] h-[18px] rounded-full border-[1.5px] flex items-center justify-center",
         disabled
-          ? "bg-disabled-bg border-[rgba(0,0,0,0.05)]"
+          ? "bg-disabled-bg border-[var(--fill-black-100)]"
           : checked
             ? "bg-background border-primary-action"
-            : "bg-background border-[rgba(0,0,0,0.1)]"
+            : "bg-background border-[var(--fill-black-200)]"
       )}
     >
       {checked && (
         <span
           className={cn(
             "w-2 h-2 rounded-full",
-            disabled ? "bg-[#99A1AF]" : "bg-primary-action"
+            disabled ? "bg-[var(--fill-gray-400)]" : "bg-primary-action"
           )}
         />
       )}
@@ -78,10 +78,12 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
   };
 
   const buttonBorder = disabled
-    ? "border-[rgba(0,0,0,0.05)]"
+    ? "border-[var(--fill-black-100)]"
     : checked
       ? "border-primary-action"
-      : "border-[rgba(0,0,0,0.1)]";
+      : "border-[var(--fill-black-200)]";
+
+  const buttonBackground = disabled && !checked ? "bg-disabled-bg" : "bg-background";
 
   return (
     <label
@@ -89,7 +91,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
         "inline-flex gap-1 select-none",
         description ? "items-start" : "items-center",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
-        isButton && cn("bg-background rounded-lg border py-2.5 pl-3 pr-4", buttonBorder),
+        isButton && cn(buttonBackground, "rounded-lg border py-2.5 pl-3 pr-4", buttonBorder),
         className
       )}
     >
@@ -113,7 +115,7 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(
           {label !== undefined && (
             <span
               className={cn(
-                "text-base leading-6",
+                "text-sm leading-5",
                 disabled ? "text-disabled" : "text-foreground"
               )}
             >

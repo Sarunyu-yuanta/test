@@ -54,6 +54,111 @@ When the button width is set to **Hug**, it wraps tightly around the label. This
 
 ---
 
+## Card
+
+
+### Rule 1 — Spacing Between Cards
+
+| | |
+|---|---|
+| **Do** | Keep clear spacing between cards so users can separate and read each block of content easily. / แต่ละการ์ดต้องมีระยะห่างที่ชัดเจน เพื่อให้ผู้ใช้สามารถแยกแยะและอ่านข้อมูลได้ง่าย |
+| **Don't** | Avoid placing cards too close together or overlapping, because it reduces readability and makes content boundaries unclear. / หลีกเลี่ยงการจัดวาง Card ให้ติดกันหรือซ้อนกัน เพราะทำให้การแยกข้อมูลไม่ชัดเจน |
+
+Use consistent spacing between cards inside list/grid layouts. Never overlap cards or compress the gap to zero.
+
+---
+
+### Rule 2 — Internal Structure
+
+| | |
+|---|---|
+| **Do** | Keep the card's content order and positions aligned with the Design System structure. / ใช้ตำแหน่งและลำดับข้อมูลภายใน Card ตามที่ Design System กำหนดไว้ |
+| **Don't** | Avoid rearranging or reordering content inside the card, because it breaks visual consistency across the product. / หลีกเลี่ยงการปรับตำแหน่งหรือลำดับข้อมูลภายใน Card เพราะทำให้รูปแบบการแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Do not swap the order of banner, title, metadata, or tag rows. Preserve the component's predefined hierarchy.
+
+---
+
+### Rule 3 — Layout Tokens
+
+| | |
+|---|---|
+| **Do** | Use card layout values exactly as defined in the Design System. / ใช้ Card ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid overriding card padding, gap, radius, or core color styles, as this causes inconsistent rendering in the system. / หลีกเลี่ยงการปรับ Padding, Gap และ Radius ของ Card รวมถึงสีที่ใช้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the built-in Card sizing and spacing tokens. Do not add custom border radius, custom padding, or ad-hoc background overrides.
+
+---
+
+### Rule 4 — Device Fit
+
+| | |
+|---|---|
+| **Do** | Choose the card size and layout variant that fits the target device for better usability. / ใช้ Card ให้เหมาะสมกับ Device เพื่อให้ Experience ในการใช้งานมีประสิทธิภาพ |
+| **Don't** | Avoid using card layouts that are not appropriate for the target device, because the reading and interaction experience will degrade. / หลีกเลี่ยงการใช้ Card ที่ไม่เหมาะสมกับ Device เพราะทำให้ Experience การแสดงผลของ Card ขาดประสิทธิภาพ |
+
+Use mobile card variants on mobile containers and desktop variants on larger screens. Match card width and composition to the available viewport.
+
+---
+
+## Checkbox & Radio
+
+
+### Rule 1 — Consistent Alignment in a Group
+
+| | |
+|---|---|
+| **Do** | Place Checkbox and Radio in a consistent direction and alignment within the same group. / จัดวาง Checkbox และ Radio ให้อยู่ในแนวเดียวกันภายในชุดเดียว เพื่อให้รูปแบบสม่ำเสมอและอ่านข้อมูลได้ง่าย |
+| **Don't** | Avoid mixing opposite alignment directions in the same group, because it makes options harder to scan and increases confusion. / หลีกเลี่ยงการจัดวาง Checkbox และ Radio ต่างแนวกันภายในชุดเดียว เพราะทำให้การอ่านข้อมูลได้ยาก และเพิ่มความสับสนในการใช้งาน |
+
+Keep control position and text alignment consistent across the same option set. Do not place some controls on the left and others on the right within one group.
+
+---
+
+### Rule 2 — Follow Layout Tokens
+
+| | |
+|---|---|
+| **Do** | Use Checkbox and Radio according to the layout defined by the Design System. / ใช้ Checkbox และ Radio ตาม Layout ที่ Design System ที่กำหนด |
+| **Don't** | Avoid changing height, colors, or visual style outside the defined component tokens, because it breaks consistency across the system. / หลีกเลี่ยงการปรับ Height, สี, หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the built-in `size`, spacing, and color tokens from `<Checkbox>` and `<Radio>`. Do not manually override height, border color, or fill styles.
+
+---
+
+### Rule 3 — Use the Correct Variant
+
+| | |
+|---|---|
+| **Do** | Use each variant based on its intended purpose. / ใช้ Variant ให้ตรงตามวัตถุประสงค์การใช้งานที่กำหนด |
+| **Don't** | Avoid using variants outside their intended meaning, because it creates inconsistent interaction patterns. / หลีกเลี่ยงการใช้ Variant ผิดจุดประสงค์ที่กำหนด เพราะทำให้รูปแบบและความหมายไม่สอดคล้องกับการใช้งานที่กำหนดไว้ |
+
+Choose `text` for standard list selection and `button` when the option must appear as a selectable surface. Do not swap variants for visual preference only.
+
+---
+
+### Rule 4 — Radio Is Single-Select Only
+
+| | |
+|---|---|
+| **Do** | Use Radio when users must choose only one option from a set. / Radio สามารถเลือกได้เพียงตัวเลือกเดียวเท่านั้น |
+| **Don't** | Avoid using Radio for multi-select scenarios; use Checkbox instead. / หลีกเลี่ยงการใช้ Radio ในการเลือกหลายตัวเลือก แนะนำให้ใช้ Checkbox แทน |
+
+`<Radio>` must be grouped by the same `name` and represent one exclusive choice. For any case where multiple options can be selected at once, use `<Checkbox>`.
+
+---
+
+### Rule 5 — Do Not Mix Control Types in One Set
+
+| | |
+|---|---|
+| **Do** | Use only one control type (Checkbox or Radio) within the same option set. / ใช้ Checkbox หรือ Radio เพียงประเภทเดียวภายในชุดเดียวกัน |
+| **Don't** | Avoid mixing Checkbox and Radio in one set, because users cannot clearly understand selection behavior. / หลีกเลี่ยงการใช้ Checkbox และ Radio ปะปนกันภายในชุดเดียว เพราะทำให้ผู้ใช้สับสนต่อรูปแบบและความหมายของตัวเลือก |
+
+Each option group should represent one interaction model. Mixing selection models in a single list causes ambiguity and increases input errors.
+
+---
+
 ## Input
 
 

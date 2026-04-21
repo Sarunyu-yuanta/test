@@ -46,14 +46,15 @@ function CheckboxVisual({
         className={cn(
           "block w-4 h-4 rounded-[2px] border-[1.5px]",
           disabled
-            ? "bg-disabled-bg border-[rgba(0,0,0,0.05)]"
-            : "bg-background border-[rgba(0,0,0,0.1)]"
+              ? "bg-disabled-bg border-[var(--fill-black-100)]"
+              : "bg-background border-[var(--fill-black-200)]"
         )}
       />
     );
   }
 
-  const fill = disabled ? "var(--fill-gray-100)" : "var(--fill-p1-600)";
+  const containerFill = disabled ? "var(--fill-gray-300)" : "var(--fill-p1-600)";
+  const iconFill = disabled ? "var(--fill-gray-400)" : "var(--fill-white-1000)";
 
   if (state === "checked") {
     return (
@@ -67,11 +68,11 @@ function CheckboxVisual({
       >
         <path
           d="M14.2222 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V8V1.77778C16 0.8 15.2 0 14.2222 0ZM6.85333 11.8133C6.50667 12.16 5.94667 12.16 5.6 11.8133L2.40889 8.62222C2.06222 8.27556 2.06222 7.71556 2.40889 7.36889C2.75556 7.02222 3.31556 7.02222 3.66222 7.36889L6.22222 9.92889L12.3378 3.81333C12.6844 3.46667 13.2444 3.46667 13.5911 3.81333C13.9378 4.16 13.9378 4.72 13.5911 5.06667L6.85333 11.8133Z"
-          fill={fill}
+          fill={containerFill}
         />
         <path
-          d="M6.85333 11.8133C6.50667 12.16 5.94667 12.16 5.6 11.8133L2.40889 8.62222C2.06222 8.27556 2.06222 7.71556 2.40889 7.36889C2.75556 7.02222 3.31556 7.02222 3.66222 7.36889L6.22222 9.92889L12.3378 3.81333C12.6844 3.46667 13.2444 3.46667 13.5911 3.81333C13.9378 4.16 13.9378 4.72 13.5911 5.06667L6.85333 11.8133Z"
-          fill="white"
+          d="M5.6 11.8133C5.94667 12.16 6.50667 12.16 6.85333 11.8133L13.5911 5.06667C13.9378 4.72 13.9378 4.16 13.5911 3.81333C13.2444 3.46667 12.6844 3.46667 12.3378 3.81333L6.22222 9.92889L3.66222 7.36889C3.31556 7.02222 2.75556 7.02222 2.40889 7.36889C2.06222 7.71556 2.06222 8.27556 2.40889 8.62222L5.6 11.8133Z"
+          fill={iconFill}
         />
       </svg>
     );
@@ -88,11 +89,11 @@ function CheckboxVisual({
     >
       <path
         d="M14.2222 0H1.77778C0.8 0 0 0.8 0 1.77778V14.2222C0 15.2 0.8 16 1.77778 16H14.2222C15.2 16 16 15.2 16 14.2222V1.77778C16 0.8 15.2 0 14.2222 0ZM11.5556 8.88889H4.44444C3.95556 8.88889 3.55556 8.48889 3.55556 8C3.55556 7.51111 3.95556 7.11111 4.44444 7.11111H11.5556C12.0444 7.11111 12.4444 7.51111 12.4444 8C12.4444 8.48889 12.0444 8.88889 11.5556 8.88889Z"
-        fill={fill}
+        fill={containerFill}
       />
       <path
-        d="M11.5556 8.88889H4.44444C3.95556 8.88889 3.55556 8.48889 3.55556 8C3.55556 7.51111 3.95556 7.11111 4.44444 7.11111H11.5556C12.0444 7.11111 12.4444 7.51111 12.4444 8C12.4444 8.48889 12.0444 8.88889 11.5556 8.88889Z"
-        fill="white"
+        d="M4.44444 8.88889H11.5556C12.0444 8.88889 12.4444 8.48889 12.4444 8C12.4444 7.51111 12.0444 7.11111 11.5556 7.11111H4.44444C3.95556 7.11111 3.55556 7.51111 3.55556 8C3.55556 8.48889 3.95556 8.88889 4.44444 8.88889Z"
+        fill={iconFill}
       />
     </svg>
   );
@@ -142,10 +143,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
   const isButton = variant === "button";
 
   const buttonBorder = disabled
-    ? "border-[rgba(0,0,0,0.05)]"
+    ? "border-[var(--fill-black-100)]"
     : hasActiveBorder
       ? "border-primary-action"
-      : "border-[rgba(0,0,0,0.1)]";
+      : "border-[var(--fill-black-200)]";
 
   return (
     <label
@@ -153,7 +154,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
         "inline-flex gap-1 select-none",
         description ? "items-start" : "items-center",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
-        isButton && cn("bg-background rounded-lg border py-2.5 pl-3 pr-4", buttonBorder),
+        isButton &&
+          cn("bg-background rounded-lg border py-2.5 pl-3 pr-4", buttonBorder),
         className
       )}
     >

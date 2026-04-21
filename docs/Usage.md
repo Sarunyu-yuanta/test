@@ -40,6 +40,93 @@ The recommended sizes serve as the default standard and can be adjusted based on
 
 ---
 
+## Card
+
+
+Card คือองค์ประกอบที่ใช้สำหรับจัดกลุ่มและแสดงข้อมูลที่เกี่ยวข้องกันให้อยู่ภายในกรอบเดียว เพื่อช่วยให้ผู้ใช้มองเห็นและเข้าใจข้อมูลได้ง่ายขึ้น / Card is a component used to group related information into a single container so content is easier to scan and understand.
+
+### Types
+
+Card มี 4 รูปแบบ: News Card, Event & Promotion Card, Social (Standard) Card, และ Live Tag Card / Card has 4 types: News Card, Event & Promotion Card, Social (Standard) Card, and Live Tag Card.
+
+| Type | Usage / การใช้งาน |
+|---|---|
+| **News Card** | Use for displaying news content or articles. / ใช้สำหรับแสดงข่าวหรือบทความ |
+| **Event & Promotion Card** | Use for events, campaigns, and promotional content. / ใช้สำหรับแสดงกิจกรรมหรือโปรโมชัน |
+| **Social (Standard) Card** | A general-purpose card for grouped informational content. / การ์ดพื้นฐานสำหรับแสดงข้อมูลทั่วไป ใช้เมื่อต้องการจัดกลุ่มข้อมูลแบบเรียบง่าย |
+| **Live Tag Card** | Use when content is currently live or being updated in real time (e.g., live broadcast). / การ์ดที่มีป้ายสถานะสด (Live) ใช้เมื่อต้องการสื่อว่าข้อมูลกำลังดำเนินอยู่แบบเรียลไทม์ เช่น ถ่ายทอดสด |
+
+### Bookmark States
+
+Bookmark คือสัญลักษณ์สำหรับบันทึกรายการหรือเนื้อหาที่ผู้ใช้สนใจ เพื่อกลับมาดูภายหลัง / Bookmark indicates saved content for later access.
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Default** | Not bookmarked yet. / สถานะปกติเมื่อยังไม่ได้บันทึกรายการ |
+| **Active** | Already bookmarked by the user. / สถานะเมื่อผู้ใช้บันทึกรายการนั้นเรียบร้อยแล้ว |
+
+### Sizes
+
+Card มีทั้งหมด 3 ขนาด ได้แก่ Desktop, Tablet และ Mobile / Card has 3 sizes: Desktop, Tablet, and Mobile.
+
+| Size | Recommended for / แนะนำสำหรับ |
+|---|---|
+| **Desktop** | Large screens and primary desktop layouts. / หน้าจอขนาดใหญ่และเลย์เอาต์หลักบนเดสก์ท็อป |
+| **Tablet** | Medium layouts and tablet contexts. / เลย์เอาต์ขนาดกลางและการใช้งานบนแท็บเล็ต |
+| **Mobile** | Small screens and mobile-first layouts. / หน้าจอขนาดเล็กและเลย์เอาต์บนมือถือ |
+
+---
+
+## Checkbox & Radio
+
+
+Checkbox และ Radio คือองค์ประกอบสำหรับให้ผู้ใช้เลือกตัวเลือกจากรายการ โดย Checkbox ใช้สำหรับเลือกได้มากกว่าหนึ่งตัวเลือก และ Radio ใช้สำหรับเลือกได้เพียงหนึ่งตัวเลือกจากกลุ่มเดียวกัน / Checkbox and Radio are selection controls where Checkbox supports multi-select and Radio supports single-select within one group.
+
+### วิธีการใช้งาน
+
+### ประเภทของ Checkbox & Radio
+
+Checkbox & Radio มี 4 รูปแบบ คือ Label (Text), Label + Description (Text), Label (Button), และ Label + Description (Button)
+
+- **Label (Text)** - รูปแบบที่แสดงเฉพาะข้อความกำกับ ใช้เมื่อความหมายของตัวเลือกชัดเจนและไม่ต้องการคำอธิบายเพิ่มเติม
+- **Label + Description (Text)** - รูปแบบที่แสดงข้อความกำกับพร้อมคำอธิบาย ใช้สำหรับอธิบายรายละเอียดของตัวเลือกให้ผู้ใช้เข้าใจมากขึ้น
+- **Label (Button)** - รูปแบบที่แสดงตัวเลือกในลักษณะปุ่ม ใช้เมื่อต้องการให้ตัวเลือกเห็นชัดและกดเลือกได้ง่าย
+- **Label + Description (Button)** - รูปแบบปุ่มที่มีทั้งข้อความกำกับและคำอธิบาย ใช้สำหรับแสดงรายละเอียดเพิ่มเติมพร้อมการเลือกตัวเลือก
+
+### สถานะของ Checkbox
+
+คือรูปแบบการแสดงผลของ Checkbox ในแต่ละช่วงของการใช้งาน เพื่อบอกผู้ใช้ว่า Checkbox อยู่ในสถานะ "ยังไม่ถูกเลือก", "ถูกเลือกแล้ว", "ถูกเลือกบางส่วน" หรือ "ไม่พร้อมใช้งาน"
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Default** | ค่าเริ่มต้น |
+| **Selected** | สถานะเมื่อ Checkbox ถูกเลือกแล้ว |
+| **Indeterminate** | สถานะกึ่งกลาง แสดงว่ามีการเลือกบางส่วนภายในกลุ่มตัวเลือก |
+| **Disabled** | สถานะเมื่อ Checkbox ไม่พร้อมให้ใช้งาน ไม่ว่าจะอยู่ในสถานะ Default, Selected หรือ Indeterminate ผู้ใช้ไม่สามารถโต้ตอบได้ |
+
+### สถานะของ Radio
+
+รูปแบบการแสดงผลของ Radio ในแต่ละช่วงของการใช้งาน เพื่อบอกผู้ใช้ว่า Radio อยู่ในสถานะ "ยังไม่ถูกเลือก", "ถูกเลือกแล้ว" หรือ "ไม่พร้อมใช้งาน"
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Default** | ค่าเริ่มต้น |
+| **Selected** | สถานะเมื่อถูกเลือกแล้ว |
+| **Disabled** | สถานะที่ตัวเลือกไม่พร้อมใช้งาน และผู้ใช้ไม่สามารถเลือกได้ |
+
+### การออกแบบ Component
+
+| Component | Key Dimension |
+|---|---|
+| **Checkbox** | Icon 16px, Radius 2 |
+| **Radio** | Inner dot 5px, Radius 999 |
+
+### Preview
+
+ตัวอย่างการใช้งานจริงสามารถอ้างอิงจากรายการตัวเลือกแบบการ์ดที่มีทั้งสถานะปกติและสถานะถูกเลือก เพื่อให้เห็นการใช้ Checkbox ในบริบทข้อมูลจริง
+
+---
+
 ## Input
 
 

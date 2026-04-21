@@ -41,8 +41,11 @@ export type {
 export type {
   CardProps,
   CardVariant,
+  CardSize,
   CardTagStatus,
+  CardSocialTag,
 } from "./components/card";
+// CardVariant = "event" | "news" | "social" | "live"
 
 // Types — Layout
 export type {

@@ -20,7 +20,7 @@ const navItems = [
   { to: "/chip", label: "Chip" },
   { to: "/checkbox", label: "Checkbox" },
   { to: "/radio", label: "Radio" },
-  // { to: "/card", label: "Card" },
+  { to: "/card", label: "Card" },
 ];
 
 function Logo() {
