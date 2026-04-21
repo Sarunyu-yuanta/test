@@ -21,6 +21,7 @@ const navItems = [
   { to: "/checkbox", label: "Checkbox" },
   { to: "/radio", label: "Radio" },
   { to: "/card", label: "Card" },
+  { to: "/table", label: "Table" },
 ];
 
 function Logo() {

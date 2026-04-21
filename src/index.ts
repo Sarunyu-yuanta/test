@@ -22,6 +22,7 @@ export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
 export { Tab, TabGroup } from "./components/tab";
 export { Tag, StatusTag } from "./components/tag";
+export { Table, TableRow, TableHeaderCell, TableCell } from "./components/table";
 export { TextArea } from "./components/textarea";
 export { TimeInput } from "./components/time-input";
 
@@ -138,6 +139,17 @@ export type {
   StatusTagType,
   StatusTagProps,
 } from "./components/tag";
+
+// Types — Table
+export type {
+  TableProps,
+  TableHeaderType,
+  TableHeaderState,
+  TableCellType,
+  TableCellTextStyle,
+  TableHeaderCellProps,
+  TableCellProps,
+} from "./components/table";
 
 // Types — TextArea
 export type {

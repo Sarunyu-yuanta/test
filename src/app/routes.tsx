@@ -15,6 +15,7 @@ import { TagPage } from "./pages/TagPage";
 import { ChipPage } from "./pages/ChipPage";
 import { CheckboxPage } from "./pages/CheckboxPage";
 import { RadioPage } from "./pages/RadioPage";
+import { TablePage } from "./pages/TablePage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
       { path: "chip", Component: ChipPage },
       { path: "checkbox", Component: CheckboxPage },
       { path: "radio", Component: RadioPage },
+      { path: "table", Component: TablePage },
     ],
   },
 ]);
