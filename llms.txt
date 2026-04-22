@@ -80,42 +80,75 @@ import {
 All values are CSS custom properties → exposed as Tailwind utilities.
 Use the Tailwind class. Never hard-code colors.
 
+Every class below is **Figma-aligned**: Light mode mirrors Color.Light (System One),
+dark mode mirrors Color.Dark (System One). Status colors: `danger`=Red.500,
+`warning`=Yellow.500, `success`=Green.500, `info`=Blue.500.
+
 ### Text color
 
-| Use for | Class |
-|---|---|
-| Body text, headings | `text-foreground` |
-| Secondary / placeholder | `text-muted-foreground` |
-| Disabled text | `text-disabled` |
-| Subtle captions | `text-caption` |
-| Brand / link / active state | `text-primary-action` |
-| Destructive / error | `text-destructive` |
-| Success | `text-success` |
-| On primary-action surfaces | `text-on-primary-action` |
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Body text, headings | `text-foreground` | `text-default` |
+| Secondary body | `text-muted-foreground` | `text-default-secondary` |
+| Tertiary / placeholder | `text-default-tertiary` / `text-default-placeholder` | |
+| Disabled text | `text-disabled` | `text-default-disabled` |
+| Inverse (on dark surfaces) | `text-default-inverse` | |
+| Subtle captions | `text-caption` | |
+| Brand / link / active | `text-primary-action` | `text-brand` / `text-brand-link` |
+| Destructive / error | `text-destructive` | `text-danger` |
+| Warning (yellow) | `text-warning` | |
+| Success (green) | `text-success` | |
+| Info (blue) | `text-info` | |
+| On primary-action surfaces | `text-on-primary-action` | `text-on-brand` |
 
 ### Background
 
-| Use for | Class |
-|---|---|
-| Page | `bg-background` |
-| Card / popover surface | `bg-card` |
-| Neutral fill (inputs, chips) | `bg-muted` or `bg-input-background` |
-| Hover on neutral | `bg-hover-bg` |
-| Disabled fill | `bg-disabled-bg` |
-| Brand action (primary buttons) | `bg-primary-action` / `hover:bg-primary-action-hover` / `active:bg-primary-action-active` |
-| Tinted primary surface | `bg-primary-action-light` / `bg-primary-action-muted` |
-| Selection / active row | `bg-selected-bg` / `bg-selected-light-bg` |
-| Destructive fill | `bg-destructive` |
-| Success / error soft | `bg-success-bg` / `bg-error-bg` |
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Page | `bg-background` | `bg-default` |
+| Card / popover surface | `bg-card` | `bg-default` |
+| Secondary surface (sidebar, subtle panel) | `bg-default-secondary` | |
+| Tertiary surface (nested card) | `bg-default-tertiary` | |
+| Neutral fill (inputs, chips) | `bg-muted` / `bg-input-background` | |
+| Hover on neutral | `bg-hover-bg` | `bg-default-hover` |
+| Disabled fill | `bg-disabled-bg` | `bg-default-disabled` |
+| Brand action (primary buttons) | `bg-primary-action` + `hover:bg-primary-action-hover` + `active:bg-primary-action-active` | `bg-brand` / `bg-brand-hover` / `bg-brand-pressed` |
+| Tinted primary surface | `bg-primary-action-light` / `bg-primary-action-muted` | `bg-brand-light` / `bg-brand-muted` |
+| Selection / active row | `bg-selected-bg` / `bg-selected-light-bg` | |
+| Destructive fill | `bg-destructive` | `bg-danger` |
+| Destructive soft surface | `bg-error-bg` | `bg-danger-light` / `bg-danger-soft` |
+| Warning fill / soft | `bg-warning` / `bg-warning-light` | |
+| Success fill / soft | `bg-success` / `bg-success-bg` | `bg-success-light` |
+| Info fill / soft | `bg-info` / `bg-info-light` | |
 
 ### Border
 
-| Use for | Class |
-|---|---|
-| Default border | `border-border` |
-| Subtle divider | `border-divider` |
-| Disabled border | `border-border-disabled` |
-| Muted border | `border-border-muted` |
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Default border | `border-border` | `border-default` |
+| Strong border | `border-border-muted` | `border-strong` |
+| Subtle divider | `border-divider` | |
+| Disabled border | `border-border-disabled` | |
+| Brand border | `border-brand` | |
+| Status borders | `border-danger` / `border-warning` / `border-success` / `border-info` | |
+
+### Icon color (when setting color on an SVG)
+
+`text-icon-default` · `text-icon-default-secondary` · `text-icon-default-tertiary` ·
+`text-icon-default-disabled` · `text-icon-brand` · `text-icon-on-brand` ·
+`text-icon-danger` · `text-icon-warning` · `text-icon-success` · `text-icon-info`
+
+### Visual scale — notification dots, badge counts, data viz
+
+For accent colors used in badges, counts, or charts (not for semantic status),
+use the `visual-*` scale. Available hues: `neutral`, `purple`, `blue`, `cyan`,
+`pink`, `red`, `orange`. Each hue has 7 steps:
+
+`bg-visual-red-light` · `bg-visual-red-soft` · `bg-visual-red-low` · `bg-visual-red` · `bg-visual-red-high` · `bg-visual-red-vivid` · `bg-visual-red-deep`
+
+Same pattern for `text-visual-*` and `border-visual-*`. Prefer `visual-*` over
+`bg-red-500` for notification counts — visual tokens adapt in dark mode, hard
+palette classes do not.
 
 ### Radius
 
@@ -700,6 +733,58 @@ in both modes.
 compatibility and is not referenced by any Tailwind utility. To change
 corner rounding per element, apply a different utility (`rounded-lg`
 → `rounded-xl`). To change it globally, fork the library.
+
+### Example: Wealth theme (Midnight Blue + Burnt Sienna)
+
+The design system ships with ramps for alternate brands. To switch the
+whole UI to the Wealth palette, override the brand semantic tokens:
+
+```css
+:root {
+  /* Primary brand → Midnight Blue */
+  --bg-brand-primary: var(--fill-midnight-blue-500);
+  --bg-brand-hover:   var(--fill-midnight-blue-600);
+  --bg-brand-pressed: var(--fill-midnight-blue-700);
+  --bg-brand-primary-light: var(--fill-midnight-blue-50);
+  --text-brand-primary:     var(--fill-midnight-blue-500);
+  --text-brand-link-primary: var(--fill-midnight-blue-500);
+  --border-brand-primary:   var(--fill-midnight-blue-500);
+
+  /* Secondary brand → Burnt Sienna */
+  --bg-brand-secondary:       var(--fill-burnt-sienna-500);
+  --bg-brand-secondary-light: var(--fill-burnt-sienna-50);
+  --text-brand-secondary:     var(--fill-burnt-sienna-500);
+  --border-brand-secondary:   var(--fill-burnt-sienna-500);
+
+  /* Keep the legacy --primary-action alias in sync so existing components track */
+  --primary-action:        var(--bg-brand-primary);
+  --primary-action-hover:  var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+}
+
+.dark {
+  --bg-brand-primary: var(--fill-midnight-blue-400);
+  --bg-brand-hover:   var(--fill-midnight-blue-300);
+  --bg-brand-pressed: var(--fill-midnight-blue-500);
+  --bg-brand-primary-light: color-mix(in srgb, var(--fill-midnight-blue-400) 15%, transparent);
+  --text-brand-primary:     var(--fill-midnight-blue-300);
+  --text-brand-link-primary: var(--fill-midnight-blue-300);
+  --border-brand-primary:   var(--fill-midnight-blue-400);
+
+  --bg-brand-secondary:       var(--fill-burnt-sienna-400);
+  --bg-brand-secondary-light: color-mix(in srgb, var(--fill-burnt-sienna-400) 15%, transparent);
+  --text-brand-secondary:     var(--fill-burnt-sienna-300);
+  --border-brand-secondary:   var(--fill-burnt-sienna-400);
+
+  --primary-action:        var(--bg-brand-primary);
+  --primary-action-hover:  var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+}
+```
+
+Override primitives (`--fill-*`) only if you want to change the ramp itself
+across all consumers. Override semantics (`--bg-brand-*`, `--text-brand-*`)
+to switch which ramp the brand uses without touching anything else.
 
 ## If you need a component the library doesn't provide
 

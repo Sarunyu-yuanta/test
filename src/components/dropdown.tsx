@@ -81,10 +81,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const borderColor = isDisabled
       ? "var(--border-disabled)"
       : isError
-        ? "var(--destructive)"
+        ? "var(--border-danger)"
         : isFocus
           ? "var(--primary-action)"
-          : "var(--border)";
+          : "var(--border-default)";
 
     const showBelow = isError || Boolean(helperText);
     const leftText = isError ? errorMessage : (helperText ?? "");
@@ -176,9 +176,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             bg,
             hasExternalLabel
               ? "h-[38px]"
-              : isFilled && !open
+              : isFilled
                 ? "py-1.5"
-                : "p-3.5",
+                : "py-3.5",
             !isDisabled && !forceState && "cursor-pointer"
           )}
         >

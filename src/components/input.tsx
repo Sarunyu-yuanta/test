@@ -72,10 +72,10 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const borderColor = isDisabled
     ? "var(--border-disabled)"
     : isError
-      ? "var(--destructive)"
+      ? "var(--border-danger)"
       : isFocus
         ? "var(--primary-action)"
-        : "var(--border)";
+        : "var(--border-default)";
 
   const hasRight = Boolean(rightIcon) || Boolean(unit);
   const padding = isFilled
@@ -125,7 +125,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
     <div ref={ref} className={cn("flex flex-col gap-1 w-full", className)}>
       <div
         className={cn(
-          "relative rounded-lg",
+          "relative rounded-lg min-h-[48px]",
           padding,
           bg,
           containerFlex,
