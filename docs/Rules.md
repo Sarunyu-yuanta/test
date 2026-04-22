@@ -239,6 +239,75 @@ Always follow the date format defined by the Design System (e.g., `DD MMM YYYY` 
 
 ---
 
+## Modal & Bottom Sheet
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Modal and Bottom Sheet exactly as defined by the Design System. / ใช้ Modal และ Bottom Sheet ตามรูปแบบที่ Design System กำหนดไว้ |
+| **Don't** | Avoid changing padding, gap, radius, colors, or adding custom internal buttons/layout. / หลีกเลี่ยงการปรับ Padding, Gap, Radius, สี หรือเพิ่มปุ่ม/โครงสร้างภายในเอง |
+
+Use `<Modal>` and `<BottomSheet>` from `@sarunyu/system-one` without overriding their core structure. Do not handcraft internal layout blocks or inject extra control patterns that conflict with the component specification.
+
+---
+
+### Rule 2 — Modal Layout Structure
+
+| | |
+|---|---|
+| **Do** | Keep Modal content order and positions according to the Design System layout. / ใช้ Modal ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid repositioning or reordering title, body, and action blocks in Modal. / หลีกเลี่ยงการปรับตำแหน่งหรือสลับลำดับเนื้อหาภายใน Modal |
+
+Do not rearrange header/body/actions or move CTA positions inside the modal. Breaking the predefined hierarchy can reduce readability and distort action priority.
+
+---
+
+### Rule 3 — Modal Width Limit
+
+| | |
+|---|---|
+| **Do** | Keep Modal width within the system standard (max 375 px). / กำหนดความกว้างของ Modal ไม่เกินมาตรฐาน (375 px) |
+| **Don't** | Avoid expanding Modal width beyond the standard width. / หลีกเลี่ยงการขยายความกว้างของ Modal เกินค่ามาตรฐาน |
+
+Modal should remain within the standard width cap (`375px`) for consistent visual balance and readability on supported layouts.
+
+---
+
+### Rule 4 — Modal Positioning
+
+| | |
+|---|---|
+| **Do** | Place Modal at the center of the viewport. / จัดตำแหน่ง Modal ให้อยู่กึ่งกลางหน้าจอเสมอ |
+| **Don't** | Avoid placing Modal outside the center position. / หลีกเลี่ยงการวาง Modal นอกตำแหน่งกึ่งกลางหน้าจอ |
+
+Render modal in a centered overlay container. Off-center placement reduces emphasis and weakens expected dialog behavior.
+
+---
+
+### Rule 5 — Bottom Sheet Positioning
+
+| | |
+|---|---|
+| **Do** | Place Bottom Sheet at the bottom edge of the viewport. / วาง Bottom Sheet ไว้ด้านล่างของหน้าจอเสมอ |
+| **Don't** | Avoid showing Bottom Sheet from any position other than the bottom. / หลีกเลี่ยงการวาง Bottom Sheet ในตำแหน่งอื่นที่ไม่ใช่ด้านล่าง |
+
+Bottom sheet must open from the bottom and stay anchored to the bottom edge. Alternative placement makes hierarchy unclear and increases interaction confusion.
+
+---
+
+### Rule 6 — Responsive Usage (Mobile uses Bottom Sheet)
+
+| | |
+|---|---|
+| **Do** | On mobile, present forms, multi-step flows, and action-heavy content (login, register, settings, option pickers, action menus) as a Bottom Sheet. Use Modal on desktop. / บนมือถือให้ใช้ Bottom Sheet สำหรับฟอร์ม, ขั้นตอนหลายขั้น และคอนเทนต์ที่ต้อง action เยอะ (login, register, settings, option picker, action menu) ส่วน Desktop ใช้ Modal |
+| **Don't** | Avoid showing a content-heavy or form-based Modal on mobile — it limits screen space and makes input difficult. / หลีกเลี่ยงการแสดง Modal ที่มีคอนเทนต์เยอะหรือเป็นฟอร์มบนมือถือ เพราะพื้นที่จำกัดและกรอกข้อมูลยาก |
+
+On mobile (< 768px), any modal that wraps a form (login/register/settings), a multi-step flow, a long option list, or an action menu must render as `<BottomSheet>`. Only short `Modal variant="alert"` notifications and simple `Modal variant="dialog"` confirmations (title + one line + 1–2 buttons, no input) may remain as `<Modal>` on mobile. On desktop (≥ 768px) always use `<Modal>`. Branch inline with `useIsMobile()` from `@sarunyu/system-one` and share one body between the two branches — do not build a custom `ResponsiveModal` wrapper.
+
+---
+
 ## Tab
 
 

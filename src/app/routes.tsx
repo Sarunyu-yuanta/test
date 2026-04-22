@@ -16,6 +16,8 @@ import { ChipPage } from "./pages/ChipPage";
 import { CheckboxPage } from "./pages/CheckboxPage";
 import { RadioPage } from "./pages/RadioPage";
 import { TablePage } from "./pages/TablePage";
+import { ModalPage } from "./pages/ModalPage";
+import { BottomSheetPage } from "./pages/BottomSheetPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -46,6 +48,8 @@ export const router = createBrowserRouter([
       { path: "checkbox", Component: CheckboxPage },
       { path: "radio", Component: RadioPage },
       { path: "table", Component: TablePage },
+      { path: "modal", Component: ModalPage },
+      { path: "bottom-sheet", Component: BottomSheetPage },
     ],
   },
 ]);

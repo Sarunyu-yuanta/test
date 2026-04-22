@@ -153,6 +153,51 @@ Floating Label Input has 3 types: Input, Text Area, and Dropdown. / Floating Lab
 
 ---
 
+## Modal & Bottom Sheet
+
+
+Modal และ Bottom Sheet คือหน้าต่างชั่วคราวที่เปิดขึ้นมาทับหน้าปัจจุบันโดยไม่เปลี่ยนหน้า ใช้สำหรับแจ้งข้อมูลหรือให้ผู้ใช้ตัดสินใจ โดย Modal แสดงกลางหน้าจอและต้องปิดหรือดำเนินการก่อนจึงจะใช้งานต่อได้ ส่วน Bottom Sheet จะเลื่อนขึ้นจากด้านล่างเพื่อแสดงตัวเลือกเพิ่มเติม โดยยังคงเห็นเนื้อหาของหน้าหลักอยู่ / Modal and Bottom Sheet are temporary surfaces shown above the current page without navigation. Modal appears at the center and usually requires user action before continuing, while Bottom Sheet slides up from the bottom to show additional options while preserving context.
+
+### ประเภทของ Modal & Bottom Sheet
+
+Modal และ Bottom Sheet มี 4 รูปแบบ คือ Dialog, Content, Alert, และ Bottom Sheet / There are 4 types: Dialog, Content, Alert, and Bottom Sheet.
+
+| Type | Usage / การใช้งาน |
+|---|---|
+| **Dialog** | Use for general confirmation flows such as confirm/save/cancel. / ใช้สำหรับข้อมูลทั่วไปหรือการยืนยัน เช่น ยืนยัน, บันทึก, หรือยกเลิก |
+| **Content** | Use for richer, more complex content beyond plain text. / ใช้สำหรับแสดงข้อมูลที่มีความซับซ้อนหรือรายละเอียดค่อนข้างมาก (ไม่ใช่แค่ข้อความอย่างเดียว) |
+| **Alert** | Use for important warning/success/error notifications. / ใช้สำหรับแจ้งเตือนข้อมูลสำคัญ |
+| **Bottom Sheet** | Use for additional actions/options that slide from the bottom of the screen. / ใช้สำหรับแสดงตัวเลือกหรือการทำงานเพิ่มเติม โดยเลื่อนขึ้นจากด้านล่างของหน้าจอ |
+
+> Component นี้รองรับฟีเจอร์ Slots สามารถปรับแต่งคอนเทนต์ได้ (ยกเว้น Alert) / This component supports content slots for customization (except `Alert`).
+
+### สถานะของ Alert
+
+คือรูปแบบการแสดงผลของ Alert ในแต่ละช่วงของการใช้งาน เพื่อบอกผู้ใช้ว่า Alert อยู่ในสถานะ “ควรระวัง”, “สำเร็จ”, หรือ “ข้อผิดพลาด” / Alert states communicate whether the message is warning, success, or danger.
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Warning** | Use to warn users about conditions that require caution. / ใช้แจ้งเตือนสิ่งที่ผู้ใช้ควรระวัง หรือสถานการณ์ที่อาจส่งผลต่อการใช้งาน |
+| **Success** | Use to indicate a completed/successful action. / ใช้แจ้งว่าการดำเนินการเสร็จสมบูรณ์หรือสำเร็จเรียบร้อย |
+| **Danger** | Use to indicate critical errors that should be acknowledged or fixed immediately. / ใช้แจ้งข้อผิดพลาดหรือสถานการณ์ร้ายแรงที่อาจส่งผลต่อข้อมูลหรือการทำงาน และควรให้ผู้ใช้แก้ไขหรือรับทราบทันที |
+
+### การออกแบบ Component
+
+การออกแบบจะอิงตามกลุ่มการใช้งานหลัก:
+- **Dialog & Content** — โครงสร้างหลักคือ Header + Body (+ Actions ตามบริบท)
+- **Alert** — เน้นสถานะและการสื่อสารที่ชัดเจน (Warning / Success / Danger)
+- **Bottom Sheet** — Header Bottom Sheet + Content area + Action area ที่ยึดตำแหน่งด้านล่าง
+
+### Preview
+
+ตัวอย่างการใช้งานควรครอบคลุม:
+- หน้าต่างแบบ **Dialog**
+- หน้าต่างแบบ **Content**
+- หน้าต่างแบบ **Alert** ทั้ง 3 สถานะ
+- **Bottom Sheet** ที่แสดงจากด้านล่างของหน้าจอ
+
+---
+
 ## Table
 
 Table is used to display structured data in rows and columns for easy comparison and scanning. / Table ใช้สำหรับแสดงข้อมูลแบบตาราง (แถวและคอลัมน์) เพื่อให้ผู้ใช้เปรียบเทียบและอ่านข้อมูลได้ง่าย

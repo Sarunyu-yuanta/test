@@ -10,6 +10,8 @@ export { DateInput } from "./components/date-input";
 export { Dropdown } from "./components/dropdown";
 export { DropdownMultiple } from "./components/dropdown-multiple";
 export { Input } from "./components/input";
+export { Modal } from "./components/modal";
+export { BottomSheet } from "./components/bottom-sheet";
 export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
 export { Tab, TabGroup } from "./components/tab";
@@ -20,6 +22,7 @@ export { TimeInput } from "./components/time-input";
 
 // Utilities
 export { cn } from "./lib/utils";
+export { useIsMobile } from "./components/ui/use-mobile";
 
 // Types — Button
 export type {
@@ -84,6 +87,22 @@ export type {
   InputState,
   InputProps,
 } from "./components/input";
+
+// Types — Bottom Sheet
+export type {
+  BottomSheetHeaderType,
+  BottomSheetRightSide,
+  BottomSheetProps,
+} from "./components/bottom-sheet";
+
+// Types — Modal
+export type {
+  ModalVariant,
+  ModalActionLayout,
+  ModalResponsive,
+  ModalAlertStatus,
+  ModalProps,
+} from "./components/modal";
 
 // Types — OptionList
 export type {

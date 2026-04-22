@@ -22,6 +22,8 @@ const navItems = [
   { to: "/radio", label: "Radio" },
   { to: "/card", label: "Card" },
   { to: "/table", label: "Table" },
+  { to: "/modal", label: "Modal" },
+  { to: "/bottom-sheet", label: "Bottom Sheet" },
 ];
 
 function Logo() {

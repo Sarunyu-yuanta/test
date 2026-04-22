@@ -21,12 +21,7 @@ import {
 import { cn } from "../lib/utils";
 import { useIsMobile } from "./ui/use-mobile";
 import { Button } from "./button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTrigger,
-  DrawerTitle,
-} from "./ui/drawer";
+import { BottomSheet } from "./bottom-sheet";
 
 export type { DateRange };
 export type DateInputState =
@@ -1137,20 +1132,22 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
         className={cn("flex flex-col gap-[4px] w-full", className)}
       >
         {isMobile ? (
-          <Drawer open={open} onOpenChange={handleOpenChange}>
-            <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
-            <DrawerContent>
-              <DrawerTitle className="sr-only">
-                เลือกวันที่
-              </DrawerTitle>
-              <div className="overflow-auto px-4 pt-2 pb-8 w-full">
-                <DrawerRangeCtx.Provider value={mode === "range"}>
-                  {calendarContent}
-                </DrawerRangeCtx.Provider>
-                {actionButtons}
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <BottomSheet
+            open={open}
+            onOpenChange={handleOpenChange}
+            trigger={triggerButton}
+            title="เลือกวันที่"
+            showHeader={false}
+            rightSide="none"
+            contentClassName="pt-0"
+          >
+            <div className="overflow-auto px-4 pt-2 pb-8 w-full">
+              <DrawerRangeCtx.Provider value={mode === "range"}>
+                {calendarContent}
+              </DrawerRangeCtx.Provider>
+              {actionButtons}
+            </div>
+          </BottomSheet>
         ) : (
           <Popover.Root
             open={open}

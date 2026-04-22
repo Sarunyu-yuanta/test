@@ -10,13 +10,8 @@ import {
   useState,
 } from "react";
 import { cn } from "../lib/utils";
+import { BottomSheet } from "./bottom-sheet";
 import { Button } from "./button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  DrawerTrigger,
-} from "./ui/drawer";
 import { useIsMobile } from "./ui/use-mobile";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -773,20 +768,20 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
         )}
       >
         {isMobile ? (
-          <Drawer open={open} onOpenChange={handleOpenChange}>
-            <DrawerTrigger asChild>
-              {triggerButton}
-            </DrawerTrigger>
-            <DrawerContent>
-              <DrawerTitle className="sr-only">
-                เลือกเวลา
-              </DrawerTitle>
-              <div className="overflow-auto px-4 pt-2 pb-8 w-full">
-                {pickerContent}
-                {actionButtons}
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <BottomSheet
+            open={open}
+            onOpenChange={handleOpenChange}
+            trigger={triggerButton}
+            title="เลือกเวลา"
+            showHeader={false}
+            rightSide="none"
+            contentClassName="pt-0"
+          >
+            <div className="overflow-auto px-4 pt-2 pb-8 w-full">
+              {pickerContent}
+              {actionButtons}
+            </div>
+          </BottomSheet>
         ) : (
           <Popover.Root
             open={open}

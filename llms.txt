@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 17 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 19 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet as raw HTML.
 2. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
@@ -68,8 +68,10 @@ import {
   Tab, TabGroup,
   Card,
   Table, TableRow, TableHeaderCell, TableCell,
+  // Overlay
+  Modal, BottomSheet,
   // Utility
-  cn,
+  cn, useIsMobile,
 } from "@sarunyu/system-one";
 ```
 
@@ -579,6 +581,213 @@ Raw option rows. Use when you need a custom dropdown or a sidebar menu — other
 
 ---
 
+### Modal
+
+Centered overlay surface for confirmations, richer content, or status alerts.
+Caller owns open/close state and supplies the backdrop — `<Modal>` only renders
+the dialog panel.
+
+```tsx
+type ModalVariant      = "dialog" | "content" | "alert";
+type ModalActionLayout = "none" | "single" | "double";
+type ModalResponsive   = "mobile" | "desktop";
+type ModalAlertStatus  = "warning" | "success" | "danger";
+
+// Dialog — short confirmation (title + text + up to 2 buttons)
+<Modal
+  variant="dialog"
+  actionLayout="double"
+  title="Delete item?"
+  description="This can't be undone."
+  primaryLabel="Delete"
+  secondaryLabel="Cancel"
+  onPrimaryClick={confirm}
+  onSecondaryClick={close}
+  onClose={close}
+/>
+
+// Content — custom body (pass children)
+<Modal variant="content" actionLayout="single" responsive="desktop" title="Edit profile" onClose={close}>
+  <Input placeholder="Name" value={name} onChange={setName} />
+</Modal>
+
+// Alert — status moment (warning / success / danger)
+<Modal
+  variant="alert"
+  alertStatus="success"
+  actionLayout="single"
+  title="Saved"
+  description="Your changes are live."
+  primaryLabel="Done"
+  onPrimaryClick={close}
+/>
+```
+
+**Rendering it onscreen.** Wrap `<Modal>` in your own backdrop/portal:
+
+```tsx
+{open ? (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+    <Modal variant="dialog" actionLayout="double" onClose={close} {...rest} />
+  </div>
+) : null}
+```
+
+**Widths are fixed by variant** — `dialog` 375px, `content`/`alert` 343px.
+Don't override `className` to enlarge them. Mobile by default; set
+`responsive="desktop"` on `variant="content"` to right-align actions.
+
+**Action layout** — `none` (no buttons), `single` (primary only, full width on
+mobile), `double` (secondary + primary). Only one primary per modal.
+
+Props: `variant`, `actionLayout`, `responsive`, `alertStatus`, `showClose`,
+`title`, `description`, `primaryLabel`, `secondaryLabel`, `children`,
+`onClose`, `onPrimaryClick`, `onSecondaryClick`, `className`.
+
+---
+
+### BottomSheet
+
+Mobile-first bottom-anchored sheet. Built on Vaul — it ships its own backdrop,
+drag-to-dismiss, and portal. Pass a `trigger` or control it via `open` /
+`onOpenChange`.
+
+```tsx
+type BottomSheetHeaderType = "text" | "icon" | "image";
+type BottomSheetRightSide  = "icon" | "action" | "none";
+
+// Controlled — opens from the bottom with title + close icon
+<BottomSheet
+  open={open}
+  onOpenChange={setOpen}
+  title="Filters"
+  rightSide="icon"
+>
+  <div className="flex flex-col gap-3">{/* filter controls */}</div>
+</BottomSheet>
+
+// Uncontrolled with a trigger
+<BottomSheet
+  trigger={<Button variant="outline" size="md">Show options</Button>}
+  title="Playlist"
+  headerType="image"
+  imageSrc="/cover.jpg"
+  rightSide="action"
+  actionLabel="Save"
+  onActionClick={save}
+>
+  <OptionList options={tracks} selectedValue={pick} onSelect={setPick} />
+</BottomSheet>
+
+// Content-only sheet (no header)
+<BottomSheet open={open} onOpenChange={setOpen} showHeader={false}>
+  <p className="text-sm text-muted-foreground">Quick tip body</p>
+</BottomSheet>
+```
+
+**Header layout**
+- `headerType="text"` — title only.
+- `headerType="icon"` — leading icon + title (pass `leftIcon`).
+- `headerType="image"` — leading thumbnail + title (pass `imageSrc`).
+
+**Right side**
+- `rightSide="icon"` — close button, auto-wired to `DrawerClose`. Custom glyph via `rightIcon`.
+- `rightSide="action"` — inline text button (e.g., "Save"), fires `onActionClick`.
+- `rightSide="none"` — nothing on the right.
+
+`showHandle` (default `true`) shows the grab handle at the top. Hide it only
+when you want a fully formal surface. Do not render a `<BottomSheet>` on desktop
+layouts — use `<Modal>` instead.
+
+Props: `open`, `onOpenChange`, `trigger`, `headerType`, `showHeader`,
+`rightSide`, `title`, `actionLabel`, `imageSrc`, `leftIcon`, `rightIcon`,
+`onActionClick`, `showHandle`, `children`, `className`, `contentClassName`.
+
+---
+
+### Modal vs BottomSheet — responsive rule
+
+**On mobile (< 768px), content-heavy / action-heavy modals MUST render as
+`<BottomSheet>`, not `<Modal>`.** This is not optional — it is the system
+default for every flow that wraps a form or an option list.
+
+Mobile → `<BottomSheet>`:
+- Login / signup / account forms
+- Settings panels and profile editors
+- Any multi-field form or multi-step flow
+- Long option / picker lists (e.g. country picker, category filter)
+- Action menus ("Share to…", "Move to…")
+
+Mobile → `<Modal>` stays OK:
+- `variant="alert"` (success / warning / danger notifications)
+- Short `variant="dialog"` confirmations (title + one line of text + 1–2 buttons, no input)
+
+Desktop (≥ 768px) → always `<Modal>`.
+
+Use the library's `useIsMobile()` hook to branch. It ships with the same
+768px breakpoint the library uses internally (DateInput/TimeInput already
+swap to `<BottomSheet>` on mobile via this hook).
+
+```tsx
+import { useState } from "react";
+import {
+  useIsMobile,
+  Modal, BottomSheet,
+  Input, Button, Checkbox,
+} from "@sarunyu/system-one";
+
+export function LoginSheet({
+  open,
+  onOpenChange,
+}: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const isMobile           = useIsMobile();
+  const [email, setEmail]  = useState("");
+  const [pw, setPw]        = useState("");
+  const [remember, setRmb] = useState(false);
+
+  const body = (
+    <div className="flex flex-col gap-4">
+      <Input placeholder="Email"    value={email} onChange={setEmail} required />
+      <Input placeholder="Password" value={pw}    onChange={setPw}    type="password" required />
+      <Checkbox checked={remember} onCheckedChange={setRmb} label="Remember me" />
+      <Button variant="primary" size="xl" className="w-full" onClick={() => onOpenChange(false)}>
+        Sign in
+      </Button>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <BottomSheet open={open} onOpenChange={onOpenChange} title="Sign in" rightSide="icon">
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+      <Modal
+        variant="content"
+        responsive="desktop"
+        title="Sign in"
+        onClose={() => onOpenChange(false)}
+      >
+        {body}
+      </Modal>
+    </div>
+  );
+}
+```
+
+**Key points in the pattern**
+- Extract the body into a single `const body = (...)` so both branches share it. Do not duplicate the form.
+- `useIsMobile()` returns `false` on the server / first paint — the initial render shows the `<Modal>` branch. That is correct; the component is portalled and non-interactive until hydrated.
+- `onOpenChange(false)` closes both branches. Do not hand-roll separate close handlers.
+- Do NOT build a custom `<ResponsiveModal>` wrapper component. Branching inline is the sanctioned pattern — wrappers hide the decision and lead to mis-use.
+
+---
+
 ## Layout — you design it
 
 The library ships zero layout components. Compose page structure with plain
@@ -632,6 +841,8 @@ Tailwind. Example scaffolds:
 | `bg-primary-action` | `bg-blue-600` / `bg-[#3b82f6]` |
 | `<h1>Title</h1>` | `<h1 className="text-3xl font-bold">Title</h1>` |
 | `<div className="flex flex-col gap-6">` | `import { Stack } from "@sarunyu/system-one"` |
+| `<Modal variant="dialog" …>` inside your own `fixed inset-0` backdrop | `<div className="fixed inset-0 bg-white rounded p-6">…` |
+| `<BottomSheet open={open} onOpenChange={setOpen}>` | Hand-rolled sheet with `translate-y` + overlay divs |
 | One `variant="primary"` per context | Two primary buttons side-by-side |
 | `onChange={setValue}` (value, not event) | `onChange={e => setValue(e.target.value)}` |
 

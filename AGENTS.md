@@ -17,6 +17,8 @@ in this package.** This file is the short version: the rules you must follow.
    - Custom checkbox/radio → use `<Checkbox>` / `<Radio>`.
    - Custom date/time pickers → use `<DateInput>` / `<TimeInput>`.
    - Custom tables → use `<Table>` + `<TableRow>` + `<TableHeaderCell>` + `<TableCell>`.
+   - Custom modals/dialogs/alerts → use `<Modal>` (wrap it in your own `fixed inset-0` backdrop).
+   - Custom bottom sheets / drawers from the bottom → use `<BottomSheet>` (it ships its own backdrop via Vaul).
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities
@@ -38,6 +40,19 @@ in this package.** This file is the short version: the rules you must follow.
    - Checkbox/Radio take their `label` as a prop. Don't wrap them in `<label>`.
    - All tabs in one `TabGroup` must share the same `size`.
    - One `<Button variant="primary">` per context.
+   - `Modal` renders the panel only — provide your own `fixed inset-0` backdrop + open/close state. One primary action per modal.
+   - `BottomSheet` is mobile-only. On desktop, use `Modal` instead.
+
+6. **Mobile forms and action-heavy modals MUST use `<BottomSheet>`, not `<Modal>`.**
+   Login, signup, settings panels, profile editors, any multi-field form,
+   multi-step flow, long picker list, or action menu — on mobile (< 768px)
+   these render as `<BottomSheet>`. Only simple `variant="alert"` and short
+   `variant="dialog"` confirmations (no form) may stay as `<Modal>` on mobile.
+   Desktop (≥ 768px) always uses `<Modal>`. Branch with the library's
+   `useIsMobile()` hook — do not build a custom "ResponsiveModal" wrapper;
+   put the `if (isMobile) return <BottomSheet>… / return <Modal>…` inline and
+   share one `const body = …` between the two branches. See the `LoginSheet`
+   recipe in `llms.txt`.
 
 ## Setup check
 
