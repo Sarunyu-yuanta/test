@@ -500,11 +500,55 @@ Key rules for sort:
 - Only one column sorts at a time — when a column's `sortKey` changes, previous columns naturally read `"none"` via the `dirFor` helper.
 - Columns that shouldn't sort (status, actions) → `sortable={false}`.
 
+**Selectable rows.** To make rows selectable with checkboxes, pair `<TableRow selected onSelectedChange>` with a `<TableCell type="checkbox" />`. The cell renders its own checkbox wired to the row — **do not put a `<Checkbox>` inside the cell yourself.** The row background turns brand-tinted automatically when `selected` is true.
+
+```tsx
+import { useMemo, useState } from "react";
+import { Table, TableRow, TableHeaderCell, TableCell } from "@sarunyu/system-one";
+
+export function SelectableTable({ rows }: { rows: Row[] }) {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const toggle = (id: string) => (next: boolean) =>
+    setSelected(prev => {
+      const copy = new Set(prev);
+      next ? copy.add(id) : copy.delete(id);
+      return copy;
+    });
+
+  const headerState =
+    selected.size === 0 ? false : selected.size === rows.length ? true : "indeterminate";
+  const toggleAll = (next: boolean) =>
+    setSelected(next ? new Set(rows.map(r => r.id)) : new Set());
+
+  return (
+    <Table>
+      <TableRow header>
+        <TableHeaderCell type="check" checkState={headerState} onCheckChange={toggleAll} />
+        <TableHeaderCell>Symbol</TableHeaderCell>
+        <TableHeaderCell>Name</TableHeaderCell>
+      </TableRow>
+      {rows.map(r => (
+        <TableRow
+          key={r.id}
+          selected={selected.has(r.id)}
+          onSelectedChange={toggle(r.id)}
+        >
+          <TableCell type="checkbox" />
+          <TableCell>{r.symbol}</TableCell>
+          <TableCell>{r.name}</TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  );
+}
+```
+
 Props:
 - `Table` — `className`, native `<table>` props.
-- `TableRow` — `header?`, `selected?`, `hoverable?` (default `true`), `onClick`, `className`.
-- `TableHeaderCell` — `children` (label), `sortable?` (default `true`, set `false` to hide the arrow), `sortDirection?: "none" | "asc" | "desc"`, `onSortChange?(next)`, `contentAlign?: "start" | "center" | "end"`, `className`.
-- `TableCell` — `children` (content), `contentAlign?`, `fixed?`, `className`.
+- `TableRow` — `header?`, `selected?`, `onSelectedChange?(next: boolean)` (fires when a `type="checkbox"` cell in this row is toggled), `hoverable?` (default `true`), `onClick`, `className`.
+- `TableHeaderCell` — `children` (label), `type?: "text" | "icon" | "check"` (use `"check"` for select-all column), `checkState?: boolean | "indeterminate"`, `onCheckChange?(next)`, `sortable?` (default `true`, set `false` to hide the arrow), `sortDirection?: "none" | "asc" | "desc"`, `onSortChange?(next)`, `contentAlign?: "start" | "center" | "end"`, `className`.
+- `TableCell` — `children` (content), `type?: "default" | "text-icon" | "text-image" | "tag" | "icon" | "button" | "checkbox"`, `contentAlign?`, `fixed?`, `className`. For `type="checkbox"` the cell renders its own checkbox — bind selection via the parent `TableRow`, not by nesting a `<Checkbox>`.
 
 ---
 

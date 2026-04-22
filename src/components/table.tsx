@@ -75,6 +75,7 @@ const TableScrollShadowContext = createContext<TableScrollShadowState>({
 type TableRowState = {
   selected: boolean;
   hovered: boolean;
+  onSelectedChange?: (next: boolean) => void;
 };
 
 const TableRowStateContext = createContext<TableRowState>({
@@ -192,13 +193,23 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
 
 export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
   selected?: boolean;
+  /** Fires when a `<TableCell type="checkbox" />` inside this row is toggled. Set this together with `selected` to make rows selectable — the cell's checkbox is wired automatically. */
+  onSelectedChange?: (next: boolean) => void;
   /** Enables built-in hover state propagation to cells in this row. */
   hoverable?: boolean;
 }
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
   function TableRow(
-    { className, selected = false, hoverable = true, onMouseEnter, onMouseLeave, ...props },
+    {
+      className,
+      selected = false,
+      onSelectedChange,
+      hoverable = true,
+      onMouseEnter,
+      onMouseLeave,
+      ...props
+    },
     ref
   ) {
     const [hovered, setHovered] = useState(false);
@@ -214,8 +225,8 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
     };
 
     const rowState = useMemo(
-      () => ({ selected, hovered: hoverable ? hovered : false }),
-      [hoverable, hovered, selected]
+      () => ({ selected, hovered: hoverable ? hovered : false, onSelectedChange }),
+      [hoverable, hovered, selected, onSelectedChange]
     );
 
     return (
@@ -503,7 +514,11 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
             contentAlign === "start" ? "justify-start" : "justify-center"
           )}
         >
-          <Checkbox checked={cellSelected} />
+          <Checkbox
+            checked={cellSelected}
+            onChange={rowState.onSelectedChange}
+            ariaLabel="Select row"
+          />
         </div>
       )}
     </td>
