@@ -354,7 +354,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
     textStyle = "default",
     selected,
     hovered,
-    label = "Text label",
+    label,
     description = "Text Description",
     imageSrc,
     tagText = "Tag",
@@ -365,6 +365,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
     fixedOffset = 0,
     fixedShadow,
     style: styleProp,
+    children,
     ...props
   },
   ref
@@ -394,6 +395,8 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
         ? hasRightOverflow
         : false;
 
+  const primaryContent = children ?? label ?? "Text label";
+
   return (
     <td
       ref={ref}
@@ -415,7 +418,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
       )}
       {type === "default" && (
         <div className="flex min-w-0 flex-col">
-          <span className={cn("text-sm leading-5", primaryTextClass)}>{label}</span>
+          <span className={cn("text-sm leading-5", primaryTextClass)}>{primaryContent}</span>
           {hasDescription && (
             <span className="text-xs leading-4 font-normal text-subtle-text">{description}</span>
           )}
@@ -426,7 +429,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
         <div className="flex items-center gap-2">
           {icon ?? <Circle size={iconSize} weight="regular" className="shrink-0 text-subtle-text" />}
           <div className="flex min-w-0 flex-col">
-            <span className={cn("text-sm leading-5", primaryTextClass)}>{label}</span>
+            <span className={cn("text-sm leading-5", primaryTextClass)}>{primaryContent}</span>
             {hasDescription && (
               <span className="text-xs leading-4 font-normal text-subtle-text">{description}</span>
             )}
@@ -448,7 +451,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
             )}
           </div>
           <div className="flex min-w-0 flex-col">
-            <span className={cn("text-sm leading-5", primaryTextClass)}>{label}</span>
+            <span className={cn("text-sm leading-5", primaryTextClass)}>{primaryContent}</span>
             {hasDescription && (
               <span className="text-xs leading-4 font-normal text-subtle-text">{description}</span>
             )}
