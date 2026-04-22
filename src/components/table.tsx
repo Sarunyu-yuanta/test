@@ -198,7 +198,7 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
   function TableRow(
-    { className, selected = false, hoverable = false, onMouseEnter, onMouseLeave, ...props },
+    { className, selected = false, hoverable = true, onMouseEnter, onMouseLeave, ...props },
     ref
   ) {
     const [hovered, setHovered] = useState(false);
@@ -240,7 +240,7 @@ export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellP
       state = "default",
       sortable = true,
       icon,
-      sortDirection = "none",
+      sortDirection,
       onSortChange,
       checkState = false,
       onCheckChange,
@@ -249,11 +249,16 @@ export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellP
       fixedShadow,
       children = "Title text",
       style: styleProp,
+      onClick: onClickProp,
       ...props
     },
     ref
   ) {
     const { hasLeftOverflow, hasRightOverflow } = useContext(TableScrollShadowContext);
+    const [internalDirection, setInternalDirection] = useState<"none" | "asc" | "desc">("none");
+    const isControlledSort = sortDirection !== undefined;
+    const currentDirection = isControlledSort ? sortDirection : internalDirection;
+
     const stateClass =
       state === "disabled"
         ? "bg-[var(--bg-default-tertiary,#f3f4f6)] text-[var(--text-default-tertiary,#6a7282)]"
@@ -264,23 +269,25 @@ export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellP
       state === "default" ? "hover:bg-[var(--bg-default-secondary,#f9fafb)]" : "";
 
     const sortIcon =
-      sortDirection === "asc" ? (
+      currentDirection === "asc" ? (
         <ArrowUp size={16} weight="fill" className="shrink-0" />
-      ) : sortDirection === "desc" ? (
+      ) : currentDirection === "desc" ? (
         <ArrowDown size={16} weight="fill" className="shrink-0" />
       ) : (
         <ArrowsDownUp size={16} weight="fill" className="shrink-0" />
       );
 
-    const handleSortClick = () => {
-      if (!sortable || !onSortChange) return;
+    const handleClick: MouseEventHandler<HTMLTableCellElement> = (e) => {
+      onClickProp?.(e);
+      if (type !== "text" || !sortable || state === "disabled") return;
       const nextDirection =
-        sortDirection === "none"
+        currentDirection === "none"
           ? "asc"
-          : sortDirection === "asc"
+          : currentDirection === "asc"
             ? "desc"
             : "none";
-      onSortChange(nextDirection);
+      if (!isControlledSort) setInternalDirection(nextDirection);
+      onSortChange?.(nextDirection);
     };
 
     const content =
@@ -324,12 +331,12 @@ export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellP
           stateClass,
           interactiveHoverClass,
           fixed && "sticky z-20",
-          sortable && type === "text" && onSortChange && "cursor-pointer select-none",
+          sortable && type === "text" && state !== "disabled" && "cursor-pointer select-none",
           className
         )}
         style={{ ...fixedStyle, ...styleProp }}
         {...props}
-        onClick={type === "text" ? handleSortClick : props.onClick}
+        onClick={handleClick}
       >
         {shadowDirection && shouldShowShadow && (
           <StickyShadowEdge direction={shadowDirection} />
