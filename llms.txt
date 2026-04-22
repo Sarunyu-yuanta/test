@@ -439,6 +439,73 @@ Data tables. Compose with TableRow + TableHeaderCell + TableCell.
 
 Align numeric columns `right`, status center. Don't stuff StatusTag inside the Table header.
 
+**TableCell content** — pass content as children (`<TableCell>{u.name}</TableCell>`).
+Do NOT pass a `label` prop for dynamic data — if children are omitted, the cell
+shows the placeholder `"Text label"`.
+
+**Sorting is not automatic.** `TableHeaderCell` is a UI primitive — it only
+toggles its own arrow icon. The parent must own sort state AND sort the data.
+
+```tsx
+import { useMemo, useState } from "react";
+import { Table, TableRow, TableHeaderCell, TableCell } from "@sarunyu/system-one";
+
+type SortDir = "none" | "asc" | "desc";
+
+export function UsersTable({ users }: { users: User[] }) {
+  const [sortKey, setSortKey] = useState<keyof User | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("none");
+
+  const sorted = useMemo(() => {
+    if (!sortKey || sortDir === "none") return users;
+    const copy = [...users];
+    copy.sort((a, b) => {
+      const av = a[sortKey]; const bv = b[sortKey];
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ?  1 : -1;
+      return 0;
+    });
+    return copy;
+  }, [users, sortKey, sortDir]);
+
+  const dirFor = (k: keyof User): SortDir => (sortKey === k ? sortDir : "none");
+  const handleSort = (k: keyof User) => (next: SortDir) => {
+    setSortKey(next === "none" ? null : k);
+    setSortDir(next);
+  };
+
+  return (
+    <Table>
+      <TableRow header>
+        <TableHeaderCell sortDirection={dirFor("name")} onSortChange={handleSort("name")}>Name</TableHeaderCell>
+        <TableHeaderCell sortDirection={dirFor("role")} onSortChange={handleSort("role")}>Role</TableHeaderCell>
+        <TableHeaderCell sortable={false}>Status</TableHeaderCell>
+      </TableRow>
+      {sorted.map(u => (
+        <TableRow key={u.id}>
+          <TableCell>{u.name}</TableCell>
+          <TableCell>{u.role}</TableCell>
+          <TableCell><StatusTag type={u.status} /></TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  );
+}
+```
+
+Key rules for sort:
+- Parent owns `sortKey` + `sortDir` state.
+- Parent derives `sorted` data via `useMemo` — the Table never mutates data.
+- Pass `sortDirection` (controlled) + `onSortChange` to every sortable header.
+- Only one column sorts at a time — when a column's `sortKey` changes, previous columns naturally read `"none"` via the `dirFor` helper.
+- Columns that shouldn't sort (status, actions) → `sortable={false}`.
+
+Props:
+- `Table` — `className`, native `<table>` props.
+- `TableRow` — `header?`, `selected?`, `hoverable?` (default `true`), `onClick`, `className`.
+- `TableHeaderCell` — `children` (label), `sortable?` (default `true`, set `false` to hide the arrow), `sortDirection?: "none" | "asc" | "desc"`, `onSortChange?(next)`, `contentAlign?: "start" | "center" | "end"`, `className`.
+- `TableCell` — `children` (content), `contentAlign?`, `fixed?`, `className`.
+
 ---
 
 ### DateInput / TimeInput
@@ -657,11 +724,42 @@ export function SettingsPage() {
 ### Data table page
 
 ```tsx
+import { useMemo, useState } from "react";
 import {
   SearchInput, Button, Table, TableRow, TableHeaderCell, TableCell, StatusTag,
 } from "@sarunyu/system-one";
 
+type SortDir = "none" | "asc" | "desc";
+type OrderKey = "id" | "customer" | "amount";
+
 export function OrdersPage() {
+  const [q, setQ]             = useState("");
+  const [sortKey, setSortKey] = useState<OrderKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("none");
+
+  const filtered = useMemo(
+    () => orders.filter(o => o.customer.toLowerCase().includes(q.toLowerCase())),
+    [q],
+  );
+
+  const sorted = useMemo(() => {
+    if (!sortKey || sortDir === "none") return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      const av = a[sortKey]; const bv = b[sortKey];
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ?  1 : -1;
+      return 0;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
+
+  const dirFor = (k: OrderKey): SortDir => (sortKey === k ? sortDir : "none");
+  const handleSort = (k: OrderKey) => (next: SortDir) => {
+    setSortKey(next === "none" ? null : k);
+    setSortDir(next);
+  };
+
   return (
     <main className="mx-auto w-full max-w-[1200px] px-6 py-10 flex flex-col gap-6">
       <header className="flex items-center justify-between">
@@ -673,12 +771,12 @@ export function OrdersPage() {
       </div>
       <Table>
         <TableRow header>
-          <TableHeaderCell>Order</TableHeaderCell>
-          <TableHeaderCell>Customer</TableHeaderCell>
-          <TableHeaderCell>Amount</TableHeaderCell>
-          <TableHeaderCell>Status</TableHeaderCell>
+          <TableHeaderCell sortDirection={dirFor("id")}       onSortChange={handleSort("id")}>Order</TableHeaderCell>
+          <TableHeaderCell sortDirection={dirFor("customer")} onSortChange={handleSort("customer")}>Customer</TableHeaderCell>
+          <TableHeaderCell sortDirection={dirFor("amount")}   onSortChange={handleSort("amount")}>Amount</TableHeaderCell>
+          <TableHeaderCell sortable={false}>Status</TableHeaderCell>
         </TableRow>
-        {orders.map(o => (
+        {sorted.map(o => (
           <TableRow key={o.id}>
             <TableCell>#{o.id}</TableCell>
             <TableCell>{o.customer}</TableCell>
