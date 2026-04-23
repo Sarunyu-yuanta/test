@@ -60,12 +60,14 @@ ships no `Page`/`Section`/`Stack` primitives — use whatever layout looks right
 | `Button` | Action button — 5 variants, 10 sizes |
 | `Input` / `TextArea` / `SearchInput` | Text input, multiline, search field |
 | `Dropdown` / `DropdownMultiple` / `OptionList` | Select controls |
-| `Checkbox` / `Radio` | Boolean / single-choice |
+| `Checkbox` / `Toggle` / `Radio` | Checkbox, boolean switch (on/off), single-choice |
 | `DateInput` / `TimeInput` | Date and time pickers |
 | `Tag` / `StatusTag` / `Chip` | Labels, workflow states, filter chips |
 | `Tab` / `TabGroup` | Tabbed navigation |
 | `Card` | Event/content card (desktop / tablet / mobile variants) |
 | `Table` | Data tables (`TableRow` / `TableHeaderCell` / `TableCell`) |
+| `Modal` | Centered overlay — dialog / content / alert variants |
+| `BottomSheet` | Mobile-first bottom sheet (Vaul-based, with backdrop) |
 
 Full prop reference: [`llms.txt`](./llms.txt).
 
@@ -120,6 +122,8 @@ import type {
   ButtonVariant, ButtonSize,
   TagVariant, ChipSize,
   InputProps, DropdownOption,
+  ToggleSize, ToggleProps,
+  ModalVariant, ModalActionLayout,
 } from "@sarunyu/system-one";
 ```
 
