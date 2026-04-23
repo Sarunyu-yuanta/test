@@ -28,7 +28,7 @@ export type CardSocialTag = {
 };
 
 export interface CardProps {
-  /** Card type: "event" (default), "default" (empty shell for custom content), "news", "social", or "live". */
+  /** Card type. Default: `"default"` — an empty shell with padding + radius. Switch to `"event"`, `"news"`, `"social"`, or `"live"` only when rendering that specific content pattern. */
   variant?: CardVariant;
   /** Custom body content (`variant="default"`). */
   children?: ReactNode;
@@ -75,6 +75,25 @@ export interface CardProps {
   // ── Live props ───────────────────────────────────────────────────────────
   /** Video duration shown as an overlay on the thumbnail, e.g. "1:26:36" (live variant). */
   duration?: string;
+}
+
+// ── Banner image ─────────────────────────────────────────────────────────────
+
+/**
+ * Banner/thumbnail renderer. When `src` is empty we fall back to a neutral
+ * placeholder surface so the card never shows a broken-image icon.
+ */
+function BannerMedia({ src, alt }: { src: string; alt: string }) {
+  if (!src) {
+    return <div aria-hidden="true" className="absolute inset-0 bg-muted" />;
+  }
+  return (
+    <img
+      alt={alt}
+      className="pointer-events-none absolute inset-0 size-full object-cover"
+      src={src}
+    />
+  );
 }
 
 // ── Duration badge ────────────────────────────────────────────────────────────
@@ -210,7 +229,7 @@ const tagConfig: Record<CardTagStatus, TagConfig> = {
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   {
-    variant = "event",
+    variant = "default",
     size = "desktop",
     children,
     title,
@@ -344,11 +363,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
           </div>
           {/* Right: thumbnail */}
           <div className="relative h-[84px] w-[149px] shrink-0 overflow-clip rounded-[6px]">
-            <img
-              alt="social thumbnail"
-              className="pointer-events-none absolute inset-0 size-full object-cover"
-              src={bannerSrc}
-            />
+            <BannerMedia src={bannerSrc} alt="social thumbnail" />
           </div>
         </div>
 
@@ -455,11 +470,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
               imgHeight,
             )}
           >
-            <img
-              alt="live thumbnail"
-              className="pointer-events-none absolute inset-0 size-full object-cover"
-              src={bannerSrc}
-            />
+            <BannerMedia src={bannerSrc} alt="live thumbnail" />
             {/* Live badge — top-left */}
             <div
               className="absolute h-[22px] left-[6px] top-[6px] flex items-center gap-[4px] rounded-[4px] px-[6px]"
@@ -492,11 +503,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
         )}
       >
         <div className="relative h-[184px] w-full shrink-0 overflow-clip">
-          <img
-            alt="news banner"
-            className="pointer-events-none absolute inset-0 size-full object-cover"
-            src={bannerSrc}
-          />
+          <BannerMedia src={bannerSrc} alt="news banner" />
           {locked && <LockBadge />}
         </div>
         <NewsContent
@@ -526,11 +533,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
         )}
       >
         <div className="relative h-[114px] w-[171px] shrink-0 overflow-clip">
-          <img
-            alt="news banner"
-            className="pointer-events-none absolute inset-0 size-full object-cover"
-            src={bannerSrc}
-          />
+          <BannerMedia src={bannerSrc} alt="news banner" />
           {locked && <LockBadge />}
         </div>
         <NewsContent
@@ -573,10 +576,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
       <div
         className={cn("relative w-full shrink-0 overflow-clip", bannerClass)}
       >
-        <img
-          alt={variant === "news" ? "news banner" : "event banner"}
-          className="pointer-events-none absolute inset-0 size-full object-cover"
+        <BannerMedia
           src={bannerSrc}
+          alt={variant === "news" ? "news banner" : "event banner"}
         />
         {locked && <LockBadge size={size} />}
       </div>

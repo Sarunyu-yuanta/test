@@ -420,25 +420,56 @@ All tabs in one group must share the same size.
 
 ### Card
 
-Event/content card. Self-contained — don't wrap in another card.
+Self-contained surface — don't wrap in another card.
+
+**Default variant is `"default"`.** Start every Card as `variant="default"` (an empty shell with padding, radius, shadow, and `bg-card`) and pass your content via `children`. Only switch to a specialized variant when the page is specifically rendering that content type.
+
+| Variant | Use for | Requires |
+|---|---|---|
+| `"default"` (default) | Any custom card surface | `children` |
+| `"event"` | Event/session card | `title`, `date`, `time`, `location`, `count`, `tagStatus` |
+| `"news"` | News/article card | `title`, `category`, `date`, optional `image` |
+| `"social"` | Social/article summary with colored tag chips | `title`, `tags`, `source`, `date` |
+| `"live"` | Live stream / video card with duration overlay | `title`, `source`, `date`, `duration` |
 
 ```tsx
+// Default — custom content (preferred starting point)
+<Card size="desktop" className="w-[308px]">
+  <h4>Custom title</h4>
+  <p className="text-sm text-muted-foreground">Any layout you want inside.</p>
+</Card>
+
+// Event
 <Card
-  variant="desktop"
+  variant="event"
+  size="desktop"
+  image="/banner.jpg"
   title="Annual Conference 2024"
-  date="Jun 23, 2024"
-  time="08:30 – 12:00"
+  date="23 มิ.ย. 2567"
+  time="08.30 - 12.00"
   location="Main Hall, Floor 7"
   count="150/200"
   tagStatus="registered"
-  image="/banner.jpg"
+/>
+
+// News
+<Card
+  variant="news"
+  size="desktop"
+  image="/cover.jpg"
+  category="Market"
+  title="Great design begins with understanding user needs"
+  date="01 มกราคม 2025"
+  bookmarked={bm}
+  onBookmarkToggle={toggle}
 />
 ```
 
-Variants set width: `desktop` (308px) · `tablet` (224px) · `mobile` (163px).
-Pick based on viewport breakpoint, not aesthetic.
+**Size presets set width:** `desktop` (308px) · `tablet` (224px) · `mobile` (163px). Pick based on viewport breakpoint, not aesthetic. The `"default"` variant uses `size` only for its internal padding / radius — set width yourself via `className`.
 
 `tagStatus`: `"not-registered"` | `"registered"` | `"full"`.
+
+When no `image` is provided on `event` / `news` / `social` / `live`, the banner area renders a neutral placeholder (no broken-image icon).
 
 ### Table
 
