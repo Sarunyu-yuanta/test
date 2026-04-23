@@ -19,6 +19,7 @@ const navItems = [
   { to: "/tag", label: "Tag" },
   { to: "/chip", label: "Chip" },
   { to: "/checkbox", label: "Checkbox" },
+  { to: "/toggle", label: "Toggle" },
   { to: "/radio", label: "Radio" },
   { to: "/card", label: "Card" },
   { to: "/table", label: "Table" },

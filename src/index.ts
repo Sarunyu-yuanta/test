@@ -4,6 +4,7 @@
 export { Button } from "./components/button";
 export { Card } from "./components/card";
 export { Checkbox } from "./components/checkbox";
+export { Toggle } from "./components/toggle";
 export { Radio } from "./components/radio";
 export { Chip } from "./components/chip";
 export { DateInput } from "./components/date-input";
@@ -48,6 +49,9 @@ export type {
   CheckboxVariant,
   CheckboxProps,
 } from "./components/checkbox";
+
+// Types — Toggle
+export type { ToggleSize, ToggleProps } from "./components/toggle";
 
 // Types — Radio
 export type { RadioVariant, RadioProps } from "./components/radio";

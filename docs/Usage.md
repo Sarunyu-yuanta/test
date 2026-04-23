@@ -127,6 +127,84 @@ Checkbox & Radio มี 4 รูปแบบ คือ Label (Text), Label + Des
 
 ---
 
+## Toggle
+
+Toggle คือองค์ประกอบที่ใช้สำหรับสลับสถานะระหว่างสองค่า เช่น เปิด–ปิด หรือ ใช้งาน–ไม่ใช้งาน โดยแสดงผลให้ผู้ใช้เห็นสถานะปัจจุบันอย่างชัดเจน / A toggle is used to switch a single on/off (or active/inactive) state so the current value is always visible to the user.
+
+### Types
+
+Toggle มี 3 รูปแบบ คือ **Label**, **Label + Description**, **Label + Description (2line+)** / The toggle supports three text layouts in the library:
+
+| Type | Usage / การใช้งาน |
+|---|---|
+| **Label** | แสดงเฉพาะชื่อการตั้งค่า ใช้เมื่อความหมายชัดเจนและไม่ต้องการคำอธิบายเพิ่มเติม / Show only a setting name when the meaning is self-explanatory. |
+| **Label + Description** | แสดงชื่อพร้อมคำอธิบายสั้น ๆ สำหรับอธิบายหน้าที่หรือผลของการเปิด–ปิด / A short line of supporting copy that explains the effect of turning the setting on or off. |
+| **Label + Description (2line+)** | แสดงชื่อพร้อมคำอธิบายหลายบรรทัด สำหรับกรณีที่มีรายละเอียดหรือเงื่อนไขเพิ่มเติม / Use when the help text may wrap to two or more lines. |
+
+In code, pass `label` and/or `description` to `<Toggle>`. Laid-out rows are **text on the left**, **switch on the right**, with **16px** (`gap-4`) between the text block and the control.
+
+### States
+
+รูปแบบการแสดงผลของสวิตช์ในแต่ละช่วงการใช้งาน เพื่อบอกผู้ใช้ว่าฟังก์ชันนั้นอยู่ในสถานะ **เปิด** / **ปิด** หรือ **ไม่พร้อมใช้งาน** / The switch reflects four combinations of **checked** and **disabled**:
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Off (default)** | สถานะปิด (เริ่มต้น) ผู้ใช้ยังสามารถสลับเป็น On ได้ / `checked={false}` — user can still turn the setting on. |
+| **Off (disabled)** | สถานะปิดและไม่พร้อมให้ใช้งาน ไม่สามารถเปลี่ยนเป็น On ได้ / `checked={false} disabled` — the control cannot be changed. |
+| **On (default)** | สถานะเปิด ผู้ใช้ยังสามารถสลับเป็น Off ได้ / `checked={true}` — user can still turn the setting off. |
+| **On (disabled)** | สถานะเปิดแต่ล็อกไว้ ไม่สามารถปิดได้ / `checked={true} disabled` — the control cannot be changed. |
+
+Map these to the `checked` and `disabled` props on `<Toggle>` from `@sarunyu/system-one`.
+
+### Sizes
+
+Toggle มีทั้งหมด **2 ขนาด** ได้แก่ **Small** และ **Large** (ในโค้ด: `size="sm"` และ `size="md"`). When `label` or `description` is set, the default size is **`sm`**; standalone toggles default to **`md`**, unless you override with `size`.
+
+| Figma (System One) | `Toggle` `size` | Frame (W×H) |
+|---|---|---|
+| **Small** | `sm` | 32×20 px |
+| **Large** | `md` | 40×24 px |
+
+### การออกแบบ Component (Dimensions)
+
+Track ใช้รูป **pill** (มุมโค้งเต็มระยะ) กับ thumb กลมและเงาแบบที่ design system กำหนด ไม่ควรปรับ offset หรือ shadow นอก token / The pill-shaped track, thumb diameter, and shadow follow built-in tokens; do not detach or reskin the control.
+
+| Size | Track (W×H) | Thumb (diameter) | Inset (approx.) |
+|---|---|---|---|
+| **Small** | 32×20 | 16 px | 2 px from track edge |
+| **Large** | 40×24 | 20 px | 2 px from track edge |
+
+### Preview
+
+**Preview** ใน Figma: แถวการตั้งค่า (เช่นแถบ “แจ้งเตือน”) แสดง **ข้อความด้านซ้าย** และ **`<Toggle />` ชิดขอบขวา** บนพื้นแถวเดียวกับฟอร์ม/การ์ด / In product UI, a common pattern is a full-width row: primary label on the left, toggle aligned to the trailing edge (e.g. notification or privacy switches).
+
+| Example copy (from spec) | Pattern |
+|---|---|
+| รับการแจ้งเตือนทาง LINE / SMS | One line of copy with **Large** (`size="md"`) toggle, typically inside a 48px-tall settings row. |
+
+```tsx
+import { useState } from "react";
+import { Toggle } from "@sarunyu/system-one";
+
+export function LineSmsNotifyRow() {
+  const [on, setOn] = useState(true);
+  return (
+    <div className="max-w-md rounded-lg border border-border px-4 py-3">
+      <Toggle
+        label="รับการแจ้งเตือนทาง LINE / SMS"
+        checked={on}
+        onChange={setOn}
+        size="md"
+      />
+    </div>
+  );
+}
+```
+
+Place the row in a `max-w-[343px]` (or `max-w-md`) column when you want the same line length as the Figma **User Guide** spec.
+
+---
+
 ## Input
 
 

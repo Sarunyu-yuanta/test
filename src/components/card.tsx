@@ -11,12 +11,10 @@ import {
   XCircle,
   type Icon,
 } from "@phosphor-icons/react";
-import { forwardRef } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { cn } from "../lib/utils";
 
-const imgBanner = "";
-
-export type CardVariant = "event" | "news" | "social" | "live";
+export type CardVariant = "default" | "event" | "news" | "social" | "live";
 export type CardSize = "desktop" | "tablet" | "mobile";
 export type CardTagStatus = "not-registered" | "registered" | "full";
 
@@ -30,8 +28,10 @@ export type CardSocialTag = {
 };
 
 export interface CardProps {
-  /** Card type: "event" (default), "news", or "social". */
+  /** Card type: "event" (default), "default" (empty shell for custom content), "news", "social", or "live". */
   variant?: CardVariant;
+  /** Custom body content (`variant="default"`). */
+  children?: ReactNode;
   /** Size preset. desktop=308px, tablet=224px, mobile=163px. Default: "desktop". */
   size?: CardSize;
   /** Card title (clamped to 2 lines). */
@@ -212,6 +212,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   {
     variant = "event",
     size = "desktop",
+    children,
     title,
     locked = true,
     image,
@@ -236,7 +237,29 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   },
   ref,
 ) {
-  const bannerSrc = image ?? imgBanner;
+  const bannerSrc = image ?? "";
+
+  // ── Default: token shell for arbitrary content ─────────────────────────────
+  if (variant === "default") {
+    const shellPadding =
+      size === "desktop" ? "p-4" : size === "tablet" ? "p-3" : "p-2.5";
+    const shellRadius =
+      size === "mobile" ? "rounded-[6px]" : "rounded-[8px]";
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "flex min-h-0 min-w-0 flex-col bg-card text-foreground shadow-card",
+          shellRadius,
+          shellPadding,
+          className,
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
 
   // ── Social card ──────────────────────────────────────────────────────────
   if (variant === "social") {

@@ -14,6 +14,7 @@ import { OptionListPage } from "./pages/OptionListPage";
 import { TagPage } from "./pages/TagPage";
 import { ChipPage } from "./pages/ChipPage";
 import { CheckboxPage } from "./pages/CheckboxPage";
+import { TogglePage } from "./pages/TogglePage";
 import { RadioPage } from "./pages/RadioPage";
 import { TablePage } from "./pages/TablePage";
 import { ModalPage } from "./pages/ModalPage";
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
       { path: "tag", Component: TagPage },
       { path: "chip", Component: ChipPage },
       { path: "checkbox", Component: CheckboxPage },
+      { path: "toggle", Component: TogglePage },
       { path: "radio", Component: RadioPage },
       { path: "table", Component: TablePage },
       { path: "modal", Component: ModalPage },

@@ -132,19 +132,58 @@ export function CardShowcase() {
   ];
 
   return (
-    <div className="bg-background min-h-screen px-10 py-10">
-      <h1 className="mb-1" style={FONT}>Card Component</h1>
-      <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>
-        variant=event &amp; variant=news · 3 sizes · lock / location / audience / tag / bookmark
+    <div className="bg-background min-h-screen px-10 py-10" style={FONT}>
+      <h1 className="mb-1">Card Component</h1>
+      <p className="text-muted-foreground mb-12 text-[14px]">
+        variant=default · variant=event &amp; variant=news · 3 sizes · lock / location / audience / tag / bookmark
       </p>
+
+      {/* ── Default — shell for custom content ── */}
+      <section className="mb-14">
+        <h2 className="mb-6 text-[16px] text-nav-link">Default — Custom Content Shell</h2>
+        <p className="text-muted-foreground mb-6 max-w-2xl text-[14px] leading-6">
+          ใช้ <span className="text-foreground font-medium">variant=&quot;default&quot;</span> เป็นกรอบการ์ดพร้อม padding และ radius ตาม size — ใส่เนื้อหาผ่าน children ได้เลย
+        </p>
+        <div className="flex flex-wrap gap-8 items-start">
+          {SIZES.map(({ label, size }) => (
+            <div key={`default-${size}`} className="flex flex-col gap-3">
+              <p className="text-[11px] uppercase tracking-wider text-caption">{label}</p>
+              <Card
+                variant="default"
+                size={size}
+                className={
+                  size === "desktop"
+                    ? "w-[308px]"
+                    : size === "tablet"
+                      ? "w-[224px]"
+                      : "w-[163px]"
+                }
+              >
+                <p className="text-sm font-semibold text-foreground">หัวข้อหรือส่วนหัว</p>
+                <p
+                  className={
+                    size === "mobile"
+                      ? "mt-2 line-clamp-4 text-xs leading-5 text-muted-foreground"
+                      : "mt-2 text-xs leading-5 text-muted-foreground"
+                  }
+                                 >
+                  {size === "mobile"
+                    ? "พื้นที่ใส่เนื้อหา — กำหนดความกว้างด้วย className"
+                    : "พื้นที่สำหรับเนื้อหา รายการ หรือคอมโพเนนต์อื่น — ความกว้างควบคุมจาก parent หรือ className"}
+                </p>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── Event — Size variants ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Event — Size Variants</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Event — Size Variants</h2>
         <div className="flex flex-wrap gap-8 items-start">
           {SIZES.map(({ label, size }) => (
             <div key={size} className="flex flex-col gap-3">
-              <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>{label}</p>
+              <p className="text-[11px] uppercase tracking-wider text-caption">{label}</p>
               <Card image={MOCK_CARD_IMAGE} variant="event" size={size} />
             </div>
           ))}
@@ -153,11 +192,11 @@ export function CardShowcase() {
 
       {/* ── Event — Tag status ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Event — Tag Status</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Event — Tag Status</h2>
         <div className="flex flex-wrap gap-8 items-start">
           {TAG_STATUSES.map(({ label, status }) => (
             <div key={status} className="flex flex-col gap-3">
-              <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>{label}</p>
+              <p className="text-[11px] uppercase tracking-wider text-caption">{label}</p>
               <Card image={MOCK_CARD_IMAGE} variant="event" size="desktop" tagStatus={status} />
             </div>
           ))}
@@ -166,22 +205,22 @@ export function CardShowcase() {
 
       {/* ── Event — Optional rows ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Event — Optional Rows</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Event — Optional Rows</h2>
         <div className="flex flex-wrap gap-8 items-start">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>All rows</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">All rows</p>
             <Card image={MOCK_CARD_IMAGE} variant="event" size="desktop" showLocation showAudience locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No location</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">No location</p>
             <Card image={MOCK_CARD_IMAGE} variant="event" size="desktop" showLocation={false} showAudience locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No audience</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">No audience</p>
             <Card image={MOCK_CARD_IMAGE} variant="event" size="desktop" showLocation showAudience={false} locked />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>No lock</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">No lock</p>
             <Card image={MOCK_CARD_IMAGE} variant="event" size="desktop" showLocation showAudience locked={false} />
           </div>
         </div>
@@ -189,14 +228,14 @@ export function CardShowcase() {
 
       {/* ── News — Desktop (vertical) ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>News — Desktop (vertical)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">News — Desktop (vertical)</h2>
         <div className="flex flex-wrap gap-8 items-start">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Not bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Not bookmarked</p>
             <Card image={MOCK_CARD_IMAGE} variant="news" size="desktop" bookmarked={false} />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Bookmarked</p>
             <Card image={MOCK_CARD_IMAGE} variant="news" size="desktop" bookmarked={true} />
           </div>
         </div>
@@ -204,14 +243,14 @@ export function CardShowcase() {
 
       {/* ── News — Mobile (horizontal) ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>News — Mobile (horizontal)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">News — Mobile (horizontal)</h2>
         <div className="flex flex-col gap-6 max-w-[343px]">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Not bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Not bookmarked</p>
             <NewsBookmarkDemo size="mobile" />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Bookmarked</p>
             <Card image={MOCK_CARD_IMAGE} variant="news" size="mobile" bookmarked={true} />
           </div>
         </div>
@@ -219,14 +258,14 @@ export function CardShowcase() {
 
       {/* ── Social — Desktop ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Social — Desktop (587px)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Social — Desktop (587px)</h2>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Not bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Not bookmarked</p>
             <SocialBookmarkDemo size="desktop" />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Bookmarked</p>
             <Card image={MOCK_CARD_IMAGE} variant="social" size="desktop" tags={DEMO_SOCIAL_TAGS} bookmarked={true} />
           </div>
         </div>
@@ -234,14 +273,14 @@ export function CardShowcase() {
 
       {/* ── Social — Mobile ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Social — Mobile (343px)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Social — Mobile (343px)</h2>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Not bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Not bookmarked</p>
             <SocialBookmarkDemo size="mobile" />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Bookmarked</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Bookmarked</p>
             <Card image={MOCK_CARD_IMAGE} variant="social" size="mobile" tags={DEMO_SOCIAL_TAGS} bookmarked={true} />
           </div>
         </div>
@@ -249,14 +288,14 @@ export function CardShowcase() {
 
       {/* ── Live — Desktop ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Live — Desktop (704px)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Live — Desktop (704px)</h2>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Upcoming (default)</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Upcoming (default)</p>
             <Card image={MOCK_CARD_IMAGE} variant="live" size="desktop" duration="upcoming" />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Duration</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Duration</p>
             <Card image={MOCK_CARD_IMAGE} variant="live" size="desktop" duration="1:26:36" />
           </div>
         </div>
@@ -264,14 +303,14 @@ export function CardShowcase() {
 
       {/* ── Live — Mobile ── */}
       <section className="mb-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Live — Mobile (343px)</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Live — Mobile (343px)</h2>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Upcoming (default)</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Upcoming (default)</p>
             <Card image={MOCK_CARD_IMAGE} variant="live" size="mobile" duration="upcoming" />
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] uppercase tracking-wider text-caption" style={FONT}>Duration</p>
+            <p className="text-[11px] uppercase tracking-wider text-caption">Duration</p>
             <Card image={MOCK_CARD_IMAGE} variant="live" size="mobile" duration="1:26:36" />
           </div>
         </div>
@@ -279,7 +318,7 @@ export function CardShowcase() {
 
       {/* ── Side-by-side preview ── */}
       <section>
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Side-by-side Preview</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Side-by-side Preview</h2>
         <div className="flex flex-wrap gap-8 items-start bg-hover-bg rounded-[12px] p-8 mb-6">
           {SIZES.map(({ size }) => (
             <Card image={MOCK_CARD_IMAGE} key={size} variant="event" size={size} />
@@ -298,11 +337,11 @@ export function CardShowcase() {
       </section>
 
       <section className="mt-14">
-        <h2 className="mb-6 text-[16px] text-nav-link" style={FONT}>Rule</h2>
+        <h2 className="mb-6 text-[16px] text-nav-link">Rule</h2>
         <div className="flex flex-col gap-6">
           {cardRules.map((rule) => (
             <div key={rule.title} className="rounded-[12px] border border-border bg-card p-4">
-              <p className="mb-4 text-[14px] font-semibold text-foreground" style={FONT}>
+              <p className="mb-4 text-[14px] font-semibold text-foreground">
                 {rule.title}
               </p>
               <div className="grid gap-4 xl:grid-cols-2">
@@ -314,7 +353,7 @@ export function CardShowcase() {
                     <CheckCircle size={14} weight="fill" />
                     <span className="text-[13px] font-semibold leading-5">Do</span>
                   </div>
-                  <p className="text-[14px] leading-6 text-foreground" style={FONT}>{rule.doText}</p>
+                  <p className="text-[14px] leading-6 text-foreground">{rule.doText}</p>
                 </div>
 
                 <div className="rounded-[8px] border border-destructive/20 bg-error-bg/40 p-4">
@@ -325,7 +364,7 @@ export function CardShowcase() {
                     <XCircle size={14} weight="fill" />
                     <span className="text-[13px] font-semibold leading-5">Don’t</span>
                   </div>
-                  <p className="text-[14px] leading-6 text-foreground" style={FONT}>{rule.dontText}</p>
+                  <p className="text-[14px] leading-6 text-foreground">{rule.dontText}</p>
                 </div>
               </div>
             </div>

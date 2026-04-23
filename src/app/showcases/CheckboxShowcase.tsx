@@ -1,4 +1,4 @@
-import { Checkbox, type CheckboxVariant } from "@/components/checkbox";
+import { Checkbox, type CheckboxChecked, type CheckboxVariant } from "@/components/checkbox";
 
 const stateVariants: {
   key: string;

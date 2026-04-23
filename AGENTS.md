@@ -15,6 +15,7 @@ in this package.** This file is the short version: the rules you must follow.
    - Custom status pills, category labels → use `<Tag>` / `<StatusTag>` / `<Chip>`.
    - Custom tabs → use `<TabGroup>`.
    - Custom checkbox/radio → use `<Checkbox>` / `<Radio>`.
+   - Custom toggle / switch → use `<Toggle>`.
    - Custom date/time pickers → use `<DateInput>` / `<TimeInput>`.
    - Custom tables → use `<Table>` + `<TableRow>` + `<TableHeaderCell>` + `<TableCell>`.
    - Custom modals/dialogs/alerts → use `<Modal>` (wrap it in your own `fixed inset-0` backdrop).

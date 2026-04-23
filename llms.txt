@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 19 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 20 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -11,7 +11,7 @@ that uses this library. The rules are non-negotiable.
 ## The 3 rules
 
 1. **Use library components for every element it provides.** Never recreate
-   Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Radio, DateInput, TimeInput,
+   Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
    Table, SearchInput, TextArea, Chip, Modal, BottomSheet as raw HTML.
 2. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
@@ -61,7 +61,7 @@ import {
   // Form
   Input, TextArea, SearchInput,
   Dropdown, DropdownMultiple, OptionList,
-  Checkbox, Radio,
+  Checkbox, Toggle, Radio,
   DateInput, TimeInput,
   // Display
   Tag, StatusTag, Chip,
@@ -301,6 +301,28 @@ Props: `placeholder`, `options`, `values: string[]`, `onChange(values)`, `disabl
 ```
 
 `checked` is `boolean | "indeterminate"`. Always provide `label` — don't wrap Checkbox in a `<label>`.
+
+### Toggle
+
+Boolean switch (`role="switch"`). Sizes: `size="sm"` (32×20) and `size="md"` (40×24).
+
+Default size is `sm` when `label` or `description` is provided; `md` for a standalone switch.
+
+When `label` (and optionally `description`) is set, the component renders a full-width row: text fills the left (`flex-1`), switch pinned to the right (`shrink-0`), `gap-4` between them. When `description` is present the row uses `items-start` so the switch aligns with the first line of text.
+
+```tsx
+// Standalone
+<Toggle checked={on} onChange={setOn} />
+<Toggle size="md" checked={on} onChange={setOn} />
+<Toggle checked={on} onChange={setOn} disabled />
+
+// Labeled row (full-width, label left / switch right)
+<Toggle checked={on} onChange={setOn} label="Notifications" />
+<Toggle checked={on} onChange={setOn} label="Notifications" description="Optional supporting copy" />
+<Toggle checked={on} onChange={setOn} label="Setting" disabled />
+```
+
+Props: `checked`, `onChange(next: boolean)`, `disabled`, `size?` (`"sm"` | `"md"`), `label`, `description`, `id`, `ariaLabel` (when there is no visible label), `className`.
 
 ### Radio
 

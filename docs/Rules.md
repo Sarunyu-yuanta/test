@@ -159,6 +159,30 @@ Each option group should represent one interaction model. Mixing selection model
 
 ---
 
+## Toggle
+
+### Rule 1 — On / Off Only
+
+| | |
+|---|---|
+| **Do** | Use Toggle for a binary *on* / *off* state (a single setting that is enabled or disabled). / ใช้ Toggle สำหรับการให้ความหมายเชิงเปิด-ปิด |
+| **Don't** | Do not use Toggle to pick between two different content modes or categories (e.g. switching "News" vs. "Analysis"). Use a **segmented control**, **tabs**, or **radio** options instead. / หลีกเลี่ยงการใช้ Toggle ผิดวัตถุประสงค์ เพราะจะทำให้รูปแบบและความหมายไม่สอดคล้องกับการใช้งานที่กำหนดไว้ |
+
+`<Toggle>` represents one boolean. For mutually exclusive *choices between labels*, the pattern is not a toggle — use a control built for that purpose so affordance and meaning stay consistent with the system.
+
+---
+
+### Rule 2 — System Appearance
+
+| | |
+|---|---|
+| **Do** | Use the `Toggle` component as shipped in the design system: sizes `sm` / `md`, token-based track and thumb colors, and optional label + description. / ใช้ Toggle ตามรูปแบบที่ Design System กำหนด |
+| **Don't** | Do not change width/height, recolor the track or thumb, roundness, or add gradients or ad-hoc styling. / หลีกเลี่ยงการปรับขนาด, เปลี่ยนสี, หรือปรับรูปทรงของ Toggle เพราะทำให้ผู้ใช้ แยกสถานะการใช้งานได้ยาก และทำให้การแสดงผลไม่สม่ำเสมอกันทั้งระบบ |
+
+Always use `<Toggle>` from `@sarunyu/system-one`. The switch must remain visually recognizable: **off** — neutral track; **on** — brand primary track; **disabled** — system muted states. Do not "theme" a toggle with one-off colors or detour around the component to fake a second meaning.
+
+---
+
 ## Input
 
 

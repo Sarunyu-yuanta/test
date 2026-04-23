@@ -356,7 +356,13 @@
   /* Surfaces */
   --surface-clear-hover: var(--fill-gray-200);
   --surface-chip-disabled: var(--fill-zinc-50);
-  --switch-background: var(--fill-slate-300);
+  /* Toggle — Figma System One (SVG fallbacks: off #F3F4F6, on-disabled track #F3F8FE) */
+  --switch-background: var(--fill-gray-100);
+  --switch-on-disabled: var(--fill-p1-100);
+  /* Knob: Figma feDropShadow (dy 2, blur 4, α 0.16) + second shadow (α 0.04) */
+  --toggle-knob-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.16),
+    0 0 1px rgba(0, 0, 0, 0.04);
 
   --ring: var(--fill-gray-400);
   --chart-1: var(--fill-p1-600);
@@ -687,7 +693,11 @@
 
   --surface-clear-hover: var(--fill-gray-800);
   --surface-chip-disabled: var(--fill-zinc-900);
-  --switch-background: var(--fill-gray-700);
+  --switch-background: var(--fill-gray-600);
+  --switch-on-disabled: color-mix(in srgb, var(--fill-p1-400) 32%, var(--fill-gray-800));
+  --toggle-knob-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.36),
+    0 0 1px rgba(0, 0, 0, 0.14);
 
   --ring: var(--fill-gray-500);
   --chart-1: var(--fill-p1-400);
@@ -846,6 +856,7 @@
   --color-surface-clear-hover: var(--surface-clear-hover);
   --color-surface-chip-disabled: var(--surface-chip-disabled);
   --color-switch-background: var(--switch-background);
+  --color-switch-on-disabled: var(--switch-on-disabled);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
