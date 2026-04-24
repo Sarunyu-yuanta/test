@@ -13,6 +13,7 @@ import {
 } from "@phosphor-icons/react";
 import { forwardRef, type ReactNode } from "react";
 import { cn } from "../lib/utils";
+import { useIsMobile } from "./ui/use-mobile";
 
 export type CardVariant = "default" | "event" | "news" | "social" | "live";
 export type CardSize = "desktop" | "tablet" | "mobile";
@@ -32,7 +33,7 @@ export interface CardProps {
   variant?: CardVariant;
   /** Custom body content (`variant="default"`). */
   children?: ReactNode;
-  /** Size preset. desktop=308px, tablet=224px, mobile=163px. Default: "desktop". */
+  /** Size preset. desktop=308px, tablet=224px, mobile=163px. Auto-detects mobile (<768px) when omitted. */
   size?: CardSize;
   /** Card title (clamped to 2 lines). */
   title?: string;
@@ -230,7 +231,7 @@ const tagConfig: Record<CardTagStatus, TagConfig> = {
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   {
     variant = "default",
-    size = "desktop",
+    size: sizeProp,
     children,
     title,
     locked = true,
@@ -256,12 +257,14 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   },
   ref,
 ) {
+  const isMobile = useIsMobile();
+  const size = sizeProp ?? (isMobile ? "mobile" : "desktop");
+
   const bannerSrc = image ?? "";
 
   // ── Default: token shell for arbitrary content ─────────────────────────────
   if (variant === "default") {
-    const shellPadding =
-      size === "desktop" ? "p-4" : size === "tablet" ? "p-3" : "p-2.5";
+    const shellPadding = size === "desktop" ? "p-4" : "p-3";
     const shellRadius =
       size === "mobile" ? "rounded-[6px]" : "rounded-[8px]";
 

@@ -1,6 +1,6 @@
 {
   "name": "@sarunyu/system-one",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "type": "module",
   "description": "A production-ready React design system built for AI-powered web generation tools (Figma Make, Lovable, V0). Tailwind CSS v4 + CSS custom properties for full theming support.",
   "keywords": [
@@ -22,6 +22,9 @@
   ],
   "author": "saranyu",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
@@ -41,6 +44,7 @@
     "dist",
     "llms.txt",
     "AGENTS.md",
+    "DESIGN.md",
     "README.md"
   ],
   "scripts": {
