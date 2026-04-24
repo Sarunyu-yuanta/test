@@ -19,6 +19,10 @@ import { RadioPage } from "./pages/RadioPage";
 import { TablePage } from "./pages/TablePage";
 import { ModalPage } from "./pages/ModalPage";
 import { BottomSheetPage } from "./pages/BottomSheetPage";
+import { NotificationPage } from "./pages/NotificationPage";
+import { BadgePage } from "./pages/BadgePage";
+import { ToastPage } from "./pages/ToastPage";
+import { AlertPage } from "./pages/AlertPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -52,6 +56,10 @@ export const router = createBrowserRouter([
       { path: "table", Component: TablePage },
       { path: "modal", Component: ModalPage },
       { path: "bottom-sheet", Component: BottomSheetPage },
+      { path: "notification", Component: NotificationPage },
+      { path: "badge", Component: BadgePage },
+      { path: "toast", Component: ToastPage },
+      { path: "alert", Component: AlertPage },
     ],
   },
 ]);

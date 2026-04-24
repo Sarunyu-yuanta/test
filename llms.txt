@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 20 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 24 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge as raw HTML.
 2. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
@@ -68,6 +68,11 @@ import {
   Tab, TabGroup,
   Card,
   Table, TableRow, TableHeaderCell, TableCell,
+  // Feedback
+  Alert,
+  Toast, ToastStack,
+  Notification,
+  Badge,
   // Overlay
   Modal, BottomSheet,
   // Utility
@@ -631,6 +636,126 @@ Raw option rows. Use when you need a custom dropdown or a sidebar menu — other
   onSelect={setValue}
 />
 ```
+
+---
+
+### Alert
+
+Inline, persistent status banner — anchored inside the page or form layout. Never use as a floating notification; use `Toast` for transient messages.
+
+```tsx
+type AlertStatus = "normal" | "information" | "success" | "warning" | "critical";
+
+<Alert status="normal"      message="This field is required." />
+<Alert status="information" message="Your session expires in 10 minutes." />
+<Alert status="success"     message="Payment confirmed." />
+<Alert status="warning"     message="Incomplete profile — some features are limited." />
+<Alert status="critical"    message="Authentication failed. Please try again." />
+<Alert status="warning"     message="A longer message that wraps to a second line." multiline />
+```
+
+Props: `status?` (default `"normal"`), `message` (required), `multiline?` (default `false` — `false` truncates to one line, `true` clamps to 2 lines), `className`.
+
+---
+
+### Toast / ToastStack
+
+Transient floating feedback — appears at screen edges, dismissed manually or auto-closes. Place in a `fixed` portal; use `ToastStack` for a queued list.
+
+```tsx
+type ToastVariant = "default" | "broadcast";
+type ToastStatus  = "information" | "success" | "warning" | "critical";
+
+// Default toast
+<Toast status="success"  message="File uploaded." onClose={dismiss} />
+<Toast status="warning"  message="Low storage — 100 MB remaining." actionLabel="Free up space" onActionClick={open} onClose={dismiss} />
+<Toast status="critical" message="Connection lost. Retrying…" multiline onClose={dismiss} />
+
+// Broadcast — system announcement banner (no close button)
+<Toast variant="broadcast" status="information" message="Maintenance window: Saturday 02:00–04:00." />
+
+// Stack — multiple toasts at once
+<div className="fixed bottom-4 right-4 z-50 w-[343px]">
+  <ToastStack items={toasts} />
+</div>
+```
+
+Props (Toast): `variant?` (default `"default"`), `status?` (default `"information"`), `message`, `multiline?`, `actionLabel?`, `onActionClick?`, `onClose?`, `className`.
+Props (ToastStack): `items: (ToastProps & { id: string })[]`, `className`, `renderItem?`.
+
+---
+
+### Badge
+
+Button with a count indicator. Two variants:
+
+- `"button"` (default) — filter/action button (funnel icon) that shows a count badge when active. Use in toolbars and filter bars.
+- `"notification"` — bell icon button used **internally** by `<Notification>`. Do not use standalone.
+
+**Critical rule:** `<Badge variant="notification">` is an internal building block of `<Notification>`. Never wire it to your own `onClick` (a toast, a custom popover, etc.). If you need a notification bell that opens a list, use `<Notification>` — it renders the bell and the panel together.
+
+```tsx
+// Filter button — inactive and active states
+<Badge label="Filter" count={0} onClick={openFilter} />
+<Badge label="Filter" count={3} onClick={openFilter} />
+<Badge iconOnly count={2} onClick={openFilter} />
+
+// WRONG — do not do this:
+// <Badge variant="notification" count={5} onClick={showToast} />
+
+// CORRECT — for a notification bell + list, always use <Notification>:
+<Notification groups={groups} onItemClick={handleClick} />
+```
+
+Props: `variant?` (`"button"` | `"notification"`, default `"button"`), `count?`, `maxCount?` (default 99), `label?` (button variant, default `"Filter"`), `iconOnly?`, `icon?` (custom icon), `notificationState?` (`"default"` | `"active"` | `"noti"`), plus native `<button>` props.
+
+---
+
+### Notification
+
+Bell-icon trigger + popover panel showing grouped notification rows. Handles badge count, auto-clear on open, and keyboard navigation. Uses `<Badge variant="notification">` internally.
+
+```tsx
+const groups: NotificationGroup[] = [
+  {
+    label: "25 ก.ค. 2567",
+    items: [
+      {
+        id: "1",
+        title: "ยืนยันการชำระเงิน",
+        description: "รายการ TXN-00234 ได้รับการยืนยันแล้ว",
+        time: "10:45",
+        unread: true,
+        type: "icon",
+      },
+      {
+        id: "2",
+        title: "อัปเดตระบบ",
+        description: "เวอร์ชัน 4.4 พร้อมใช้งานแล้ว",
+        time: "08:30",
+        type: "image",
+        imageSrc: "/img/system.png",
+        actionLabel: "อัปเดต",
+        onActionClick: handleUpdate,
+      },
+    ],
+  },
+];
+
+<Notification groups={groups} onItemClick={handleClick} />
+<Notification groups={groups} badgeCount={12} clearBadgeOnOpen />
+<Notification groups={[]} emptyText="ไม่มีการแจ้งเตือน" />
+```
+
+Props: `groups`, `badgeCount?` (overrides computed unread count), `panelWidth?` (default 375), `emptyText?`, `clearBadgeOnOpen?` (default `true`), `open?`, `defaultOpen?`, `onOpenChange?`, `onBadgeCleared?`, `onItemClick?`, `className`, `panelClassName`.
+
+**When to use which:**
+
+| Component | Pattern | Lifetime |
+|---|---|---|
+| `Alert` | Inline, anchored to related content (form, section) | Persistent |
+| `Toast` | Floating, screen edge (top/bottom) | Transient — auto or manual dismiss |
+| `Notification` | Bell icon → popover history panel | On-demand |
 
 ---
 

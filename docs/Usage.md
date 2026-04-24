@@ -276,6 +276,104 @@ Modal และ Bottom Sheet มี 4 รูปแบบ คือ Dialog, Conte
 
 ---
 
+## Toast & Alert
+
+Message components ใช้เพื่อสื่อสารผลลัพธ์หรือสถานะของระบบให้ผู้ใช้รับรู้แบบรวดเร็ว โดยในระบบนี้แบ่งเป็น **Toast** (ข้อความแจ้งเตือนแบบชั่วคราว) และ **Alert** (ข้อความแจ้งเตือนแบบแสดงค้างในตำแหน่งที่เกี่ยวข้องกับเนื้อหา)
+
+### เลือกใช้เมื่อไร (When to use)
+
+| Component | Usage / การใช้งาน |
+|---|---|
+| **Toast** | Use for temporary feedback after an action (save success, warning, error). Usually appears in a floating layer and can be dismissed. / ใช้สำหรับ feedback ชั่วคราวหลังผู้ใช้ทำ action เช่น บันทึกสำเร็จ แจ้งเตือน หรือผิดพลาด โดยมักแสดงแบบลอยและปิดได้ |
+| **Alert** | Use for inline, persistent messages inside normal page layout (form/section context). It does not auto-dismiss. / ใช้สำหรับข้อความ inline ที่แสดงค้างใน flow ปกติของหน้า เช่น ใน form หรือ section และไม่หายเอง |
+
+### Toast
+
+Toast รองรับ 2 variants:
+- **Default** — กล่องแจ้งเตือนพร้อมไอคอน และรองรับ `actionLabel` + ปุ่มปิด
+- **Broadcast** — แถบข้อความแจ้งเตือนระดับหน้า (ใช้ประกาศ/แจ้งให้เห็นชัด)
+
+#### Toast Status
+
+| Status | Description / คำอธิบาย |
+|---|---|
+| **information** | General informational feedback. / ข้อความแจ้งข้อมูลทั่วไป |
+| **success** | Action completed successfully. / การทำงานสำเร็จ |
+| **warning** | Cautionary message. / ข้อความเตือนที่ควรระวัง |
+| **critical** | Critical failure or blocking issue. / ข้อผิดพลาดสำคัญที่ควรรับทราบทันที |
+
+#### Toast Props (หลัก ๆ)
+
+- `variant`: `"default" | "broadcast"`
+- `status`: `"information" | "success" | "warning" | "critical"`
+- `message`: ข้อความที่ต้องการแสดง
+- `multiline`: แสดงหลายบรรทัด
+- `actionLabel`, `onActionClick`: ปุ่ม action (ใช้กับ `default`)
+- `onClose`: callback เมื่อกดปิด
+
+```tsx
+import { Toast } from "@sarunyu/system-one";
+
+export function ToastExample() {
+  return (
+    <Toast
+      variant="default"
+      status="success"
+      message="บันทึกข้อมูลสำเร็จ"
+      actionLabel="ดูรายละเอียด"
+      onActionClick={() => {}}
+      onClose={() => {}}
+    />
+  );
+}
+```
+
+### Alert (Inline Message)
+
+Alert ใช้สำหรับสื่อสารในบริบทของเนื้อหา เช่น ใต้ฟอร์ม, ใน card section, หรือใต้ field ที่เกี่ยวข้อง โดย **ไม่ auto-dismiss** และคงอยู่จนกว่าจะเปลี่ยน state ของหน้าหรือผู้ใช้ดำเนินการต่อ
+
+#### Alert Status
+
+| Status | Description / คำอธิบาย |
+|---|---|
+| **normal** | Neutral message in section flow. / ข้อความทั่วไปแบบเป็นกลาง |
+| **information** | Informational guidance. / ข้อความให้ข้อมูลหรือคำแนะนำ |
+| **success** | Successful state. / สถานะสำเร็จ |
+| **warning** | Cautionary state. / สถานะเตือน |
+| **critical** | Critical error state. / สถานะข้อผิดพลาดสำคัญ |
+
+#### Alert Props (หลัก ๆ)
+
+- `status`: `"normal" | "information" | "success" | "warning" | "critical"`
+- `message`: ข้อความที่ต้องการแสดง
+- `multiline`: รองรับข้อความ 2 บรรทัดขึ้นไป
+
+```tsx
+import { Alert } from "@sarunyu/system-one";
+
+export function AlertExample() {
+  return (
+    <div className="space-y-3">
+      <Alert status="information" message="กรุณาตรวจสอบข้อมูลก่อนยืนยัน" />
+      <Alert
+        status="warning"
+        multiline
+        message="บัญชีนี้ยังไม่ได้ยืนยันอีเมล หากยังไม่ยืนยันภายในเวลาที่กำหนด จะไม่สามารถแก้ไขข้อมูลบางส่วนได้"
+      />
+    </div>
+  );
+}
+```
+
+### Practical Guidance
+
+- ใช้ **Toast** เมื่อไม่ต้องการขัด flow หลักของหน้า และข้อมูลไม่จำเป็นต้องค้างนาน
+- ใช้ **Alert** เมื่อข้อความสัมพันธ์กับตำแหน่งในเนื้อหา และผู้ใช้ต้องเห็นต่อเนื่องระหว่างกรอก/ตรวจสอบข้อมูล
+- หลีกเลี่ยงการแสดง Toast ซ้อนหลายรายการพร้อมกันโดยไม่จัดลำดับความสำคัญ
+- หลีกเลี่ยงใช้ Alert แทน validation message ราย field หากมีข้อความ error เฉพาะช่องอยู่แล้ว
+
+---
+
 ## Table
 
 Table is used to display structured data in rows and columns for easy comparison and scanning. / Table ใช้สำหรับแสดงข้อมูลแบบตาราง (แถวและคอลัมน์) เพื่อให้ผู้ใช้เปรียบเทียบและอ่านข้อมูลได้ง่าย

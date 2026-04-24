@@ -495,3 +495,49 @@ Always use `<Table>`, `<TableHeaderCell>`, `<TableRow>`, and `<TableCell>` with 
 | **Don't** | Avoid using Table states outside their intended meaning, because it can mislead users and make data status unclear. / หลีกเลี่ยงการใช้สถานะของ Table ที่ไม่ตรงตามบริบทการใช้งาน เพราะอาจทำให้ผู้ใช้สับสนสถานะของข้อมูลที่กำลังดู |
 
 Apply states deliberately: row hover for focus, selected rows for active selection, sort state only on the active sortable column, and sticky/fixed behavior only when horizontal overflow exists.
+
+---
+
+## Notification, Toast & Alert
+
+### Rule 1 — Keep Alert/Inline Message in Normal Layout Flow
+
+| | |
+|---|---|
+| **Do** | Place Alert (Inline Message) inside the related content area, such as form/section blocks, and keep the standard design token structure. / วาง Alert (Inline Message) ไว้ใน flow ปกติของเนื้อหาที่เกี่ยวข้อง เช่น ใน form หรือ section และใช้โครงสร้างตาม Design System |
+| **Don't** | Avoid forcing custom height, radius, or style overrides that break message readability and hierarchy. / หลีกเลี่ยงการปรับความสูง มุมโค้ง หรือสไตล์แกนหลักเองจนทำให้การอ่านและลำดับความสำคัญของข้อความผิดเพี้ยน |
+
+Alert is an inline, persistent message. Keep it anchored to its related context, and preserve core tokens (`spacing`, `radius`, status color, icon size) so it remains scannable and predictable.
+
+---
+
+### Rule 2 — Toast Must Not Block Primary Content
+
+| | |
+|---|---|
+| **Do** | Place Toast at screen edges (top or bottom) so users can still focus on the main task. / วาง Toast ไว้บริเวณขอบหน้าจอ (บน/ล่าง) เพื่อไม่บังเนื้อหาหลักระหว่างการใช้งาน |
+| **Don't** | Avoid placing Toast at the center or over key interaction zones. / หลีกเลี่ยงการวาง Toast ตรงกลางหน้าจอหรือทับบริเวณที่ผู้ใช้ต้องโต้ตอบหลัก |
+
+Toast is transient feedback. It should inform quickly without interrupting reading flow or blocking controls that users need immediately.
+
+---
+
+### Rule 3 — Use Notification for Persistent, Decision-Critical Information
+
+| | |
+|---|---|
+| **Do** | Use Notification when information must remain visible long enough for users to compare or decide (e.g., transaction details, account states). / ใช้ Notification เมื่อข้อมูลต้องคงอยู่ให้ผู้ใช้เปรียบเทียบหรือตัดสินใจ เช่น รายละเอียดธุรกรรมหรือสถานะบัญชี |
+| **Don't** | Do not replace Notification with Toast in areas where users need sustained visibility. / ไม่ควรใช้ Toast แทน Notification ในบริเวณที่ผู้ใช้ต้องใช้เวลาอ่านข้อความและตัดสินใจ |
+
+Notification is for durable context; Toast is for brief acknowledgment. Choosing the wrong component lowers comprehension and can cause users to miss important information.
+
+---
+
+### Rule 4 — Keep Status Semantics Consistent Across Notification/Toast/Alert
+
+| | |
+|---|---|
+| **Do** | Match status color + icon + copy meaning consistently (`information`, `success`, `warning`, `critical`). / ใช้สถานะ สี ไอคอน และข้อความให้ตรงความหมายเดียวกัน (`information`, `success`, `warning`, `critical`) |
+| **Don't** | Avoid mixed semantics (e.g., success message rendered with warning/danger style). / หลีกเลี่ยงการใช้สถานะที่ขัดกัน เช่น ข้อความสำเร็จแต่ใช้สไตล์เตือนหรืออันตราย |
+
+Consistent semantics are essential for trust and fast recognition. Users should understand the message type immediately without re-reading.

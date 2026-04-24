@@ -68,6 +68,10 @@ ships no `Page`/`Section`/`Stack` primitives — use whatever layout looks right
 | `Table` | Data tables (`TableRow` / `TableHeaderCell` / `TableCell`) |
 | `Modal` | Centered overlay — dialog / content / alert variants |
 | `BottomSheet` | Mobile-first bottom sheet (Vaul-based, with backdrop) |
+| `Alert` | Inline persistent status banner — information / success / warning / critical |
+| `Toast` / `ToastStack` | Floating transient notification — default and broadcast variants |
+| `Badge` | Count badge overlay on a trigger (notification bell or filter button) |
+| `Notification` | Bell trigger + popover panel with grouped notification items |
 
 Full prop reference: [`llms.txt`](./llms.txt).
 
@@ -124,6 +128,9 @@ import type {
   InputProps, DropdownOption,
   ToggleSize, ToggleProps,
   ModalVariant, ModalActionLayout,
+  AlertStatus,
+  ToastVariant, ToastStatus,
+  NotificationItem, NotificationGroup,
 } from "@sarunyu/system-one";
 ```
 

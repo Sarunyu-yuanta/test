@@ -25,6 +25,10 @@ const navItems = [
   { to: "/table", label: "Table" },
   { to: "/modal", label: "Modal" },
   { to: "/bottom-sheet", label: "Bottom Sheet" },
+  { to: "/notification", label: "Notification" },
+  { to: "/badge", label: "Badge" },
+  { to: "/toast", label: "Toast Message" },
+  { to: "/alert", label: "Alert" },
 ];
 
 function Logo() {

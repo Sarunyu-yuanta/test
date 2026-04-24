@@ -20,6 +20,10 @@ in this package.** This file is the short version: the rules you must follow.
    - Custom tables → use `<Table>` + `<TableRow>` + `<TableHeaderCell>` + `<TableCell>`.
    - Custom modals/dialogs/alerts → use `<Modal>` (wrap it in your own `fixed inset-0` backdrop).
    - Custom bottom sheets / drawers from the bottom → use `<BottomSheet>` (it ships its own backdrop via Vaul).
+   - Custom inline status banners → use `<Alert>` (never hand-roll tinted divs with icons).
+   - Custom toast / snackbar notifications → use `<Toast>` / `<ToastStack>` in a `fixed` portal.
+   - Filter buttons with count badges → use `<Badge>` (`variant="button"`).
+   - Notification bell + list panel → use `<Notification>`. Never use `<Badge variant="notification">` standalone or wire it to a custom `onClick` (toast, popover, etc.) — `<Notification>` handles both the bell and the panel.
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities
@@ -43,6 +47,11 @@ in this package.** This file is the short version: the rules you must follow.
    - One `<Button variant="primary">` per context.
    - `Modal` renders the panel only — provide your own `fixed inset-0` backdrop + open/close state. One primary action per modal.
    - `BottomSheet` is mobile-only. On desktop, use `Modal` instead.
+   - `Alert` is always-visible (no open state). Pass `status` + `message`; add `onClose` only for dismissible alerts.
+   - `Toast` / `ToastStack` are floating — render them in a `fixed` portal (`fixed bottom-4 right-4 z-50`). Never inline them in page flow.
+   - `Badge variant="button"` (default) — filter button with optional count. Pass `count`, `label`, `iconOnly`, and `onClick`.
+   - `Badge variant="notification"` — internal to `<Notification>`; never use standalone or attach your own `onClick` to it.
+   - `Notification` manages its own popover; pass `groups` (array of `{ label, items }`). It renders both the bell trigger and the panel. This is the only correct way to show a notification list.
 
 6. **Mobile forms and action-heavy modals MUST use `<BottomSheet>`, not `<Modal>`.**
    Login, signup, settings panels, profile editors, any multi-field form,
