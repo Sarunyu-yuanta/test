@@ -8,7 +8,7 @@ that uses this library. The rules are non-negotiable.
 
 ---
 
-## The 3 rules
+## The 4 rules
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
@@ -16,10 +16,26 @@ that uses this library. The rules are non-negotiable.
 2. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
-3. **Layout is free.** Build page structure with plain `<div>` + Tailwind
-   (flex, grid, container, max-w-*, gap-*, p-*, mx-auto). The library does
-   NOT ship layout primitives. Do not import `Page`, `Section`, `Stack`,
-   `CardGrid`, `Toolbar` — they don't exist.
+3. **No arbitrary bracket values for spacing / sizing / typography.**
+   Use scale utilities, not pixel overrides. The library's shipped stylesheet
+   only contains scale utilities + a fixed list of safelisted container widths,
+   so any other `[...]` value is a no-op in hosts without Tailwind installed.
+   - **Forbidden**: `max-w-[1100px]`, `h-[317px]`, `min-h-[calc(100vh-64px)]`,
+     `w-[272px]`, `gap-[14px]`, `p-[10px]`, `text-[13px]`, `leading-[22px]`,
+     `rounded-[10px]`, `top-[7px]`.
+   - **Allowed**: `max-w-5xl`, `max-w-2xl`, `h-80`, `w-64`, `gap-4`, `p-6`,
+     `text-sm`, `leading-6`, `rounded-lg`, `top-2`, and the 4px spacing scale
+     (`0.5` / `1` / `2` / `3` / `4` / `5` / `6` / `8` / `10` / `12` / `16` / `20` / `24`).
+   - **Container-width exception**: these `max-w-[*]` values are safelisted and
+     may be used — `max-w-[480px]`, `max-w-[640px]`, `max-w-[720px]`, `max-w-[800px]`,
+     `max-w-[960px]`, `max-w-[1024px]`, `max-w-[1200px]`, `max-w-[1280px]`,
+     `max-w-[1440px]`. For any other width, snap to `max-w-{xs…7xl}`.
+   - If a design calls for an odd value, snap to the nearest scale step — the
+     design system is calibrated for those steps on purpose.
+4. **Layout is free (within the scale).** Build page structure with plain `<div>`
+   + Tailwind utilities (flex, grid, container, max-w-*, gap-*, p-*, mx-auto).
+   The library does NOT ship layout primitives. Do not import `Page`, `Section`,
+   `Stack`, `CardGrid`, `Toolbar` — they don't exist.
 
 ---
 

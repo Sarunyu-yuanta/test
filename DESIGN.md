@@ -242,6 +242,7 @@ Use sparingly. Corporate UIs prefer border separation over heavy elevation.
 | Keep whitespace controlled: `gap-4`–`gap-6` inside sections | Over-pad with `gap-10`+ inside cards |
 | One `variant="primary"` Button per context | Two or more primary buttons side by side |
 | Separate sections with `gap-12` or a `border-divider` line | Use heavy drop shadows to separate sections |
+| Use scale values — `max-w-5xl`, `h-80`, `w-64`, `gap-4`, `p-6`, `text-sm` | Use arbitrary brackets — `max-w-[1100px]`, `h-[317px]`, `gap-[14px]`, `text-[13px]` (won't compile in hosts without Tailwind; see AGENTS.md rule 3) |
 
 ---
 

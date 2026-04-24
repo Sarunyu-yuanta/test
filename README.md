@@ -27,6 +27,27 @@ import "@sarunyu/system-one/styles.css";
 
 No provider, no wrapper. Components ship with `"use client"`.
 
+### Import order matters (if host has Tailwind)
+
+The library's CSS is pre-wrapped in `@layer system-one` so host utilities can
+override library utilities. For that to hold, import this library **before**
+`tailwindcss` / your own utility CSS:
+
+```css
+/* app/globals.css — CORRECT */
+@import "@sarunyu/system-one/styles.css";
+@import "tailwindcss";
+```
+
+```css
+/* app/globals.css — WRONG (library utilities will beat yours) */
+@import "tailwindcss";
+@import "@sarunyu/system-one/styles.css";
+```
+
+For hosts without Tailwind (Claude Code / Cursor vibe-coded projects), order
+doesn't matter — unlayered host rules always beat the library's layered rules.
+
 ## Use
 
 ```tsx

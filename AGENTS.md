@@ -32,14 +32,35 @@ in this package.** This file is the short version: the rules you must follow.
      `bg-background`, `bg-card`, `bg-muted`, `bg-primary-action`,
      `border-border`, `border-divider`, etc. See `llms.txt` for the full table.
 
-3. **Do not add text/font utility classes to `<h1>`–`<h4>`.** They are pre-styled.
+3. **No arbitrary bracket values for spacing/sizing/typography.** Use scale utilities only.
+   - **Forbidden**: `max-w-[1100px]`, `h-[317px]`, `min-h-[calc(100vh-64px)]`,
+     `w-[272px]`, `gap-[14px]`, `p-[10px]`, `text-[13px]`, `leading-[22px]`,
+     `rounded-[10px]`, `top-[7px]`.
+   - **Allowed**: scale values — `max-w-5xl` / `max-w-2xl`, `h-80` (=320px),
+     `w-64` (=256px), `gap-4`, `p-6`, `text-sm`, `leading-6`, `rounded-lg`,
+     `top-2`. The spacing scale is 4px-based: `0.5` (2px), `1` (4px), `2` (8px),
+     `3` (12px), `4` (16px), `5` (20px), `6` (24px), `8` (32px), `10` (40px),
+     `12` (48px), `16` (64px), `20` (80px), `24` (96px).
+   - **Exception — container widths only**: these specific arbitrary widths are
+     safelisted and may be used: `max-w-[480px]`, `max-w-[640px]`, `max-w-[720px]`,
+     `max-w-[800px]`, `max-w-[960px]`, `max-w-[1024px]`, `max-w-[1200px]`,
+     `max-w-[1280px]`, `max-w-[1440px]`. For other widths, pick the nearest
+     `max-w-{xs,sm,md,lg,xl,2xl,3xl,4xl,5xl,6xl,7xl}`.
+   - **Why**: the library's shipped `styles.css` only contains scale utilities
+     + the safelisted arbitrary container widths. Any other `[...]` value needs
+     host-side Tailwind to compile — in a plain host (e.g. Claude Code / Cursor
+     vibe-coded Vite project without Tailwind setup) the class is a no-op and
+     layout collapses. If a design truly requires an odd value, snap to the
+     nearest scale step.
+
+4. **Do not add text/font utility classes to `<h1>`–`<h4>`.** They are pre-styled.
    Use them as-is.
 
-4. **Layout is your job, with plain Tailwind.** The library has NO layout primitives.
+5. **Layout is your job, with plain Tailwind.** The library has NO layout primitives.
    Do not import `Page`, `Section`, `Stack`, `CardGrid`, `Toolbar` — they do not exist.
    Build structure with `<div>` + `flex` / `grid` / `max-w-*` / `gap-*` / `p-*`.
 
-5. **Component props are documented in `llms.txt` and in the `.d.ts` files.**
+6. **Component props are documented in `llms.txt` and in the `.d.ts` files.**
    - `Input.onChange` receives `(value: string)`, not an event.
    - `placeholder` IS the label (floats up on fill). Don't add a separate `<label>`.
    - Checkbox/Radio take their `label` as a prop. Don't wrap them in `<label>`.
@@ -53,7 +74,7 @@ in this package.** This file is the short version: the rules you must follow.
    - `Badge variant="notification"` — internal to `<Notification>`; never use standalone or attach your own `onClick` to it.
    - `Notification` manages its own popover; pass `groups` (array of `{ label, items }`). It renders both the bell trigger and the panel. This is the only correct way to show a notification list.
 
-6. **Mobile forms and action-heavy modals MUST use `<BottomSheet>`, not `<Modal>`.**
+7. **Mobile forms and action-heavy modals MUST use `<BottomSheet>`, not `<Modal>`.**
    Login, signup, settings panels, profile editors, any multi-field form,
    multi-step flow, long picker list, or action menu — on mobile (< 768px)
    these render as `<BottomSheet>`. Only simple `variant="alert"` and short
@@ -74,6 +95,20 @@ import "@sarunyu/system-one/styles.css";
 ```
 
 If the screen looks unstyled, this import is missing.
+
+**If the host project has Tailwind (v4) in a separate CSS file, import this
+library BEFORE Tailwind:**
+
+```css
+/* app/globals.css */
+@import "@sarunyu/system-one/styles.css";   /* first */
+@import "tailwindcss";                       /* second */
+```
+
+The library ships its CSS wrapped in `@layer system-one` so host utilities can
+override library utilities — but that only works if host's Tailwind layer is
+declared AFTER the library's. Reversing the import order makes library
+utilities (`p-6`, `gap-4`, `max-w-*`, etc.) win over host-written ones.
 
 ## Dark mode
 
