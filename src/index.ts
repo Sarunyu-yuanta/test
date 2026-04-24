@@ -121,6 +121,7 @@ export type {
 // Types — Notification
 export type {
   NotificationItemType,
+  NotificationItemStatus,
   NotificationItem,
   NotificationGroup,
   NotificationProps,

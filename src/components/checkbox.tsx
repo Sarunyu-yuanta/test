@@ -11,6 +11,10 @@ export interface CheckboxProps {
   checked?: CheckboxChecked;
   /** Disable interaction. */
   disabled?: boolean;
+  /** Mark the field as invalid. Shows a red border and displays `errorMessage`. */
+  error?: boolean;
+  /** Error message shown below when `error` is true. Default: "Error message". */
+  errorMessage?: string;
   /** Label text rendered to the right of the checkbox. */
   label?: ReactNode;
   /** Secondary description text rendered below the label. */
@@ -35,9 +39,11 @@ type VisualState = "default" | "checked" | "indeterminate";
 function CheckboxVisual({
   state,
   disabled,
+  error,
 }: {
   state: VisualState;
   disabled: boolean;
+  error: boolean;
 }) {
   if (state === "default") {
     return (
@@ -46,14 +52,16 @@ function CheckboxVisual({
         className={cn(
           "block w-4 h-4 rounded-[2px] border-[1.5px]",
           disabled
-              ? "bg-disabled-bg border-[var(--fill-black-100)]"
-              : "bg-background border-[var(--fill-black-200)]"
+            ? "bg-disabled-bg border-[var(--fill-black-100)]"
+            : error
+            ? "bg-background border-destructive"
+            : "bg-background border-[var(--fill-black-200)]"
         )}
       />
     );
   }
 
-  const containerFill = disabled ? "var(--fill-gray-300)" : "var(--fill-p1-600)";
+  const containerFill = disabled ? "var(--disabled-bg)" : "var(--fill-p1-600)";
   const iconFill = disabled ? "var(--fill-gray-400)" : "var(--fill-white-1000)";
 
   if (state === "checked") {
@@ -103,6 +111,8 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
   {
     checked = false,
     disabled = false,
+    error = false,
+    errorMessage = "Error message",
     label,
     description,
     variant = "text",
@@ -144,60 +154,73 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
 
   const buttonBorder = disabled
     ? "border-[var(--fill-black-100)]"
+    : error
+    ? "border-destructive"
     : hasActiveBorder
-      ? "border-primary-action"
-      : "border-[var(--fill-black-200)]";
+    ? "border-primary-action"
+    : "border-[var(--fill-black-200)]";
+
+  const showError = error && !disabled;
 
   return (
     <label
       className={cn(
-        "inline-flex gap-1 select-none",
-        description ? "items-start" : "items-center",
+        "flex flex-col select-none",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
-        isButton &&
-          cn("bg-background rounded-lg border py-2.5 pl-3 pr-4", buttonBorder),
         className
       )}
     >
-      <span className="relative inline-flex items-center justify-center w-6 h-6 shrink-0">
-        <input
-          ref={setRefs}
-          id={id}
-          name={name}
-          value={value}
-          type="checkbox"
-          checked={checked === true}
-          disabled={disabled}
-          onChange={handleChange}
-          aria-label={ariaLabel}
-          aria-checked={checked === "indeterminate" ? "mixed" : checked}
-          className="absolute inset-0 w-full h-full opacity-0 m-0 cursor-[inherit] disabled:cursor-[inherit]"
-        />
-        <CheckboxVisual state={state} disabled={disabled} />
-      </span>
-      {hasText && (
-        <span className="flex flex-col">
-          {label !== undefined && (
-            <span
-              className={cn(
-                "text-base leading-6",
-                disabled ? "text-disabled" : "text-foreground"
-              )}
-            >
-              {label}
-            </span>
-          )}
-          {description !== undefined && (
-            <span
-              className={cn(
-                "text-xs leading-4",
-                disabled ? "text-disabled" : "text-subtle-text"
-              )}
-            >
-              {description}
-            </span>
-          )}
+      <span
+        className={cn(
+          "inline-flex gap-1",
+          description ? "items-start" : "items-center",
+          isButton && cn("bg-background rounded-lg border py-2.5 pl-3 pr-4", buttonBorder)
+        )}
+      >
+        <span className="relative inline-flex items-center justify-center w-6 h-6 shrink-0">
+          <input
+            ref={setRefs}
+            id={id}
+            name={name}
+            value={value}
+            type="checkbox"
+            checked={checked === true}
+            disabled={disabled}
+            onChange={handleChange}
+            aria-label={ariaLabel}
+            aria-checked={checked === "indeterminate" ? "mixed" : checked}
+            aria-invalid={showError || undefined}
+            className="absolute inset-0 w-full h-full opacity-0 m-0 cursor-[inherit] disabled:cursor-[inherit]"
+          />
+          <CheckboxVisual state={state} disabled={disabled} error={showError} />
         </span>
+        {hasText && (
+          <span className="flex flex-col">
+            {label !== undefined && (
+              <span
+                className={cn(
+                  "text-base leading-6",
+                  disabled ? "text-disabled" : "text-foreground"
+                )}
+              >
+                {label}
+              </span>
+            )}
+            {description !== undefined && (
+              <span
+                className={cn(
+                  "text-xs leading-4",
+                  disabled ? "text-disabled" : "text-subtle-text"
+                )}
+              >
+                {description}
+              </span>
+            )}
+          </span>
+        )}
+      </span>
+      {showError && (
+        <span className="mt-1 ml-7 text-xs text-destructive">{errorMessage}</span>
       )}
     </label>
   );

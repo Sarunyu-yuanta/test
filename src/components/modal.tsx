@@ -19,7 +19,7 @@ type AlertConfig = {
 
 const ALERT_CONFIG: Record<ModalAlertStatus, AlertConfig> = {
   warning: {
-    titleColor: "var(--accent-orange)",
+    titleColor: "var(--text-warning-primary)",
     background:
       "https://www.figma.com/api/mcp/asset/f4ca68ad-5732-4124-9ff4-cfb69330cc02",
     layers: [
@@ -38,7 +38,7 @@ const ALERT_CONFIG: Record<ModalAlertStatus, AlertConfig> = {
     ],
   },
   success: {
-    titleColor: "var(--success)",
+    titleColor: "var(--text-success-primary)",
     background:
       "https://www.figma.com/api/mcp/asset/2a865e6f-8a92-4496-88b5-71ac99e2c385",
     layers: [
@@ -53,7 +53,7 @@ const ALERT_CONFIG: Record<ModalAlertStatus, AlertConfig> = {
     ],
   },
   danger: {
-    titleColor: "var(--destructive)",
+    titleColor: "var(--text-danger-primary)",
     background:
       "https://www.figma.com/api/mcp/asset/c7a65595-684e-4a04-b7fd-d443951f680a",
     layers: [

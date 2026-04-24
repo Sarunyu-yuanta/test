@@ -43,7 +43,6 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const hasCount = count > 0;
-  const isActive = hasCount;
   const resolvedNotificationState: BadgeNotificationState =
     notificationState ?? (hasCount ? "noti" : "default");
   const notificationIsFilled =
@@ -52,13 +51,9 @@ export function Badge({
 
   const visualIcon =
     variant === "notification" ? (
-      notificationIsFilled ? (
-        <BellSimple size={19} weight="fill" />
-      ) : (
-        <BellSimple size={19} weight="regular" />
-      )
+      <BellSimple size={18} weight={notificationIsFilled ? "fill" : "regular"} />
     ) : (
-      (icon ?? <FunnelSimple size={18} weight="regular" />)
+      icon ?? <FunnelSimple size={18} weight="regular" />
     );
 
   return (
@@ -68,10 +63,7 @@ export function Badge({
           aria-label="Notification"
           size="icon-xs"
           variant="plain-black"
-          className={cn(
-            "text-subtle-text",
-            notificationIsFilled && "text-primary-action",
-          )}
+          className="text-icon-brand [&>span]:!h-[18px] [&>span]:!w-[18px]"
           {...props}
         >
           {visualIcon}
@@ -80,8 +72,8 @@ export function Badge({
         <Button
           aria-label={label}
           size="icon-md"
-          variant={isActive ? "outline" : "outline-black"}
-          className={cn(isActive && "bg-primary-action-light border-primary-action-light")}
+          variant={hasCount ? "outline" : "outline-black"}
+          className={cn(hasCount && "bg-primary-action-light border-primary-action-light")}
           {...props}
         >
           {visualIcon}
@@ -90,8 +82,8 @@ export function Badge({
         <Button
           size="md"
           leftIcon={visualIcon}
-          variant={isActive ? "outline" : "outline-black"}
-          className={cn(isActive && "bg-primary-action-light border-primary-action-light")}
+          variant={hasCount ? "outline" : "outline-black"}
+          className={cn(hasCount && "bg-primary-action-light border-primary-action-light")}
           {...props}
         >
           {label}
@@ -101,13 +93,13 @@ export function Badge({
       {(variant === "notification" ? showNotificationDot : hasCount) && (
         <div
           className={cn(
-            "absolute flex items-center justify-center rounded-[60px] px-1",
+            "absolute flex h-[14px] min-h-[14px] min-w-[14px] items-center justify-center rounded-[60px]",
             variant === "notification"
-              ? "-right-0.5 -top-0.5 h-[14px] min-w-[14px] bg-destructive"
+              ? "-right-0.5 -top-0.5 bg-destructive px-[2.5px]"
               : "-right-1 -top-[7px] h-4 min-w-4 bg-primary-action",
           )}
         >
-          <p className="text-center text-xs leading-4 text-on-primary-action">
+          <p className="text-center text-xs leading-4 font-normal text-text-default-white">
             {formatCount(count, maxCount)}
           </p>
         </div>

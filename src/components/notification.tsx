@@ -1,6 +1,6 @@
 "use client";
 
-import { Circle, ImageSquare } from "@phosphor-icons/react";
+import { Gift, ImageSquare } from "@phosphor-icons/react";
 import * as Popover from "@radix-ui/react-popover";
 import {
   forwardRef,
@@ -15,6 +15,7 @@ import { Badge } from "./badge";
 import { cn } from "../lib/utils";
 
 export type NotificationItemType = "icon" | "image";
+export type NotificationItemStatus = "new" | "unread" | "read";
 
 export interface NotificationItem {
   id: string;
@@ -23,6 +24,8 @@ export interface NotificationItem {
   time: string;
   /** Shows unread dot and tinted row background. Default: false */
   unread?: boolean;
+  /** Visual state for the notification row. Default: "read" */
+  status?: NotificationItemStatus;
   /** Icon row or image row. Default: "icon" */
   type?: NotificationItemType;
   /** Image source for image-type rows. */
@@ -43,12 +46,14 @@ export interface NotificationGroup {
 export interface NotificationProps {
   /** Notification groups rendered in order under date dividers. */
   groups: NotificationGroup[];
-  /** Badge count shown on the trigger. Default: number of unread items. */
+  /** Badge count shown on the trigger. Default: number of new items. */
   badgeCount?: number;
   /** Width of the popover panel in px. Default: 375 */
   panelWidth?: number;
   /** Placeholder text when no notifications are available. */
   emptyText?: string;
+  /** Show group divider labels above each section. Default: true */
+  showGroupLabels?: boolean;
   /** Auto clear badge to default when the list is opened. Default: true */
   clearBadgeOnOpen?: boolean;
   /** Controlled open state */
@@ -74,20 +79,24 @@ function NotificationDivider({ label }: { label: string }) {
 function NotificationRow({
   item,
   onItemClick,
+  hideIndicator = false,
+  demoteNewBackground = false,
 }: {
   item: NotificationItem;
   onItemClick?: (item: NotificationItem) => void;
+  hideIndicator?: boolean;
+  demoteNewBackground?: boolean;
 }) {
   const rowType = item.type ?? "icon";
   const showImage = rowType === "image";
-  const showUnread = Boolean(item.unread);
+  const status = item.status ?? (item.unread ? "unread" : "read");
+  const showIndicator = (status === "new" || status === "unread") && !hideIndicator;
+  const rowBackground =
+    status === "new" && !demoteNewBackground ? "bg-muted" : "bg-background";
 
   return (
     <div
-      className={cn(
-        "flex w-full items-start gap-3 px-4 py-3",
-        showUnread ? "bg-primary-action-light/40" : "bg-background",
-      )}
+      className={cn("flex w-full items-start gap-3 px-4 py-3", rowBackground)}
       role="button"
       tabIndex={0}
       onClick={() => onItemClick?.(item)}
@@ -113,29 +122,19 @@ function NotificationRow({
           )
         ) : (
           <div className="flex h-6 w-6 items-center justify-center text-subtle-text">
-            {item.icon ?? <Circle size={20} weight="regular" />}
+            {item.icon ?? <Gift size={20} weight="regular" />}
           </div>
         )}
       </div>
 
-      <div className="min-w-0 flex-1">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-2">
-          <p className="min-w-0 flex-1 truncate text-base leading-6 font-bold text-foreground">
-            {item.title}
-          </p>
-          <div className="flex shrink-0 items-center gap-2">
-            {showUnread && (
-              <span
-                aria-hidden="true"
-                className="h-2 w-2 rounded-full bg-primary-action"
-              />
-            )}
-            <p className="text-xs leading-4 text-muted-foreground">{item.time}</p>
-          </div>
-          <p className="col-start-1 mt-1 line-clamp-2 text-sm leading-5 text-muted-foreground">
-            {item.description}
-          </p>
-        </div>
+      <div className="min-w-0 flex-1 space-y-1">
+        <p className="line-clamp-2 text-base leading-6 font-semibold text-foreground">
+          {item.title}
+        </p>
+        <p className="line-clamp-3 text-sm leading-5 text-muted-foreground">
+          {item.description}
+        </p>
+        <p className="text-xs leading-4 text-muted-foreground">{item.time}</p>
 
         {item.actionLabel && (
           <Button
@@ -151,6 +150,15 @@ function NotificationRow({
           </Button>
         )}
       </div>
+
+      <div className="flex w-2 shrink-0 items-start justify-center pt-2">
+        {showIndicator ? (
+          <span
+            aria-hidden="true"
+            className="h-2 w-2 rounded-full bg-destructive"
+          />
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -162,6 +170,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       badgeCount,
       panelWidth = 375,
       emptyText = "No notifications",
+      showGroupLabels = true,
       clearBadgeOnOpen = true,
       open,
       defaultOpen,
@@ -175,18 +184,26 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
   ) {
     const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
     const [isBadgeCleared, setIsBadgeCleared] = useState(false);
+    const [clickedItemIds, setClickedItemIds] = useState<Set<string>>(new Set());
+    const [wasDismissed, setWasDismissed] = useState(false);
+    const [mobileAlign, setMobileAlign] = useState<{ alignOffset: number; width: number } | null>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const controlled = open !== undefined;
     const resolvedOpen = controlled ? open : internalOpen;
-    const unreadCount = useMemo(
+    const newCount = useMemo(
       () =>
         groups.reduce(
           (acc, group) =>
-            acc + group.items.filter((item) => Boolean(item.unread)).length,
+            acc +
+            group.items.filter((item) => {
+              const status = item.status ?? (item.unread ? "unread" : "read");
+              return status === "new";
+            }).length,
           0,
         ),
       [groups],
     );
-    const nextCount = badgeCount ?? unreadCount;
+    const nextCount = badgeCount ?? newCount;
     const prevCountRef = useRef(nextCount);
 
     useEffect(() => {
@@ -197,11 +214,32 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       prevCountRef.current = nextCount;
     }, [nextCount]);
 
+    useEffect(() => {
+      const update = () => {
+        if (window.innerWidth > 640 || !triggerRef.current) {
+          setMobileAlign(null);
+          return;
+        }
+        const contentWidth = Math.min(panelWidth, window.innerWidth - 32);
+        const triggerLeft = triggerRef.current.getBoundingClientRect().left;
+        // position left edge of panel at (viewportWidth - panelWidth) / 2
+        setMobileAlign({
+          alignOffset: (window.innerWidth - contentWidth) / 2 - triggerLeft,
+          width: contentWidth,
+        });
+      };
+      update();
+      window.addEventListener("resize", update);
+      return () => window.removeEventListener("resize", update);
+    }, [panelWidth]);
+
     const displayCount = clearBadgeOnOpen && isBadgeCleared ? 0 : nextCount;
-    const hasBadge = displayCount > 0;
     const hasItems = groups.some((group) => group.items.length > 0);
 
     const handleOpenChange = (next: boolean) => {
+      if (resolvedOpen && !next) {
+        setWasDismissed(true);
+      }
       if (next && clearBadgeOnOpen && nextCount > 0) {
         setIsBadgeCleared(true);
         onBadgeCleared?.();
@@ -210,17 +248,31 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       onOpenChange?.(next);
     };
 
+    const handleItemClick = (item: NotificationItem) => {
+      setClickedItemIds((prev) => {
+        if (prev.has(item.id)) return prev;
+        const next = new Set(prev);
+        next.add(item.id);
+        return next;
+      });
+      onItemClick?.(item);
+    };
+
     return (
       <Popover.Root open={resolvedOpen} onOpenChange={handleOpenChange}>
         <div ref={ref} className={cn("inline-flex", className)}>
           <Popover.Trigger asChild>
-            <div className="relative">
+            <div ref={triggerRef} className="relative">
               <Badge
                 variant="notification"
                 count={displayCount}
                 maxCount={99}
                 notificationState={
-                  displayCount > 0 ? "noti" : resolvedOpen ? "active" : "default"
+                  displayCount > 0
+                    ? "noti"
+                    : resolvedOpen
+                      ? "active"
+                      : "default"
                 }
                 aria-label="Open notifications"
               />
@@ -230,15 +282,17 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
 
         <Popover.Portal>
           <Popover.Content
-            align="end"
+            align={mobileAlign ? "start" : "end"}
+            alignOffset={mobileAlign?.alignOffset ?? 0}
+            avoidCollisions={!mobileAlign}
             sideOffset={10}
             className={cn(
               "z-50 overflow-hidden rounded-lg border border-border bg-background shadow-lg",
               panelClassName,
             )}
-            style={{ width: panelWidth }}
+            style={{ width: mobileAlign?.width ?? panelWidth }}
           >
-            <div className="max-h-[480px] overflow-y-auto py-2">
+            <div className="max-h-[480px] overflow-y-auto">
               {!hasItems && (
                 <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                   {emptyText}
@@ -247,13 +301,17 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
 
               {groups.map((group) => (
                 <div key={group.label} className="w-full">
-                  <NotificationDivider label={group.label} />
+                  {showGroupLabels && group.label ? (
+                    <NotificationDivider label={group.label} />
+                  ) : null}
                   <div className="divide-y divide-divider">
                     {group.items.map((item) => (
                       <NotificationRow
                         key={item.id}
                         item={item}
-                        onItemClick={onItemClick}
+                        onItemClick={handleItemClick}
+                        hideIndicator={clickedItemIds.has(item.id)}
+                        demoteNewBackground={wasDismissed}
                       />
                     ))}
                   </div>

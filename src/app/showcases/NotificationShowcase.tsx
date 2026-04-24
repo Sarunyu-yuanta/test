@@ -1,13 +1,9 @@
-import { BellSimple, Circle } from "@phosphor-icons/react";
-import { useMemo, useState } from "react";
+import { Gift } from "@phosphor-icons/react";
+import { useState, useMemo } from "react";
 import {
   Notification,
   type NotificationGroup,
-  type NotificationItem,
 } from "@/components/notification";
-
-const MOCK_IMAGE =
-  "https://images.unsplash.com/photo-1579033012653-3f0f7af55ce8?q=80&w=600&auto=format&fit=crop";
 
 export function NotificationShowcase() {
   const [open, setOpen] = useState(false);
@@ -15,65 +11,64 @@ export function NotificationShowcase() {
   const groups = useMemo<NotificationGroup[]>(
     () => [
       {
-        label: "วันนี้",
+        label: "",
         items: [
           {
-            id: "today-1",
+            id: "new-1",
             type: "icon",
-            unread: true,
-            title: "Lorem ipsum dolor sit amet iuofseofv",
-            description: "Ullamcorper faucibus nunc bibendum tincidunt aliquet in in ut.",
-            time: "13:08",
-            icon: <Circle size={20} />,
-            actionLabel: "Button",
+            status: "new",
+            title: "โอนหุ้นมาหยวนต้า เทรดฟรี ไม่มีค่าคอม",
+            description:
+              "ลูกค้าเปิดบัญชีใหม่และโอนหุ้นเข้าพอร์ตหยวนต้า มูลค่าขั้นต่ำ 1,000,000 บาท ภายใน 7 วันหลังเปิดบัญชีสำเร็จ ฟรีค่าธรรมเนียมการซื้อ-ขาย 5 วัน*",
+            time: "01 Oct 2025 - 13:08",
+            icon: <Gift size={20} />,
           },
           {
-            id: "today-2",
-            type: "image",
-            unread: true,
-            title: "Lorem ipsum dolor sit amet iuofseofv",
-            description: "Aenean vitae eget ut in auctor rhoncus egestas cras.",
-            time: "10:24",
-            imageSrc: MOCK_IMAGE,
-            actionLabel: "Button",
-          },
-        ],
-      },
-      {
-        label: "เมื่อวาน",
-        items: [
-          {
-            id: "yesterday-1",
             type: "icon",
-            title: "Lorem ipsum dolor sit amet iuofseofv",
-            description: "Ullamcorper faucibus nunc bibendum tincidunt aliquet in in ut.",
-            time: "18:16",
-            icon: <BellSimple size={20} />,
-            actionLabel: "Button",
+            id: "unread-1",
+            status: "unread",
+            title:
+              "งานสัมมนา Healthcare Revolution: From Innovation to Investment",
+            description:
+              "ลงทะเบียนด่วน! ตั้งแต่วันที่ 9 - 22 ต.ค. 68 (จำนวนจำกัด 40 ที่นั่งเท่านั้น) กรอกฟอร์มเพื่อลงทะเบียนเข้าร่วมงาน หมายเหตุ: ผู้ได้รับสิทธิ์จะได้รับอีเมลพร้อม QRcode ยืนยันเข้างาน",
+            time: "01 Oct 2025 - 13:08",
+            icon: <Gift size={20} />,
           },
           {
-            id: "yesterday-2",
-            type: "image",
-            title: "Lorem ipsum dolor sit amet iuofseofv",
-            description: "Aenean vitae eget ut in auctor rhoncus egestas cras.",
-            time: "11:05",
-            imageSrc: MOCK_IMAGE,
-            actionLabel: "Button",
+            id: "read-1",
+            type: "icon",
+            status: "read",
+            title:
+              "งานสัมมนา Healthcare Revolution: From Innovation to Investment",
+            description:
+              "ลงทะเบียนด่วน! ตั้งแต่วันที่ 9 - 22 ต.ค. 68 (จำนวนจำกัด 40 ที่นั่งเท่านั้น) กรอกฟอร์มเพื่อลงทะเบียนเข้าร่วมงาน หมายเหตุ: ผู้ได้รับสิทธิ์จะได้รับอีเมลพร้อม QRcode ยืนยันเข้างาน",
+            time: "01 Oct 2025 - 13:08",
+            icon: <Gift size={20} />,
+          },
+          {
+            id: "unread-2",
+            type: "icon",
+            status: "unread",
+            title: "แจ้งเตือนสิทธิประโยชน์สำหรับลูกค้าใหม่",
+            description:
+              "โปรดตรวจสอบสิทธิพิเศษของบัญชีใหม่ในแอปภายใน 24 ชั่วโมง เพื่อไม่ให้พลาดข้อเสนอและแคมเปญประจำเดือน",
+            time: "30 Sep 2025 - 09:42",
+            icon: <Gift size={20} />,
+          },
+          {
+            id: "read-2",
+            type: "icon",
+            status: "read",
+            title: "ประกาศวันหยุดทำการตลาดหลักทรัพย์",
+            description:
+              "ระบบซื้อขายจะปิดให้บริการในวันหยุดนักขัตฤกษ์ตามประกาศตลาดหลักทรัพย์ โปรดวางแผนการลงทุนล่วงหน้า",
+            time: "29 Sep 2025 - 16:20",
+            icon: <Gift size={20} />,
           },
         ],
       },
     ],
     [],
-  );
-
-  const unreadCount = useMemo(
-    () =>
-      groups.reduce(
-        (acc, group) =>
-          acc + group.items.filter((item) => Boolean(item.unread)).length,
-        0,
-      ),
-    [groups],
   );
 
   return (
@@ -83,34 +78,17 @@ export function NotificationShowcase() {
           <div className="min-w-0">
             <h1 className="text-foreground">Notification Component</h1>
             <p className="mt-1 text-sm text-muted-foreground">
-              คลิกที่ badge เพื่อเปิด notification list และดูการคั่นตามวัน
+              คลิกที่ badge เพื่อเปิด notification list ตาม Figma
+              (ใหม่/ยังไม่อ่าน/อ่านแล้ว)
             </p>
           </div>
 
           <Notification
             open={open}
             onOpenChange={setOpen}
-            badgeCount={unreadCount}
             groups={groups}
+            showGroupLabels={false}
           />
-        </div>
-
-        <div className="rounded-lg border border-border p-4">
-          <p className="text-sm font-semibold text-foreground">States</p>
-          <div className="mt-4 flex flex-wrap items-center gap-6">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Default</span>
-              <Notification badgeCount={0} groups={[]} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Unread</span>
-              <Notification badgeCount={1} groups={groups} />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Count</span>
-              <Notification badgeCount={12} groups={groups} />
-            </div>
-          </div>
         </div>
       </div>
     </div>

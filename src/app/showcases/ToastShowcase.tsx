@@ -59,7 +59,7 @@ export function ToastShowcase() {
         <section className="rounded-lg border border-border p-4">
           <p className="text-sm font-semibold text-foreground">Interactive Playground</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            กดปุ่มเพื่อแสดง Toast แบบ interaction จริง (fixed ที่มุมขวาบนของ viewport)
+            กดปุ่มเพื่อแสดง Toast แบบ interaction จริง — desktop: มุมขวาบน / tablet & mobile: กึ่งกลางบน
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -130,7 +130,7 @@ export function ToastShowcase() {
 
           <div className="mt-5 rounded-lg border border-divider bg-default-secondary p-4">
             <p className="text-sm text-muted-foreground">
-              Toast จะโชว์ที่มุมขวาบนของหน้าจอจริงทันทีเมื่อกดปุ่ม
+              Desktop (≥ 1024px): Toast โชว์มุมขวาบน — Tablet &amp; Mobile: Toast โชว์กึ่งกลางด้านบน
             </p>
           </div>
         </section>
@@ -220,7 +220,13 @@ export function ToastShowcase() {
         </section>
       </div>
 
-      <div className="pointer-events-none fixed top-5 right-5 z-50 flex max-h-[calc(100vh-40px)] w-[375px] flex-col gap-2 overflow-y-auto">
+      <div
+        className={cn(
+          "pointer-events-none fixed top-5 z-50 flex max-h-[calc(100vh-40px)] flex-col gap-2 overflow-y-auto",
+          "left-1/2 w-[calc(100vw-32px)] max-w-[375px] -translate-x-1/2",
+          "lg:left-auto lg:right-5 lg:w-[375px] lg:translate-x-0",
+        )}
+      >
         {activeToasts.map((toast) => (
           <Toast
             key={toast.id}
@@ -231,7 +237,9 @@ export function ToastShowcase() {
             actionLabel={toast.actionLabel}
             className={cn(
               "pointer-events-auto",
-              toast.variant === "default" ? "ml-auto w-[343px]" : "w-[375px]",
+              toast.variant === "default"
+                ? "mx-auto w-[343px] lg:ml-auto lg:mr-0"
+                : "w-full lg:w-[375px]",
             )}
             onActionClick={() => pushLog(`${prettifyStatus(toast.status)}: action clicked`)}
             onClose={() => {
