@@ -92,12 +92,13 @@ Two issues arise:
    after `index.css`. Put brand overrides in a dedicated file imported last:
 
 ```css
-/* src/theme-overrides.css */
+/* src/theme-overrides.css — only needed if you want a custom brand color.
+   Leave this file EMPTY (or skip it) to keep the library's default P1 blue. */
 :root {
-  --primary-action: #4f46e5;
-  --primary-action-hover: #4338ca;
-  --primary-action-active: #3730a3;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* --primary-action: #your-brand-600;        ← replace with YOUR color */
+  /* --primary-action-hover: #your-brand-700;  */
+  /* --primary-action-active: #your-brand-800; */
+  /* --font-sans: "YourFont", sans-serif;      */
 }
 ```
 
