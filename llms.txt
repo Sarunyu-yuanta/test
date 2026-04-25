@@ -86,27 +86,15 @@ Two issues arise:
    `@layer base`. Let the library supply these — they resolve to standard
    white/dark/gray values that work correctly with the library's components.
 
-2. **Brand overrides must be in a separate file imported after the library**
-   — the library emits its design tokens as unlayered CSS. Any override in
-   `index.css` (even at the bottom) loses because the library is imported
-   after `index.css`. Put brand overrides in a dedicated file imported last:
+2. **Do NOT create a `theme-overrides.css`** unless the user explicitly asks
+   to change the brand color. The library's default P1 blue works out of the
+   box. An overrides file is only needed when a custom brand palette is
+   required — see the Theming section below.
 
-```css
-/* src/theme-overrides.css — only needed if you want a custom brand color.
-   Leave this file EMPTY (or skip it) to keep the library's default P1 blue. */
-:root {
-  /* --primary-action: #your-brand-600;        ← replace with YOUR color */
-  /* --primary-action-hover: #your-brand-700;  */
-  /* --primary-action-active: #your-brand-800; */
-  /* --font-sans: "YourFont", sans-serif;      */
-}
-```
-
-The `src/main.tsx` import order for Lovable:
+The `src/main.tsx` import order for Lovable (two lines only):
 ```tsx
 import "./index.css";                        /* Tailwind v3 layers first */
-import "@sarunyu/system-one/styles.css";     /* library — flat/unlayered CSS, beats any @layer */
-import "./theme-overrides.css";             /* brand overrides — last, so they win */
+import "@sarunyu/system-one/styles.css";     /* library — unlayered, beats any @layer */
 ```
 
 ## Dark mode
