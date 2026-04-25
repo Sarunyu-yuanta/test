@@ -189,12 +189,20 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             )}
             style={
               isFilled
-                ? { ...inputStyleProp, color: filledValue, ...inputCaretStyle }
+                ? {
+                    ...inputStyleProp,
+                    color: filledValue,
+                    ...inputCaretStyle,
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                  }
                 : {
                     ...inputStyleProp,
                     color: "transparent",
                     caretColor: isFocus ? "var(--caret-color)" : "transparent",
                     padding: hasRight ? "12px 14px" : "14px",
+                    fontSize: "16px",
+                    lineHeight: "24px",
                   }
             }
           />
