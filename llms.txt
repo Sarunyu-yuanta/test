@@ -58,6 +58,56 @@ import "@sarunyu/system-one/styles.css";
 
 No provider, no wrapper. Components ship with `"use client"`.
 
+### Lovable / Vite + Tailwind v3 hosts
+
+Lovable projects use Tailwind v3 and ship a `src/index.css` based on
+shadcn/ui that defines CSS variables in `@layer base`:
+
+```css
+/* Lovable's generated index.css */
+@layer base {
+  :root {
+    --background: 0 0% 100%;   /* shadcn HSL-component format */
+    --border: 214.3 31.8% 91.4%;
+  }
+}
+```
+
+Two issues arise:
+
+1. **Variable format conflict** — shadcn uses HSL components (`0 0% 100%`)
+   for use with `hsl(var(--background))`. The library emits its design
+   tokens as **unlayered** `:root {}` rules, which always outrank any
+   `@layer base` rule regardless of import order. Library values win —
+   making `hsl(library-value)` calls in shadcn components invalid.
+
+   **Fix:** Remove Lovable's `--background`, `--foreground`, `--border`,
+   `--muted`, `--card`, `--popover`, `--input`, `--ring` definitions from
+   `@layer base`. Let the library supply these — they resolve to standard
+   white/dark/gray values that work correctly with the library's components.
+
+2. **Brand overrides must be in a separate file imported after the library**
+   — the library emits its design tokens as unlayered CSS. Any override in
+   `index.css` (even at the bottom) loses because the library is imported
+   after `index.css`. Put brand overrides in a dedicated file imported last:
+
+```css
+/* src/theme-overrides.css */
+:root {
+  --primary-action: #4f46e5;
+  --primary-action-hover: #4338ca;
+  --primary-action-active: #3730a3;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+```
+
+The `src/main.tsx` import order for Lovable:
+```tsx
+import "./index.css";                        /* Tailwind v3 layers first */
+import "@sarunyu/system-one/styles.css";     /* library — flat/unlayered CSS, beats any @layer */
+import "./theme-overrides.css";             /* brand overrides — last, so they win */
+```
+
 ## Dark mode
 
 Add `.dark` to any ancestor. All components and tokens adapt.

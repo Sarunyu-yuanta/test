@@ -1,124 +1,151 @@
 /**
- * Post-process compiled CSS so the library plays nicely with host cascade:
+ * Post-process compiled CSS to remove @layer wrappers.
  *
- *   1. Strip inner @layer wrappers (theme/base/components/utilities).
- *      Keeps older Tailwind v3 PostCSS pipelines happy — they choke on
- *      `@layer base` etc. when no `@tailwind base` directive precedes them.
+ * Tailwind v4 CLI outputs CSS with `@layer base { … }`, `@layer utilities { … }`,
+ * etc.  These cause two problems for consumers:
  *
- *   2. Wrap everything in a single `@layer system-one { ... }`.
- *      Without this, every rule the library ships is unlayered — and
- *      unlayered styles beat every rule that sits inside a named @layer
- *      (including Tailwind v4's host-side `@layer utilities`). A host-written
- *      `p-6` / `gap-4` / `max-w-5xl` would silently lose to the library's
- *      copies of the same utilities.
+ *   1. Tailwind v3 PostCSS plugin (used by Lovable, older Next.js setups) throws
+ *      an error when it sees `@layer base` without a matching `@tailwind base`
+ *      directive — even when the CSS belongs to a third-party library.
  *
- *      Named layer = lowest cascade priority by default, so host's unlayered
- *      styles and later-declared named layers (e.g. host Tailwind utilities)
- *      win. This requires the host to import the library CSS *before* their
- *      own Tailwind / utility CSS — see README / AGENTS.md.
+ *   2. When the host also uses Tailwind v4, the library's `@layer system-one`
+ *      ends up at a LOWER cascade priority than the host's `@layer base`
+ *      preflight, which resets `button { background: transparent; border: 0 }`.
+ *      Primary buttons lose their background colour.
  *
- * @import rules must stay at the top of the file (before any other at-rule,
- * per CSS spec), so leading `@import` statements and banner comments are
- * extracted and re-emitted above the wrapper. The extractor walks the CSS
- * character-by-character and respects string quotes so @import URLs
- * containing semicolons (e.g. `wght@400;500;600`) are handled correctly.
+ * Fix: strip every `@layer` wrapper.  The inner rules become UNLAYERED — they
+ * are emitted in the same source order as before (properties → theme → base →
+ * utilities → components) but without any `@layer` declaration.  Per the CSS
+ * cascade spec, unlayered rules ALWAYS outrank layered rules, regardless of
+ * import order.  This means:
+ *
+ *   • Library component styles beat the host's Tailwind preflight. ✓
+ *   • Library design tokens beat Lovable/shadcn's `@layer base` variables. ✓
+ *   • No `@layer` keyword in the output → Tailwind v3 PostCSS is happy. ✓
+ *   • Import order doesn't matter for component styles. ✓
+ *
+ * Token customisation: host unlayered overrides placed AFTER the library import
+ * win by source order.  Always import the library BEFORE your own token
+ * overrides so they take effect.
+ *
+ * Scanning is string- and comment-aware: `@layer` tokens or braces inside
+ * `content: "..."` or `/* … *\/` won't confuse the parser, and @import URLs
+ * containing semicolons (e.g. `wght@400;500;600`) parse correctly.
+ *
+ * Running the script twice is a no-op — there are no @layer wrappers to strip
+ * on the second run.
  */
 
 import { readFileSync, writeFileSync } from "fs";
 
-const LAYER_NAME = "system-one";
 const file = process.argv[2] || "dist/style.css";
-const css = readFileSync(file, "utf8");
 
-/* ---------- step 1: strip inner @layer wrappers ---------- */
-
-let stripped = "";
-{
-  let i = 0;
-  while (i < css.length) {
-    if (css.slice(i, i + 7) === "@layer ") {
-      const semi = css.indexOf(";", i);
-      const brace = css.indexOf("{", i);
-
-      // Ordering declaration (semicolon before any brace) — strip entirely
-      if (semi !== -1 && (brace === -1 || semi < brace)) {
-        i = semi + 1;
-        continue;
-      }
-
-      // Block declaration — unwrap contents
-      if (brace !== -1) {
-        let depth = 1;
-        let j = brace + 1;
-        while (j < css.length && depth > 0) {
-          if (css[j] === "{") depth++;
-          else if (css[j] === "}") depth--;
-          if (depth > 0) stripped += css[j];
-          j++;
-        }
-        i = j;
-        continue;
-      }
-    }
-    stripped += css[i];
-    i++;
+let css;
+try {
+  css = readFileSync(file, "utf8");
+} catch (err) {
+  if (err.code === "ENOENT") {
+    console.error(
+      `strip-layers: ${file} not found. Run the CSS build first (e.g. \`npm run build:lib\`).`,
+    );
+    process.exit(1);
   }
+  throw err;
 }
 
-/* ---------- step 2: extract leading banner comments + @imports ---------- */
+/* ---------- helpers ---------- */
 
-function splitTop(source) {
-  const N = source.length;
-  let pos = 0;
-  const isWs = (ch) => ch === " " || ch === "\t" || ch === "\n" || ch === "\r";
+const isIdent = (c) => c !== undefined && /[A-Za-z0-9_-]/.test(c);
 
-  outer: while (pos < N) {
-    // skip whitespace
-    while (pos < N && isWs(source[pos])) pos++;
+const isLiteralStart = (src, idx) => {
+  const ch = src[idx];
+  return ch === '"' || ch === "'" || src.slice(idx, idx + 2) === "/*";
+};
 
-    // /* ... */ comment
-    if (source.slice(pos, pos + 2) === "/*") {
-      const end = source.indexOf("*/", pos + 2);
-      if (end === -1) break;
-      pos = end + 2;
+function skipLiteral(src, idx) {
+  const ch = src[idx];
+  if (ch === '"' || ch === "'") {
+    let j = idx + 1;
+    while (j < src.length) {
+      if (src[j] === "\\") { j += 2; continue; }
+      if (src[j] === ch) return j + 1;
+      j++;
+    }
+    return src.length;
+  }
+  if (src.slice(idx, idx + 2) === "/*") {
+    const end = src.indexOf("*/", idx + 2);
+    return end === -1 ? src.length : end + 2;
+  }
+  return idx + 1;
+}
+
+/* ---------- strip @layer wrappers ---------- */
+
+let result = "";
+let i = 0;
+const N = css.length;
+
+while (i < N) {
+  // copy strings/comments verbatim so tokens inside them don't get matched
+  if (isLiteralStart(css, i)) {
+    const end = skipLiteral(css, i);
+    result += css.slice(i, end);
+    i = end;
+    continue;
+  }
+
+  // match a real @layer token (not a longer ident like `@layerFoo`)
+  if (css.slice(i, i + 6) === "@layer" && !isIdent(css[i + 6])) {
+    let j = i + 6;
+    let terminator = null;
+    while (j < N) {
+      if (isLiteralStart(css, j)) { j = skipLiteral(css, j); continue; }
+      const c = css[j];
+      if (c === ";") { terminator = ";"; break; }
+      if (c === "{") { terminator = "{"; break; }
+      j++;
+    }
+
+    // ordering declaration (`@layer a, b, c;`) — strip entirely
+    if (terminator === ";") {
+      i = j + 1;
       continue;
     }
 
-    // @import ... ;  (walks past semicolons that live inside "..." or '...')
-    if (source.slice(pos, pos + 7) === "@import") {
-      let j = pos + 7;
-      let quote = null;
-      while (j < N) {
-        const ch = source[j];
-        if (quote) {
-          if (ch === "\\") { j += 2; continue; }
-          if (ch === quote) quote = null;
-        } else if (ch === '"' || ch === "'") {
-          quote = ch;
-        } else if (ch === ";") {
-          pos = j + 1;
-          continue outer;
+    // block form — strip wrapper, emit inner content flat
+    if (terminator === "{") {
+      let depth = 1;
+      let k = j + 1;
+      while (k < N && depth > 0) {
+        if (isLiteralStart(css, k)) {
+          const end = skipLiteral(css, k);
+          result += css.slice(k, end);
+          k = end;
+          continue;
         }
-        j++;
+        const c = css[k];
+        if (c === "{") { depth++; result += c; k++; continue; }
+        if (c === "}") {
+          depth--;
+          if (depth === 0) { k++; break; }
+          result += c; k++; continue;
+        }
+        result += c;
+        k++;
       }
-      // unterminated @import — bail
-      break;
+      i = k;
+      continue;
     }
 
-    // anything else: we're done peeling the top
+    // no terminator found — malformed; emit remainder and bail
+    result += css.slice(i);
     break;
   }
 
-  return { top: source.slice(0, pos), body: source.slice(pos) };
+  result += css[i];
+  i++;
 }
 
-const { top, body } = splitTop(stripped);
-
-/* ---------- step 3: wrap body in the named layer ---------- */
-
-const output = `${top}@layer ${LAYER_NAME}{${body}}`;
-
-writeFileSync(file, output);
-console.log(
-  `Stripped inner @layer wrappers and wrapped body in @layer ${LAYER_NAME} in ${file}`,
-);
+writeFileSync(file, result);
+console.log(`Stripped @layer wrappers from ${file} (flat/unlayered output)`);
