@@ -311,13 +311,12 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           ) : (
             <CaretDown size={22} className={cn("shrink-0", caretClassName)} />
           )}
-        </div>
 
-        {/* ── Dropdown menu ── */}
-        {open && !forceState && options.length > 0 && (
+          {/* ── Dropdown menu ── */}
+          {open && !forceState && options.length > 0 && (
           <div
             className={cn(
-              "relative bg-popover rounded-lg overflow-clip p-2 z-20 flex flex-col items-start text-popover-foreground",
+              "absolute top-full left-0 w-full mt-1 bg-popover rounded-lg overflow-clip p-2 z-50 flex flex-col items-start text-popover-foreground",
               filteredOptions.length > 10 && "overflow-y-auto"
             )}
             style={{
@@ -363,7 +362,8 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               </div>
             )}
           </div>
-        )}
+          )}
+        </div>
 
         {/* ── Below: helper / error ── */}
         {showBelow && (
