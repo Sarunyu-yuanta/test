@@ -22,6 +22,7 @@ Rules:
 - Use only components and tokens from this library — do not create custom UI primitives
 - Do not install shadcn/ui or any other component library
 - Colors must use library tokens (e.g. bg-brand, text-default), not arbitrary Tailwind colors
+- Use @phosphor-icons/react for all icons — never lucide-react or other icon libraries
 ```
 
 ## Developing this library
@@ -45,9 +46,9 @@ npm run dev         # Vite dev server (component playground)
 
 ### CSS cascade notes
 
-- `strip-layers.mjs` makes all compiled CSS **unlayered** so library components beat any host Tailwind preflight
-- `body` and `html` base resets use `:where()` (specificity 0) so host utility classes naturally override them — this prevents the library from breaking host dark themes (e.g. Figma Make)
-- `h1–h4`, `button`, `label`, `input` use bare element selectors (specificity 0-0-1) to correctly override Tailwind's own bundled preflight via source order
+- `strip-layers.mjs` makes all compiled CSS **unlayered** so library component styles beat any host Tailwind preflight
+- `body` and `html` base resets use `:where()` (specificity 0) so host utility classes naturally override them
+- Element-level resets (`h1–h4`, `button`, `input`, `label`) are intentionally omitted — unlayered rules beat Tailwind v3 `@layer utilities` regardless of specificity, which would override host styles
 
 ### Publish
 

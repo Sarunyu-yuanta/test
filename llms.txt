@@ -8,7 +8,7 @@ that uses this library. The rules are non-negotiable.
 
 ---
 
-## The 4 rules
+## The 5 rules
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
@@ -16,7 +16,11 @@ that uses this library. The rules are non-negotiable.
 2. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
-3. **No arbitrary bracket values for spacing / sizing / typography.**
+3. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
+   or any other icon library. Install with `npm install @phosphor-icons/react`.
+   Import named icons: `import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react"`.
+   Every icon accepts `size`, `weight` (`"regular"` | `"bold"` | `"fill"` | `"duotone"` | `"light"` | `"thin"`), and `className` props.
+4. **No arbitrary bracket values for spacing / sizing / typography.**
    Use scale utilities, not pixel overrides. The library's shipped stylesheet
    only contains scale utilities + a fixed list of safelisted container widths,
    so any other `[...]` value is a no-op in hosts without Tailwind installed.
