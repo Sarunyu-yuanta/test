@@ -15,7 +15,7 @@ export { DropdownMultiple } from "./components/dropdown-multiple";
 export { Input } from "./components/input";
 export { Modal } from "./components/modal";
 export { Notification } from "./components/notification";
-export { Toast, ToastStack } from "./components/toast";
+export { Toast, ToastStack, Toaster } from "./components/toast";
 export { BottomSheet } from "./components/bottom-sheet";
 export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
@@ -133,6 +133,7 @@ export type {
   ToastStatus,
   ToastProps,
   ToastStackProps,
+  ToasterProps,
 } from "./components/toast";
 
 // Types — OptionList

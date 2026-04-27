@@ -199,3 +199,34 @@ export function ToastStack({ items, className, renderItem }: ToastStackProps) {
     </div>
   );
 }
+
+export interface ToasterProps {
+  items: Array<ToastProps & { id: string }>;
+  renderItem?: (item: ToastProps & { id: string }) => ReactNode;
+  className?: string;
+}
+
+/**
+ * Fixed-position toast container.
+ * - Desktop (≥ md): top-right
+ * - Tablet & mobile (< md): top-center, full width with horizontal padding
+ *
+ * Place once at the root of your app (e.g. inside App.tsx or layout).
+ */
+export function Toaster({ items, renderItem, className }: ToasterProps) {
+  if (items.length === 0) return null;
+  return (
+    <div
+      className={cn(
+        "fixed z-50 top-4",
+        // desktop: top-right, fixed width
+        "md:right-4 md:w-[360px]",
+        // tablet & mobile: horizontally centered, full width minus padding
+        "max-md:left-1/2 max-md:-translate-x-1/2 max-md:w-[calc(100vw-32px)]",
+        className,
+      )}
+    >
+      <ToastStack items={items} renderItem={renderItem} />
+    </div>
+  );
+}
