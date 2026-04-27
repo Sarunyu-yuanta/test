@@ -8,19 +8,20 @@ that uses this library. The rules are non-negotiable.
 
 ---
 
-## The 5 rules
+## The 6 rules
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
    Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge as raw HTML.
-2. **Use design-token classes for color and typography.** Never `text-blue-600`,
+2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
+3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
-3. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
+4. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
    or any other icon library. Install with `npm install @phosphor-icons/react`.
    Import named icons: `import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react"`.
    Every icon accepts `size`, `weight` (`"regular"` | `"bold"` | `"fill"` | `"duotone"` | `"light"` | `"thin"`), and `className` props.
-4. **No arbitrary bracket values for spacing / sizing / typography.**
+5. **No arbitrary bracket values for spacing / sizing / typography.**
    Use scale utilities, not pixel overrides. The library's shipped stylesheet
    only contains scale utilities + a fixed list of safelisted container widths,
    so any other `[...]` value is a no-op in hosts without Tailwind installed.
@@ -36,7 +37,7 @@ that uses this library. The rules are non-negotiable.
      `max-w-[1440px]`. For any other width, snap to `max-w-{xs…7xl}`.
    - If a design calls for an odd value, snap to the nearest scale step — the
      design system is calibrated for those steps on purpose.
-4. **Layout is free (within the scale).** Build page structure with plain `<div>`
+6. **Layout is free (within the scale).** Build page structure with plain `<div>`
    + Tailwind utilities (flex, grid, container, max-w-*, gap-*, p-*, mx-auto).
    The library does NOT ship layout primitives. Do not import `Page`, `Section`,
    `Stack`, `CardGrid`, `Toolbar` — they don't exist.
@@ -487,8 +488,6 @@ All tabs in one group must share the same size.
 Self-contained surface — don't wrap in another card.
 
 **Default variant is `"default"`.** Start every Card as `variant="default"` (an empty shell with padding, radius, shadow, and `bg-card`) and pass your content via `children`. Only switch to a specialized variant when the page is specifically rendering that content type.
-
-**Do not override the component's built-in styles.** Never pass `bg-*`, `shadow-*`, `text-foreground`, or `p-*` in `className` — the component already sets these. Only use `className` for layout (width, flex, grid, margin).
 
 | Variant | Use for | Requires |
 |---|---|---|
