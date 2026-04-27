@@ -57,7 +57,9 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const currentValue = controlled ? value : internalValue;
   const isDisabled = forceState === "disabled";
 
-  const state: InputState = forceState ?? (focused ? "focus" : "default");
+  const state: InputState = (forceState && forceState !== "default")
+    ? forceState
+    : (focused ? "focus" : "default");
   const isError = state === "error";
   const isFocus = state === "focus";
   const isFilled = currentValue.length > 0;
