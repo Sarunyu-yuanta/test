@@ -75,6 +75,7 @@
 @source inline("border{,-0,-2,-4,-8}");
 @source inline("{border-t,border-r,border-b,border-l,border-x,border-y}{,-0,-2,-4,-8}");
 @source inline("{divide-x,divide-y}{,-0,-2,-4,-8}");
+@source inline("divide-{divider,border-default,border-strong,border-muted}");
 @source inline("rounded{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}");
 @source inline("rounded-{t,r,b,l,tl,tr,bl,br}{,-none,-sm,-md,-lg,-xl,-2xl,-3xl,-full}");
 
