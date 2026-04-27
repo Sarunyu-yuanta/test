@@ -1,8 +1,7 @@
 @import './fonts.css';
 
-@import 'tailwindcss/theme' source(none);
-@import 'tailwindcss/utilities' source(none);
-@source '../components/**/*.{tsx,ts}';
+@import 'tailwindcss/theme';
+@import 'tailwindcss/utilities';
 
 /*
  * Layout utility safelist.
