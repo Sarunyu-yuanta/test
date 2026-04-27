@@ -290,7 +290,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
 
               {groups.map((group) => (
                 <div key={group.label} className="w-full">
-                  <div className="divide-y divide-divider">
+                  <div>
                     {group.items.map((item) => (
                       <NotificationRow
                         key={item.id}
