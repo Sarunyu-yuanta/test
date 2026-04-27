@@ -660,11 +660,9 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
           <span className="shrink-0" style={{ color: caretColor }}>
             {isFocus ? <CaretUp size={22} /> : <CaretDown size={22} />}
           </span>
-        </div>
-
         {open && !isStatic && options.length > 0 && (
           <div
-            className="relative bg-popover rounded-[8px] overflow-clip p-[8px] z-20 flex flex-col items-start text-popover-foreground"
+            className="absolute top-full left-0 w-full mt-1 bg-popover rounded-[8px] overflow-clip p-[8px] z-50 flex flex-col items-start text-popover-foreground"
             style={{
               boxShadow: "var(--elevation-popover)",
             }}
@@ -743,6 +741,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
             </div>
           </div>
         )}
+        </div>
 
         {showBelow && (
           <div className="flex items-start px-[4px] text-[12px] leading-[16px]">
