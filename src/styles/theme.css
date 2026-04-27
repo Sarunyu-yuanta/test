@@ -1093,12 +1093,27 @@
     @apply border-border outline-ring/50;
   }
 
-  body {
+  /*
+   * :where() reduces specificity to 0 for document-level defaults.
+   * strip-layers.mjs removes @layer wrappers, making these rules unlayered
+   * (highest cascade priority).  Without :where(), bare `body` and `html`
+   * selectors (specificity 0-0-1) would override host-app utility classes
+   * only when the host uses @layer for its own background/font-size rules.
+   * With :where(), any host class (specificity ≥ 0-1-0) or bare element rule
+   * (≥ 0-0-1) wins naturally — the defaults only kick in when nothing else
+   * targets these elements.
+   *
+   * h1–h4, button, label, input intentionally stay as bare element selectors:
+   * they must beat Tailwind's own bundled preflight (h1 { font-size: inherit },
+   * button { font: inherit }, etc.) which is also unlayered at specificity
+   * 0-0-1.  Source order wins; our rules appear after the preflight in dist.
+   */
+  :where(body) {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
   }
 
-  html {
+  :where(html) {
     font-size: var(--font-size);
   }
 
