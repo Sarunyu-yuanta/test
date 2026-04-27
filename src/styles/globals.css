@@ -1,6 +1,7 @@
 @import './fonts.css';
 
-@import 'tailwindcss' source(none);
+@import 'tailwindcss/theme' source(none);
+@import 'tailwindcss/utilities' source(none);
 @source '../components/**/*.{tsx,ts}';
 
 /*
