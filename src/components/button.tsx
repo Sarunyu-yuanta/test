@@ -54,18 +54,19 @@ const roundedLabelClass: Record<ButtonLabelSize, string> = {
   xl: "rounded-lg",
 };
 
+const heightClass: Record<ButtonLabelSize, string> = {
+  xs: "h-[26px]",
+  sm: "h-[28px]",
+  md: "h-8",      // 32px
+  lg: "h-9",      // 36px
+  xl: "h-10",     // 40px
+};
+
 function getPaddingClasses(
   size: ButtonLabelSize,
   hasLeft: boolean,
   hasRight: boolean,
-): readonly [string, string, string] {
-  const pyMap: Record<ButtonLabelSize, string> = {
-    xs: "py-1",    // 4px
-    sm: "py-1",    // 4px
-    md: "py-1.5",  // 6px
-    lg: "py-2",    // 8px
-    xl: "py-2.5",  // 10px
-  };
+): readonly [string, string] {
   const pxMap: Record<ButtonLabelSize, { l: string; r: string }> = {
     xs: { l: "pl-1.5", r: "pr-1.5" }, // 6px
     sm: { l: "pl-2",   r: "pr-2"   }, // 8px
@@ -83,7 +84,6 @@ function getPaddingClasses(
   return [
     hasLeft ? reducedMap[size].l : pxMap[size].l,
     hasRight ? reducedMap[size].r : pxMap[size].r,
-    pyMap[size],
   ] as const;
 }
 
@@ -101,19 +101,19 @@ function getVariantClasses(variant: ButtonVariant, isDisabled: boolean): string 
   if (isDisabled) {
     if (variant === "outline" || variant === "outline-black")
       return "bg-disabled-bg text-disabled border border-border-disabled cursor-not-allowed";
-    return "bg-disabled-bg text-disabled cursor-not-allowed";
+    return "bg-disabled-bg text-disabled border border-transparent cursor-not-allowed";
   }
   if (variant === "outline")
     return "bg-background text-primary-action border border-border hover:bg-hover-bg active:bg-disabled-bg";
   if (variant === "plain")
-    return "bg-transparent text-primary-action hover:bg-hover-bg active:bg-disabled-bg";
+    return "bg-transparent text-primary-action border border-transparent hover:bg-hover-bg active:bg-disabled-bg";
   // Black label variants — hover only, no active state (by design)
   if (variant === "outline-black")
     return "bg-background text-foreground border border-border hover:bg-hover-bg";
   if (variant === "plain-black")
-    return "bg-transparent text-foreground hover:bg-hover-bg";
+    return "bg-transparent text-foreground border border-transparent hover:bg-hover-bg";
   // primary
-  return "bg-primary-action text-on-primary-action hover:bg-primary-action-hover active:bg-primary-action-active";
+  return "bg-primary-action text-on-primary-action border border-transparent hover:bg-primary-action-hover active:bg-primary-action-active";
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -212,9 +212,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       className={cn(
         baseClasses,
         roundedLabelClass[labelSize],
+        heightClass[labelSize],
         paddingParts[0],
         paddingParts[1],
-        paddingParts[2],
         hasLeft || hasRight ? gapClass[labelSize] : undefined,
         variantClasses,
         cursorClass,
