@@ -53,41 +53,48 @@ const variantStyles: Record<
   {
     bg: string;
     text: string;
+    color: string;
   }
 > = {
   blue: {
     bg: "bg-[var(--fill-blue-50)]",
     text: "text-[var(--fill-blue-700)]",
+    color: "var(--fill-blue-700)",
   },
   green: {
     bg: "bg-[var(--fill-green-100)]",
     text: "text-[var(--fill-green-600)]",
+    color: "var(--fill-green-600)",
   },
   yellow: {
     bg: "bg-[var(--fill-yellow-100)]",
     text: "text-[var(--fill-yellow-600)]",
+    color: "var(--fill-yellow-600)",
   },
   red: {
     bg: "bg-[var(--fill-red-100)]",
     text: "text-[var(--fill-red-600)]",
+    color: "var(--fill-red-600)",
   },
   gray: {
     bg: "bg-[var(--fill-gray-100)]",
     text: "text-subtle-text",
+    color: "var(--subtle-text)",
   },
   lime: {
     bg: "bg-[var(--fill-lime-100)]",
     text: "text-[var(--fill-lime-600)]",
+    color: "var(--fill-lime-600)",
   },
 };
 
-function CircleIcon({ disabled }: { disabled: boolean }) {
+function CircleIcon({ disabled, color }: { disabled: boolean; color: string }) {
   return (
     <Circle
       aria-hidden="true"
       weight="regular"
       className="h-3.5 w-3.5 shrink-0"
-      color={disabled ? "var(--disabled)" : "var(--subtle-text)"}
+      color={disabled ? "var(--disabled)" : color}
     />
   );
 }
@@ -132,7 +139,7 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
         className
       )}
     >
-      {icon && <CircleIcon disabled={isDisabled} />}
+      {icon && <CircleIcon disabled={isDisabled} color={v.color} />}
       <span className={cn("whitespace-nowrap font-normal", s.text, textClass)}>
         {text}
       </span>
