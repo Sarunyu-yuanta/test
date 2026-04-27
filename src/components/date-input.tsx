@@ -7,8 +7,8 @@ import React, {
   useCallback,
   forwardRef,
 } from "react";
-import type { DateRange, CaptionProps } from "react-day-picker";
-import { DayPicker, useNavigation } from "react-day-picker";
+import type { DateRange, MonthCaptionProps } from "react-day-picker";
+import { DayPicker, useDayPicker } from "react-day-picker";
 import * as Popover from "@radix-ui/react-popover";
 import {
   CalendarBlank,
@@ -114,14 +114,15 @@ const NAV_BTN_CLASS = cn(
 type CaptionView = "days" | "months" | "years";
 
 function CustomCaption({
-  displayMonth,
+  calendarMonth,
   displayIndex,
-}: CaptionProps) {
-  const { goToMonth, previousMonth, nextMonth, displayMonths } =
-    useNavigation();
+}: MonthCaptionProps) {
+  const { goToMonth, previousMonth, nextMonth, months } =
+    useDayPicker();
   const isDrawerRange = React.useContext(DrawerRangeCtx);
   const { disabledYears = [] } = React.useContext(DisabledDatesCtx);
   const [view, setView] = useState<CaptionView>("days");
+  const displayMonth = calendarMonth.date;
   const [pickerYear, setPickerYear] = useState(
     displayMonth.getFullYear(),
   );
@@ -130,9 +131,9 @@ function CustomCaption({
   );
 
   const isFirst =
-    displayMonths[0].getTime() === displayMonth.getTime();
+    months[0].date.getTime() === displayMonth.getTime();
   const isLast =
-    displayMonths[displayMonths.length - 1].getTime() ===
+    months[months.length - 1].date.getTime() ===
     displayMonth.getTime();
   const idx = displayIndex ?? 0;
 
@@ -420,87 +421,103 @@ function CustomCaption({
 const DAY_PICKER_CLASSES = {
   months: "flex flex-col sm:flex-row sm:gap-6",
   month: "space-y-2 relative",
-  caption:
+  month_caption:
     "flex justify-center pt-1 relative items-center mb-2",
   caption_label: "text-[14px] leading-[20px] text-foreground",
   nav: "hidden",
-  nav_button: cn(
-    "h-[28px] w-[28px] inline-flex items-center justify-center",
-    "rounded-[6px] bg-transparent border border-border cursor-pointer",
-    "text-muted-foreground hover:bg-disabled-bg transition-colors duration-100",
-    "p-0 outline-none",
-  ),
-  nav_button_previous: "absolute left-1",
-  nav_button_next: "absolute right-1",
-  table: "w-full border-collapse",
-  head_row: "flex",
-  head_cell:
+  button_previous: "absolute left-1",
+  button_next: "absolute right-1",
+  month_grid: "w-full border-collapse",
+  weekdays: "flex",
+  weekday:
     "w-[36px] h-[32px] inline-flex items-center justify-center text-[12px] text-disabled font-normal",
-  row: "flex w-full mt-1",
-  cell: cn(
+  week: "flex w-full mt-1",
+  // In v9 modifier classes (range_start, range_end, etc.) are placed on the
+  // outer `day` wrapper element. We use semantic marker class names so both
+  // the wrapper and button can reference them.
+  day: cn(
     "h-[36px] w-[36px] text-center p-0 relative overflow-hidden",
-    "[&:has(.day-range-middle)]:bg-range-bg",
-    "[&:has(.day-range-start)]:bg-range-bg",
-    "[&:has(.day-range-end)]:bg-range-bg",
-    "[&:has(.day-range-start)]:rounded-l-[6px]",
-    "[&:has(.day-range-end)]:rounded-r-[6px]",
-    "[&:first-child:has(.day-range-middle)]:rounded-l-[6px]",
-    "[&:last-child:has(.day-range-middle)]:rounded-r-[6px]",
-    "[&:first-child:has(.day-range-end)]:rounded-l-[6px]",
-    "[&:last-child:has(.day-range-start)]:rounded-r-[6px]",
+    // Range band background on the wrapper
+    "[&.is-range-middle]:bg-range-bg",
+    "[&.is-range-start]:bg-range-bg",
+    "[&.is-range-end]:bg-range-bg",
+    "[&.is-range-start]:rounded-l-[6px]",
+    "[&.is-range-end]:rounded-r-[6px]",
+    "[&:first-child.is-range-middle]:rounded-l-[6px]",
+    "[&:last-child.is-range-middle]:rounded-r-[6px]",
+    "[&:first-child.is-range-end]:rounded-l-[6px]",
+    "[&:last-child.is-range-start]:rounded-r-[6px]",
     "focus-within:relative focus-within:z-20",
   ),
-  day: cn(
+  day_button: cn(
     "h-[36px] w-[36px] inline-flex items-center justify-center",
     "text-[14px] text-foreground rounded-[6px]",
     "border-0 bg-transparent cursor-pointer",
     "hover:bg-disabled-bg transition-colors duration-100",
-    "outline-none aria-selected:opacity-100 p-0",
+    "outline-none p-0",
+    // Selected (single mode)
+    "[.is-selected_&]:!bg-primary-action [.is-selected_&]:!text-on-primary-action [.is-selected_&]:!rounded-[6px]",
+    // Range start button styling
+    "[.is-range-start_&]:!bg-primary-action [.is-range-start_&]:!text-on-primary-action [.is-range-start_&]:!rounded-l-[6px] [.is-range-start_&]:!rounded-r-none",
+    // Range end button styling
+    "[.is-range-end_&]:!bg-primary-action [.is-range-end_&]:!text-on-primary-action [.is-range-end_&]:!rounded-r-[6px] [.is-range-end_&]:!rounded-l-none",
+    // Range middle button styling
+    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none",
+    // Today (when not selected)
+    "[.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!bg-primary-action-light [.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!text-foreground",
+    // Outside days
+    "[.is-outside_&]:text-disabled [.is-outside_&]:opacity-50",
+    "[.is-outside.is-selected_&]:!bg-transparent [.is-outside.is-selected_&]:!opacity-30",
+    // Disabled days
+    "[.is-disabled_&]:text-disabled [.is-disabled_&]:opacity-50 [.is-disabled_&]:cursor-not-allowed",
   ),
-  day_range_start:
-    "day-range-start !bg-primary-action !text-on-primary-action !rounded-l-[6px] !rounded-r-none",
-  day_range_end:
-    "day-range-end !bg-primary-action !text-on-primary-action !rounded-r-[6px] !rounded-l-none",
-  day_selected:
-    "!bg-primary-action text-on-primary-action hover:!bg-primary-action focus:!bg-primary-action rounded-[6px]",
-  day_today:
-    "[&:not([aria-selected=true])]:!bg-primary-action-light [&:not([aria-selected=true])]:text-foreground rounded-[6px]",
-  day_outside:
-    "day-outside text-disabled opacity-50 aria-selected:bg-transparent aria-selected:opacity-30",
-  day_disabled: "text-disabled opacity-50 cursor-not-allowed",
-  day_range_middle:
-    "day-range-middle !bg-range-bg !text-range-text !rounded-none",
-  day_hidden: "invisible",
+  // Modifier classes applied to the `day` wrapper in v9
+  selected: "is-selected",
+  range_start: "is-range-start",
+  range_end: "is-range-end",
+  range_middle: "is-range-middle",
+  today: "is-today",
+  outside: "is-outside",
+  disabled: "is-disabled",
+  hidden: "invisible",
 };
 
 const DRAWER_DAY_PICKER_CLASSES: typeof DAY_PICKER_CLASSES = {
   ...DAY_PICKER_CLASSES,
   months: "flex flex-col gap-6 w-full",
   month: "space-y-2 relative w-full",
-  table: "w-full border-collapse table-fixed",
-  head_row: "flex w-full",
-  head_cell:
+  month_grid: "w-full border-collapse table-fixed",
+  weekdays: "flex w-full",
+  weekday:
     "flex-1 h-[40px] inline-flex items-center justify-center text-[13px] text-disabled font-normal",
-  row: "flex w-full mt-1",
-  cell: cn(
+  week: "flex w-full mt-1",
+  day: cn(
     "h-[44px] flex-1 text-center p-0 relative overflow-hidden",
-    "[&:has(.day-range-middle)]:bg-range-bg",
-    "[&:has(.day-range-start)]:bg-range-bg",
-    "[&:has(.day-range-end)]:bg-range-bg",
-    "[&:has(.day-range-start)]:rounded-l-[8px]",
-    "[&:has(.day-range-end)]:rounded-r-[8px]",
-    "[&:first-child:has(.day-range-middle)]:rounded-l-[8px]",
-    "[&:last-child:has(.day-range-middle)]:rounded-r-[8px]",
-    "[&:first-child:has(.day-range-end)]:rounded-l-[8px]",
-    "[&:last-child:has(.day-range-start)]:rounded-r-[8px]",
+    "[&.is-range-middle]:bg-range-bg",
+    "[&.is-range-start]:bg-range-bg",
+    "[&.is-range-end]:bg-range-bg",
+    "[&.is-range-start]:rounded-l-[8px]",
+    "[&.is-range-end]:rounded-r-[8px]",
+    "[&:first-child.is-range-middle]:rounded-l-[8px]",
+    "[&:last-child.is-range-middle]:rounded-r-[8px]",
+    "[&:first-child.is-range-end]:rounded-l-[8px]",
+    "[&:last-child.is-range-start]:rounded-r-[8px]",
     "focus-within:relative focus-within:z-20",
   ),
-  day: cn(
+  day_button: cn(
     "h-[44px] w-full inline-flex items-center justify-center",
     "text-[16px] text-foreground rounded-[8px]",
     "border-0 bg-transparent cursor-pointer",
     "hover:bg-disabled-bg transition-colors duration-100",
-    "outline-none aria-selected:opacity-100 p-0",
+    "outline-none p-0",
+    "[.is-selected_&]:!bg-primary-action [.is-selected_&]:!text-on-primary-action [.is-selected_&]:!rounded-[8px]",
+    "[.is-range-start_&]:!bg-primary-action [.is-range-start_&]:!text-on-primary-action [.is-range-start_&]:!rounded-l-[8px] [.is-range-start_&]:!rounded-r-none",
+    "[.is-range-end_&]:!bg-primary-action [.is-range-end_&]:!text-on-primary-action [.is-range-end_&]:!rounded-r-[8px] [.is-range-end_&]:!rounded-l-none",
+    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none",
+    "[.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!bg-primary-action-light [.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!text-foreground",
+    "[.is-outside_&]:text-disabled [.is-outside_&]:opacity-50",
+    "[.is-outside.is-selected_&]:!bg-transparent [.is-outside.is-selected_&]:!opacity-30",
+    "[.is-disabled_&]:text-disabled [.is-disabled_&]:opacity-50 [.is-disabled_&]:cursor-not-allowed",
   ),
 };
 
@@ -1055,7 +1072,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
           formatWeekdayName: (date) =>
             THAI_WEEKDAYS[date.getDay()],
         }}
-        components={{ Caption: CustomCaption }}
+        components={{ MonthCaption: CustomCaption }}
       />
     ) : (
       <DayPicker
@@ -1069,7 +1086,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
           formatWeekdayName: (date) =>
             THAI_WEEKDAYS[date.getDay()],
         }}
-        components={{ Caption: CustomCaption }}
+        components={{ MonthCaption: CustomCaption }}
       />
     );
 
