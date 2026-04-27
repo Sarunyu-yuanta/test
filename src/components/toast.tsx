@@ -9,7 +9,7 @@ import {
   X,
   XCircle,
 } from "@phosphor-icons/react";
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, useEffect, useRef, type ReactNode } from "react";
 import { cn } from "../lib/utils";
 
 export type ToastVariant = "default" | "broadcast";
@@ -204,6 +204,13 @@ export interface ToasterProps {
   items: Array<ToastProps & { id: string }>;
   renderItem?: (item: ToastProps & { id: string }) => ReactNode;
   className?: string;
+  /**
+   * Auto-dismiss duration in ms. Calls onRemove(id) after the delay.
+   * Set to 0 to disable auto-dismiss. Default: 4000.
+   */
+  duration?: number;
+  /** Called with the toast id when it should be removed (timeout or close). */
+  onRemove?: (id: string) => void;
 }
 
 /**
@@ -212,21 +219,63 @@ export interface ToasterProps {
  * - Tablet & mobile (< md): top-center, full width with horizontal padding
  *
  * Place once at the root of your app (e.g. inside App.tsx or layout).
+ *
+ * @example
+ * const [toasts, setToasts] = useState([]);
+ * const remove = (id) => setToasts(t => t.filter(x => x.id !== id));
+ * <Toaster items={toasts} onRemove={remove} />
  */
-export function Toaster({ items, renderItem, className }: ToasterProps) {
+export function Toaster({ items, renderItem, className, duration = 4000, onRemove }: ToasterProps) {
+  const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  useEffect(() => {
+    if (!onRemove || duration === 0) return;
+
+    // start timer for newly added items
+    items.forEach((item) => {
+      if (!timers.current.has(item.id)) {
+        const t = setTimeout(() => {
+          onRemove(item.id);
+          timers.current.delete(item.id);
+        }, duration);
+        timers.current.set(item.id, t);
+      }
+    });
+
+    // clear timers for items that were already removed externally
+    const live = new Set(items.map((i) => i.id));
+    timers.current.forEach((t, id) => {
+      if (!live.has(id)) {
+        clearTimeout(t);
+        timers.current.delete(id);
+      }
+    });
+  });
+
+  useEffect(() => {
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      timers.current.forEach(clearTimeout);
+    };
+  }, []);
+
   if (items.length === 0) return null;
+
+  const enriched = items.map((item) => ({
+    ...item,
+    onClose: onRemove ? () => onRemove(item.id) : item.onClose,
+  }));
+
   return (
     <div
       className={cn(
         "fixed z-50 top-4",
-        // desktop: top-right, fixed width
         "md:right-4 md:w-[360px]",
-        // tablet & mobile: horizontally centered, full width minus padding
         "max-md:left-1/2 max-md:-translate-x-1/2 max-md:w-[calc(100vw-32px)]",
         className,
       )}
     >
-      <ToastStack items={items} renderItem={renderItem} />
+      <ToastStack items={enriched} renderItem={renderItem} />
     </div>
   );
 }
