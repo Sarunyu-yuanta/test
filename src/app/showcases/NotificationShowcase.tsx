@@ -87,7 +87,6 @@ export function NotificationShowcase() {
             open={open}
             onOpenChange={setOpen}
             groups={groups}
-            showGroupLabels={false}
           />
         </div>
       </div>

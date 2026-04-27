@@ -52,8 +52,6 @@ export interface NotificationProps {
   panelWidth?: number;
   /** Placeholder text when no notifications are available. */
   emptyText?: string;
-  /** Show group divider labels above each section. Default: true */
-  showGroupLabels?: boolean;
   /** Auto clear badge to default when the list is opened. Default: true */
   clearBadgeOnOpen?: boolean;
   /** Controlled open state */
@@ -67,14 +65,6 @@ export interface NotificationProps {
   panelClassName?: string;
 }
 
-function NotificationDivider({ label }: { label: string }) {
-  return (
-    <div className="flex items-center gap-3 px-4 py-2">
-      <p className="shrink-0 text-sm leading-5 text-subtle-text">{label}</p>
-      <div aria-hidden="true" className="h-px min-w-0 flex-1 bg-divider" />
-    </div>
-  );
-}
 
 function NotificationRow({
   item,
@@ -170,7 +160,6 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       badgeCount,
       panelWidth = 375,
       emptyText = "No notifications",
-      showGroupLabels = true,
       clearBadgeOnOpen = true,
       open,
       defaultOpen,
@@ -301,9 +290,6 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
 
               {groups.map((group) => (
                 <div key={group.label} className="w-full">
-                  {showGroupLabels && group.label ? (
-                    <NotificationDivider label={group.label} />
-                  ) : null}
                   <div className="divide-y divide-divider">
                     {group.items.map((item) => (
                       <NotificationRow
