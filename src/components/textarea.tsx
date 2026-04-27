@@ -58,22 +58,22 @@ export const TextArea = forwardRef<HTMLDivElement, TextAreaProps>(
     const isFilled = currentValue.length > 0;
 
     const floatLabel = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-    const filledValue = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const filledValue = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
 
     const borderInset = isFocus || isError ? "-1px" : "0px";
     const borderRad = isFocus || isError ? "9px" : "8px";
     const borderColor = isDisabled
       ? "var(--border-disabled)"
       : isError
-        ? "var(--destructive)"
+        ? "var(--bg-danger-primary)"
         : isFocus
           ? "var(--primary-action)"
-          : "var(--border)";
+          : "var(--border-default)";
 
     const charCount = currentValue.length;
     const showBelow = isError || Boolean(helperText) || showCount;
     const leftText = isError ? errorMessage : (helperText ?? "");
-    const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
+    const leftColor = isError ? "var(--bg-danger-primary)" : "var(--muted-foreground)";
     const countColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

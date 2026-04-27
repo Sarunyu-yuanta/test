@@ -66,7 +66,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
 
   const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
   const floatLabel = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-  const filledValue = isDisabled ? "var(--disabled)" : "var(--foreground)";
+  const filledValue = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
   const unitColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
 
   const borderInset = isFocus || isError ? "-1px" : "0px";
@@ -89,7 +89,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const charCount = currentValue.length;
   const showBelow = isError || Boolean(helperText) || showCount;
   const leftText = isError ? errorMessage : (helperText ?? "");
-  const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
+  const leftColor = isError ? "var(--bg-danger-primary)" : "var(--muted-foreground)";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isDisabled) return;

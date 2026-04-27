@@ -24,7 +24,7 @@ export type CardSocialTag = {
   label: string;
   /** Background color. Default: "var(--disabled-bg)". */
   bg?: string;
-  /** Text color. Default: "var(--foreground)". */
+  /** Text color. Default: "var(--text-default-primary)". */
   text?: string;
 };
 
@@ -220,7 +220,7 @@ const tagConfig: Record<CardTagStatus, TagConfig> = {
   },
   full: {
     bg: "var(--error-bg)",
-    text: "var(--destructive)",
+    text: "var(--bg-danger-primary)",
     label: "เต็มแล้ว",
     Icon: XCircle,
   },
@@ -348,7 +348,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
                   )}
                   style={{
                     backgroundColor: t.bg ?? "var(--disabled-bg)",
-                    color: t.text ?? "var(--foreground)",
+                    color: t.text ?? "var(--text-default-primary)",
                   }}
                 >
                   {t.label}

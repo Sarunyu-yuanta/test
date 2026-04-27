@@ -306,14 +306,14 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
     const borderColor = isDisabled
       ? "var(--border-disabled)"
       : isError
-        ? "var(--destructive)"
+        ? "var(--bg-danger-primary)"
         : isFocus
           ? "var(--primary-action)"
-          : "var(--border)";
+          : "var(--border-default)";
 
     const showBelow = isError || Boolean(helperText);
     const leftText = isError ? errorMessage : (helperText ?? "");
-    const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
+    const leftColor = isError ? "var(--bg-danger-primary)" : "var(--muted-foreground)";
 
     // ── Selected options ────────────────────────────────────────────────────
     const selectedOptions = useMemo(
@@ -568,7 +568,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
                   onKeyDown={handleInputKeyDown}
                   className="flex-1 min-w-[40px] outline-none border-none bg-transparent text-[14px] leading-[20px]"
                   style={{
-                    color: "var(--foreground)",
+                    color: "var(--text-default-primary)",
                     caretColor: "var(--caret-color)",
                   }}
                   onClick={(e) => e.stopPropagation()}
@@ -590,7 +590,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
             onKeyDown={handleInputKeyDown}
             className="flex-1 min-w-[40px] outline-none border-none bg-transparent text-[14px] leading-[20px]"
             style={{
-              color: "var(--foreground)",
+              color: "var(--text-default-primary)",
               caretColor: "var(--caret-color)",
             }}
             onClick={(e) => e.stopPropagation()}

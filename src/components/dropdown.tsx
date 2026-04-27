@@ -70,7 +70,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     // ── Colours ─────────────────────────────────────────────────────────────
     const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-    const filledColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const filledColor = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
     const caretClassName = isDisabled ? "text-disabled" : "text-muted-foreground";
 
     const hasExternalLabel = Boolean(label);
@@ -88,7 +88,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     const showBelow = isError || Boolean(helperText);
     const leftText = isError ? errorMessage : (helperText ?? "");
-    const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
+    const leftColor = isError ? "var(--bg-danger-primary)" : "var(--muted-foreground)";
 
     // ── Filtered options ────────────────────────────────────────────────────
     const filteredOptions = search.trim()
@@ -243,7 +243,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 placeholder={placeholder + (required ? " *" : "")}
                 className="flex-1 min-w-0 min-h-[1px] text-base leading-5 not-italic bg-transparent outline-none border-none p-0 m-0 placeholder:text-muted-foreground"
                 style={{
-                  color: "var(--foreground)",
+                  color: "var(--text-default-primary)",
                   caretColor: "var(--caret-color)",
                 }}
                 onClick={(e) => e.stopPropagation()}

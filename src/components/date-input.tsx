@@ -654,7 +654,7 @@ function DateScrollColumn({
               style={{
                 fontSize: isSel ? 32 : 14,
                 lineHeight: 1,
-                color: isSel ? "var(--foreground)" : "var(--disabled)",
+                color: isSel ? "var(--text-default-primary)" : "var(--disabled)",
                 transition: "font-size 0.1s, color 0.1s",
                 whiteSpace: "nowrap",
               }}
@@ -820,9 +820,9 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     // ── Colours ─────────────────────────────────────────────────────────────────
     const bgClass = isDisabled ? "bg-disabled-bg" : "bg-background";
     const labelColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-    const valueColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const valueColor = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
     const iconColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-    const minusColor = isDisabled ? "var(--disabled)" : "var(--foreground)";
+    const minusColor = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
     const asteriskColorEmpty = isDisabled ? "var(--disabled)" : "var(--error-dark)";
     const asteriskColorFilled = isDisabled
       ? "var(--disabled)"
@@ -834,10 +834,10 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     const borderColor = isDisabled
       ? "var(--border-disabled)"
       : isError
-        ? "var(--destructive)"
+        ? "var(--bg-danger-primary)"
         : isFocus
           ? "var(--primary-action)"
-          : "var(--border)";
+          : "var(--border-default)";
 
     const showBelow = isError || Boolean(helperText);
     const leftText = isError ? errorMessage : (helperText ?? "");
@@ -1164,7 +1164,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
                 className="z-50 rounded-[8px] bg-popover p-3 outline-none text-popover-foreground"
                 style={{
                   boxShadow: "var(--elevation-popover)",
-                  border: "1px solid var(--border)",
+                  border: "1px solid var(--border-default)",
                 }}
                 onOpenAutoFocus={(e) => e.preventDefault()}
               >

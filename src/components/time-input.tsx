@@ -208,7 +208,7 @@ function ScrollColumn({
                 fontSize: isSel ? 32 : 14,
                 lineHeight: 1,
                 color: isSel
-                  ? "var(--foreground)"
+                  ? "var(--text-default-primary)"
                   : "var(--disabled)",
                 transition: "font-size 0.1s, color 0.1s",
               }}
@@ -271,7 +271,7 @@ function RangeSlotPicker({
                   fontVariationSettings: "'wdth' 100",
                   color: isSelected
                     ? "var(--on-primary-action)"
-                    : "var(--foreground)",
+                    : "var(--text-default-primary)",
                 }}
               >
                 {slot.label}
@@ -386,7 +386,7 @@ function TimePickerContent({
             style={{
               fontSize: 32,
               lineHeight: 1,
-              color: "var(--foreground)",
+              color: "var(--text-default-primary)",
             }}
           >
             :
@@ -475,7 +475,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
       : "var(--muted-foreground)";
     const valueColor = isDisabled
       ? "var(--disabled)"
-      : "var(--foreground)";
+      : "var(--text-default-primary)";
     const iconColor = isDisabled
       ? "var(--disabled)"
       : "var(--muted-foreground)";
@@ -495,10 +495,10 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
     const borderColor = isDisabled
       ? "var(--border-disabled)"
       : isError
-        ? "var(--destructive)"
+        ? "var(--bg-danger-primary)"
         : isFocus
           ? "var(--primary-action)"
-          : "var(--border)";
+          : "var(--border-default)";
 
     const showBelow = isError || Boolean(helperText);
     const leftText = isError ? errorMessage : (helperText ?? "");
@@ -798,7 +798,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
                 className="z-50 rounded-[8px] bg-popover p-3 outline-none max-w-[340px] text-popover-foreground"
                 style={{
                   boxShadow: "var(--elevation-popover)",
-                  border: "1px solid var(--border)",
+                  border: "1px solid var(--border-default)",
                   minWidth:
                     mode === "single" ? 327 : undefined,
                 }}

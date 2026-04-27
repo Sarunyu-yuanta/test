@@ -45,7 +45,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
     const borderRad = focused ? "9px" : "8px";
     const borderColor = focused
       ? "var(--primary-action)"
-      : "var(--border)";
+      : "var(--border-default)";
     const handleChange = (next: string) => {
       if (!controlled) setInternalValue(next);
       onChange?.(next);
@@ -105,7 +105,7 @@ export const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
             onBlur={() => setFocused(false)}
             className="m-0 w-full border-none bg-transparent p-0 text-base leading-5 outline-none"
             style={{
-              color: isFilled ? "var(--foreground)" : "transparent",
+              color: isFilled ? "var(--text-default-primary)" : "transparent",
               caretColor: "var(--caret-color)",
             }}
           />
