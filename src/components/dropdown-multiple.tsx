@@ -396,8 +396,9 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
 
     const handleTriggerClick = () => {
       if (isDisabled || isStatic) return;
-      if (!open) setOpen(true);
-      inputRef.current?.focus();
+      const next = !open;
+      setOpen(next);
+      if (next) inputRef.current?.focus();
     };
 
     const handleInputKeyDown = (e: React.KeyboardEvent) => {
