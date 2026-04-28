@@ -328,7 +328,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
               filteredOptions.map((opt) => (
                 <div
                   key={opt.value}
-                  onClick={() => handleSelect(opt.value)}
+                  onClick={(e) => { e.stopPropagation(); handleSelect(opt.value); }}
                   className={cn(
                   "w-full shrink-0 rounded-[4px] cursor-pointer transition-colors duration-100",
                     opt.value === currentValue
