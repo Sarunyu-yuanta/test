@@ -83,11 +83,7 @@ export function NotificationShowcase() {
             </p>
           </div>
 
-          <Notification
-            open={open}
-            onOpenChange={setOpen}
-            groups={groups}
-          />
+          <Notification open={open} onOpenChange={setOpen} groups={groups} />
         </div>
       </div>
     </div>
