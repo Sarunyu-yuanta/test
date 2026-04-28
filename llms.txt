@@ -330,15 +330,13 @@ Single-select dropdown.
   options={[
     { label: "Option A", value: "a" },
     { label: "Option B", value: "b" },
-    { label: "Disabled", value: "c", disabled: true },
   ]}
   value={selected}
   onChange={setSelected}
 />
 ```
 
-Props: `placeholder`, `options: { label, value, disabled? }[]`, `value`, `onChange(value)`,
-`disabled`, `className`.
+Props: `placeholder`, `label`, `required`, `forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `helperText`, `options: { label, value }[]`, `value`, `onChange(value)`, `className`. To disable, pass `forceState="disabled"` — there is no top-level `disabled` prop.
 
 ### DropdownMultiple
 
@@ -348,24 +346,24 @@ Multi-select dropdown with checkboxes.
 <DropdownMultiple
   placeholder="Select tags"
   options={tagOptions}
-  values={selected}
+  value={selected}
   onChange={setSelected}
 />
 ```
 
-Props: `placeholder`, `options`, `values: string[]`, `onChange(values)`, `disabled`, `className`.
+Props: `placeholder`, `label`, `required`, `forceState`, `errorMessage`, `helperText`, `options`, `value: string[]`, `onChange(value: string[])`, `className`. The controlled prop is `value` (not `values`). To disable, use `forceState="disabled"`.
 
 ---
 
 ### Checkbox
 
 ```tsx
-<Checkbox checked={agreed} onCheckedChange={setAgreed} label="I agree to the terms" />
-<Checkbox checked="indeterminate" onCheckedChange={setAll} label="Select all" />
-<Checkbox checked={sub} onCheckedChange={setSub} label="Subscribe" disabled />
+<Checkbox checked={agreed} onChange={setAgreed} label="I agree to the terms" />
+<Checkbox checked="indeterminate" onChange={setAll} label="Select all" />
+<Checkbox checked={sub} onChange={setSub} label="Subscribe" disabled />
 ```
 
-`checked` is `boolean | "indeterminate"`. Always provide `label` — don't wrap Checkbox in a `<label>`.
+`checked` is `boolean | "indeterminate"`. `onChange` receives a boolean (`(next: boolean) => void`) — NOT an event, NOT `onCheckedChange`. Always provide `label` — don't wrap Checkbox in a `<label>`.
 
 ### Toggle
 
@@ -395,10 +393,12 @@ Render a group — use `name` to bind siblings.
 
 ```tsx
 <div className="flex flex-col gap-2">
-  <Radio name="plan" value="free" checked={plan === "free"} onChange={setPlan} label="Free" />
-  <Radio name="plan" value="pro"  checked={plan === "pro"}  onChange={setPlan} label="Pro" />
+  <Radio name="plan" value="free" checked={plan === "free"} onChange={() => setPlan("free")} label="Free" />
+  <Radio name="plan" value="pro"  checked={plan === "pro"}  onChange={() => setPlan("pro")}  label="Pro" />
 </div>
 ```
+
+`onChange` receives a boolean (`(next: boolean) => void`) — fires with `true` when the radio becomes selected. To track which value was picked, ignore the arg and set the value directly: `onChange={() => setPlan("pro")}`.
 
 ---
 
@@ -412,11 +412,13 @@ type TagVariant = "blue" | "green" | "yellow" | "red" | "gray" | "lime";
 
 <Tag text="Active" variant="green" />
 <Tag text="Draft" variant="yellow" />
-<Tag text="Filter: Design" close onClose={remove} />
+<Tag text="Filter: Design" close />
 <Tag text="Small" variant="blue" size="small" />
 ```
 
-Props: `text`, `variant`, `size` (`"large"` default | `"small"`), `close`, `onClose`, `className`.
+Props: `text`, `variant`, `size` (`"large"` default | `"small"`), `state` (`"default"` | `"hover"` | `"disabled"`), `icon` (boolean — leading dot), `close` (boolean — visual × button only), `className`.
+
+**Note** — `close` is purely visual; the Tag does not handle dismiss. To make a removable tag, wrap it in a clickable parent (`<button onClick={remove}><Tag close text="…" /></button>`) or use `<DropdownMultiple>`'s built-in removable chips.
 
 ### StatusTag
 
@@ -674,14 +676,32 @@ Props:
 
 ### DateInput / TimeInput
 
-```tsx
-<DateInput placeholder="Select date" mode="single" value={date} onChange={setDate} />
-<DateInput mode="range"    value={range} onChange={setRange} />
-<DateInput mode="multiple" value={dates} onChange={setDates} />
+Modes: `"single"` (default) | `"range"`. There is **no `"multiple"` mode**.
 
+Each mode uses different value props — single mode uses `value` + `onChange`, range mode uses `dateRange` + `onRangeChange` (or `startTime`/`endTime` + `onStartChange`/`onEndChange` for TimeInput).
+
+```tsx
+// DateInput — single
+<DateInput placeholder="Select date" mode="single" value={date} onChange={setDate} />
+
+// DateInput — range (different prop names!)
+<DateInput mode="range" dateRange={range} onRangeChange={setRange} />
+
+// TimeInput — single
 <TimeInput placeholder="Start time" value={time} onChange={setTime} />
-<TimeInput mode="range" value={timeRange} onChange={setTimeRange} />
+
+// TimeInput — range (different prop names!)
+<TimeInput
+  mode="range"
+  startTime={start}
+  endTime={end}
+  onStartChange={setStart}
+  onEndChange={setEnd}
+/>
 ```
+
+DateInput types: `value: Date | undefined`, `dateRange: DateRange` (re-exported from react-day-picker — `{ from?: Date; to?: Date }`).
+TimeInput types: `value: TimeValue` where `TimeValue = { hour: 0–23, minute: 0–59 }`.
 
 Always format `"DD MMM YYYY"` for display (system format). Don't mix Thai month names with C.E. year.
 
@@ -987,7 +1007,7 @@ export function LoginSheet({
     <div className="flex flex-col gap-4">
       <Input placeholder="Email"    value={email} onChange={setEmail} required />
       <Input placeholder="Password" value={pw}    onChange={setPw}    type="password" required />
-      <Checkbox checked={remember} onCheckedChange={setRmb} label="Remember me" />
+      <Checkbox checked={remember} onChange={setRmb} label="Remember me" />
       <Button variant="primary" size="xl" className="w-full" onClick={() => onOpenChange(false)}>
         Sign in
       </Button>
@@ -1109,7 +1129,7 @@ export function LoginPage() {
         <div className="flex flex-col gap-4">
           <Input placeholder="Email" type="email" value={email} onChange={setEmail} required />
           <Input placeholder="Password" type="password" value={pw} onChange={setPw} required />
-          <Checkbox checked={remember} onCheckedChange={setRmb} label="Remember me" />
+          <Checkbox checked={remember} onChange={setRmb} label="Remember me" />
         </div>
         <Button variant="primary" size="lg" className="w-full">Sign in</Button>
         <p className="text-center text-sm text-muted-foreground">
@@ -1199,7 +1219,7 @@ export function SettingsPage() {
         <DropdownMultiple
           placeholder="Interests"
           options={interests}
-          values={picked}
+          value={picked}
           onChange={setPicked}
         />
         <DateInput placeholder="Birthday" mode="single" value={dob} onChange={setDob} />
