@@ -455,14 +455,14 @@ const DAY_PICKER_CLASSES = {
     "border-0 bg-transparent cursor-pointer",
     "hover:bg-disabled-bg transition-colors duration-100",
     "outline-none p-0",
-    // Selected (single mode)
-    "[.is-selected_&]:!bg-primary-action [.is-selected_&]:!text-on-primary-action [.is-selected_&]:!rounded-[6px]",
+    // Selected (single mode only — not range-middle which also gets is-selected)
+    "[.is-selected:not(.is-range-middle)_&]:!bg-primary-action [.is-selected:not(.is-range-middle)_&]:!text-on-primary-action [.is-selected:not(.is-range-middle)_&]:!rounded-[6px]",
     // Range start button styling
     "[.is-range-start_&]:!bg-primary-action [.is-range-start_&]:!text-on-primary-action [.is-range-start_&]:!rounded-l-[6px] [.is-range-start_&]:!rounded-r-none",
     // Range end button styling
     "[.is-range-end_&]:!bg-primary-action [.is-range-end_&]:!text-on-primary-action [.is-range-end_&]:!rounded-r-[6px] [.is-range-end_&]:!rounded-l-none",
-    // Range middle button styling
-    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none",
+    // Range middle button styling (light blue — must override is-selected which also fires on middle days)
+    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none [.is-range-middle_&]:hover:!bg-range-bg",
     // Today (when not selected)
     "[.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!bg-primary-action-light [.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!text-foreground",
     // Outside days
@@ -510,10 +510,10 @@ const DRAWER_DAY_PICKER_CLASSES: typeof DAY_PICKER_CLASSES = {
     "border-0 bg-transparent cursor-pointer",
     "hover:bg-disabled-bg transition-colors duration-100",
     "outline-none p-0",
-    "[.is-selected_&]:!bg-primary-action [.is-selected_&]:!text-on-primary-action [.is-selected_&]:!rounded-[8px]",
+    "[.is-selected:not(.is-range-middle)_&]:!bg-primary-action [.is-selected:not(.is-range-middle)_&]:!text-on-primary-action [.is-selected:not(.is-range-middle)_&]:!rounded-[8px]",
     "[.is-range-start_&]:!bg-primary-action [.is-range-start_&]:!text-on-primary-action [.is-range-start_&]:!rounded-l-[8px] [.is-range-start_&]:!rounded-r-none",
     "[.is-range-end_&]:!bg-primary-action [.is-range-end_&]:!text-on-primary-action [.is-range-end_&]:!rounded-r-[8px] [.is-range-end_&]:!rounded-l-none",
-    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none",
+    "[.is-range-middle_&]:!bg-range-bg [.is-range-middle_&]:!text-range-text [.is-range-middle_&]:!rounded-none [.is-range-middle_&]:hover:!bg-range-bg",
     "[.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!bg-primary-action-light [.is-today:not(.is-selected):not(.is-range-start):not(.is-range-end)_&]:!text-foreground",
     "[.is-outside_&]:text-disabled [.is-outside_&]:opacity-50",
     "[.is-outside.is-selected_&]:!bg-transparent [.is-outside.is-selected_&]:!opacity-30",
