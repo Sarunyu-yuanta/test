@@ -1,13 +1,13 @@
 # Style — spacing, typography, radius, shadow
 
 ## Typography
-Pre-styled HTML headings (do NOT add `text-*` / `font-*` overrides):
-- `<h1>` 24px
-- `<h2>` 20px
-- `<h3>` 18px
-- `<h4>` 16px
+Headings have no built-in size — apply utility classes explicitly:
+- `<h1>` → `text-2xl font-medium leading-normal`
+- `<h2>` → `text-xl font-medium leading-normal`
+- `<h3>` → `text-lg font-medium leading-normal`
+- `<h4>` → `text-base font-medium leading-normal`
 
-Body text inherits `--foreground`. Font: Noto Sans Thai (override globally via `--font-sans`).
+Body text inherits `--foreground`. Font: Noto Sans Thai (set globally by the library on `body`; override with `font-family` on your own `body` rule if needed).
 
 ## Radius
 `rounded-sm` 2px · `rounded` 4px (default) · `rounded-md` 6px · `rounded-lg` 8px · `rounded-xl` 12px · `rounded-2xl` 16px · `rounded-3xl` 24px · `rounded-full`

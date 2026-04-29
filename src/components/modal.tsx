@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { X } from "@phosphor-icons/react";
+import { X, Warning, Check } from "@phosphor-icons/react";
 import { Button } from "./button";
 import { cn } from "../lib/utils";
 
@@ -10,62 +10,31 @@ export type ModalActionLayout = "none" | "single" | "double";
 export type ModalResponsive = "mobile" | "desktop";
 export type ModalAlertStatus = "warning" | "success" | "danger";
 
-type AlertLayer = { inset: string; src: string };
 type AlertConfig = {
   titleColor: string;
-  background: string;
-  layers: AlertLayer[];
+  solidBg: string;
+  boxShadow: string;
+  Icon: React.ElementType;
 };
 
 const ALERT_CONFIG: Record<ModalAlertStatus, AlertConfig> = {
   warning: {
     titleColor: "var(--text-warning-primary)",
-    background:
-      "https://www.figma.com/api/mcp/asset/f4ca68ad-5732-4124-9ff4-cfb69330cc02",
-    layers: [
-      {
-        inset: "12.5%",
-        src: "https://www.figma.com/api/mcp/asset/7052a092-a432-4e8c-b559-6b51d28d878f",
-      },
-      {
-        inset: "22.5%",
-        src: "https://www.figma.com/api/mcp/asset/a291a1b2-06c8-455c-8e21-29755aa05c57",
-      },
-      {
-        inset: "28.57% 30.71% 32.86% 30.71%",
-        src: "https://www.figma.com/api/mcp/asset/a22c7520-55fe-4003-ba78-65dab40b9e23",
-      },
-    ],
+    solidBg: "#f0b100",
+    boxShadow: "0 0 0 8px rgba(240,177,0,0.2), 0 0 0 20px rgba(240,177,0,0.08)",
+    Icon: Warning,
   },
   success: {
     titleColor: "var(--text-success-primary)",
-    background:
-      "https://www.figma.com/api/mcp/asset/2a865e6f-8a92-4496-88b5-71ac99e2c385",
-    layers: [
-      {
-        inset: "12.77%",
-        src: "https://www.figma.com/api/mcp/asset/5878ce35-4f9a-4203-97a8-70a2f17b182c",
-      },
-      {
-        inset: "22.55%",
-        src: "https://www.figma.com/api/mcp/asset/cea74180-b261-4db7-8712-6d32c4ccdeaf",
-      },
-    ],
+    solidBg: "#00c951",
+    boxShadow: "0 0 0 8px rgba(0,201,81,0.2), 0 0 0 20px rgba(0,201,81,0.08)",
+    Icon: Check,
   },
   danger: {
     titleColor: "var(--text-danger-primary)",
-    background:
-      "https://www.figma.com/api/mcp/asset/c7a65595-684e-4a04-b7fd-d443951f680a",
-    layers: [
-      {
-        inset: "12.77%",
-        src: "https://www.figma.com/api/mcp/asset/10090345-ae32-4fc4-aff6-cba04ea93700",
-      },
-      {
-        inset: "22.55%",
-        src: "https://www.figma.com/api/mcp/asset/3aa1156e-e48b-411f-ab98-93e1da98ecc1",
-      },
-    ],
+    solidBg: "#fb2c36",
+    boxShadow: "0 0 0 8px rgba(251,44,54,0.2), 0 0 0 20px rgba(251,44,54,0.08)",
+    Icon: X,
   },
 };
 
@@ -185,32 +154,21 @@ function AlertBody({
   title: string;
   description: string;
 }) {
+  const { Icon, titleColor, solidBg, boxShadow } = config;
   return (
     <div className="flex flex-col items-center gap-4 text-center">
-      <div className="relative size-[100px]">
-        <img
-          alt=""
-          className="absolute inset-0 size-full"
-          src={config.background}
-        />
-        {config.layers.map((layer) => (
-          <div
-            key={layer.src}
-            className="absolute"
-            style={{ inset: layer.inset }}
-          >
-            <img
-              alt=""
-              className="absolute inset-0 size-full"
-              src={layer.src}
-            />
-          </div>
-        ))}
+      <div className="flex items-center justify-center size-[100px]">
+        <div
+          className="flex items-center justify-center size-[56px] rounded-full"
+          style={{ backgroundColor: solidBg, boxShadow }}
+        >
+          <Icon size={40} color="white" />
+        </div>
       </div>
       <div className="flex flex-col items-center gap-2">
         <p
           className="text-[18px] leading-7 font-bold"
-          style={{ color: config.titleColor }}
+          style={{ color: titleColor }}
         >
           {title}
         </p>
