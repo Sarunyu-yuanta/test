@@ -192,3 +192,37 @@ export type {
   TimeInputProps,
   TimeSlot,
 } from "./components/time-input";
+
+// Default export — for tools that do `import SystemOne from '@sarunyu/system-one'`
+import { Button } from "./components/button";
+import { Badge } from "./components/badge";
+import { Alert } from "./components/alert";
+import { Card } from "./components/card";
+import { Checkbox } from "./components/checkbox";
+import { Toggle } from "./components/toggle";
+import { Radio } from "./components/radio";
+import { Chip } from "./components/chip";
+import { DateInput } from "./components/date-input";
+import { Dropdown } from "./components/dropdown";
+import { DropdownMultiple } from "./components/dropdown-multiple";
+import { Input } from "./components/input";
+import { Modal } from "./components/modal";
+import { Notification } from "./components/notification";
+import { Toast, ToastStack, Toaster } from "./components/toast";
+import { BottomSheet } from "./components/bottom-sheet";
+import { OptionList } from "./components/option-list";
+import { SearchInput } from "./components/search-input";
+import { Tab, TabGroup } from "./components/tab";
+import { Tag, StatusTag } from "./components/tag";
+import { Table, TableRow, TableHeaderCell, TableCell } from "./components/table";
+import { TextArea } from "./components/textarea";
+import { TimeInput } from "./components/time-input";
+import { cn } from "./lib/utils";
+import { useIsMobile } from "./components/ui/use-mobile";
+export default {
+  Button, Badge, Alert, Card, Checkbox, Toggle, Radio, Chip,
+  DateInput, Dropdown, DropdownMultiple, Input, Modal, Notification,
+  Toast, ToastStack, Toaster, BottomSheet, OptionList, SearchInput,
+  Tab, TabGroup, Tag, StatusTag, Table, TableRow, TableHeaderCell, TableCell,
+  TextArea, TimeInput, cn, useIsMobile,
+};

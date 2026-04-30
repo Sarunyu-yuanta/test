@@ -63,6 +63,25 @@ import "@sarunyu/system-one/styles.css";
 
 No provider, no wrapper. Components ship with `"use client"`.
 
+### Figma Make
+
+**CRITICAL:** Add this import to your entry file (e.g. `src/main.tsx`) before any other code, or styles, fonts, and colors will be completely broken:
+
+```tsx
+import "@sarunyu/system-one/styles.css";
+```
+
+Use **named imports** (preferred). A default import is also supported but gives you an object — you must then destructure it:
+
+```tsx
+// ✅ preferred — named imports
+import { Button, Input } from "@sarunyu/system-one";
+
+// ✅ also valid — default import (use SystemOne.Button, etc.)
+import SystemOne from "@sarunyu/system-one";
+const { Button, Input } = SystemOne;
+```
+
 ### Lovable / Vite + Tailwind v3 hosts
 
 Lovable projects use Tailwind v3 and ship a `src/index.css` based on
