@@ -186,7 +186,7 @@ export interface ToastStackProps {
   renderItem?: (item: ToastProps & { id: string }) => ReactNode;
 }
 
-export function ToastStack({ items, className, renderItem }: ToastStackProps) {
+export function ToastStack({ items = [], className, renderItem }: ToastStackProps) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {items.map((item) =>

@@ -144,6 +144,12 @@ Types: `value: Date | undefined` (DateInput single), `dateRange: { from?: Date; 
 Alert statuses: `normal` (default) | `information` | `success` | `warning` | `critical`
 Toast statuses: `information` | `success` | `warning` | `critical`. Variants: `default` | `broadcast`.
 
+**`ToastStack` requires `items` prop** — never render `<ToastStack />` without it or it crashes. Always pass an array (use `[]` as default state):
+```tsx
+const [toasts, setToasts] = useState<Array<ToastProps & { id: string }>>([]);
+<ToastStack items={toasts} />
+```
+
 **Alert limitations:** `message` is a single string — no title, no multiple paragraphs. For multi-paragraph notices or disclaimers, do NOT build a custom component with inline styles. Use token classes:
 
 ```tsx
