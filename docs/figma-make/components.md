@@ -144,6 +144,20 @@ Types: `value: Date | undefined` (DateInput single), `dateRange: { from?: Date; 
 Alert statuses: `normal` (default) | `information` | `success` | `warning` | `critical`
 Toast statuses: `information` | `success` | `warning` | `critical`. Variants: `default` | `broadcast`.
 
+**Alert limitations:** `message` is a single string — no title, no multiple paragraphs. For multi-paragraph notices or disclaimers, do NOT build a custom component with inline styles. Use token classes:
+
+```tsx
+// ✅ multi-paragraph notice / disclaimer
+<div className="bg-default-secondary border border-border rounded-xl p-6 flex gap-3">
+  <Warning size={16} weight="fill" className="text-icon-default-secondary shrink-0 mt-0.5" />
+  <div className="flex flex-col gap-2">
+    <p className="text-sm font-medium text-foreground">คำเตือนความเสี่ยง</p>
+    <p className="text-xs text-muted-foreground leading-normal">Paragraph 1…</p>
+    <p className="text-xs text-muted-foreground leading-normal">Paragraph 2…</p>
+  </div>
+</div>
+```
+
 ## Badge
 - `variant="button"` (default) — filter button with count. Use in toolbars.
 - `variant="notification"` — INTERNAL only. Never wire your own onClick. For a notification bell + list, use `<Notification>`.

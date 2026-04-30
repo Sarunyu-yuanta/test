@@ -20,6 +20,24 @@
 
 6. **Layout = plain `<div>` + Tailwind utilities.** The library does NOT ship `Page`, `Section`, `Stack`, `CardGrid`, `Toolbar` — they don't exist. Use `flex`, `grid`, `container`, `max-w-*`, `gap-*`, `p-*`, `mx-auto`.
 
+7. **Never use `style={{}}` with raw colors or sizes.** Inline styles bypass the design system entirely and break dark mode. Use token classes from tokens.md instead.
+   ```tsx
+   // ❌ wrong
+   <div style={{ backgroundColor: "#F8F8F5", color: "#6A6A7A" }}>
+   // ✅ correct
+   <div className="bg-default-secondary text-muted-foreground">
+   ```
+
+8. **If the design uses a non-blue brand color, use `theme-overrides.css` — never hardcode the brand hex.** Set `--primary-action` once in the override file, then use `text-brand` / `bg-primary-action` / `text-on-primary-action` everywhere. See setup.md "Brand color" section for the full override template.
+   ```tsx
+   // ❌ wrong — hardcoded orange
+   <p className="text-[#C48B3C]">ผลิตภัณฑ์ของเรา</p>
+   <button style={{ backgroundColor: "#C48B3C" }}>…</button>
+   // ✅ correct — brand token (resolves to whatever --primary-action is)
+   <p className="text-brand">ผลิตภัณฑ์ของเรา</p>
+   <Button variant="primary">…</Button>
+   ```
+
 ## Responsive rule (CRITICAL)
 
 On mobile (< 768px), content/action-heavy modals MUST render as `<BottomSheet>`, not `<Modal>`. Use `useIsMobile()` to branch.
