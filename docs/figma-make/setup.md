@@ -34,13 +34,16 @@ If the design uses a brand color other than the library default (P1 blue), you *
   --primary-action: #C48B3C;        /* brand 600 */
   --primary-action-hover: #A87530;  /* brand 700 */
   --primary-action-active: #8C5E20; /* brand 800 */
+  /* Also override light/muted — use rgb(r g b / alpha%) NOT color-mix() */
+  --primary-action-light: rgb(196 139 60 / 6%);
+  --primary-action-muted: rgb(196 139 60 / 10%);
 }
 .dark {
   --primary-action: #E5A84F;
   --primary-action-hover: #F0BB6A;
   --primary-action-active: #D49030;
-  --primary-action-light: color-mix(in srgb, #E5A84F 10%, transparent);
-  --primary-action-muted: color-mix(in srgb, #E5A84F 15%, transparent);
+  --primary-action-light: rgb(229 168 79 / 10%);
+  --primary-action-muted: rgb(229 168 79 / 15%);
 }
 ```
 

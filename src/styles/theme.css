@@ -283,16 +283,8 @@
   --primary-action: var(--bg-brand-primary);
   --primary-action-hover: var(--bg-brand-hover);
   --primary-action-active: var(--bg-brand-pressed);
-  --primary-action-light: color-mix(
-    in srgb,
-    var(--bg-brand-primary) 6%,
-    transparent
-  );
-  --primary-action-muted: color-mix(
-    in srgb,
-    var(--bg-brand-primary) 10%,
-    transparent
-  );
+  --primary-action-light: rgb(10 110 231 / 6%);
+  --primary-action-muted: rgb(10 110 231 / 10%);
 
   --muted-foreground: var(--text-default-tertiary);
 

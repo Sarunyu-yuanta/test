@@ -1374,8 +1374,9 @@ defaults live in `tokens/color.json` (P1 blue). Replace with your own values.
   --primary-action: #7c3aed;        /* your brand 600 */
   --primary-action-hover: #6d28d9;  /* your brand 700 */
   --primary-action-active: #5b21b6; /* your brand 800 */
-  /* -light / -muted derive from --primary-action via color-mix(), so they
-     cascade automatically in :root. No need to override them here. */
+  /* Use rgb(r g b / alpha%) — NOT color-mix() which is unsupported in some renderers */
+  --primary-action-light: rgb(124 58 237 / 6%);
+  --primary-action-muted: rgb(124 58 237 / 10%);
 
   --font-sans: "Inter", sans-serif;  /* replace default Noto Sans Thai */
 }
@@ -1386,8 +1387,8 @@ defaults live in `tokens/color.json` (P1 blue). Replace with your own values.
   --primary-action: #a78bfa;        /* your brand 400 */
   --primary-action-hover: #c4b5fd;  /* your brand 300 */
   --primary-action-active: #8b5cf6; /* your brand 500 */
-  --primary-action-light: color-mix(in srgb, #a78bfa 10%, transparent);
-  --primary-action-muted: color-mix(in srgb, #a78bfa 15%, transparent);
+  --primary-action-light: rgb(167 139 250 / 10%);
+  --primary-action-muted: rgb(167 139 250 / 15%);
 }
 ```
 
