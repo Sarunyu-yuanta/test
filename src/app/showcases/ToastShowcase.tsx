@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/button";
-import { Toast, type ToastStatus } from "@/components/toast";
-import { cn } from "@/lib/utils";
+import { Toast, Toaster, type ToastProps, type ToastStatus } from "@/components/toast";
 
 const DEFAULT_ONE_LINE = "Text message";
 const DEFAULT_TWO_LINES = "Lorem ipsum is placeholder text commonly used in the mockups.";
@@ -12,14 +11,7 @@ const BROADCAST_TWO_LINES =
 const DEFAULT_STATUSES: ToastStatus[] = ["information", "success", "warning", "critical"];
 const BROADCAST_STATUSES: ToastStatus[] = ["information", "warning", "critical"];
 
-type DemoToast = {
-  id: string;
-  variant: "default" | "broadcast";
-  status: ToastStatus;
-  message: string;
-  multiline?: boolean;
-  actionLabel?: string;
-};
+type DemoToast = ToastProps & { id: string };
 
 function prettifyStatus(status: ToastStatus) {
   return status.charAt(0).toUpperCase() + status.slice(1);
@@ -32,18 +24,12 @@ export function ToastShowcase() {
   const pushLog = (next: string) =>
     setLogs((prev) => [next, ...prev].slice(0, 8));
 
-  const removeToast = (id: string) => {
-    setActiveToasts((prev) => prev.filter((toast) => toast.id !== id));
-  };
+  const removeToast = (id: string) =>
+    setActiveToasts((prev) => prev.filter((t) => t.id !== id));
 
   const addToast = (toast: Omit<DemoToast, "id">) => {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     setActiveToasts((prev) => [{ id, ...toast }, ...prev].slice(0, 5));
-
-    // Broadcast follows the banner behavior in Figma, auto-hide in showcase demo.
-    if (toast.variant === "broadcast") {
-      window.setTimeout(() => removeToast(id), 3500);
-    }
   };
 
   return (
@@ -72,6 +58,7 @@ export function ToastShowcase() {
                   status: "information",
                   message: DEFAULT_ONE_LINE,
                   actionLabel: "Action",
+                  onActionClick: () => pushLog("Information: action clicked"),
                 })
               }
             >
@@ -87,6 +74,7 @@ export function ToastShowcase() {
                   multiline: true,
                   message: DEFAULT_TWO_LINES,
                   actionLabel: "Action",
+                  onActionClick: () => pushLog("Success: action clicked"),
                 })
               }
             >
@@ -130,7 +118,9 @@ export function ToastShowcase() {
 
           <div className="mt-5 rounded-lg border border-divider bg-default-secondary p-4">
             <p className="text-sm text-muted-foreground">
-              Desktop (≥ 1024px): Toast โชว์มุมขวาบน — Tablet &amp; Mobile: Toast โชว์กึ่งกลางด้านบน
+              Desktop (≥ 768px): Toast โชว์มุมขวาบน — Tablet &amp; Mobile: Toast โชว์กึ่งกลางด้านบน
+              <br />
+              Auto-dismiss หลังจาก 4 วินาที
             </p>
           </div>
         </section>
@@ -220,35 +210,15 @@ export function ToastShowcase() {
         </section>
       </div>
 
-      <div
-        className={cn(
-          "pointer-events-none fixed top-5 z-50 flex max-h-[calc(100vh-40px)] flex-col gap-2 overflow-y-auto",
-          "left-1/2 w-[calc(100vw-32px)] max-w-[375px] -translate-x-1/2",
-          "lg:left-auto lg:right-5 lg:w-[375px] lg:translate-x-0",
-        )}
-      >
-        {activeToasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            variant={toast.variant}
-            status={toast.status}
-            message={toast.message}
-            multiline={toast.multiline}
-            actionLabel={toast.actionLabel}
-            className={cn(
-              "pointer-events-auto",
-              toast.variant === "default"
-                ? "mx-auto w-[343px] lg:ml-auto lg:mr-0"
-                : "w-full lg:w-[375px]",
-            )}
-            onActionClick={() => pushLog(`${prettifyStatus(toast.status)}: action clicked`)}
-            onClose={() => {
-              removeToast(toast.id);
-              pushLog(`${prettifyStatus(toast.status)}: closed`);
-            }}
-          />
-        ))}
-      </div>
+      <Toaster
+        items={activeToasts}
+        duration={4000}
+        onRemove={(id) => {
+          const toast = activeToasts.find((t) => t.id === id);
+          if (toast?.status) pushLog(`${prettifyStatus(toast.status)}: dismissed`);
+          removeToast(id);
+        }}
+      />
     </div>
   );
 }
