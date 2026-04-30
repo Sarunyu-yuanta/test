@@ -144,11 +144,28 @@ Types: `value: Date | undefined` (DateInput single), `dateRange: { from?: Date; 
 Alert statuses: `normal` (default) | `information` | `success` | `warning` | `critical`
 Toast statuses: `information` | `success` | `warning` | `critical`. Variants: `default` | `broadcast`.
 
-**`ToastStack` requires `items` prop** — never render `<ToastStack />` without it or it crashes. Always pass an array (use `[]` as default state):
+**Three toast components — do NOT confuse them:**
+
+| Component | Role | Has auto-dismiss? | Has fixed position? |
+|---|---|---|---|
+| `Toaster` | Full managed container — place once at app root | ✅ `duration` + `onRemove` | ✅ top-right desktop / top-center mobile |
+| `ToastStack` | Bare list renderer — custom layout only | ❌ | ❌ |
+| `Toast` | Single item only — no state management | ❌ | ❌ |
+
+**Always use `Toaster` for normal toast usage:**
 ```tsx
+// App.tsx or layout root
 const [toasts, setToasts] = useState<Array<ToastProps & { id: string }>>([]);
-<ToastStack items={toasts} />
+const remove = (id: string) => setToasts(t => t.filter(x => x.id !== id));
+const add = (t: Omit<ToastProps, "onClose"> & { id: string }) => setToasts(p => [...p, t]);
+
+<Toaster items={toasts} onRemove={remove} duration={4000} />
+
+// To trigger a toast:
+add({ id: crypto.randomUUID(), status: "success", message: "Saved" });
 ```
+
+`ToastStack` has NO `duration` / `onRemove` props — those belong to `Toaster` only. `Toaster` still exists and was never removed.
 
 **Alert limitations:** `message` is a single string — no title, no multiple paragraphs. For multi-paragraph notices or disclaimers, do NOT build a custom component with inline styles. Use token classes:
 
