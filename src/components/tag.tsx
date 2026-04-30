@@ -132,7 +132,7 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
     <div
       ref={ref}
       className={cn(
-        "inline-flex items-center justify-center rounded-[4px]",
+        "inline-flex w-fit items-center justify-center rounded-[4px]",
         (icon || close) && "gap-[2px]",
         s.container,
         bgClass,
@@ -203,7 +203,7 @@ export function StatusTag({ type = "stop", text, className }: StatusTagProps) {
   return (
     <div
       className={cn(
-        "inline-flex items-center justify-center gap-1 rounded-[8px] px-2 py-1",
+        "inline-flex w-fit items-center justify-center gap-1 rounded-[8px] px-2 py-1",
         className
       )}
     >
