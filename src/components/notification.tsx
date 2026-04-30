@@ -288,15 +288,15 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
                 </div>
               )}
 
-              {groups.map((group) => (
-                <div key={group.label} className="w-full">
+              {groups.map((group, gi) => (
+                <div key={group.label ?? gi} className="w-full">
                   <div>
-                    {group.items.map((item) => (
+                    {group.items.map((item, ii) => (
                       <NotificationRow
-                        key={item.id}
+                        key={item.id ?? `${gi}-${ii}`}
                         item={item}
                         onItemClick={handleItemClick}
-                        hideIndicator={clickedItemIds.has(item.id)}
+                        hideIndicator={item.id ? clickedItemIds.has(item.id) : false}
                         demoteNewBackground={wasDismissed}
                       />
                     ))}
