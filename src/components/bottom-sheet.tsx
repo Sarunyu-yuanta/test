@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import type React from "react";
 import { Circle } from "@phosphor-icons/react";
 import { Button } from "./button";
@@ -52,10 +53,21 @@ export function BottomSheet({
   className,
   contentClassName,
 }: BottomSheetProps) {
+  const [everOpened, setEverOpened] = useState(!!open);
+
+  useEffect(() => {
+    if (open) setEverOpened(true);
+  }, [open]);
+
+  const handleOpenChange = (next: boolean) => {
+    if (next) setEverOpened(true);
+    onOpenChange?.(next);
+  };
+
   return (
-    <Drawer direction="bottom" open={open} onOpenChange={onOpenChange}>
+    <Drawer direction="bottom" open={open} onOpenChange={handleOpenChange}>
       {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-      <DrawerContent
+      {everOpened && <DrawerContent
         className={cn(
           "[&>div:first-child]:hidden rounded-t-[24px] border-t-0 px-4 pb-6 pt-2",
           className,
@@ -83,7 +95,7 @@ export function BottomSheet({
         ) : null}
 
         {children ? <div className={cn("pt-2", contentClassName)}>{children}</div> : null}
-      </DrawerContent>
+      </DrawerContent>}
     </Drawer>
   );
 }

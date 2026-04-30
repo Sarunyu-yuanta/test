@@ -269,7 +269,7 @@ Caller owns open state and supplies backdrop. Widths fixed by variant — DON'T 
 Action layout: `none` | `single` | `double`. Only one primary per modal.
 
 ## BottomSheet
-Mobile-only (use Modal on desktop). Built on Vaul — ships own backdrop/portal.
+Mobile-only (use Modal on desktop). Built on Vaul — ships own backdrop/portal. **No lazy-mounting needed** — the component suppresses its internal portal until first open automatically.
 
 ```tsx
 <BottomSheet open={open} onOpenChange={setOpen} title="Filters" rightSide="icon">
