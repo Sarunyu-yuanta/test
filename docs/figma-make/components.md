@@ -137,6 +137,36 @@ const allSelected = rows.length > 0 && rows.every(r => sel.has(r.id));
 </Table>
 ```
 
+**Sorting — MUST wire `sortDirection` + `onSortChange` to parent state, otherwise the icon never changes:**
+
+```tsx
+type SortDir = "none" | "asc" | "desc";
+const [sortCol, setSortCol] = useState<string | null>(null);
+const [sortDir, setSortDir] = useState<SortDir>("none");
+
+const handleSort = (col: string) => (next: SortDir) => {
+  setSortCol(col);
+  setSortDir(next);
+};
+
+<TableHead>
+  <TableRow>
+    <TableHeaderCell
+      sortable
+      sortDirection={sortCol === "name" ? sortDir : "none"}
+      onSortChange={handleSort("name")}
+    >Name</TableHeaderCell>
+    <TableHeaderCell
+      sortable
+      sortDirection={sortCol === "date" ? sortDir : "none"}
+      onSortChange={handleSort("date")}
+    >Date</TableHeaderCell>
+  </TableRow>
+</TableHead>
+```
+
+`onSortChange` receives `"asc"` | `"desc"` | `"none"`. **Never pass a hardcoded `sortDirection` or a no-op `onSortChange={() => {}}`** — the component is fully controlled.
+
 - `TableHeaderCell` props: `type` (`text` | `icon` | `check`) `checkState` `onCheckChange` `sortable` (default true) `sortDirection` (`none` | `asc` | `desc`) `onSortChange`
 - `TableRow` props: `selected` `onSelectedChange` (required for checkbox to work) `hoverable` `onClick`
 - `TableCell` props: `type` (`default` | `text-icon` | `text-image` | `tag` | `icon` | `button` | `checkbox`) `contentAlign` (`start` | `center`) — use `type="checkbox"` (NOT nested `<Checkbox>`) for selectable rows
