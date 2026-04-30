@@ -167,6 +167,12 @@ add({ id: crypto.randomUUID(), status: "success", message: "Saved" });
 
 `ToastStack` has NO `duration` / `onRemove` props — those belong to `Toaster` only. `Toaster` still exists and was never removed.
 
+**`onRemove` is required for toasts to dismiss.** Without it, toasts stay on screen forever — neither auto-dismiss nor the × button will work. Always wire it up:
+```tsx
+const remove = (id: string) => setToasts(t => t.filter(x => x.id !== id));
+<Toaster items={toasts} onRemove={remove} />
+```
+
 **Alert limitations:** `message` is a single string — no title, no multiple paragraphs. For multi-paragraph notices or disclaimers, do NOT build a custom component with inline styles. Use token classes:
 
 ```tsx

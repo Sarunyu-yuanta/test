@@ -229,6 +229,9 @@ export function Toaster({ items, renderItem, className, duration = 4000, onRemov
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   useEffect(() => {
+    if (duration > 0 && !onRemove) {
+      console.warn("[Toaster] duration is set but onRemove is not provided — toasts will never dismiss. Pass onRemove={(id) => setToasts(t => t.filter(x => x.id !== id))} to enable auto-dismiss.");
+    }
     if (!onRemove || duration === 0) return;
 
     // start timer for newly added items
