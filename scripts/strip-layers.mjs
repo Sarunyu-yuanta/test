@@ -147,5 +147,46 @@ while (i < N) {
   i++;
 }
 
+// Hoist @import statements to the top — CSS spec requires @import before all
+// other statements. Tailwind CLI inlines fonts.css and the @import ends up
+// mid-file, which PostCSS (used by Lovable, Figma Make) rejects with
+// "@import must precede all other statements".
+function hoistImports(css) {
+  const imports = [];
+  let rest = "";
+  let i = 0;
+  const N = css.length;
+
+  while (i < N) {
+    if (isLiteralStart(css, i)) {
+      const end = skipLiteral(css, i);
+      rest += css.slice(i, end);
+      i = end;
+      continue;
+    }
+
+    if (css.slice(i, i + 7) === "@import" && !isIdent(css[i + 7])) {
+      let j = i + 7;
+      while (j < N) {
+        if (isLiteralStart(css, j)) { j = skipLiteral(css, j); continue; }
+        if (css[j] === ";") { j++; break; }
+        j++;
+      }
+      imports.push(css.slice(i, j).trim());
+      while (j < N && /\s/.test(css[j])) j++;
+      i = j;
+      continue;
+    }
+
+    rest += css[i];
+    i++;
+  }
+
+  if (imports.length === 0) return css;
+  return imports.join("\n") + "\n" + rest;
+}
+
+result = hoistImports(result);
+
 writeFileSync(file, result);
 console.log(`Stripped @layer wrappers from ${file} (flat/unlayered output)`);
