@@ -751,9 +751,13 @@ type AlertStatus = "normal" | "information" | "success" | "warning" | "critical"
 <Alert status="warning"     message="Incomplete profile — some features are limited." />
 <Alert status="critical"    message="Authentication failed. Please try again." />
 <Alert status="warning"     message="A longer message that wraps to a second line." multiline />
+
+// With title — for notices, disclaimers, info boxes with a heading
+<Alert status="normal"   title="คำเตือนความเสี่ยง" message="การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนตัดสินใจลงทุน" multiline />
+<Alert status="warning"  title="ข้อมูลสำคัญ"       message="บัญชีของคุณจะถูกระงับหากไม่ยืนยันภายใน 7 วัน" />
 ```
 
-Props: `status?` (default `"normal"`), `message` (required), `multiline?` (default `false` — `false` truncates to one line, `true` clamps to 2 lines), `className`.
+Props: `status?` (default `"normal"`), `title?` (bold header line above message), `message` (required), `multiline?` (default `false` — `false` truncates to one line, `true` clamps to 2 lines), `className`.
 
 ---
 

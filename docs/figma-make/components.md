@@ -142,6 +142,14 @@ Types: `value: Date | undefined` (DateInput single), `dateRange: { from?: Date; 
 ```
 
 Alert statuses: `normal` (default) | `information` | `success` | `warning` | `critical`
+Alert props: `status?` · `title?` (bold header above message) · `message` (required) · `multiline?` · `className?`
+
+```tsx
+// single-line
+<Alert status="warning" message="Profile incomplete" />
+// with title (for notices, disclaimers)
+<Alert status="normal" title="คำเตือนความเสี่ยง" message="การลงทุนมีความเสี่ยง..." multiline />
+```
 Toast statuses: `information` | `success` | `warning` | `critical`. Variants: `default` | `broadcast`.
 
 **Three toast components — do NOT confuse them:**

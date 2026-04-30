@@ -13,6 +13,7 @@ export type AlertStatus =
 
 export interface AlertProps {
   status?: AlertStatus;
+  title?: string;
   message: string;
   multiline?: boolean;
   className?: string;
@@ -67,10 +68,11 @@ function AlertStatusIcon({
 }
 
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  { status = "normal", message, multiline = false, className },
+  { status = "normal", title, message, multiline = false, className },
   ref,
 ) {
   const style = alertStyles[status];
+  const hasTitle = Boolean(title);
 
   return (
     <div
@@ -78,21 +80,32 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
       role="status"
       className={cn(
         "flex w-full items-center gap-1.5 rounded px-2 py-1",
-        multiline && "items-start",
+        (multiline || hasTitle) && "items-start",
         style.container,
         className,
       )}
     >
-      <AlertStatusIcon status={status} className={cn("shrink-0", multiline && "mt-0.5", style.icon)} />
-      <p
-        className={cn(
-          "min-w-0 flex-1 text-sm leading-5 font-normal",
-          multiline ? "line-clamp-2" : "truncate",
-          style.text,
+      <AlertStatusIcon
+        status={status}
+        className={cn("shrink-0 mt-0.5", style.icon)}
+      />
+      <div className="min-w-0 flex-1 flex flex-col gap-0.5">
+        {hasTitle && (
+          <p className={cn("text-sm leading-5 font-medium", style.text)}>
+            {title}
+          </p>
         )}
-      >
-        {message}
-      </p>
+        <p
+          className={cn(
+            "text-sm leading-5 font-normal",
+            !hasTitle && !multiline && "truncate",
+            !hasTitle && multiline && "line-clamp-2",
+            style.text,
+          )}
+        >
+          {message}
+        </p>
+      </div>
     </div>
   );
 });
