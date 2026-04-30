@@ -149,7 +149,7 @@ import {
   Table, TableRow, TableHeaderCell, TableCell,
   // Feedback
   Alert,
-  Toast, ToastStack,
+  Toast, Toaster,
   Notification,
   Badge,
   // Overlay
@@ -757,30 +757,32 @@ Props: `status?` (default `"normal"`), `message` (required), `multiline?` (defau
 
 ---
 
-### Toast / ToastStack
+### Toast / Toaster
 
-Transient floating feedback — appears at screen edges, dismissed manually or auto-closes. Place in a `fixed` portal; use `ToastStack` for a queued list.
+Transient floating feedback. **Always use `Toaster` for queued toasts — it handles fixed positioning (top-right desktop, top-center mobile) and auto-dismiss automatically.**
 
 ```tsx
 type ToastVariant = "default" | "broadcast";
 type ToastStatus  = "information" | "success" | "warning" | "critical";
 
-// Default toast
-<Toast status="success"  message="File uploaded." onClose={dismiss} />
-<Toast status="warning"  message="Low storage — 100 MB remaining." actionLabel="Free up space" onActionClick={open} onClose={dismiss} />
-<Toast status="critical" message="Connection lost. Retrying…" multiline onClose={dismiss} />
+// ✅ Correct — place Toaster once at app root (App.tsx or layout)
+const [toasts, setToasts] = useState<Array<ToastProps & { id: string }>>([]);
+const remove = (id: string) => setToasts(t => t.filter(x => x.id !== id));
+const add = (t: Omit<ToastProps, "onClose"> & { id: string }) =>
+  setToasts(p => [...p, t]);
 
-// Broadcast — system announcement banner (no close button)
+<Toaster items={toasts} onRemove={remove} />  // fixed-positioned, auto-dismisses after 4s
+
+// Trigger a toast from anywhere:
+add({ id: crypto.randomUUID(), status: "success", message: "Saved." });
+add({ id: crypto.randomUUID(), status: "warning", message: "Low storage.", actionLabel: "Free up", onActionClick: open });
+
+// Broadcast — system-wide banner (no close button, no auto-dismiss)
 <Toast variant="broadcast" status="information" message="Maintenance window: Saturday 02:00–04:00." />
-
-// Stack — multiple toasts at once
-<div className="fixed bottom-4 right-4 z-50 w-[343px]">
-  <ToastStack items={toasts} />
-</div>
 ```
 
+Props (Toaster): `items`, `onRemove?`, `duration?` (ms, default 4000 — set 0 to disable auto-dismiss), `renderItem?`, `className`.
 Props (Toast): `variant?` (default `"default"`), `status?` (default `"information"`), `message`, `multiline?`, `actionLabel?`, `onActionClick?`, `onClose?`, `className`.
-Props (ToastStack): `items: (ToastProps & { id: string })[]`, `className`, `renderItem?`.
 
 ---
 

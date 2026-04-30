@@ -12,7 +12,7 @@ import {
   Card,
   Table, TableRow, TableHeaderCell, TableCell,
   Alert,
-  Toast, ToastStack,
+  Toast, Toaster,
   Notification,
   Badge,
   Modal, BottomSheet,
