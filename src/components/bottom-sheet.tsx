@@ -68,6 +68,7 @@ export function BottomSheet({
     <Drawer direction="bottom" open={open} onOpenChange={handleOpenChange}>
       {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
       {everOpened && <DrawerContent
+        aria-describedby={undefined}
         className={cn(
           "[&>div:first-child]:hidden rounded-t-[24px] border-t-0 px-4 pb-6 pt-2",
           className,
