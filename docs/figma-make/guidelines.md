@@ -28,14 +28,12 @@
    <div className="bg-default-secondary text-muted-foreground">
    ```
 
-8. **If the design uses a non-blue brand color, use `theme-overrides.css` — never hardcode the brand hex.** Set `--primary-action` once in the override file, then use `text-brand` / `bg-primary-action` / `text-on-primary-action` everywhere. See setup.md "Brand color" section for the full override template.
+8. **Never hardcode any color that isn't in tokens.md.** If you see a brand color in the design that differs from the library default, use the nearest library token — do NOT create `theme-overrides.css` or hardcode hex values.
    ```tsx
-   // ❌ wrong — hardcoded orange
+   // ❌ wrong
    <p className="text-[#C48B3C]">ผลิตภัณฑ์ของเรา</p>
-   <button style={{ backgroundColor: "#C48B3C" }}>…</button>
-   // ✅ correct — brand token (resolves to whatever --primary-action is)
+   // ✅ correct
    <p className="text-brand">ผลิตภัณฑ์ของเรา</p>
-   <Button variant="primary">…</Button>
    ```
 
 ## Responsive rule (CRITICAL)
