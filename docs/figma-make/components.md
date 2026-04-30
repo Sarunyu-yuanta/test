@@ -10,7 +10,7 @@ import {
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
-  Table, TableRow, TableHeaderCell, TableCell,
+  Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
   Alert,
   Toast, Toaster,
   Notification,
@@ -105,11 +105,22 @@ Default variant is `"default"` — start every Card here. Specialized variants:
 Sizes (sets width): `desktop` (308px) · `tablet` (224px) · `mobile` (163px). For `default`, set width yourself via `className`.
 
 ## Table
-Compose with `TableRow` + `TableHeaderCell` + `TableCell`. Sorting and selection are NOT automatic — parent owns state.
+Compose with `TableHead` + `TableBody` + `TableRow` + `TableHeaderCell` + `TableCell`. Sorting and selection are NOT automatic — parent owns state. **Always wrap header rows in `<TableHead>` and body rows in `<TableBody>`** to avoid DOM nesting warnings.
 
-- `TableRow` props: `header` `selected` `onSelectedChange` `hoverable` `onClick`
-- `TableHeaderCell` props: `type` (`text` | `icon` | `check`) `checkState` `onCheckChange` `sortable` (default true) `sortDirection` (`none` | `asc` | `desc`) `onSortChange` `contentAlign`
-- `TableCell` props: `type` (`default` | `text-icon` | `text-image` | `tag` | `icon` | `button` | `checkbox`) — use `type="checkbox"` (NOT nested `<Checkbox>`) for selectable rows
+```tsx
+<Table>
+  <TableHead>
+    <TableRow><TableHeaderCell>Name</TableHeaderCell></TableRow>
+  </TableHead>
+  <TableBody>
+    <TableRow><TableCell>Alice</TableCell></TableRow>
+  </TableBody>
+</Table>
+```
+
+- `TableHeaderCell` props: `type` (`text` | `icon` | `check`) `checkState` `onCheckChange` `sortable` (default true) `sortDirection` (`none` | `asc` | `desc`) `onSortChange`
+- `TableRow` props: `selected` `onSelectedChange` `hoverable` `onClick`
+- `TableCell` props: `type` (`default` | `text-icon` | `text-image` | `tag` | `icon` | `button` | `checkbox`) `contentAlign` (`start` | `center`) — use `type="checkbox"` (NOT nested `<Checkbox>`) for selectable rows
 - Pass content as children (`<TableCell>{value}</TableCell>`). Omitting children shows placeholder "Text label".
 
 ## DateInput / TimeInput

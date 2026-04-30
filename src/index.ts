@@ -21,7 +21,7 @@ export { OptionList } from "./components/option-list";
 export { SearchInput } from "./components/search-input";
 export { Tab, TabGroup } from "./components/tab";
 export { Tag, StatusTag } from "./components/tag";
-export { Table, TableRow, TableHeaderCell, TableCell } from "./components/table";
+export { Table, TableRow, TableHeaderCell, TableCell, TableHead, TableBody } from "./components/table";
 export { TextArea } from "./components/textarea";
 export { TimeInput } from "./components/time-input";
 
@@ -176,6 +176,7 @@ export type {
   TableCellTextStyle,
   TableHeaderCellProps,
   TableCellProps,
+  TableRowProps,
 } from "./components/table";
 
 // Types — TextArea
@@ -214,7 +215,7 @@ import { OptionList } from "./components/option-list";
 import { SearchInput } from "./components/search-input";
 import { Tab, TabGroup } from "./components/tab";
 import { Tag, StatusTag } from "./components/tag";
-import { Table, TableRow, TableHeaderCell, TableCell } from "./components/table";
+import { Table, TableRow, TableHeaderCell, TableCell, TableHead, TableBody } from "./components/table";
 import { TextArea } from "./components/textarea";
 import { TimeInput } from "./components/time-input";
 import { cn } from "./lib/utils";
@@ -223,6 +224,6 @@ export default {
   Button, Badge, Alert, Card, Checkbox, Toggle, Radio, Chip,
   DateInput, Dropdown, DropdownMultiple, Input, Modal, Notification,
   Toast, ToastStack, Toaster, BottomSheet, OptionList, SearchInput,
-  Tab, TabGroup, Tag, StatusTag, Table, TableRow, TableHeaderCell, TableCell,
+  Tab, TabGroup, Tag, StatusTag, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
   TextArea, TimeInput, cn, useIsMobile,
 };

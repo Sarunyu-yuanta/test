@@ -116,7 +116,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
       ? "flex-col items-start justify-center"
       : rightIcon
         ? "flex items-center gap-[8px]"
-        : "flex items-end gap-[8px]"
+        : "flex items-center gap-[8px]"
     : cn("flex items-center", hasRight && "gap-[8px]");
 
   const inputCaretStyle: React.CSSProperties = {
@@ -127,7 +127,8 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
     <div ref={ref} className={cn("flex flex-col gap-1 w-full", className)}>
       <div
         className={cn(
-          "relative rounded-lg min-h-[48px]",
+          "relative rounded-lg",
+          isFilled ? "min-h-[48px]" : "h-[48px]",
           padding,
           bg,
           containerFlex,
@@ -201,7 +202,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
                 : {
                     ...inputStyleProp,
                     color: "transparent",
-                    caretColor: isFocus ? "var(--caret-color)" : "transparent",
+                    caretColor: focused ? "var(--caret-color)" : "transparent",
                     padding: hasRight ? "12px 14px" : "14px",
                     fontSize: "16px",
                     lineHeight: "24px",

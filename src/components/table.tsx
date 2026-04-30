@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDown, ArrowUp, ArrowsDownUp, Circle } from "@phosphor-icons/react";
-import {
+import React, {
   createContext,
   forwardRef,
   useContext,
@@ -43,6 +43,8 @@ export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElem
   fixed?: "left" | "right";
   fixedOffset?: number;
   fixedShadow?: "left" | "right";
+  /** Accepted but ignored — prevents DOM warning when passed by consumers. */
+  contentAlign?: string;
 }
 
 export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -197,6 +199,8 @@ export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
   onSelectedChange?: (next: boolean) => void;
   /** Enables built-in hover state propagation to cells in this row. */
   hoverable?: boolean;
+  /** Accepted but ignored — prevents DOM warning when passed by consumers. */
+  header?: boolean;
 }
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
@@ -206,6 +210,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
       selected = false,
       onSelectedChange,
       hoverable = true,
+      header: _header,
       onMouseEnter,
       onMouseLeave,
       ...props
@@ -258,6 +263,7 @@ export const TableHeaderCell = forwardRef<HTMLTableCellElement, TableHeaderCellP
       fixed,
       fixedOffset = 0,
       fixedShadow,
+      contentAlign: _contentAlign,
       children = "Title text",
       style: styleProp,
       onClick: onClickProp,
@@ -525,7 +531,21 @@ export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(functi
   );
 });
 
+export const TableHead = forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
+  function TableHead({ className, ...props }, ref) {
+    return <thead ref={ref} className={cn("", className)} {...props} />;
+  }
+);
+
+export const TableBody = forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
+  function TableBody({ className, ...props }, ref) {
+    return <tbody ref={ref} className={cn("", className)} {...props} />;
+  }
+);
+
 Table.displayName = "Table";
 TableRow.displayName = "TableRow";
 TableHeaderCell.displayName = "TableHeaderCell";
 TableCell.displayName = "TableCell";
+TableHead.displayName = "TableHead";
+TableBody.displayName = "TableBody";

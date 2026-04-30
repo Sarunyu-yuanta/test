@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect, forwardRef } from "react";
+import React, { useState, useRef, useEffect, useCallback, forwardRef } from "react";
+import { createPortal } from "react-dom";
 import { CaretDown, CaretUp } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
 
@@ -55,6 +56,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     const [search, setSearch] = useState("");
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
 
     const controlled = value !== undefined;
     const currentValue = controlled ? value : internalValue;
@@ -109,13 +113,31 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       if (!open) setSearch("");
     }, [open]);
 
+    const updateMenuPosition = useCallback(() => {
+      if (!triggerRef.current) return;
+      const rect = triggerRef.current.getBoundingClientRect();
+      setMenuStyle({ position: "fixed", top: rect.bottom + 4, left: rect.left, width: rect.width });
+    }, []);
+
+    useEffect(() => {
+      if (!open) return;
+      updateMenuPosition();
+      window.addEventListener("scroll", updateMenuPosition, true);
+      window.addEventListener("resize", updateMenuPosition);
+      return () => {
+        window.removeEventListener("scroll", updateMenuPosition, true);
+        window.removeEventListener("resize", updateMenuPosition);
+      };
+    }, [open, updateMenuPosition]);
+
     // Close on outside click
     useEffect(() => {
       if (!open) return;
       const handler = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-          setOpen(false);
-        }
+        const target = e.target as Node;
+        const inContainer = containerRef.current?.contains(target) ?? false;
+        const inMenu = menuRef.current?.contains(target) ?? false;
+        if (!inContainer && !inMenu) setOpen(false);
       };
       document.addEventListener("mousedown", handler);
       return () => document.removeEventListener("mousedown", handler);
@@ -170,6 +192,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
         {/* ── Trigger ── */}
         <div
+          ref={triggerRef}
           onClick={handleToggle}
           className={cn(
             "relative flex gap-2 items-center rounded-lg px-3.5",
@@ -312,15 +335,19 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             <CaretDown size={22} className={cn("shrink-0", caretClassName)} />
           )}
 
-          {/* ── Dropdown menu ── */}
-          {open && !forceState && options.length > 0 && (
+        </div>
+
+        {open && !forceState && options.length > 0 && createPortal(
           <div
+            ref={menuRef}
             className={cn(
-              "absolute top-full left-0 w-full mt-1 bg-popover rounded-lg overflow-clip p-2 z-50 flex flex-col items-start text-popover-foreground",
+              "bg-popover rounded-lg overflow-clip p-2 flex flex-col items-start text-popover-foreground",
               filteredOptions.length > 10 && "overflow-y-auto"
             )}
             style={{
+              ...menuStyle,
               boxShadow: "var(--elevation-popover)",
+              zIndex: 9999,
               ...(filteredOptions.length > 10 ? { maxHeight: 10 * 48 + 16 } : {}),
             }}
           >
@@ -361,9 +388,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
                 </div>
               </div>
             )}
-          </div>
-          )}
-        </div>
+          </div>,
+          document.body
+        )}
 
         {/* ── Below: helper / error ── */}
         {showBelow && (
