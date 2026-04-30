@@ -107,19 +107,38 @@ Sizes (sets width): `desktop` (308px) · `tablet` (224px) · `mobile` (163px). F
 ## Table
 Compose with `TableHead` + `TableBody` + `TableRow` + `TableHeaderCell` + `TableCell`. Sorting and selection are NOT automatic — parent owns state. **Always wrap header rows in `<TableHead>` and body rows in `<TableBody>`** to avoid DOM nesting warnings.
 
+**Checkbox selection — MUST wire `selected` + `onSelectedChange` on every `TableRow`, otherwise the checkbox does nothing:**
+
 ```tsx
+const [sel, setSel] = useState<Set<string>>(new Set());
+const toggle = (id: string) =>
+  setSel(prev => { const s = new Set(prev); s.has(id) ? s.delete(id) : s.add(id); return s; });
+const allSelected = rows.length > 0 && rows.every(r => sel.has(r.id));
+
 <Table>
   <TableHead>
-    <TableRow><TableHeaderCell>Name</TableHeaderCell></TableRow>
+    <TableRow>
+      <TableHeaderCell type="check" sortable={false}
+        checkState={allSelected ? true : sel.size > 0 ? "indeterminate" : false}
+        onCheckChange={(v) => setSel(v ? new Set(rows.map(r => r.id)) : new Set())} />
+      <TableHeaderCell>Name</TableHeaderCell>
+    </TableRow>
   </TableHead>
   <TableBody>
-    <TableRow><TableCell>Alice</TableCell></TableRow>
+    {rows.map(row => (
+      <TableRow key={row.id} hoverable
+        selected={sel.has(row.id)}
+        onSelectedChange={() => toggle(row.id)}>
+        <TableCell type="checkbox" />
+        <TableCell>{row.name}</TableCell>
+      </TableRow>
+    ))}
   </TableBody>
 </Table>
 ```
 
 - `TableHeaderCell` props: `type` (`text` | `icon` | `check`) `checkState` `onCheckChange` `sortable` (default true) `sortDirection` (`none` | `asc` | `desc`) `onSortChange`
-- `TableRow` props: `selected` `onSelectedChange` `hoverable` `onClick`
+- `TableRow` props: `selected` `onSelectedChange` (required for checkbox to work) `hoverable` `onClick`
 - `TableCell` props: `type` (`default` | `text-icon` | `text-image` | `tag` | `icon` | `button` | `checkbox`) `contentAlign` (`start` | `center`) — use `type="checkbox"` (NOT nested `<Checkbox>`) for selectable rows
 - Pass content as children (`<TableCell>{value}</TableCell>`). Omitting children shows placeholder "Text label".
 
