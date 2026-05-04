@@ -5,7 +5,7 @@ Add to package.json dependencies:
 ```json
 {
   "dependencies": {
-    "@sarunyu/system-one": "4.9.24",
+    "@sarunyu/system-one": "4.9.28",
     "@phosphor-icons/react": "^2.1.7"
   }
 }
