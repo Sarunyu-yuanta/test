@@ -8,6 +8,7 @@ import {
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
   Avatar, AvatarStack,
+  Breadcrumb,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
@@ -320,3 +321,18 @@ Raw option rows for custom dropdowns or sidebar menus. Otherwise prefer `Dropdow
 ```tsx
 <OptionList options={opts} selectedValue={v} onSelect={setV} />
 ```
+
+## Breadcrumb
+Horizontal navigation trail with `/` separators. Last item = current page (brand color, no link). Pass `href` on every item except the last.
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: "Detail" },
+  ]}
+/>
+```
+
+`items`: `{ label: string; href?: string }[]` — required. `className?` for layout overrides only.

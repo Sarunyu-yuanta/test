@@ -566,3 +566,17 @@ Always use the `<Avatar>` component from `@sarunyu/system-one` without overridin
 | **Don't** | Avoid mixing multiple Avatar sizes within the same list, because it creates visual inconsistency in the design. / หลีกเลี่ยงการใช้ Avatar หลายขนาดในรายการเดียวกัน เพราะทำให้เกิดความไม่สม่ำเสมอของการออกแบบ |
 
 All avatars within the same list or context must use the same `size` prop. Mixing sizes (e.g., `xxs` alongside `m`) disrupts visual rhythm and makes the layout feel inconsistent.
+
+---
+
+## Breadcrumb
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Breadcrumb according to the layout defined by the Design System. / ใช้ Breadcrumb ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid adjusting height, padding, gap, color, or any modification that causes the component to deviate from the defined layout. / หลีกเลี่ยงการปรับ Height, Padding, Gap, สี หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ |
+
+Always use the `<Breadcrumb>` component from `@sarunyu/system-one` without overriding its internal spacing, colors, or typography. Do not manually recreate breadcrumb trails with custom separators or styled anchors.

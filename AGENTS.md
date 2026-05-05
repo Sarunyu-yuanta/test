@@ -25,6 +25,7 @@ in this package.** This file is the short version: the rules you must follow.
    - Filter buttons with count badges → use `<Badge>` (`variant="button"`).
    - Notification bell + list panel → use `<Notification>`. Never use `<Badge variant="notification">` standalone or wire it to a custom `onClick` (toast, popover, etc.) — `<Notification>` handles both the bell and the panel.
    - User profile photos, initials circles, or silhouette placeholders → use `<Avatar>`. For grouped users, use `<AvatarStack>`. Never hand-roll `<img>` or `<div>` avatar shapes.
+   - Custom breadcrumb / navigation trails → use `<Breadcrumb>`.
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities
@@ -155,7 +156,7 @@ Build it with tokens. Never introduce new colors.
 
 If the custom thing is conceptually a button/input/tag/chip/tab/card/table,
 **stop and use the library's component instead.** Only build custom when the
-concept isn't covered (hero section, chart, breadcrumb, etc.).
+concept isn't covered (hero section, chart, etc.).
 
 ## Read this before generating code
 

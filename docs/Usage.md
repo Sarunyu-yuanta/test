@@ -577,3 +577,40 @@ Avatar-Stack มีขนาดทั้งหมด 3 ขนาด ได้แ
 | **Avatar-Stack small** | 16 px avatars, 4 px overlap |
 | **Avatar-Stack medium** | 20 px avatars, 5 px overlap |
 | **Avatar-Stack large** | 24 px avatars, 5 px overlap |
+
+---
+
+## Breadcrumb
+
+Breadcrumb คือองค์ประกอบนำทางที่แสดงลำดับตำแหน่งปัจจุบันภายในโครงสร้างของเว็บไซต์หรือแอปพลิเคชัน เพื่อช่วยให้ผู้ใช้รู้ว่ากำลังอยู่ส่วนใด และสามารถย้อนกลับไปยังหน้าก่อนหน้าได้ง่ายขึ้น / Breadcrumb is a navigation component that shows the user's current position within the site or application hierarchy, making it easy to understand context and navigate back to a previous page.
+
+### วิธีการใช้งาน
+
+ใช้สำหรับแสดงเส้นทางการนำทางของหน้า เพื่อบอกผู้ใช้ว่ากำลังอยู่ที่แห่งใดในระบบ และสามารถย้อนกลับไปยังหน้าก่อนหน้าในเส้นทางนั้นได้ / Use to show the navigation path so users know where they are in the system and can return to any previous level.
+
+> **หมายเหตุ** ข้อความลำดับสุดท้ายจะแสดงเป็นสถานะหน้าปัจจุบัน และไม่สามารถคลิกได้ / The last item always represents the current page and is non-clickable.
+
+### Depth
+
+Breadcrumb รองรับความลึกได้ไม่จำกัด แต่แนะนำให้ใช้ไม่เกิน 5 ระดับ เพื่อไม่ให้เส้นทางยาวเกินไป / Supports any depth but 5 levels is the recommended maximum to keep the trail readable.
+
+| Depth | Example |
+|---|---|
+| 1 | หน้าหลัก / Page1 |
+| 2 | หน้าหลัก / Page1 / Page2 |
+| 3 | หน้าหลัก / Page1 / Page2 / Page3 |
+| 4 | หน้าหลัก / Page1 / Page2 / Page3 / Page4 |
+| 5 | หน้าหลัก / Page1 / Page2 / Page3 / Page4 / Page5 |
+
+### การออกแบบ Component
+
+| Property | Value |
+|---|---|
+| **Gap between items** | 4 px |
+| **Separator** | `/` (text, decorative — `aria-hidden`) |
+| **Ancestor items** | `text-text-default-secondary`; clickable when `href` is provided |
+| **Current page (last item)** | `text-text-brand-secondary`; never clickable |
+
+### Preview
+
+ตัวอย่างการใช้งานจริงแสดง Breadcrumb อยู่ในหน้าบทความ โดยมีเส้นทาง หน้าหลัก / ข่าวสารทั้งหมด / ชื่อบทความ (สีแบรนด์) ซึ่งช่วยให้ผู้ใช้ย้อนกลับไปยังรายการข่าวได้ทันที
