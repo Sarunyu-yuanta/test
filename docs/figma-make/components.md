@@ -7,6 +7,7 @@ import {
   Dropdown, DropdownMultiple, OptionList,
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
+  Avatar, AvatarStack,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
@@ -241,6 +242,38 @@ const remove = (id: string) => setToasts(t => t.filter(x => x.id !== id));
 <Toaster items={toasts} onRemove={remove} />
 ```
 
+
+## Avatar / AvatarStack
+Three display types: `"photo"` (default) | `"text"` (initials) | `"placeholder"` (generic silhouette).
+Seven sizes: `"xxs"` (16px) | `"xs"` (20px) | `"s"` (24px) | `"m"` (32px, default) | `"l"` (40px) | `"xl"` (48px) | `"xxl"` (56px).
+
+```tsx
+// Photo with online dot
+<Avatar src={user.photo} alt={user.name} status />
+
+// Initials
+<Avatar type="text" initials="JD" size="m" />
+
+// Placeholder
+<Avatar type="placeholder" size="s" />
+
+// Stack — items can mix types; max= caps visible count
+<AvatarStack
+  items={[
+    { src: u1.photo, alt: u1.name },
+    { src: u2.photo, alt: u2.name },
+    { type: "text", initials: "JD" },
+    { type: "placeholder" },
+  ]}
+  size="medium"
+  max={5}
+/>
+```
+
+AvatarStack sizes: `"small"` (16px avatars) | `"medium"` (20px) | `"large"` (24px).
+`status` prop (online dot) is available on `photo` type only.
+**Never override avatar `width`/`height` or apply color/filter styles** — use the `size` prop only.
+**Use the same `size` for all avatars within one list** — mixing sizes breaks visual consistency.
 
 ## Badge
 - `variant="button"` (default) — filter button with count. Use in toolbars.

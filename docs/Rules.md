@@ -541,3 +541,28 @@ Notification is for durable context; Toast is for brief acknowledgment. Choosing
 | **Don't** | Avoid mixed semantics (e.g., success message rendered with warning/danger style). / หลีกเลี่ยงการใช้สถานะที่ขัดกัน เช่น ข้อความสำเร็จแต่ใช้สไตล์เตือนหรืออันตราย |
 
 Consistent semantics are essential for trust and fast recognition. Users should understand the message type immediately without re-reading.
+
+---
+
+## Avatar
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Avatar according to the layout defined by the Design System. / ใช้ Avatar ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid adjusting height, color, stretching, or modifying the format in any way that deviates from the defined layout, because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Height, สี, การยืด, หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the `<Avatar>` component from `@sarunyu/system-one` without overriding its dimensions, colors, or shape. Do not apply custom `height`, `width`, color overrides, or CSS filters to the avatar element.
+
+---
+
+### Rule 2 — Consistent Size
+
+| | |
+|---|---|
+| **Do** | Use Avatar with the same size throughout a single list or context. / เลือกใช้ Avatar ให้มีขนาดเท่ากัน |
+| **Don't** | Avoid mixing multiple Avatar sizes within the same list, because it creates visual inconsistency in the design. / หลีกเลี่ยงการใช้ Avatar หลายขนาดในรายการเดียวกัน เพราะทำให้เกิดความไม่สม่ำเสมอของการออกแบบ |
+
+All avatars within the same list or context must use the same `size` prop. Mixing sizes (e.g., `xxs` alongside `m`) disrupts visual rhythm and makes the layout feel inconsistent.

@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack as raw HTML.
 2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
 3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
@@ -143,6 +143,7 @@ import {
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
   // Display
+  Avatar, AvatarStack,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
@@ -813,6 +814,57 @@ Button with a count indicator. Two variants:
 ```
 
 Props: `variant?` (`"button"` | `"notification"`, default `"button"`), `count?`, `maxCount?` (default 99), `label?` (button variant, default `"Filter"`), `iconOnly?`, `icon?` (custom icon), `notificationState?` (`"default"` | `"active"` | `"noti"`), plus native `<button>` props.
+
+---
+
+### Avatar
+
+User avatar in three display modes across seven sizes, with an optional online-status dot.
+
+- `"photo"` (default) — renders an `<img>`. Pair with `status` for a green online dot.
+- `"text"` — gradient circle showing up to 2-character initials.
+- `"placeholder"` — generic silhouette when no photo or name is available.
+
+```tsx
+// Photo
+<Avatar src={user.photoUrl} alt={user.name} />
+<Avatar src={user.photoUrl} alt={user.name} status />
+
+// Initials
+<Avatar type="text" initials="JD" />
+<Avatar type="text" initials="JD" size="l" />
+
+// Placeholder
+<Avatar type="placeholder" />
+
+// Sizes: xxs | xs | s | m (default) | l | xl | xxl
+<Avatar size="s" src={url} alt="User" />
+```
+
+Props: `type?` (`"photo"` | `"text"` | `"placeholder"`, default `"photo"`), `size?` (`"xxs"` | `"xs"` | `"s"` | `"m"` | `"l"` | `"xl"` | `"xxl"`, default `"m"`), `src?`, `alt?`, `initials?` (≤ 2 chars, `text` type), `status?` (green dot, `photo` type only), `className?`.
+
+---
+
+### AvatarStack
+
+Horizontal row of overlapping avatars with a circular separator between each pair. Items can mix `photo`, `text`, and `placeholder` types.
+
+```tsx
+<AvatarStack
+  items={[
+    { src: user1.photoUrl, alt: user1.name },
+    { src: user2.photoUrl, alt: user2.name },
+    { type: "text", initials: "JD" },
+    { type: "placeholder" },
+  ]}
+  size="medium"
+  max={5}
+/>
+```
+
+Sizes map to avatar pixel sizes: `"small"` → 16 px, `"medium"` → 20 px, `"large"` → 24 px.
+
+Props: `items` (array of `{ type?, src?, alt?, initials? }`), `size?` (`"small"` | `"medium"` | `"large"`, default `"small"`), `max?` (default 5), `className?`.
 
 ---
 

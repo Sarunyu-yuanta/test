@@ -29,6 +29,7 @@ const navItems = [
   { to: "/badge", label: "Badge" },
   { to: "/toast", label: "Toast Message" },
   { to: "/alert", label: "Alert" },
+  { to: "/avatar", label: "Avatar" },
 ];
 
 function Logo() {

@@ -20,6 +20,7 @@ export default defineConfig({
     tailwindcss(),
     dts({
       include: [
+        "src/vite-env.d.ts",
         "src/index.ts",
         "src/lib",
         "src/components/*.tsx",

@@ -24,6 +24,7 @@ in this package.** This file is the short version: the rules you must follow.
    - Custom toast / snackbar notifications → use `<Toast>` / `<ToastStack>` in a `fixed` portal.
    - Filter buttons with count badges → use `<Badge>` (`variant="button"`).
    - Notification bell + list panel → use `<Notification>`. Never use `<Badge variant="notification">` standalone or wire it to a custom `onClick` (toast, popover, etc.) — `<Notification>` handles both the bell and the panel.
+   - User profile photos, initials circles, or silhouette placeholders → use `<Avatar>`. For grouped users, use `<AvatarStack>`. Never hand-roll `<img>` or `<div>` avatar shapes.
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities
