@@ -24,6 +24,7 @@ import { BadgePage } from "./pages/BadgePage";
 import { ToastPage } from "./pages/ToastPage";
 import { AlertPage } from "./pages/AlertPage";
 import { AvatarPage } from "./pages/AvatarPage";
+import { BreadcrumbPage } from "./pages/BreadcrumbPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -62,6 +63,7 @@ export const router = createBrowserRouter([
       { path: "toast", Component: ToastPage },
       { path: "alert", Component: AlertPage },
       { path: "avatar", Component: AvatarPage },
+      { path: "breadcrumb", Component: BreadcrumbPage },
     ],
   },
 ]);
