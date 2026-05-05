@@ -30,6 +30,7 @@ const navItems = [
   { to: "/toast", label: "Toast Message" },
   { to: "/alert", label: "Alert" },
   { to: "/avatar", label: "Avatar" },
+  { to: "/breadcrumb", label: "Breadcrumb" },
 ];
 
 function Logo() {

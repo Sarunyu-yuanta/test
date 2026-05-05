@@ -26,6 +26,7 @@ export { TextArea } from "./components/textarea";
 export { TimeInput } from "./components/time-input";
 export { Avatar } from "./components/avatar";
 export { AvatarStack } from "./components/avatar-stack";
+export { Breadcrumb } from "./components/breadcrumb";
 
 // Utilities
 export { cn } from "./lib/utils";
@@ -202,6 +203,9 @@ export type { AvatarSize, AvatarType, AvatarProps } from "./components/avatar";
 // Types — AvatarStack
 export type { AvatarStackSize, AvatarStackItem, AvatarStackProps } from "./components/avatar-stack";
 
+// Types — Breadcrumb
+export type { BreadcrumbItem, BreadcrumbProps } from "./components/breadcrumb";
+
 // Default export — for tools that do `import SystemOne from '@sarunyu/system-one'`
 import { Button } from "./components/button";
 import { Badge } from "./components/badge";
@@ -228,6 +232,7 @@ import { TextArea } from "./components/textarea";
 import { TimeInput } from "./components/time-input";
 import { Avatar } from "./components/avatar";
 import { AvatarStack } from "./components/avatar-stack";
+import { Breadcrumb } from "./components/breadcrumb";
 import { cn } from "./lib/utils";
 import { useIsMobile } from "./components/ui/use-mobile";
 export default {
@@ -235,5 +240,5 @@ export default {
   DateInput, Dropdown, DropdownMultiple, Input, Modal, Notification,
   Toast, ToastStack, Toaster, BottomSheet, OptionList, SearchInput,
   Tab, TabGroup, Tag, StatusTag, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
-  TextArea, TimeInput, Avatar, AvatarStack, cn, useIsMobile,
+  TextArea, TimeInput, Avatar, AvatarStack, Breadcrumb, cn, useIsMobile,
 };

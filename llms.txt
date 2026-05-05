@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 24 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 27 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb as raw HTML.
 2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
 3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
@@ -142,6 +142,8 @@ import {
   Dropdown, DropdownMultiple, OptionList,
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
+  // Navigation
+  Breadcrumb,
   // Display
   Avatar, AvatarStack,
   Tag, StatusTag, Chip,
@@ -868,6 +870,26 @@ Props: `items` (array of `{ type?, src?, alt?, initials? }`), `size?` (`"small"`
 
 ---
 
+### Breadcrumb
+
+Horizontal navigation trail rendered as a `<nav>` with `/` separators. The last item is always the current page (active state). Items with `href` render as anchor tags; items without render as plain text.
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: "Detail" },
+  ]}
+/>
+```
+
+Props: `items` (`BreadcrumbItem[]` — each has `label: string`, `href?: string`), `className?`.
+
+The last item in `items` is always treated as the current page — never pass `href` on it.
+
+---
+
 ### Notification
 
 Bell-icon trigger + popover panel showing grouped notification rows. Handles badge count, auto-clear on open, and keyboard navigation. Uses `<Badge variant="notification">` internally.
@@ -1521,4 +1543,4 @@ Rules for custom components:
 - Border → `border-border` (or `border-divider` for light separators).
 - Typography → use `<h1>`…`<h4>` and body text inherits from `--foreground`.
 
-If the thing you're building is conceptually a button/input/tag/chip/tab/card/table — **do not build a custom one. Use the library's component.** The only reason to build custom is when the library truly doesn't cover the concept (e.g. a bespoke hero section, a custom chart, a breadcrumb).
+If the thing you're building is conceptually a button/input/tag/chip/tab/card/table/breadcrumb — **do not build a custom one. Use the library's component.** The only reason to build custom is when the library truly doesn't cover the concept (e.g. a bespoke hero section, a custom chart).
