@@ -67,36 +67,40 @@ export function BottomSheet({
   return (
     <Drawer direction="bottom" open={open} onOpenChange={handleOpenChange}>
       {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-      {everOpened && <DrawerContent
-        aria-describedby={undefined}
-        className={cn(
-          "[&>div:first-child]:hidden rounded-t-[24px] border-t-0 px-4 pb-6 pt-2",
-          className,
-        )}
-      >
-        <DrawerTitle className="sr-only">{title}</DrawerTitle>
+      {everOpened && (
+        <DrawerContent
+          aria-describedby={undefined}
+          className={cn(
+            "[&>div:first-child]:hidden rounded-t-[24px] border-t-0 px-4 pb-6 pt-2",
+            className,
+          )}
+        >
+          <DrawerTitle className="sr-only">{title}</DrawerTitle>
 
-        {showHandle ? (
-          <div className="mb-2 flex justify-center">
-            <div className="h-1 w-10 rounded-full bg-muted" />
-          </div>
-        ) : null}
+          {showHandle ? (
+            <div className="mb-2 flex justify-center">
+              <div className="h-1 w-10 rounded-full bg-muted" />
+            </div>
+          ) : null}
 
-        {showHeader ? (
-          <Header
-            headerType={headerType}
-            rightSide={rightSide}
-            title={title}
-            actionLabel={actionLabel}
-            imageSrc={imageSrc}
-            leftIcon={leftIcon}
-            rightIcon={rightIcon}
-            onActionClick={onActionClick}
-          />
-        ) : null}
+          {showHeader ? (
+            <Header
+              headerType={headerType}
+              rightSide={rightSide}
+              title={title}
+              actionLabel={actionLabel}
+              imageSrc={imageSrc}
+              leftIcon={leftIcon}
+              rightIcon={rightIcon}
+              onActionClick={onActionClick}
+            />
+          ) : null}
 
-        {children ? <div className={cn("pt-2", contentClassName)}>{children}</div> : null}
-      </DrawerContent>}
+          {children ? (
+            <div className={cn("pt-2", contentClassName)}>{children}</div>
+          ) : null}
+        </DrawerContent>
+      )}
     </Drawer>
   );
 }
@@ -121,10 +125,21 @@ function Header({
   onActionClick?: () => void;
 }) {
   return (
-    <div className={cn("flex items-center gap-3", rightSide === "action" ? "pr-2" : undefined)}>
+    <div
+      className={cn(
+        "flex items-center gap-3",
+        rightSide === "action" ? "pr-2" : undefined,
+      )}
+    >
       <div className="flex min-w-0 flex-1 items-center gap-2">
-        <Leading headerType={headerType} imageSrc={imageSrc} leftIcon={leftIcon} />
-        <p className="truncate text-base leading-6 font-bold text-foreground">{title}</p>
+        <Leading
+          headerType={headerType}
+          imageSrc={imageSrc}
+          leftIcon={leftIcon}
+        />
+        <p className="truncate text-base leading-6 font-bold text-foreground">
+          {title}
+        </p>
       </div>
       <Trailing
         rightSide={rightSide}
@@ -147,7 +162,11 @@ function Leading({
 }) {
   if (headerType === "image") {
     return imageSrc ? (
-      <img alt="" className="size-8 shrink-0 rounded-md object-cover" src={imageSrc} />
+      <img
+        alt=""
+        className="size-8 shrink-0 rounded-md object-cover"
+        src={imageSrc}
+      />
     ) : (
       <div className="size-8 shrink-0 rounded-md bg-muted" />
     );
@@ -176,7 +195,7 @@ function Trailing({
   if (rightSide === "action") {
     return (
       <Button
-        className="px-0 py-0 text-base leading-6 font-bold"
+        className="text-base leading-6 font-bold"
         onClick={onActionClick}
         size="md"
         variant="plain"
