@@ -1,6 +1,48 @@
-# @sarunyu/system-one
+# @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 13 production-ready components. Built for AI-powered generation tools (v0, Lovable, Figma Make).
+React component library. Tailwind CSS v4 + CSS custom properties. 24 components.
+Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
+
+**This file is the contract.** Read it top-to-bottom before generating any screen
+that uses this library. The rules are non-negotiable.
+
+---
+
+## The 6 rules
+
+1. **Use library components for every element it provides.** Never recreate
+   Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack as raw HTML.
+2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
+3. **Use design-token classes for color and typography.** Never `text-blue-600`,
+   `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
+   color you need is not in it, use `text-foreground` / `bg-card`.
+4. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
+   or any other icon library. Install with `npm install @phosphor-icons/react`.
+   Import named icons: `import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react"`.
+   Every icon accepts `size`, `weight` (`"regular"` | `"bold"` | `"fill"` | `"duotone"` | `"light"` | `"thin"`), and `className` props.
+5. **No arbitrary bracket values for spacing / sizing / typography.**
+   Use scale utilities, not pixel overrides. The library's shipped stylesheet
+   only contains scale utilities + a fixed list of safelisted container widths,
+   so any other `[...]` value is a no-op in hosts without Tailwind installed.
+   - **Forbidden**: `max-w-[1100px]`, `h-[317px]`, `min-h-[calc(100vh-64px)]`,
+     `w-[272px]`, `gap-[14px]`, `p-[10px]`, `text-[13px]`, `leading-[22px]`,
+     `rounded-[10px]`, `top-[7px]`.
+   - **Allowed**: `max-w-5xl`, `max-w-2xl`, `h-80`, `w-64`, `gap-4`, `p-6`,
+     `text-sm`, `leading-6`, `rounded-lg`, `top-2`, and the 4px spacing scale
+     (`0.5` / `1` / `2` / `3` / `4` / `5` / `6` / `8` / `10` / `12` / `16` / `20` / `24`).
+   - **Container-width exception**: these `max-w-[*]` values are safelisted and
+     may be used — `max-w-[480px]`, `max-w-[640px]`, `max-w-[720px]`, `max-w-[800px]`,
+     `max-w-[960px]`, `max-w-[1024px]`, `max-w-[1200px]`, `max-w-[1280px]`,
+     `max-w-[1440px]`. For any other width, snap to `max-w-{xs…7xl}`.
+   - If a design calls for an odd value, snap to the nearest scale step — the
+     design system is calibrated for those steps on purpose.
+6. **Layout is free (within the scale).** Build page structure with plain `<div>`
+   + Tailwind utilities (flex, grid, container, max-w-*, gap-*, p-*, mx-auto).
+   The library does NOT ship layout primitives. Do not import `Page`, `Section`,
+   `Stack`, `CardGrid`, `Toolbar` — they don't exist.
+
+---
 
 ## Install
 
@@ -8,82 +50,265 @@ React component library. Tailwind CSS v4 + CSS custom properties. 13 production-
 npm install @sarunyu/system-one
 ```
 
-## Setup by Platform
+Peer dep: `react >= 18`.
 
-### v0 / Next.js (App Router)
-
-```tsx
-// app/layout.tsx
-import "@sarunyu/system-one/styles.css"
-```
-
-Components are pre-annotated with `"use client"`. Safe to import anywhere — Server Components, Client Components, pages.
-
-### Next.js (Pages Router)
+## Setup
 
 ```tsx
-// pages/_app.tsx
-import "@sarunyu/system-one/styles.css"
+// Next.js App Router: app/layout.tsx
+// Next.js Pages: pages/_app.tsx
+// Vite / Figma Make / Lovable: src/main.tsx
+import "@sarunyu/system-one/styles.css";
 ```
 
-### Figma Make / Lovable / Vite
+No provider, no wrapper. Components ship with `"use client"`.
+
+### Figma Make
+
+**CRITICAL:** Add this import to your entry file (e.g. `src/main.tsx`) before any other code, or styles, fonts, and colors will be completely broken:
 
 ```tsx
-// src/main.tsx
-import "@sarunyu/system-one/styles.css"
+import "@sarunyu/system-one/styles.css";
 ```
 
-## Import
+Use **named imports** (preferred). A default import is also supported but gives you an object — you must then destructure it:
+
+```tsx
+// ✅ preferred — named imports
+import { Button, Input } from "@sarunyu/system-one";
+
+// ✅ also valid — default import (use SystemOne.Button, etc.)
+import SystemOne from "@sarunyu/system-one";
+const { Button, Input } = SystemOne;
+```
+
+### Lovable / Vite + Tailwind v3 hosts
+
+Lovable projects use Tailwind v3 and ship a `src/index.css` based on
+shadcn/ui that defines CSS variables in `@layer base`:
+
+```css
+/* Lovable's generated index.css */
+@layer base {
+  :root {
+    --background: 0 0% 100%;   /* shadcn HSL-component format */
+    --border: 214.3 31.8% 91.4%;
+  }
+}
+```
+
+Two issues arise:
+
+1. **Variable format conflict** — shadcn uses HSL components (`0 0% 100%`)
+   for use with `hsl(var(--background))`. The library emits its design
+   tokens as **unlayered** `:root {}` rules, which always outrank any
+   `@layer base` rule regardless of import order. Library values win —
+   making `hsl(library-value)` calls in shadcn components invalid.
+
+   **Fix:** Remove Lovable's `--background`, `--foreground`, `--border`,
+   `--muted`, `--card`, `--popover`, `--input`, `--ring` definitions from
+   `@layer base`. Let the library supply these — they resolve to standard
+   white/dark/gray values that work correctly with the library's components.
+
+2. **Do NOT create a `theme-overrides.css`** unless the user explicitly asks
+   to change the brand color. The library's default P1 blue works out of the
+   box. An overrides file is only needed when a custom brand palette is
+   required — see the Theming section below.
+
+The `src/main.tsx` import order for Lovable (two lines only):
+```tsx
+import "./index.css";                        /* Tailwind v3 layers first */
+import "@sarunyu/system-one/styles.css";     /* library — unlayered, beats any @layer */
+```
+
+## Dark mode
+
+Add `.dark` to any ancestor. All components and tokens adapt.
+
+```tsx
+<html className={isDark ? "dark" : ""}>
+```
+
+---
+
+## Available imports
 
 ```tsx
 import {
-  Button, Input, TextArea, SearchInput,
+  // Actions
+  Button,
+  // Form
+  Input, TextArea, SearchInput,
   Dropdown, DropdownMultiple, OptionList,
+  Checkbox, Toggle, Radio,
+  DateInput, TimeInput,
+  // Display
+  Avatar, AvatarStack,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
-  DateInput, TimeInput,
-  cn
-} from "@sarunyu/system-one"
+  Table, TableRow, TableHeaderCell, TableCell,
+  // Feedback
+  Alert,
+  Toast, Toaster,
+  Notification,
+  Badge,
+  // Overlay
+  Modal, BottomSheet,
+  // Utility
+  cn, useIsMobile,
+} from "@sarunyu/system-one";
 ```
+
+---
+
+## Token reference (memorize this)
+
+All values are CSS custom properties → exposed as Tailwind utilities.
+Use the Tailwind class. Never hard-code colors.
+
+Every class below is **Figma-aligned**: Light mode mirrors Color.Light (System One),
+dark mode mirrors Color.Dark (System One). Status colors: `danger`=Red.500,
+`warning`=Yellow.500, `success`=Green.500, `info`=Blue.500.
+
+### Text color
+
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Body text, headings | `text-foreground` | `text-default` |
+| Secondary body | `text-muted-foreground` | `text-default-secondary` |
+| Tertiary / placeholder | `text-default-tertiary` / `text-default-placeholder` | |
+| Disabled text | `text-disabled` | `text-default-disabled` |
+| Inverse (on dark surfaces) | `text-default-inverse` | |
+| Subtle captions | `text-caption` | |
+| Brand / link / active | `text-primary-action` | `text-brand` / `text-brand-link` |
+| Destructive / error | `text-destructive` | `text-danger` |
+| Warning (yellow) | `text-warning` | |
+| Success (green) | `text-success` | |
+| Info (blue) | `text-info` | |
+| On primary-action surfaces | `text-on-primary-action` | `text-on-brand` |
+
+### Background
+
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Page | `bg-background` | `bg-default` |
+| Card / popover surface | `bg-card` | `bg-default` |
+| Secondary surface (sidebar, subtle panel) | `bg-default-secondary` | |
+| Tertiary surface (nested card) | `bg-default-tertiary` | |
+| Neutral fill (inputs, chips) | `bg-muted` / `bg-input-background` | |
+| Hover on neutral | `bg-hover-bg` | `bg-default-hover` |
+| Disabled fill | `bg-disabled-bg` | `bg-default-disabled` |
+| Brand action (primary buttons) | `bg-primary-action` + `hover:bg-primary-action-hover` + `active:bg-primary-action-active` | `bg-brand` / `bg-brand-hover` / `bg-brand-pressed` |
+| Tinted primary surface | `bg-primary-action-light` / `bg-primary-action-muted` | `bg-brand-light` / `bg-brand-muted` |
+| Selection / active row | `bg-selected-bg` / `bg-selected-light-bg` | |
+| Destructive fill | `bg-destructive` | `bg-danger` |
+| Destructive soft surface | `bg-error-bg` | `bg-danger-light` / `bg-danger-soft` |
+| Warning fill / soft | `bg-warning` / `bg-warning-light` | |
+| Success fill / soft | `bg-success` / `bg-success-bg` | `bg-success-light` |
+| Info fill / soft | `bg-info` / `bg-info-light` | |
+
+### Border
+
+| Use for | Class | Alt (Figma semantic) |
+|---|---|---|
+| Default border | `border-border` | `border-default` |
+| Strong border | `border-border-muted` | `border-strong` |
+| Subtle divider | `border-divider` | |
+| Disabled border | `border-border-disabled` | |
+| Brand border | `border-brand` | |
+| Status borders | `border-danger` / `border-warning` / `border-success` / `border-info` | |
+
+### Icon color (when setting color on an SVG)
+
+`text-icon-default` · `text-icon-default-secondary` · `text-icon-default-tertiary` ·
+`text-icon-default-disabled` · `text-icon-brand` · `text-icon-on-brand` ·
+`text-icon-danger` · `text-icon-warning` · `text-icon-success` · `text-icon-info`
+
+### Visual scale — notification dots, badge counts, data viz
+
+For accent colors used in badges, counts, or charts (not for semantic status),
+use the `visual-*` scale. Available hues: `neutral`, `purple`, `blue`, `cyan`,
+`pink`, `red`, `orange`. Each hue has 7 steps:
+
+`bg-visual-red-light` · `bg-visual-red-soft` · `bg-visual-red-low` · `bg-visual-red` · `bg-visual-red-high` · `bg-visual-red-vivid` · `bg-visual-red-deep`
+
+Same pattern for `text-visual-*` and `border-visual-*`. Prefer `visual-*` over
+`bg-red-500` for notification counts — visual tokens adapt in dark mode, hard
+palette classes do not.
+
+### Radius
+
+`rounded-sm` (2px) · `rounded` (4px, default `--radius`) · `rounded-md` (6px) · `rounded-lg` (8px) · `rounded-xl` (12px) · `rounded-2xl` (16px) · `rounded-3xl` (24px) · `rounded-full`
+
+### Shadow
+
+`shadow-xs` · `shadow-sm` · `shadow-md` · `shadow-lg` · `shadow-card` (event/content cards) · `shadow-popover` (dropdowns, menus)
+
+### Typography
+
+Pre-styled HTML headings: `<h1>` (24px) · `<h2>` (20px) · `<h3>` (18px) · `<h4>` (16px). Do NOT add `text-*` / `font-*` to override.
+
+Body text inherits `--foreground`. Font family is `--font-sans` (Noto Sans Thai by default — override via `--font-sans` to change globally).
+
+### Spacing / sizing
+
+Standard Tailwind scale (4px units). Fine-grained: `p-0.5` (2px), `p-1.5` (6px), `p-2.5` (10px), `p-3.5` (14px), `p-13` (56px).
 
 ---
 
 ## Components
 
+Every example below assumes state is managed by the caller via `useState`.
+
 ### Button
 
-Variants: `primary` | `outline` | `plain` | `outline-black` | `plain-black`
-Label sizes: `xs` | `sm` | `md` | `lg` | `xl`
-Icon-only sizes: `icon-xs` | `icon-sm` | `icon-md` | `icon-lg` | `icon-xl`
+Actions only. Never `<button>` with utility classes.
 
 ```tsx
+type ButtonVariant = "primary" | "outline" | "plain" | "outline-black" | "plain-black";
+type ButtonLabelSize = "xs" | "sm" | "md" | "lg" | "xl";
+type ButtonIconSize  = "icon-xs" | "icon-sm" | "icon-md" | "icon-lg" | "icon-xl";
+
 <Button variant="primary" size="md">Submit</Button>
-<Button variant="outline" size="md" onClick={fn}>Cancel</Button>
+<Button variant="outline" size="md" onClick={save}>Save draft</Button>
 <Button variant="plain" size="sm">Learn more</Button>
-<Button variant="primary" size="md" leftIcon={<Icon />}>Add item</Button>
-<Button variant="outline" size="md" rightIcon={<Icon />}>Continue</Button>
+<Button variant="primary" size="lg" leftIcon={<PlusIcon />}>Add item</Button>
 <Button size="icon-md" aria-label="Settings"><GearIcon /></Button>
+<Button variant="primary" size="md" disabled>Can't submit</Button>
 ```
 
-Props: `variant`, `size`, `leftIcon`, `rightIcon`, `disabled`, `onClick`, `className`, `children`
+**Semantics** — `primary` = main CTA (one per context). `outline` = secondary action.
+`plain` = tertiary / low-priority. `outline-black` / `plain-black` = same as outline/plain
+but in neutral tone (use when brand color shouldn't compete, e.g. toolbar actions).
+
+**Sizing** — `md` desktop default. `xl` mobile default. `xs`/`sm` for dense toolbars. Icon-only sizes match label sizes 1:1.
+
+Props: `variant`, `size`, `leftIcon`, `rightIcon`, `disabled`, `onClick`, `className`, plus all native `<button>` props.
 
 ---
 
 ### Input
 
-Floating-label text input with validation states.
+Floating-label text input. Never `<input>` with utility classes.
 
 ```tsx
 <Input placeholder="Email" value={email} onChange={setEmail} />
-<Input placeholder="Amount" unit="THB" />
-<Input placeholder="Password" type="password" />
-<Input placeholder="Bio" showCount maxCount={160} />
-<Input forceState="error" errorMessage="This field is required" placeholder="Email" />
-<Input forceState="disabled" placeholder="Read only" />
+<Input placeholder="Password" type="password" value={pw} onChange={setPw} />
+<Input placeholder="Amount" unit="THB" value={amount} onChange={setAmount} />
+<Input placeholder="Bio" showCount maxCount={160} value={bio} onChange={setBio} />
+<Input placeholder="Email" required />
+<Input placeholder="Email" forceState="error" errorMessage="Invalid email" value={email} onChange={setEmail} />
+<Input placeholder="Email" forceState="disabled" value="locked@example.com" />
+<Input placeholder="Search" helperText="Press Enter to search" value={q} onChange={setQ} />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `type`, `unit`, `showCount`, `maxCount`, `forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `required`, `className`
+**Important** — `onChange` receives `(value: string)`, **not** an event. The placeholder
+IS the label (it floats up when filled — don't add a separate `<label>`).
+
+Props: `placeholder`, `value`, `onChange(value)`, `type`, `unit`, `showCount`, `maxCount`,
+`forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `helperText`,
+`required`, `rightIcon`, `className`.
 
 ---
 
@@ -93,24 +318,25 @@ Multi-line input. API mirrors Input.
 
 ```tsx
 <TextArea placeholder="Description" value={text} onChange={setText} />
-<TextArea placeholder="Tweet" showCount maxCount={280} />
-<TextArea forceState="error" errorMessage="Required" placeholder="Notes" />
+<TextArea placeholder="Tweet" showCount maxCount={280} value={post} onChange={setPost} />
+<TextArea placeholder="Feedback" forceState="error" errorMessage="Required" />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `showCount`, `maxCount`, `forceState`, `errorMessage`, `required`, `className`
+Props: `placeholder`, `value`, `onChange(value)`, `showCount`, `maxCount`, `forceState`,
+`errorMessage`, `helperText`, `required`, `className`.
 
 ---
 
 ### SearchInput
 
-Search field with icon and clear button.
+Search field with icon + clear button.
 
 ```tsx
-<SearchInput placeholder="Search events..." value={q} onChange={setQ} />
-<SearchInput size="sm" placeholder="Filter by name..." />
+<SearchInput placeholder="Search events…" value={q} onChange={setQ} />
+<SearchInput size="sm" placeholder="Filter…" value={q} onChange={setQ} />
 ```
 
-Props: `placeholder`, `value`, `onChange`, `size` (`"lg"` | `"sm"`), `className`
+Props: `placeholder`, `value`, `onChange(value)`, `size` (`"lg"` default | `"sm"`), `className`.
 
 ---
 
@@ -124,16 +350,13 @@ Single-select dropdown.
   options={[
     { label: "Option A", value: "a" },
     { label: "Option B", value: "b" },
-    { label: "Disabled", value: "c", disabled: true },
   ]}
   value={selected}
   onChange={setSelected}
 />
 ```
 
-Props: `placeholder`, `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `value`, `onChange`, `disabled`, `className`
-
----
+Props: `placeholder`, `label`, `required`, `forceState` (`"default"` | `"focus"` | `"error"` | `"disabled"`), `errorMessage`, `helperText`, `options: { label, value }[]`, `value`, `onChange(value)`, `className`. To disable, pass `forceState="disabled"` — there is no top-level `disabled` prop.
 
 ### DropdownMultiple
 
@@ -142,330 +365,1160 @@ Multi-select dropdown with checkboxes.
 ```tsx
 <DropdownMultiple
   placeholder="Select tags"
-  options={options}
-  values={selected}
+  options={tagOptions}
+  value={selected}
   onChange={setSelected}
 />
 ```
 
-Props: `placeholder`, `options`, `values`, `onChange`, `disabled`, `className`
+Props: `placeholder`, `label`, `required`, `forceState`, `errorMessage`, `helperText`, `options`, `value: string[]`, `onChange(value: string[])`, `className`. The controlled prop is `value` (not `values`). To disable, use `forceState="disabled"`.
+
+---
+
+### Checkbox
+
+```tsx
+<Checkbox checked={agreed} onChange={setAgreed} label="I agree to the terms" />
+<Checkbox checked="indeterminate" onChange={setAll} label="Select all" />
+<Checkbox checked={sub} onChange={setSub} label="Subscribe" disabled />
+```
+
+`checked` is `boolean | "indeterminate"`. `onChange` receives a boolean (`(next: boolean) => void`) — NOT an event, NOT `onCheckedChange`. Always provide `label` — don't wrap Checkbox in a `<label>`.
+
+### Toggle
+
+Boolean switch (`role="switch"`). Sizes: `size="sm"` (32×20) and `size="md"` (40×24).
+
+Default size is `sm` when `label` or `description` is provided; `md` for a standalone switch.
+
+When `label` (and optionally `description`) is set, the component renders a full-width row: text fills the left (`flex-1`), switch pinned to the right (`shrink-0`), `gap-4` between them. When `description` is present the row uses `items-start` so the switch aligns with the first line of text.
+
+```tsx
+// Standalone
+<Toggle checked={on} onChange={setOn} />
+<Toggle size="md" checked={on} onChange={setOn} />
+<Toggle checked={on} onChange={setOn} disabled />
+
+// Labeled row (full-width, label left / switch right)
+<Toggle checked={on} onChange={setOn} label="Notifications" />
+<Toggle checked={on} onChange={setOn} label="Notifications" description="Optional supporting copy" />
+<Toggle checked={on} onChange={setOn} label="Setting" disabled />
+```
+
+Props: `checked`, `onChange(next: boolean)`, `disabled`, `size?` (`"sm"` | `"md"`), `label`, `description`, `id`, `ariaLabel` (when there is no visible label), `className`.
+
+### Radio
+
+Render a group — use `name` to bind siblings.
+
+```tsx
+<div className="flex flex-col gap-2">
+  <Radio name="plan" value="free" checked={plan === "free"} onChange={() => setPlan("free")} label="Free" />
+  <Radio name="plan" value="pro"  checked={plan === "pro"}  onChange={() => setPlan("pro")}  label="Pro" />
+</div>
+```
+
+`onChange` receives a boolean (`(next: boolean) => void`) — fires with `true` when the radio becomes selected. To track which value was picked, ignore the arg and set the value directly: `onChange={() => setPlan("pro")}`.
 
 ---
 
 ### Tag
 
-Compact colored label. Use for categories, statuses, filters.
-
-Variants: `blue` | `green` | `yellow` | `red` | `gray` | `lime`
-Sizes: `large` (default) | `small`
-
-Color semantics: `green` → positive/active, `red` → error/danger, `yellow` → warning/pending, `blue` → informational, `gray` → neutral/inactive
+Compact categorical label.
 
 ```tsx
+type TagVariant = "blue" | "green" | "yellow" | "red" | "gray" | "lime";
+// green=positive, red=danger, yellow=warning, blue=info, gray=neutral
+
 <Tag text="Active" variant="green" />
 <Tag text="Draft" variant="yellow" />
-<Tag text="Error" variant="red" size="small" />
-<Tag text="Filter" close onClose={fn} />
+<Tag text="Filter: Design" close />
+<Tag text="Small" variant="blue" size="small" />
 ```
 
-Props: `text`, `variant`, `size`, `close`, `onClose`, `className`
+Props: `text`, `variant`, `size` (`"large"` default | `"small"`), `state` (`"default"` | `"hover"` | `"disabled"`), `icon` (boolean — leading dot), `close` (boolean — visual × button only), `className`.
 
----
+**Note** — `close` is purely visual; the Tag does not handle dismiss. To make a removable tag, wrap it in a clickable parent (`<button onClick={remove}><Tag close text="…" /></button>`) or use `<DropdownMultiple>`'s built-in removable chips.
 
 ### StatusTag
 
-Process-flow state indicator with colored dot.
-
-Types: `stop` | `success` | `hold` | `processing` | `error`
+Workflow/process state with colored dot. Use this (not Tag) for statuses.
 
 ```tsx
+type StatusTagType = "stop" | "success" | "hold" | "processing" | "error";
+
 <StatusTag type="success" />
-<StatusTag type="processing" text="In progress" />
-<StatusTag type="hold" />
+<StatusTag type="processing" text="Uploading…" />
 <StatusTag type="error" />
 ```
 
-Props: `type`, `text`, `className`
-
-Use `StatusTag` for workflow states. Use `Tag` for categorical labels.
-
----
+**When to pick which** — workflow state (order flow, job status) → StatusTag.
+Category / label / filter pill → Tag.
 
 ### Chip
 
-Toggleable filter/selection chip. Always use in groups of 2+.
-
-Types: `single` (default) | `multiple`
-Sizes: `large` | `medium` | `small`
+Toggleable filter selection. Always use in groups of 2+.
 
 ```tsx
-{/* Single-select group */}
-<div className="flex gap-2">
-  <Chip label="All" selected={filter === "all"} onClick={() => setFilter("all")} />
-  <Chip label="Active" selected={filter === "active"} onClick={() => setFilter("active")} />
-  <Chip label="Archived" selected={filter === "archived"} onClick={() => setFilter("archived")} />
+// Single-select filter bar
+<div className="flex flex-wrap gap-2">
+  {["all", "active", "archived"].map(v => (
+    <Chip key={v} label={v} selected={filter === v} onClick={() => setFilter(v)} />
+  ))}
 </div>
 
-{/* Multi-select */}
-<Chip label="Design" type="multiple" selected={tags.includes("design")} onClick={() => toggle("design")} />
+// Multi-select tag picker
+<div className="flex flex-wrap gap-2">
+  {tags.map(t => (
+    <Chip key={t} label={t} type="multiple" size="medium"
+          selected={picked.has(t)} onClick={() => toggle(t)} />
+  ))}
+</div>
 ```
 
-Props: `label`, `selected`, `onClick`, `type`, `size`, `disabled`, `className`
+Props: `label`, `selected`, `onClick`, `type` (`"single"` default | `"multiple"`),
+`size` (`"large"` | `"medium"` | `"small"`), `disabled`, `className`.
 
 ---
 
 ### TabGroup
 
-Tabbed navigation. Always use `TabGroup`, not bare `Tab`.
-
-Sizes: `lg` | `md` (default) | `sm`
+Tabbed navigation. Always use `TabGroup` (never bare `<Tab>`).
 
 ```tsx
 <TabGroup
   items={[
     { id: "overview", title: "Overview" },
-    { id: "details", title: "Details", icon: true },
-    { id: "history", title: "History", notification: 3 },
+    { id: "details",  title: "Details", icon: true },
+    { id: "history",  title: "History", notification: 3 },
     { id: "settings", title: "Settings", disabled: true },
   ]}
-  activeId={activeTab}
-  onChange={setActiveTab}
+  activeId={active}
+  onChange={setActive}
   size="md"
 />
 ```
 
-Props: `items` (`Array<{ id: string, title: string, icon?: boolean, notification?: number, disabled?: boolean }>`), `activeId`, `onChange`, `size`, `className`
+Props: `items`, `activeId`, `onChange(id)`, `size` (`"lg"` | `"md"` default | `"sm"`), `className`.
+
+All tabs in one group must share the same size.
 
 ---
 
 ### Card
 
-Responsive event/content card.
+Self-contained surface — don't wrap in another card.
 
-Variants: `desktop` (308px wide) | `tablet` (224px wide) | `mobile` (163px wide)
-tagStatus: `not-registered` | `registered` | `full`
+**Default variant is `"default"`.** Start every Card as `variant="default"` (an empty shell with padding, radius, shadow, and `bg-card`) and pass your content via `children`. Only switch to a specialized variant when the page is specifically rendering that content type.
+
+| Variant | Use for | Requires |
+|---|---|---|
+| `"default"` (default) | Any custom card surface | `children` |
+| `"event"` | Event/session card | `title`, `date`, `time`, `location`, `count`, `tagStatus` |
+| `"news"` | News/article card | `title`, `category`, `date`, optional `image` |
+| `"social"` | Social/article summary with colored tag chips | `title`, `tags`, `source`, `date` |
+| `"live"` | Live stream / video card with duration overlay | `title`, `source`, `date`, `duration` |
 
 ```tsx
+// Default — custom content (preferred starting point)
+<Card size="desktop" className="w-[308px]">
+  <h4>Custom title</h4>
+  <p className="text-sm text-muted-foreground">Any layout you want inside.</p>
+</Card>
+
+// Event
 <Card
-  variant="desktop"
+  variant="event"
+  size="desktop"
+  image="/banner.jpg"
   title="Annual Conference 2024"
-  date="Jun 23, 2024"
-  time="08:30 - 12:00"
+  date="23 มิ.ย. 2567"
+  time="08.30 - 12.00"
   location="Main Hall, Floor 7"
   count="150/200"
   tagStatus="registered"
-  image="/banner.jpg"
+/>
+
+// News
+<Card
+  variant="news"
+  size="desktop"
+  image="/cover.jpg"
+  category="Market"
+  title="Great design begins with understanding user needs"
+  date="01 มกราคม 2025"
+  bookmarked={bm}
+  onBookmarkToggle={toggle}
 />
 ```
 
-Props: `variant`, `title`, `date`, `time`, `location`, `count`, `tagStatus`, `image`, `className`
+**Size presets set width:** `desktop` (308px) · `tablet` (224px) · `mobile` (163px). Pick based on viewport breakpoint, not aesthetic. The `"default"` variant uses `size` only for its internal padding / radius — set width yourself via `className`.
 
-Match variant to viewport: `desktop` on wide layouts, `tablet` / `mobile` on narrow.
+`tagStatus`: `"not-registered"` | `"registered"` | `"full"`.
+
+When no `image` is provided on `event` / `news` / `social` / `live`, the banner area renders a neutral placeholder (no broken-image icon).
+
+### Table
+
+Data tables. Compose with TableRow + TableHeaderCell + TableCell.
+
+```tsx
+<Table>
+  <TableRow header>
+    <TableHeaderCell>Name</TableHeaderCell>
+    <TableHeaderCell>Role</TableHeaderCell>
+    <TableHeaderCell>Status</TableHeaderCell>
+  </TableRow>
+  {users.map(u => (
+    <TableRow key={u.id}>
+      <TableCell>{u.name}</TableCell>
+      <TableCell>{u.role}</TableCell>
+      <TableCell><StatusTag type={u.status} /></TableCell>
+    </TableRow>
+  ))}
+</Table>
+```
+
+Align numeric columns `right`, status center. Don't stuff StatusTag inside the Table header.
+
+**TableCell content** — pass content as children (`<TableCell>{u.name}</TableCell>`).
+Do NOT pass a `label` prop for dynamic data — if children are omitted, the cell
+shows the placeholder `"Text label"`.
+
+**Sorting is not automatic.** `TableHeaderCell` is a UI primitive — it only
+toggles its own arrow icon. The parent must own sort state AND sort the data.
+
+```tsx
+import { useMemo, useState } from "react";
+import { Table, TableRow, TableHeaderCell, TableCell } from "@sarunyu/system-one";
+
+type SortDir = "none" | "asc" | "desc";
+
+export function UsersTable({ users }: { users: User[] }) {
+  const [sortKey, setSortKey] = useState<keyof User | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("none");
+
+  const sorted = useMemo(() => {
+    if (!sortKey || sortDir === "none") return users;
+    const copy = [...users];
+    copy.sort((a, b) => {
+      const av = a[sortKey]; const bv = b[sortKey];
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ?  1 : -1;
+      return 0;
+    });
+    return copy;
+  }, [users, sortKey, sortDir]);
+
+  const dirFor = (k: keyof User): SortDir => (sortKey === k ? sortDir : "none");
+  const handleSort = (k: keyof User) => (next: SortDir) => {
+    setSortKey(next === "none" ? null : k);
+    setSortDir(next);
+  };
+
+  return (
+    <Table>
+      <TableRow header>
+        <TableHeaderCell sortDirection={dirFor("name")} onSortChange={handleSort("name")}>Name</TableHeaderCell>
+        <TableHeaderCell sortDirection={dirFor("role")} onSortChange={handleSort("role")}>Role</TableHeaderCell>
+        <TableHeaderCell sortable={false}>Status</TableHeaderCell>
+      </TableRow>
+      {sorted.map(u => (
+        <TableRow key={u.id}>
+          <TableCell>{u.name}</TableCell>
+          <TableCell>{u.role}</TableCell>
+          <TableCell><StatusTag type={u.status} /></TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  );
+}
+```
+
+Key rules for sort:
+- Parent owns `sortKey` + `sortDir` state.
+- Parent derives `sorted` data via `useMemo` — the Table never mutates data.
+- Pass `sortDirection` (controlled) + `onSortChange` to every sortable header.
+- Only one column sorts at a time — when a column's `sortKey` changes, previous columns naturally read `"none"` via the `dirFor` helper.
+- Columns that shouldn't sort (status, actions) → `sortable={false}`.
+
+**Selectable rows.** To make rows selectable with checkboxes, pair `<TableRow selected onSelectedChange>` with a `<TableCell type="checkbox" />`. The cell renders its own checkbox wired to the row — **do not put a `<Checkbox>` inside the cell yourself.** The row background turns brand-tinted automatically when `selected` is true.
+
+```tsx
+import { useMemo, useState } from "react";
+import { Table, TableRow, TableHeaderCell, TableCell } from "@sarunyu/system-one";
+
+export function SelectableTable({ rows }: { rows: Row[] }) {
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+
+  const toggle = (id: string) => (next: boolean) =>
+    setSelected(prev => {
+      const copy = new Set(prev);
+      next ? copy.add(id) : copy.delete(id);
+      return copy;
+    });
+
+  const headerState =
+    selected.size === 0 ? false : selected.size === rows.length ? true : "indeterminate";
+  const toggleAll = (next: boolean) =>
+    setSelected(next ? new Set(rows.map(r => r.id)) : new Set());
+
+  return (
+    <Table>
+      <TableRow header>
+        <TableHeaderCell type="check" checkState={headerState} onCheckChange={toggleAll} />
+        <TableHeaderCell>Symbol</TableHeaderCell>
+        <TableHeaderCell>Name</TableHeaderCell>
+      </TableRow>
+      {rows.map(r => (
+        <TableRow
+          key={r.id}
+          selected={selected.has(r.id)}
+          onSelectedChange={toggle(r.id)}
+        >
+          <TableCell type="checkbox" />
+          <TableCell>{r.symbol}</TableCell>
+          <TableCell>{r.name}</TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  );
+}
+```
+
+Props:
+- `Table` — `className`, native `<table>` props.
+- `TableRow` — `header?`, `selected?`, `onSelectedChange?(next: boolean)` (fires when a `type="checkbox"` cell in this row is toggled), `hoverable?` (default `true`), `onClick`, `className`.
+- `TableHeaderCell` — `children` (label), `type?: "text" | "icon" | "check"` (use `"check"` for select-all column), `checkState?: boolean | "indeterminate"`, `onCheckChange?(next)`, `sortable?` (default `true`, set `false` to hide the arrow), `sortDirection?: "none" | "asc" | "desc"`, `onSortChange?(next)`, `contentAlign?: "start" | "center" | "end"`, `className`.
+- `TableCell` — `children` (content), `type?: "default" | "text-icon" | "text-image" | "tag" | "icon" | "button" | "checkbox"`, `contentAlign?`, `fixed?`, `className`. For `type="checkbox"` the cell renders its own checkbox — bind selection via the parent `TableRow`, not by nesting a `<Checkbox>`.
 
 ---
 
-### DateInput
+### DateInput / TimeInput
 
-Calendar date picker.
+Modes: `"single"` (default) | `"range"`. There is **no `"multiple"` mode**.
 
-Modes: `single` | `range` | `multiple`
-Variants: `popover` (default) | `modal`
+Each mode uses different value props — single mode uses `value` + `onChange`, range mode uses `dateRange` + `onRangeChange` (or `startTime`/`endTime` + `onStartChange`/`onEndChange` for TimeInput).
 
 ```tsx
+// DateInput — single
 <DateInput placeholder="Select date" mode="single" value={date} onChange={setDate} />
-<DateInput mode="range" value={range} onChange={setRange} />
-<DateInput mode="multiple" value={dates} onChange={setDates} />
-```
 
-Props: `placeholder`, `mode`, `value`, `onChange`, `variant`, `disabled`, `className`
+// DateInput — range (different prop names!)
+<DateInput mode="range" dateRange={range} onRangeChange={setRange} />
 
----
-
-### TimeInput
-
-24-hour time picker.
-
-Modes: `single` | `range`
-
-```tsx
+// TimeInput — single
 <TimeInput placeholder="Start time" value={time} onChange={setTime} />
-<TimeInput mode="range" value={timeRange} onChange={setTimeRange} />
+
+// TimeInput — range (different prop names!)
+<TimeInput
+  mode="range"
+  startTime={start}
+  endTime={end}
+  onStartChange={setStart}
+  onEndChange={setEnd}
+/>
 ```
 
-Props: `placeholder`, `mode`, `value`, `onChange`, `disabled`, `className`
+DateInput types: `value: Date | undefined`, `dateRange: DateRange` (re-exported from react-day-picker — `{ from?: Date; to?: Date }`).
+TimeInput types: `value: TimeValue` where `TimeValue = { hour: 0–23, minute: 0–59 }`.
 
----
+Always format `"DD MMM YYYY"` for display (system format). Don't mix Thai month names with C.E. year.
 
 ### OptionList
 
-Scrollable option list for custom dropdowns.
+Raw option rows. Use when you need a custom dropdown or a sidebar menu — otherwise use `Dropdown` / `DropdownMultiple`.
 
 ```tsx
-{/* Single-select */}
 <OptionList
   options={[{ label: "Item A", value: "a" }, { label: "Item B", value: "b" }]}
   selectedValue={value}
   onSelect={setValue}
 />
+```
 
-{/* Multi-select */}
-<OptionList
-  options={options}
-  selectedValues={values}
-  onToggle={toggleValue}
+---
+
+### Alert
+
+Inline, persistent status banner — anchored inside the page or form layout. Never use as a floating notification; use `Toast` for transient messages.
+
+```tsx
+type AlertStatus = "normal" | "information" | "success" | "warning" | "critical";
+
+<Alert status="normal"      message="This field is required." />
+<Alert status="information" message="Your session expires in 10 minutes." />
+<Alert status="success"     message="Payment confirmed." />
+<Alert status="warning"     message="Incomplete profile — some features are limited." />
+<Alert status="critical"    message="Authentication failed. Please try again." />
+<Alert status="warning"     message="A longer message that wraps to a second line." multiline />
+
+// With title — for notices, disclaimers, info boxes with a heading
+<Alert status="normal"   title="คำเตือนความเสี่ยง" message="การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนตัดสินใจลงทุน" multiline />
+<Alert status="warning"  title="ข้อมูลสำคัญ"       message="บัญชีของคุณจะถูกระงับหากไม่ยืนยันภายใน 7 วัน" />
+```
+
+Props: `status?` (default `"normal"`), `title?` (bold header line above message), `message` (required), `multiline?` (default `false` — `false` truncates to one line, `true` clamps to 2 lines), `className`.
+
+---
+
+### Toast / Toaster
+
+Transient floating feedback. **Always use `Toaster` for queued toasts — it handles fixed positioning (top-right desktop, top-center mobile) and auto-dismiss automatically.**
+
+```tsx
+type ToastVariant = "default" | "broadcast";
+type ToastStatus  = "information" | "success" | "warning" | "critical";
+
+// ✅ Correct — place Toaster once at app root (App.tsx or layout)
+const [toasts, setToasts] = useState<Array<ToastProps & { id: string }>>([]);
+const remove = (id: string) => setToasts(t => t.filter(x => x.id !== id));
+const add = (t: Omit<ToastProps, "onClose"> & { id: string }) =>
+  setToasts(p => [...p, t]);
+
+<Toaster items={toasts} onRemove={remove} />  // fixed-positioned, auto-dismisses after 4s
+
+// Trigger a toast from anywhere:
+add({ id: crypto.randomUUID(), status: "success", message: "Saved." });
+add({ id: crypto.randomUUID(), status: "warning", message: "Low storage.", actionLabel: "Free up", onActionClick: open });
+
+// Broadcast — system-wide banner (no close button, no auto-dismiss)
+<Toast variant="broadcast" status="information" message="Maintenance window: Saturday 02:00–04:00." />
+```
+
+Props (Toaster): `items`, `onRemove?`, `duration?` (ms, default 4000 — set 0 to disable auto-dismiss), `renderItem?`, `className`.
+Props (Toast): `variant?` (default `"default"`), `status?` (default `"information"`), `message`, `multiline?`, `actionLabel?`, `onActionClick?`, `onClose?`, `className`.
+
+---
+
+### Badge
+
+Button with a count indicator. Two variants:
+
+- `"button"` (default) — filter/action button (funnel icon) that shows a count badge when active. Use in toolbars and filter bars.
+- `"notification"` — bell icon button used **internally** by `<Notification>`. Do not use standalone.
+
+**Critical rule:** `<Badge variant="notification">` is an internal building block of `<Notification>`. Never wire it to your own `onClick` (a toast, a custom popover, etc.). If you need a notification bell that opens a list, use `<Notification>` — it renders the bell and the panel together.
+
+```tsx
+// Filter button — inactive and active states
+<Badge label="Filter" count={0} onClick={openFilter} />
+<Badge label="Filter" count={3} onClick={openFilter} />
+<Badge iconOnly count={2} onClick={openFilter} />
+
+// WRONG — do not do this:
+// <Badge variant="notification" count={5} onClick={showToast} />
+
+// CORRECT — for a notification bell + list, always use <Notification>:
+<Notification groups={groups} onItemClick={handleClick} />
+```
+
+Props: `variant?` (`"button"` | `"notification"`, default `"button"`), `count?`, `maxCount?` (default 99), `label?` (button variant, default `"Filter"`), `iconOnly?`, `icon?` (custom icon), `notificationState?` (`"default"` | `"active"` | `"noti"`), plus native `<button>` props.
+
+---
+
+### Avatar
+
+User avatar in three display modes across seven sizes, with an optional online-status dot.
+
+- `"photo"` (default) — renders an `<img>`. Pair with `status` for a green online dot.
+- `"text"` — gradient circle showing up to 2-character initials.
+- `"placeholder"` — generic silhouette when no photo or name is available.
+
+```tsx
+// Photo
+<Avatar src={user.photoUrl} alt={user.name} />
+<Avatar src={user.photoUrl} alt={user.name} status />
+
+// Initials
+<Avatar type="text" initials="JD" />
+<Avatar type="text" initials="JD" size="l" />
+
+// Placeholder
+<Avatar type="placeholder" />
+
+// Sizes: xxs | xs | s | m (default) | l | xl | xxl
+<Avatar size="s" src={url} alt="User" />
+```
+
+Props: `type?` (`"photo"` | `"text"` | `"placeholder"`, default `"photo"`), `size?` (`"xxs"` | `"xs"` | `"s"` | `"m"` | `"l"` | `"xl"` | `"xxl"`, default `"m"`), `src?`, `alt?`, `initials?` (≤ 2 chars, `text` type), `status?` (green dot, `photo` type only), `className?`.
+
+---
+
+### AvatarStack
+
+Horizontal row of overlapping avatars with a circular separator between each pair. Items can mix `photo`, `text`, and `placeholder` types.
+
+```tsx
+<AvatarStack
+  items={[
+    { src: user1.photoUrl, alt: user1.name },
+    { src: user2.photoUrl, alt: user2.name },
+    { type: "text", initials: "JD" },
+    { type: "placeholder" },
+  ]}
+  size="medium"
+  max={5}
 />
 ```
 
-Props: `options` (`Array<{ label: string, value: string, disabled?: boolean }>`), `selectedValue`, `onSelect`, `selectedValues`, `onToggle`, `className`
+Sizes map to avatar pixel sizes: `"small"` → 16 px, `"medium"` → 20 px, `"large"` → 24 px.
+
+Props: `items` (array of `{ type?, src?, alt?, initials? }`), `size?` (`"small"` | `"medium"` | `"large"`, default `"small"`), `max?` (default 5), `className?`.
 
 ---
 
-## Design Tokens
+### Notification
 
-All tokens are CSS custom properties. Override after the stylesheet import:
+Bell-icon trigger + popover panel showing grouped notification rows. Handles badge count, auto-clear on open, and keyboard navigation. Uses `<Badge variant="notification">` internally.
 
-```css
-:root {
-  --primary-action: #7c3aed;        /* brand color */
-  --primary-action-hover: #6d28d9;
-  --primary-action-active: #5b21b6;
-  --font-sans: "Inter", sans-serif; /* override library default (Noto Sans Thai) */
-  --radius: 8px;                    /* border radius base */
+```tsx
+const groups: NotificationGroup[] = [
+  {
+    label: "25 ก.ค. 2567",
+    items: [
+      {
+        id: "1",
+        title: "ยืนยันการชำระเงิน",
+        description: "รายการ TXN-00234 ได้รับการยืนยันแล้ว",
+        time: "10:45",
+        unread: true,
+        type: "icon",
+      },
+      {
+        id: "2",
+        title: "อัปเดตระบบ",
+        description: "เวอร์ชัน 4.4 พร้อมใช้งานแล้ว",
+        time: "08:30",
+        type: "image",
+        imageSrc: "/img/system.png",
+        actionLabel: "อัปเดต",
+        onActionClick: handleUpdate,
+      },
+    ],
+  },
+];
+
+<Notification groups={groups} onItemClick={handleClick} />
+<Notification groups={groups} badgeCount={12} clearBadgeOnOpen />
+<Notification groups={[]} emptyText="ไม่มีการแจ้งเตือน" />
+```
+
+Props: `groups`, `badgeCount?` (overrides computed unread count), `panelWidth?` (default 375), `emptyText?`, `clearBadgeOnOpen?` (default `true`), `open?`, `defaultOpen?`, `onOpenChange?`, `onBadgeCleared?`, `onItemClick?`, `className`, `panelClassName`.
+
+**When to use which:**
+
+| Component | Pattern | Lifetime |
+|---|---|---|
+| `Alert` | Inline, anchored to related content (form, section) | Persistent |
+| `Toast` | Floating, screen edge (top/bottom) | Transient — auto or manual dismiss |
+| `Notification` | Bell icon → popover history panel | On-demand |
+
+---
+
+### Modal
+
+Centered overlay surface for confirmations, richer content, or status alerts.
+Caller owns open/close state and supplies the backdrop — `<Modal>` only renders
+the dialog panel.
+
+**CRITICAL — choose the correct variant before writing any code:**
+
+| Variant | Use when | Has children? |
+|---|---|---|
+| `"dialog"` | Simple confirmation: title + description text + up to 2 buttons. NO custom UI. | No |
+| `"content"` | Any modal with custom content: filters, forms, inputs, lists, date pickers, etc. | Yes — required |
+| `"alert"` | Status moments only: success / warning / danger with icon. | No |
+
+**Rule: if the modal contains ANYTHING other than a title + plain description text → use `variant="content"` and pass the body as `children`. Never use `variant="dialog"` with custom UI inside.**
+
+```tsx
+type ModalVariant      = "dialog" | "content" | "alert";
+type ModalActionLayout = "none" | "single" | "double";
+type ModalResponsive   = "mobile" | "desktop";
+type ModalAlertStatus  = "warning" | "success" | "danger";
+
+// Dialog — ONLY for title + plain text + buttons. No custom children.
+<Modal
+  variant="dialog"
+  actionLayout="double"
+  title="Delete item?"
+  description="This can't be undone."
+  primaryLabel="Delete"
+  secondaryLabel="Cancel"
+  onPrimaryClick={confirm}
+  onSecondaryClick={close}
+  onClose={close}
+/>
+
+// Content — filters, forms, inputs, any custom UI. Always pass children.
+<Modal
+  variant="content"
+  actionLayout="double"
+  title="Filters"
+  primaryLabel="Apply"
+  secondaryLabel="Reset"
+  onPrimaryClick={apply}
+  onSecondaryClick={reset}
+  onClose={close}
+>
+  <div className="flex flex-col gap-4">
+    <Dropdown placeholder="Category" ... />
+    <DateInput mode="range" ... />
+  </div>
+</Modal>
+
+// Content desktop — right-aligns action buttons
+<Modal variant="content" actionLayout="single" responsive="desktop" title="Edit profile" onClose={close}>
+  <Input placeholder="Name" value={name} onChange={setName} />
+</Modal>
+
+// Alert — status moment (warning / success / danger)
+<Modal
+  variant="alert"
+  alertStatus="success"
+  actionLayout="single"
+  title="Saved"
+  description="Your changes are live."
+  primaryLabel="Done"
+  onPrimaryClick={close}
+/>
+```
+
+**Rendering it onscreen.** Wrap `<Modal>` in your own backdrop/portal:
+
+```tsx
+{open ? (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+    <Modal variant="content" title="Filters" actionLayout="double" onClose={close}>
+      {/* your content */}
+    </Modal>
+  </div>
+) : null}
+```
+
+**Widths are fixed by variant** — `dialog` 375px, `content`/`alert` 343px.
+Don't override `className` to enlarge them. Mobile by default; set
+`responsive="desktop"` on `variant="content"` to right-align actions.
+
+**Action layout** — `none` (no buttons), `single` (primary only, full width on
+mobile), `double` (secondary + primary). Only one primary per modal.
+
+Props: `variant`, `actionLayout`, `responsive`, `alertStatus`, `showClose`,
+`title`, `description`, `primaryLabel`, `secondaryLabel`, `children`,
+`onClose`, `onPrimaryClick`, `onSecondaryClick`, `className`.
+
+---
+
+### BottomSheet
+
+Mobile-first bottom-anchored sheet. Built on Vaul — it ships its own backdrop,
+drag-to-dismiss, and portal. Pass a `trigger` or control it via `open` /
+`onOpenChange`.
+
+```tsx
+type BottomSheetHeaderType = "text" | "icon" | "image";
+type BottomSheetRightSide  = "icon" | "action" | "none";
+
+// Controlled — opens from the bottom with title + close icon
+<BottomSheet
+  open={open}
+  onOpenChange={setOpen}
+  title="Filters"
+  rightSide="icon"
+>
+  <div className="flex flex-col gap-3">{/* filter controls */}</div>
+</BottomSheet>
+
+// Uncontrolled with a trigger
+<BottomSheet
+  trigger={<Button variant="outline" size="md">Show options</Button>}
+  title="Playlist"
+  headerType="image"
+  imageSrc="/cover.jpg"
+  rightSide="action"
+  actionLabel="Save"
+  onActionClick={save}
+>
+  <OptionList options={tracks} selectedValue={pick} onSelect={setPick} />
+</BottomSheet>
+
+// Content-only sheet (no header)
+<BottomSheet open={open} onOpenChange={setOpen} showHeader={false}>
+  <p className="text-sm text-muted-foreground">Quick tip body</p>
+</BottomSheet>
+```
+
+**Header layout**
+- `headerType="text"` — title only.
+- `headerType="icon"` — leading icon + title (pass `leftIcon`).
+- `headerType="image"` — leading thumbnail + title (pass `imageSrc`).
+
+**Right side**
+- `rightSide="icon"` — close button, auto-wired to `DrawerClose`. Custom glyph via `rightIcon`.
+- `rightSide="action"` — inline text button (e.g., "Save"), fires `onActionClick`.
+- `rightSide="none"` — nothing on the right.
+
+`showHandle` (default `true`) shows the grab handle at the top. Hide it only
+when you want a fully formal surface. Do not render a `<BottomSheet>` on desktop
+layouts — use `<Modal>` instead.
+
+Props: `open`, `onOpenChange`, `trigger`, `headerType`, `showHeader`,
+`rightSide`, `title`, `actionLabel`, `imageSrc`, `leftIcon`, `rightIcon`,
+`onActionClick`, `showHandle`, `children`, `className`, `contentClassName`.
+
+---
+
+### Modal vs BottomSheet — responsive rule
+
+**On mobile (< 768px), content-heavy / action-heavy modals MUST render as
+`<BottomSheet>`, not `<Modal>`.** This is not optional — it is the system
+default for every flow that wraps a form or an option list.
+
+Mobile → `<BottomSheet>`:
+- Login / signup / account forms
+- Settings panels and profile editors
+- Any multi-field form or multi-step flow
+- Long option / picker lists (e.g. country picker, category filter)
+- Action menus ("Share to…", "Move to…")
+
+Mobile → `<Modal>` stays OK:
+- `variant="alert"` (success / warning / danger notifications)
+- Short `variant="dialog"` confirmations (title + one line of text + 1–2 buttons, no input)
+
+Desktop (≥ 768px) → always `<Modal>`.
+
+Use the library's `useIsMobile()` hook to branch. It ships with the same
+768px breakpoint the library uses internally (DateInput/TimeInput already
+swap to `<BottomSheet>` on mobile via this hook).
+
+```tsx
+import { useState } from "react";
+import {
+  useIsMobile,
+  Modal, BottomSheet,
+  Input, Button, Checkbox,
+} from "@sarunyu/system-one";
+
+export function LoginSheet({
+  open,
+  onOpenChange,
+}: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const isMobile           = useIsMobile();
+  const [email, setEmail]  = useState("");
+  const [pw, setPw]        = useState("");
+  const [remember, setRmb] = useState(false);
+
+  const body = (
+    <div className="flex flex-col gap-4">
+      <Input placeholder="Email"    value={email} onChange={setEmail} required />
+      <Input placeholder="Password" value={pw}    onChange={setPw}    type="password" required />
+      <Checkbox checked={remember} onChange={setRmb} label="Remember me" />
+      <Button variant="primary" size="xl" className="w-full" onClick={() => onOpenChange(false)}>
+        Sign in
+      </Button>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <BottomSheet open={open} onOpenChange={onOpenChange} title="Sign in" rightSide="icon">
+        {body}
+      </BottomSheet>
+    );
+  }
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+      <Modal
+        variant="content"
+        responsive="desktop"
+        title="Sign in"
+        onClose={() => onOpenChange(false)}
+      >
+        {body}
+      </Modal>
+    </div>
+  );
 }
 ```
 
-Key tokens:
-- `--primary-action` — brand color (primary buttons, links, active states)
-- `--background` / `--foreground` — page surface and text
-- `--border` — default border color
-- `--muted-foreground` — placeholder and secondary text
-- `--destructive` — error/danger red
-- `--success` — success green
-- `--font-sans` — font family (default: Noto Sans Thai)
-- `--radius` — base border radius (default: 4px)
+**Key points in the pattern**
+- Extract the body into a single `const body = (...)` so both branches share it. Do not duplicate the form.
+- `useIsMobile()` returns `false` on the server / first paint — the initial render shows the `<Modal>` branch. That is correct; the component is portalled and non-interactive until hydrated.
+- `onOpenChange(false)` closes both branches. Do not hand-roll separate close handlers.
+- Do NOT build a custom `<ResponsiveModal>` wrapper component. Branching inline is the sanctioned pattern — wrappers hide the decision and lead to mis-use.
 
 ---
 
-## Dark Mode
+## Layout — you design it
 
-Add `.dark` to `<html>` or any ancestor:
+The library ships zero layout components. Compose page structure with plain
+Tailwind. Example scaffolds:
 
 ```tsx
-// Next.js
-<html className={isDark ? "dark" : ""}>
-
-// Vite
-document.documentElement.classList.toggle("dark", isDark)
+// Centered content page
+<main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-12">
+  <header className="flex items-start justify-between gap-4">
+    <div className="flex flex-col gap-2">
+      <h1>Dashboard</h1>
+      <p className="text-muted-foreground">Overview of your activity</p>
+    </div>
+    <Button variant="primary" size="md">New item</Button>
+  </header>
+  <section className="flex flex-col gap-6">{/* ... */}</section>
+</main>
 ```
 
-All components adapt automatically.
+```tsx
+// Sidebar + content
+<div className="flex min-h-screen">
+  <aside className="w-64 shrink-0 border-r border-divider bg-card p-6">{/* nav */}</aside>
+  <main className="flex-1 p-8">{/* content */}</main>
+</div>
+```
+
+```tsx
+// Responsive card grid
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  {events.map(e => <Card key={e.id} {...e} />)}
+</div>
+```
+
+**Rules for layout:**
+- Use `bg-background` / `bg-card` — never hard-code colors.
+- Leave breathing room: `gap-4` inner clusters, `gap-6`–`gap-12` between sections, `py-10`+ page padding.
+- Max-width the content column (`max-w-[640px]` forms, `max-w-[1200px]` dashboards).
+- Use `<h1>`…`<h4>` directly. They are pre-styled.
 
 ---
 
-## TypeScript
+## DO / DON'T
 
-```ts
-import type { ButtonVariant, ButtonSize, TagVariant, ChipSize } from "@sarunyu/system-one"
+| DO | DON'T |
+|---|---|
+| `<Button variant="primary" size="md">Save</Button>` | `<button className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>` |
+| `<Input placeholder="Email" value={e} onChange={setE} />` | `<label>Email</label><input className="border…" />` |
+| `<Tag text="Active" variant="green" />` | `<span className="bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>` |
+| `text-muted-foreground` | `text-gray-500` |
+| `bg-primary-action` | `bg-blue-600` / `bg-[#3b82f6]` |
+| `<h1>Title</h1>` | `<h1 className="text-3xl font-bold">Title</h1>` |
+| `<div className="flex flex-col gap-6">` | `import { Stack } from "@sarunyu/system-one"` |
+| `<Modal variant="dialog" …>` inside your own `fixed inset-0` backdrop | `<div className="fixed inset-0 bg-white rounded p-6">…` |
+| `<BottomSheet open={open} onOpenChange={setOpen}>` | Hand-rolled sheet with `translate-y` + overlay divs |
+| One `variant="primary"` per context | Two primary buttons side-by-side |
+| `onChange={setValue}` (value, not event) | `onChange={e => setValue(e.target.value)}` |
+
+---
+
+## Full page recipes
+
+### Login form
+
+```tsx
+import { Button, Input, Checkbox } from "@sarunyu/system-one";
+import { useState } from "react";
+
+export function LoginPage() {
+  const [email, setEmail]   = useState("");
+  const [pw, setPw]         = useState("");
+  const [remember, setRmb]  = useState(false);
+
+  return (
+    <main className="min-h-screen grid place-items-center bg-background p-6">
+      <div className="w-full max-w-[400px] flex flex-col gap-6 bg-card p-8 rounded-xl shadow-card">
+        <div className="flex flex-col gap-1">
+          <h1>Welcome back</h1>
+          <p className="text-muted-foreground">Sign in to continue</p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <Input placeholder="Email" type="email" value={email} onChange={setEmail} required />
+          <Input placeholder="Password" type="password" value={pw} onChange={setPw} required />
+          <Checkbox checked={remember} onChange={setRmb} label="Remember me" />
+        </div>
+        <Button variant="primary" size="lg" className="w-full">Sign in</Button>
+        <p className="text-center text-sm text-muted-foreground">
+          No account? <a className="text-primary-action">Sign up</a>
+        </p>
+      </div>
+    </main>
+  );
+}
+```
+
+### Event list page
+
+```tsx
+import { Button, SearchInput, Chip, Card, TabGroup } from "@sarunyu/system-one";
+import { useState } from "react";
+
+export function EventsPage() {
+  const [tab, setTab]       = useState("upcoming");
+  const [query, setQuery]   = useState("");
+  const [filter, setFilter] = useState("all");
+
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-6 md:px-8 py-10 flex flex-col gap-8">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col gap-2">
+          <h1>Events</h1>
+          <p className="text-muted-foreground">Browse and register</p>
+        </div>
+        <Button variant="primary" size="md" leftIcon={<PlusIcon />}>New event</Button>
+      </header>
+
+      <TabGroup
+        items={[
+          { id: "upcoming", title: "Upcoming" },
+          { id: "past",     title: "Past", notification: 12 },
+        ]}
+        activeId={tab}
+        onChange={setTab}
+      />
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <SearchInput placeholder="Search events…" value={query} onChange={setQuery} />
+        <div className="flex flex-wrap gap-2">
+          {["all", "conference", "workshop", "meetup"].map(v => (
+            <Chip key={v} label={v} selected={filter === v} onClick={() => setFilter(v)} />
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map(e => <Card key={e.id} variant="desktop" {...e} />)}
+      </div>
+    </main>
+  );
+}
+```
+
+### Settings form
+
+```tsx
+import { Input, TextArea, Dropdown, DropdownMultiple, DateInput, Button } from "@sarunyu/system-one";
+
+export function SettingsPage() {
+  return (
+    <main className="mx-auto w-full max-w-[640px] px-6 py-10 flex flex-col gap-8">
+      <header className="flex flex-col gap-2">
+        <h1>Account settings</h1>
+        <p className="text-muted-foreground">Manage your profile and preferences</p>
+      </header>
+
+      <section className="flex flex-col gap-6">
+        <h2>Profile</h2>
+        <Input placeholder="Full name"  value={name}  onChange={setName} required />
+        <Input placeholder="Email"      value={email} onChange={setEmail} required />
+        <TextArea placeholder="Bio" value={bio} onChange={setBio} showCount maxCount={160} />
+      </section>
+
+      <section className="flex flex-col gap-6">
+        <h2>Preferences</h2>
+        <Dropdown
+          placeholder="Timezone"
+          options={timezones}
+          value={tz}
+          onChange={setTz}
+        />
+        <DropdownMultiple
+          placeholder="Interests"
+          options={interests}
+          value={picked}
+          onChange={setPicked}
+        />
+        <DateInput placeholder="Birthday" mode="single" value={dob} onChange={setDob} />
+      </section>
+
+      <div className="flex justify-end gap-3">
+        <Button variant="outline" size="md">Cancel</Button>
+        <Button variant="primary" size="md">Save changes</Button>
+      </div>
+    </main>
+  );
+}
+```
+
+### Data table page
+
+```tsx
+import { useMemo, useState } from "react";
+import {
+  SearchInput, Button, Table, TableRow, TableHeaderCell, TableCell, StatusTag,
+} from "@sarunyu/system-one";
+
+type SortDir = "none" | "asc" | "desc";
+type OrderKey = "id" | "customer" | "amount";
+
+export function OrdersPage() {
+  const [q, setQ]             = useState("");
+  const [sortKey, setSortKey] = useState<OrderKey | null>(null);
+  const [sortDir, setSortDir] = useState<SortDir>("none");
+
+  const filtered = useMemo(
+    () => orders.filter(o => o.customer.toLowerCase().includes(q.toLowerCase())),
+    [q],
+  );
+
+  const sorted = useMemo(() => {
+    if (!sortKey || sortDir === "none") return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => {
+      const av = a[sortKey]; const bv = b[sortKey];
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ?  1 : -1;
+      return 0;
+    });
+    return copy;
+  }, [filtered, sortKey, sortDir]);
+
+  const dirFor = (k: OrderKey): SortDir => (sortKey === k ? sortDir : "none");
+  const handleSort = (k: OrderKey) => (next: SortDir) => {
+    setSortKey(next === "none" ? null : k);
+    setSortDir(next);
+  };
+
+  return (
+    <main className="mx-auto w-full max-w-[1200px] px-6 py-10 flex flex-col gap-6">
+      <header className="flex items-center justify-between">
+        <h1>Orders</h1>
+        <Button variant="primary" size="md">Export</Button>
+      </header>
+      <div className="flex items-center gap-3">
+        <SearchInput placeholder="Search orders…" value={q} onChange={setQ} />
+      </div>
+      <Table>
+        <TableRow header>
+          <TableHeaderCell sortDirection={dirFor("id")}       onSortChange={handleSort("id")}>Order</TableHeaderCell>
+          <TableHeaderCell sortDirection={dirFor("customer")} onSortChange={handleSort("customer")}>Customer</TableHeaderCell>
+          <TableHeaderCell sortDirection={dirFor("amount")}   onSortChange={handleSort("amount")}>Amount</TableHeaderCell>
+          <TableHeaderCell sortable={false}>Status</TableHeaderCell>
+        </TableRow>
+        {sorted.map(o => (
+          <TableRow key={o.id}>
+            <TableCell>#{o.id}</TableCell>
+            <TableCell>{o.customer}</TableCell>
+            <TableCell>{o.amount}</TableCell>
+            <TableCell><StatusTag type={o.status} /></TableCell>
+          </TableRow>
+        ))}
+      </Table>
+    </main>
+  );
+}
 ```
 
 ---
 
-## Notes
+## Theming
 
-- No provider or wrapper needed — just import the stylesheet and use components
-- The library ships pre-built CSS — no Tailwind config required in the consuming project
-- If the project already uses Tailwind and you see font differences, override `--font-sans` in your CSS
-- CSS custom properties can be referenced in Tailwind classes: `bg-[var(--primary-action)]`
+Override tokens after importing the stylesheet. **You must override both
+`:root` (light mode) and `.dark` (dark mode) — they are independent.**
 
----
+The hex values below are **placeholders for your brand palette** (shown in
+violet for contrast). They are NOT part of System One — the library's own
+defaults live in `tokens/color.json` (P1 blue). Replace with your own values.
 
-## Component Usage Guide
+```css
+/* Light mode — replace with YOUR brand palette */
+:root {
+  --primary-action: #7c3aed;        /* your brand 600 */
+  --primary-action-hover: #6d28d9;  /* your brand 700 */
+  --primary-action-active: #5b21b6; /* your brand 800 */
+  /* Use rgb(r g b / alpha%) — NOT color-mix() which is unsupported in some renderers */
+  --primary-action-light: rgb(124 58 237 / 6%);
+  --primary-action-muted: rgb(124 58 237 / 10%);
 
-### Button
+  --font-sans: "Inter", sans-serif;  /* replace default Noto Sans Thai */
+}
 
-Buttons are interactive elements that allow users to click or tap to perform actions — such as submitting a form, saving data, navigating to another page, or opening a popup.
+/* Dark mode — override separately. The library's .dark block hard-codes
+   these to a blue palette, so setting only :root leaves dark mode unchanged. */
+.dark {
+  --primary-action: #a78bfa;        /* your brand 400 */
+  --primary-action-hover: #c4b5fd;  /* your brand 300 */
+  --primary-action-active: #8b5cf6; /* your brand 500 */
+  --primary-action-light: rgb(167 139 250 / 10%);
+  --primary-action-muted: rgb(167 139 250 / 15%);
+}
+```
 
-Types: `primary` — main CTA, use once per context. `outline` — secondary action, supports primary without affecting main flow. `plain` — no background or border, low-priority actions. `secondary` (outline-black) — same as outline but black, use when blue is not appropriate.
+Every component that uses `--primary-action` will pick up your brand color
+in both modes.
 
-Sizes: `base` recommended for Desktop. `xl` recommended for Mobile.
+**Do not try to override `--radius`.** It is a legacy var kept for
+compatibility and is not referenced by any Tailwind utility. To change
+corner rounding per element, apply a different utility (`rounded-lg`
+→ `rounded-xl`). To change it globally, fork the library.
 
-States: Default, Hover, Press, Disabled.
+### Example: Wealth theme (Midnight Blue + Burnt Sienna)
 
-### Input
+The design system ships with ramps for alternate brands. To switch the
+whole UI to the Wealth palette, override the brand semantic tokens:
 
-Floating Label Input is a single-line or multi-line field with a label that floats inside.
+```css
+:root {
+  /* Primary brand → Midnight Blue */
+  --bg-brand-primary: var(--fill-midnight-blue-500);
+  --bg-brand-hover:   var(--fill-midnight-blue-600);
+  --bg-brand-pressed: var(--fill-midnight-blue-700);
+  --bg-brand-primary-light: var(--fill-midnight-blue-50);
+  --text-brand-primary:     var(--fill-midnight-blue-500);
+  --text-brand-link-primary: var(--fill-midnight-blue-500);
+  --border-brand-primary:   var(--fill-midnight-blue-500);
 
-Types: `Input` — single-line, general text/numeric. `TextArea` — multi-line, for comments or addresses. `Dropdown` — predefined list selection, displays as OptionList.
+  /* Secondary brand → Burnt Sienna */
+  --bg-brand-secondary:       var(--fill-burnt-sienna-500);
+  --bg-brand-secondary-light: var(--fill-burnt-sienna-50);
+  --text-brand-secondary:     var(--fill-burnt-sienna-500);
+  --border-brand-secondary:   var(--fill-burnt-sienna-500);
 
-States: Default, Focus, Error, Disabled.
+  /* Keep the legacy --primary-action alias in sync so existing components track */
+  --primary-action:        var(--bg-brand-primary);
+  --primary-action-hover:  var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+}
 
-### Tab
+.dark {
+  --bg-brand-primary: var(--fill-midnight-blue-400);
+  --bg-brand-hover:   var(--fill-midnight-blue-300);
+  --bg-brand-pressed: var(--fill-midnight-blue-500);
+  --bg-brand-primary-light: color-mix(in srgb, var(--fill-midnight-blue-400) 15%, transparent);
+  --text-brand-primary:     var(--fill-midnight-blue-300);
+  --text-brand-link-primary: var(--fill-midnight-blue-300);
+  --border-brand-primary:   var(--fill-midnight-blue-400);
 
-Tabs allow users to switch between different content sections within the same page.
+  --bg-brand-secondary:       var(--fill-burnt-sienna-400);
+  --bg-brand-secondary-light: color-mix(in srgb, var(--fill-burnt-sienna-400) 15%, transparent);
+  --text-brand-secondary:     var(--fill-burnt-sienna-300);
+  --border-brand-secondary:   var(--fill-burnt-sienna-400);
 
-Types: Default (text only), Icon (with icon), Notification (with badge).
+  --primary-action:        var(--bg-brand-primary);
+  --primary-action-hover:  var(--bg-brand-hover);
+  --primary-action-active: var(--bg-brand-pressed);
+}
+```
 
-States: Default, Active (selected), Disabled.
+Override primitives (`--fill-*`) only if you want to change the ramp itself
+across all consumers. Override semantics (`--bg-brand-*`, `--text-brand-*`)
+to switch which ramp the brand uses without touching anything else.
 
-Sizes: `lg` (default), `md`, `sm`. Always use the same size within one tab group.
+## If you need a component the library doesn't provide
 
-### Tag
+Build it with tokens, not hard-coded colors. Example — a custom badge:
 
-Tags display categories, types, or short metadata. Status Tags communicate process state.
+```tsx
+<span className="inline-flex items-center gap-1 rounded-full bg-primary-action-light text-primary-action px-2 py-0.5 text-xs">
+  {text}
+</span>
+```
 
-Tag types: Default (text only), Icon (with icon), Remove (dismissible).
-Tag states: Default, Hover/Press, Disabled.
-Tag sizes: Large, Small.
+Rules for custom components:
+- Colors → always from the token table above.
+- Radius → one of `rounded-sm`/`rounded-md`/`rounded-lg`/`rounded-xl`/`rounded-full`.
+- Shadow → `shadow-card` for resting surfaces, `shadow-popover` for floating.
+- Border → `border-border` (or `border-divider` for light separators).
+- Typography → use `<h1>`…`<h4>` and body text inherits from `--foreground`.
 
-Status Tag variants: `success` — process completed. `processing` — in progress. `hold` — temporarily paused. `stop` — stopped. `error` — failed.
-
-### Chip
-
-Chips are toggleable filter/selection elements. Always use in groups of 2+.
-
-Types: `single` — one selection at a time. `multiple` — multiple selections simultaneously.
-
-States: Default, Active, Disabled (Default), Disabled (Active).
-
-Sizes: `large`, `medium`, `small`.
-
----
-
-## Design Rules
-
-### Button Rules
-
-- Maximum width is 343px (`max-w-[343px]`). Never remove or override. Do not detach the component.
-- Do not manually recreate or modify padding (`py-[10px] px-[16px]`) or border-radius (`rounded-[8px]`).
-- Use Primary only once per context. Never place two Primary buttons side-by-side. Use Outline/Secondary for supporting actions.
-- Hug width is correct for short labels only. For long labels, use Fill width or set explicit max-w-[343px].
-
-### Input Rules
-
-- Never override input border or background colors manually — use built-in state variants (Default, Focus, Error, Disabled).
-- Do not recreate input styles manually or adjust gap/height outside the component's tokens.
-- Use Dropdown Tags only for multi-select. For single-select, use standard Dropdown.
-- Keep labelText short enough to fit on one line. Long labels break the floating label layout.
-- Do not show Helper Text and Error Message simultaneously. Error state replaces helper text.
-- Use Option List only when there are multiple selectable values.
-- Always follow the system date format (DD MMM YYYY). Do not mix Thai month names with C.E. year or reorder day/month/year.
-
-### Tab Rules
-
-- Do not override padding, gap, border-radius, element order, or colors inside the tab bar.
-- All tabs in one group must use the same size prop. Never mix sizes.
-- Do not add extra gap or margin between tabs — use built-in spacing tokens only.
-
-### Tag Rules
-
-- Do not override height, padding, or layout of Tag or StatusTag.
-- All tags in the same context must use the same size.
-- Do not reorder internal elements (icon, label, badge) inside Tag or StatusTag.
-- Always use the correct StatusTag variant for its semantic meaning. Never override the color.
-
-### Chip Rules
-
-- Keep chip labels short and single-purpose. Long labels cause overflow.
-- Do not override padding, gap, radius, height, element order, or colors.
-- All chips in the same group must share the same size and spacing.
-- Use Chip only for groups with 2+ options. For single options, use a toggle or checkbox instead.
+If the thing you're building is conceptually a button/input/tag/chip/tab/card/table — **do not build a custom one. Use the library's component.** The only reason to build custom is when the library truly doesn't cover the concept (e.g. a bespoke hero section, a custom chart, a breadcrumb).

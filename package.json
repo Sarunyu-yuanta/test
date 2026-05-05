@@ -1,6 +1,6 @@
 {
   "name": "@sarunyu/system-one",
-  "version": "1.1.1",
+  "version": "4.9.30",
   "type": "module",
   "description": "A production-ready React design system built for AI-powered web generation tools (Figma Make, Lovable, V0). Tailwind CSS v4 + CSS custom properties for full theming support.",
   "keywords": [
@@ -22,6 +22,9 @@
   ],
   "author": "saranyu",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
@@ -39,7 +42,10 @@
   ],
   "files": [
     "dist",
-    "llms.txt"
+    "llms.txt",
+    "AGENTS.md",
+    "DESIGN.md",
+    "README.md"
   ],
   "scripts": {
     "dev": "vite",
@@ -51,7 +57,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-popover": "1.1.6",
     "clsx": "2.1.1",
-    "react-day-picker": "8.10.1",
+    "react-day-picker": "^9.14.0",
     "tailwind-merge": "3.2.0",
     "vaul": "1.1.2"
   },
