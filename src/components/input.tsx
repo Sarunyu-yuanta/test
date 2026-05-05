@@ -57,14 +57,16 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const currentValue = controlled ? value : internalValue;
   const isDisabled = forceState === "disabled";
 
-  const state: InputState = forceState ?? (focused ? "focus" : "default");
+  const state: InputState = (forceState && forceState !== "default")
+    ? forceState
+    : (focused ? "focus" : "default");
   const isError = state === "error";
   const isFocus = state === "focus";
   const isFilled = currentValue.length > 0;
 
   const bg = isDisabled ? "bg-disabled-bg" : "bg-background";
   const floatLabel = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
-  const filledValue = isDisabled ? "var(--disabled)" : "var(--foreground)";
+  const filledValue = isDisabled ? "var(--disabled)" : "var(--text-default-primary)";
   const unitColor = isDisabled ? "var(--disabled)" : "var(--muted-foreground)";
 
   const borderInset = isFocus || isError ? "-1px" : "0px";
@@ -72,10 +74,10 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const borderColor = isDisabled
     ? "var(--border-disabled)"
     : isError
-      ? "var(--destructive)"
+      ? "var(--border-danger)"
       : isFocus
         ? "var(--primary-action)"
-        : "var(--border)";
+        : "var(--border-default)";
 
   const hasRight = Boolean(rightIcon) || Boolean(unit);
   const padding = isFilled
@@ -87,7 +89,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
   const charCount = currentValue.length;
   const showBelow = isError || Boolean(helperText) || showCount;
   const leftText = isError ? errorMessage : (helperText ?? "");
-  const leftColor = isError ? "var(--destructive)" : "var(--muted-foreground)";
+  const leftColor = isError ? "var(--bg-danger-primary)" : "var(--muted-foreground)";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isDisabled) return;
@@ -114,7 +116,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
       ? "flex-col items-start justify-center"
       : rightIcon
         ? "flex items-center gap-[8px]"
-        : "flex items-end gap-[8px]"
+        : "flex items-center gap-[8px]"
     : cn("flex items-center", hasRight && "gap-[8px]");
 
   const inputCaretStyle: React.CSSProperties = {
@@ -126,6 +128,7 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
       <div
         className={cn(
           "relative rounded-lg",
+          isFilled ? "min-h-[48px]" : "h-[48px]",
           padding,
           bg,
           containerFlex,
@@ -189,12 +192,20 @@ export const Input = forwardRef<HTMLDivElement, InputProps>(function Input(
             )}
             style={
               isFilled
-                ? { ...inputStyleProp, color: filledValue, ...inputCaretStyle }
+                ? {
+                    ...inputStyleProp,
+                    color: filledValue,
+                    ...inputCaretStyle,
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                  }
                 : {
                     ...inputStyleProp,
                     color: "transparent",
-                    caretColor: isFocus ? "var(--caret-color)" : "transparent",
+                    caretColor: focused ? "var(--caret-color)" : "transparent",
                     padding: hasRight ? "12px 14px" : "14px",
+                    fontSize: "16px",
+                    lineHeight: "24px",
                   }
             }
           />

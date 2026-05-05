@@ -152,6 +152,8 @@ const SAMPLE_OPTIONS: DropdownOption[] = [
 // ─── Showcase ─────────────────────────────────────────────────────────────────
 export function DropdownShowcase() {
   const [interVal, setInterVal] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalVal, setModalVal] = useState("");
   const [required, setRequired] = useState(false);
   const [helper, setHelper]     = useState(false);
   const [isError, setIsError]   = useState(false);
@@ -271,6 +273,51 @@ export function DropdownShowcase() {
               ))}
             </div>
           </div>
+
+          {/* ── Divider ── */}
+          <div className="border-t-2 border-divider my-12" />
+
+          {/* ── In Modal ── */}
+          <h2 className="mb-2" style={FONT}>In Modal</h2>
+          <p className="text-muted-foreground mb-8 text-[13px]" style={FONT}>
+            Dropdown inside a modal with <code className="text-xs bg-disabled-bg px-1 rounded">overflow: hidden</code> — option list overlays outside the container via portal
+          </p>
+          <div className="pl-2">
+            <button
+              onClick={() => setModalOpen(true)}
+              className="px-4 py-2 bg-primary-action text-white rounded-lg text-sm cursor-pointer"
+              style={FONT}
+            >
+              Open Modal
+            </button>
+          </div>
+
+          {modalOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40">
+              <div
+                className="bg-background rounded-2xl shadow-xl w-[360px] flex flex-col gap-4 overflow-hidden"
+                style={{ padding: "24px", maxHeight: "220px" }}
+              >
+                <div className="flex items-center justify-between">
+                  <p className="font-semibold text-foreground text-sm" style={FONT}>
+                    Modal (overflow: hidden)
+                  </p>
+                  <button
+                    onClick={() => setModalOpen(false)}
+                    className="text-muted-foreground hover:text-foreground text-lg leading-none cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <Dropdown
+                  placeholder="Select option"
+                  value={modalVal}
+                  onChange={setModalVal}
+                  options={SAMPLE_OPTIONS}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
