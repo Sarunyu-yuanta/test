@@ -54,6 +54,135 @@ When the button width is set to **Hug**, it wraps tightly around the label. This
 
 ---
 
+## Card
+
+
+### Rule 1 — Spacing Between Cards
+
+| | |
+|---|---|
+| **Do** | Keep clear spacing between cards so users can separate and read each block of content easily. / แต่ละการ์ดต้องมีระยะห่างที่ชัดเจน เพื่อให้ผู้ใช้สามารถแยกแยะและอ่านข้อมูลได้ง่าย |
+| **Don't** | Avoid placing cards too close together or overlapping, because it reduces readability and makes content boundaries unclear. / หลีกเลี่ยงการจัดวาง Card ให้ติดกันหรือซ้อนกัน เพราะทำให้การแยกข้อมูลไม่ชัดเจน |
+
+Use consistent spacing between cards inside list/grid layouts. Never overlap cards or compress the gap to zero.
+
+---
+
+### Rule 2 — Internal Structure
+
+| | |
+|---|---|
+| **Do** | Keep the card's content order and positions aligned with the Design System structure. / ใช้ตำแหน่งและลำดับข้อมูลภายใน Card ตามที่ Design System กำหนดไว้ |
+| **Don't** | Avoid rearranging or reordering content inside the card, because it breaks visual consistency across the product. / หลีกเลี่ยงการปรับตำแหน่งหรือลำดับข้อมูลภายใน Card เพราะทำให้รูปแบบการแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Do not swap the order of banner, title, metadata, or tag rows. Preserve the component's predefined hierarchy.
+
+---
+
+### Rule 3 — Layout Tokens
+
+| | |
+|---|---|
+| **Do** | Use card layout values exactly as defined in the Design System. / ใช้ Card ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid overriding card padding, gap, radius, or core color styles, as this causes inconsistent rendering in the system. / หลีกเลี่ยงการปรับ Padding, Gap และ Radius ของ Card รวมถึงสีที่ใช้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the built-in Card sizing and spacing tokens. Do not add custom border radius, custom padding, or ad-hoc background overrides.
+
+---
+
+### Rule 4 — Device Fit
+
+| | |
+|---|---|
+| **Do** | Choose the card size and layout variant that fits the target device for better usability. / ใช้ Card ให้เหมาะสมกับ Device เพื่อให้ Experience ในการใช้งานมีประสิทธิภาพ |
+| **Don't** | Avoid using card layouts that are not appropriate for the target device, because the reading and interaction experience will degrade. / หลีกเลี่ยงการใช้ Card ที่ไม่เหมาะสมกับ Device เพราะทำให้ Experience การแสดงผลของ Card ขาดประสิทธิภาพ |
+
+Use mobile card variants on mobile containers and desktop variants on larger screens. Match card width and composition to the available viewport.
+
+---
+
+## Checkbox & Radio
+
+
+### Rule 1 — Consistent Alignment in a Group
+
+| | |
+|---|---|
+| **Do** | Place Checkbox and Radio in a consistent direction and alignment within the same group. / จัดวาง Checkbox และ Radio ให้อยู่ในแนวเดียวกันภายในชุดเดียว เพื่อให้รูปแบบสม่ำเสมอและอ่านข้อมูลได้ง่าย |
+| **Don't** | Avoid mixing opposite alignment directions in the same group, because it makes options harder to scan and increases confusion. / หลีกเลี่ยงการจัดวาง Checkbox และ Radio ต่างแนวกันภายในชุดเดียว เพราะทำให้การอ่านข้อมูลได้ยาก และเพิ่มความสับสนในการใช้งาน |
+
+Keep control position and text alignment consistent across the same option set. Do not place some controls on the left and others on the right within one group.
+
+---
+
+### Rule 2 — Follow Layout Tokens
+
+| | |
+|---|---|
+| **Do** | Use Checkbox and Radio according to the layout defined by the Design System. / ใช้ Checkbox และ Radio ตาม Layout ที่ Design System ที่กำหนด |
+| **Don't** | Avoid changing height, colors, or visual style outside the defined component tokens, because it breaks consistency across the system. / หลีกเลี่ยงการปรับ Height, สี, หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the built-in `size`, spacing, and color tokens from `<Checkbox>` and `<Radio>`. Do not manually override height, border color, or fill styles.
+
+---
+
+### Rule 3 — Use the Correct Variant
+
+| | |
+|---|---|
+| **Do** | Use each variant based on its intended purpose. / ใช้ Variant ให้ตรงตามวัตถุประสงค์การใช้งานที่กำหนด |
+| **Don't** | Avoid using variants outside their intended meaning, because it creates inconsistent interaction patterns. / หลีกเลี่ยงการใช้ Variant ผิดจุดประสงค์ที่กำหนด เพราะทำให้รูปแบบและความหมายไม่สอดคล้องกับการใช้งานที่กำหนดไว้ |
+
+Choose `text` for standard list selection and `button` when the option must appear as a selectable surface. Do not swap variants for visual preference only.
+
+---
+
+### Rule 4 — Radio Is Single-Select Only
+
+| | |
+|---|---|
+| **Do** | Use Radio when users must choose only one option from a set. / Radio สามารถเลือกได้เพียงตัวเลือกเดียวเท่านั้น |
+| **Don't** | Avoid using Radio for multi-select scenarios; use Checkbox instead. / หลีกเลี่ยงการใช้ Radio ในการเลือกหลายตัวเลือก แนะนำให้ใช้ Checkbox แทน |
+
+`<Radio>` must be grouped by the same `name` and represent one exclusive choice. For any case where multiple options can be selected at once, use `<Checkbox>`.
+
+---
+
+### Rule 5 — Do Not Mix Control Types in One Set
+
+| | |
+|---|---|
+| **Do** | Use only one control type (Checkbox or Radio) within the same option set. / ใช้ Checkbox หรือ Radio เพียงประเภทเดียวภายในชุดเดียวกัน |
+| **Don't** | Avoid mixing Checkbox and Radio in one set, because users cannot clearly understand selection behavior. / หลีกเลี่ยงการใช้ Checkbox และ Radio ปะปนกันภายในชุดเดียว เพราะทำให้ผู้ใช้สับสนต่อรูปแบบและความหมายของตัวเลือก |
+
+Each option group should represent one interaction model. Mixing selection models in a single list causes ambiguity and increases input errors.
+
+---
+
+## Toggle
+
+### Rule 1 — On / Off Only
+
+| | |
+|---|---|
+| **Do** | Use Toggle for a binary *on* / *off* state (a single setting that is enabled or disabled). / ใช้ Toggle สำหรับการให้ความหมายเชิงเปิด-ปิด |
+| **Don't** | Do not use Toggle to pick between two different content modes or categories (e.g. switching "News" vs. "Analysis"). Use a **segmented control**, **tabs**, or **radio** options instead. / หลีกเลี่ยงการใช้ Toggle ผิดวัตถุประสงค์ เพราะจะทำให้รูปแบบและความหมายไม่สอดคล้องกับการใช้งานที่กำหนดไว้ |
+
+`<Toggle>` represents one boolean. For mutually exclusive *choices between labels*, the pattern is not a toggle — use a control built for that purpose so affordance and meaning stay consistent with the system.
+
+---
+
+### Rule 2 — System Appearance
+
+| | |
+|---|---|
+| **Do** | Use the `Toggle` component as shipped in the design system: sizes `sm` / `md`, token-based track and thumb colors, and optional label + description. / ใช้ Toggle ตามรูปแบบที่ Design System กำหนด |
+| **Don't** | Do not change width/height, recolor the track or thumb, roundness, or add gradients or ad-hoc styling. / หลีกเลี่ยงการปรับขนาด, เปลี่ยนสี, หรือปรับรูปทรงของ Toggle เพราะทำให้ผู้ใช้ แยกสถานะการใช้งานได้ยาก และทำให้การแสดงผลไม่สม่ำเสมอกันทั้งระบบ |
+
+Always use `<Toggle>` from `@sarunyu/system-one`. The switch must remain visually recognizable: **off** — neutral track; **on** — brand primary track; **disabled** — system muted states. Do not "theme" a toggle with one-off colors or detour around the component to fake a second meaning.
+
+---
+
 ## Input
 
 
@@ -131,6 +260,75 @@ Option List is designed for multi-value selection contexts such as Dropdown inpu
 | **Don't** | Avoid inconsistent date formats — such as using Thai month names with a C.E. year, or reordering day/month/year. / หลีกเลี่ยงการใช้รูปแบบวันที่ที่ไม่สอดคล้องกัน เช่น วัน/เดือนภาษาไทยแต่ใช้ปีเป็น ค.ศ. หรือสลับตำแหน่งของวันที่/เดือน/ปี |
 
 Always follow the date format defined by the Design System (e.g., `DD MMM YYYY` in Thai locale). Do not mix Thai month names with C.E. year, or reorder day/month/year — inconsistent formats confuse users and break data uniformity.
+
+---
+
+## Modal & Bottom Sheet
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Modal and Bottom Sheet exactly as defined by the Design System. / ใช้ Modal และ Bottom Sheet ตามรูปแบบที่ Design System กำหนดไว้ |
+| **Don't** | Avoid changing padding, gap, radius, colors, or adding custom internal buttons/layout. / หลีกเลี่ยงการปรับ Padding, Gap, Radius, สี หรือเพิ่มปุ่ม/โครงสร้างภายในเอง |
+
+Use `<Modal>` and `<BottomSheet>` from `@sarunyu/system-one` without overriding their core structure. Do not handcraft internal layout blocks or inject extra control patterns that conflict with the component specification.
+
+---
+
+### Rule 2 — Modal Layout Structure
+
+| | |
+|---|---|
+| **Do** | Keep Modal content order and positions according to the Design System layout. / ใช้ Modal ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid repositioning or reordering title, body, and action blocks in Modal. / หลีกเลี่ยงการปรับตำแหน่งหรือสลับลำดับเนื้อหาภายใน Modal |
+
+Do not rearrange header/body/actions or move CTA positions inside the modal. Breaking the predefined hierarchy can reduce readability and distort action priority.
+
+---
+
+### Rule 3 — Modal Width Limit
+
+| | |
+|---|---|
+| **Do** | Keep Modal width within the system standard (max 375 px). / กำหนดความกว้างของ Modal ไม่เกินมาตรฐาน (375 px) |
+| **Don't** | Avoid expanding Modal width beyond the standard width. / หลีกเลี่ยงการขยายความกว้างของ Modal เกินค่ามาตรฐาน |
+
+Modal should remain within the standard width cap (`375px`) for consistent visual balance and readability on supported layouts.
+
+---
+
+### Rule 4 — Modal Positioning
+
+| | |
+|---|---|
+| **Do** | Place Modal at the center of the viewport. / จัดตำแหน่ง Modal ให้อยู่กึ่งกลางหน้าจอเสมอ |
+| **Don't** | Avoid placing Modal outside the center position. / หลีกเลี่ยงการวาง Modal นอกตำแหน่งกึ่งกลางหน้าจอ |
+
+Render modal in a centered overlay container. Off-center placement reduces emphasis and weakens expected dialog behavior.
+
+---
+
+### Rule 5 — Bottom Sheet Positioning
+
+| | |
+|---|---|
+| **Do** | Place Bottom Sheet at the bottom edge of the viewport. / วาง Bottom Sheet ไว้ด้านล่างของหน้าจอเสมอ |
+| **Don't** | Avoid showing Bottom Sheet from any position other than the bottom. / หลีกเลี่ยงการวาง Bottom Sheet ในตำแหน่งอื่นที่ไม่ใช่ด้านล่าง |
+
+Bottom sheet must open from the bottom and stay anchored to the bottom edge. Alternative placement makes hierarchy unclear and increases interaction confusion.
+
+---
+
+### Rule 6 — Responsive Usage (Mobile uses Bottom Sheet)
+
+| | |
+|---|---|
+| **Do** | On mobile, present forms, multi-step flows, and action-heavy content (login, register, settings, option pickers, action menus) as a Bottom Sheet. Use Modal on desktop. / บนมือถือให้ใช้ Bottom Sheet สำหรับฟอร์ม, ขั้นตอนหลายขั้น และคอนเทนต์ที่ต้อง action เยอะ (login, register, settings, option picker, action menu) ส่วน Desktop ใช้ Modal |
+| **Don't** | Avoid showing a content-heavy or form-based Modal on mobile — it limits screen space and makes input difficult. / หลีกเลี่ยงการแสดง Modal ที่มีคอนเทนต์เยอะหรือเป็นฟอร์มบนมือถือ เพราะพื้นที่จำกัดและกรอกข้อมูลยาก |
+
+On mobile (< 768px), any modal that wraps a form (login/register/settings), a multi-step flow, a long option list, or an action menu must render as `<BottomSheet>`. Only short `Modal variant="alert"` notifications and simple `Modal variant="dialog"` confirmations (title + one line + 1–2 buttons, no input) may remain as `<Modal>` on mobile. On desktop (≥ 768px) always use `<Modal>`. Branch inline with `useIsMobile()` from `@sarunyu/system-one` and share one body between the two branches — do not build a custom `ResponsiveModal` wrapper.
 
 ---
 
@@ -261,3 +459,110 @@ All chips within the same group must share the same size and spacing. Inconsiste
 | **Don't** | Avoid using Chip when only a single value can be selected. / หลีกเลี่ยงการใช้ Chip กับตัวเลือกเพียงค่าเดียว |
 
 Chip is designed for multi-option selection groups. If only one option exists, use a different component (e.g., a toggle or checkbox) instead.
+
+---
+
+## Table
+
+
+### Rule 1 — Alignment Consistency
+
+| | |
+|---|---|
+| **Do** | Keep content alignment consistent between Header and Cell (left-left, center-center, right-right). / จัดตำแหน่งการวางข้อมูลให้สอดคล้องระหว่างข้อมูลใน Header และข้อมูลใน Cell เช่น Header Align ซ้าย ให้ Header Align ซ้ายตาม หรือข้อมูล Align ขวา ให้ Header Align ขวาตาม |
+| **Don't** | Avoid mismatched alignment between Header and Cell (e.g., left header with right-aligned content) because it reduces scanability and readability. / หลีกเลี่ยงการจัดตำแหน่งการวางข้อมูลที่ไม่ตรงกันระหว่าง Header และ Cell เพราะทำให้ผู้ใช้อ่าน หรือเปรียบเทียบข้อมูลได้ยาก |
+
+Table columns must use the same alignment in both header and body cells. Misaligned headers and values make scanning and comparison difficult, especially in dense data tables.
+
+---
+
+### Rule 2 — Layout Token Integrity
+
+| | |
+|---|---|
+| **Do** | Use Table with the spacing, padding, and structure defined by the Design System. / ใช้ Table ตามรูปแบบที่ Design System กำหนดไว้ |
+| **Don't** | Avoid manually adjusting Table padding or gap values because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Padding, Gap ของ Table เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use `<Table>`, `<TableHeaderCell>`, `<TableRow>`, and `<TableCell>` with their built-in spacing tokens. Do not override internal padding, gap, or core layout values.
+
+---
+
+### Rule 3 — Use Correct Table State
+
+| | |
+|---|---|
+| **Do** | Use Table states according to the intended interaction and service context (e.g., default, hover, selected, sorted, fixed). / ใช้สถานะของ Table ให้ตรงตามบริบทการใช้งานที่กำหนด |
+| **Don't** | Avoid using Table states outside their intended meaning, because it can mislead users and make data status unclear. / หลีกเลี่ยงการใช้สถานะของ Table ที่ไม่ตรงตามบริบทการใช้งาน เพราะอาจทำให้ผู้ใช้สับสนสถานะของข้อมูลที่กำลังดู |
+
+Apply states deliberately: row hover for focus, selected rows for active selection, sort state only on the active sortable column, and sticky/fixed behavior only when horizontal overflow exists.
+
+---
+
+## Notification, Toast & Alert
+
+### Rule 1 — Keep Alert/Inline Message in Normal Layout Flow
+
+| | |
+|---|---|
+| **Do** | Place Alert (Inline Message) inside the related content area, such as form/section blocks, and keep the standard design token structure. / วาง Alert (Inline Message) ไว้ใน flow ปกติของเนื้อหาที่เกี่ยวข้อง เช่น ใน form หรือ section และใช้โครงสร้างตาม Design System |
+| **Don't** | Avoid forcing custom height, radius, or style overrides that break message readability and hierarchy. / หลีกเลี่ยงการปรับความสูง มุมโค้ง หรือสไตล์แกนหลักเองจนทำให้การอ่านและลำดับความสำคัญของข้อความผิดเพี้ยน |
+
+Alert is an inline, persistent message. Keep it anchored to its related context, and preserve core tokens (`spacing`, `radius`, status color, icon size) so it remains scannable and predictable.
+
+---
+
+### Rule 2 — Toast Must Not Block Primary Content
+
+| | |
+|---|---|
+| **Do** | Place Toast at screen edges (top or bottom) so users can still focus on the main task. / วาง Toast ไว้บริเวณขอบหน้าจอ (บน/ล่าง) เพื่อไม่บังเนื้อหาหลักระหว่างการใช้งาน |
+| **Don't** | Avoid placing Toast at the center or over key interaction zones. / หลีกเลี่ยงการวาง Toast ตรงกลางหน้าจอหรือทับบริเวณที่ผู้ใช้ต้องโต้ตอบหลัก |
+
+Toast is transient feedback. It should inform quickly without interrupting reading flow or blocking controls that users need immediately.
+
+---
+
+### Rule 3 — Use Notification for Persistent, Decision-Critical Information
+
+| | |
+|---|---|
+| **Do** | Use Notification when information must remain visible long enough for users to compare or decide (e.g., transaction details, account states). / ใช้ Notification เมื่อข้อมูลต้องคงอยู่ให้ผู้ใช้เปรียบเทียบหรือตัดสินใจ เช่น รายละเอียดธุรกรรมหรือสถานะบัญชี |
+| **Don't** | Do not replace Notification with Toast in areas where users need sustained visibility. / ไม่ควรใช้ Toast แทน Notification ในบริเวณที่ผู้ใช้ต้องใช้เวลาอ่านข้อความและตัดสินใจ |
+
+Notification is for durable context; Toast is for brief acknowledgment. Choosing the wrong component lowers comprehension and can cause users to miss important information.
+
+---
+
+### Rule 4 — Keep Status Semantics Consistent Across Notification/Toast/Alert
+
+| | |
+|---|---|
+| **Do** | Match status color + icon + copy meaning consistently (`information`, `success`, `warning`, `critical`). / ใช้สถานะ สี ไอคอน และข้อความให้ตรงความหมายเดียวกัน (`information`, `success`, `warning`, `critical`) |
+| **Don't** | Avoid mixed semantics (e.g., success message rendered with warning/danger style). / หลีกเลี่ยงการใช้สถานะที่ขัดกัน เช่น ข้อความสำเร็จแต่ใช้สไตล์เตือนหรืออันตราย |
+
+Consistent semantics are essential for trust and fast recognition. Users should understand the message type immediately without re-reading.
+
+---
+
+## Avatar
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Avatar according to the layout defined by the Design System. / ใช้ Avatar ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid adjusting height, color, stretching, or modifying the format in any way that deviates from the defined layout, because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Height, สี, การยืด, หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the `<Avatar>` component from `@sarunyu/system-one` without overriding its dimensions, colors, or shape. Do not apply custom `height`, `width`, color overrides, or CSS filters to the avatar element.
+
+---
+
+### Rule 2 — Consistent Size
+
+| | |
+|---|---|
+| **Do** | Use Avatar with the same size throughout a single list or context. / เลือกใช้ Avatar ให้มีขนาดเท่ากัน |
+| **Don't** | Avoid mixing multiple Avatar sizes within the same list, because it creates visual inconsistency in the design. / หลีกเลี่ยงการใช้ Avatar หลายขนาดในรายการเดียวกัน เพราะทำให้เกิดความไม่สม่ำเสมอของการออกแบบ |
+
+All avatars within the same list or context must use the same `size` prop. Mixing sizes (e.g., `xxs` alongside `m`) disrupts visual rhythm and makes the layout feel inconsistent.

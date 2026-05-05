@@ -114,7 +114,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                     style={{
                       color: disabled
                         ? "var(--disabled)"
-                        : "var(--foreground)",
+                        : "var(--text-default-primary)",
                     }}
                   >
                     {opt.label}

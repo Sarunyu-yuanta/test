@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { List, X } from "@phosphor-icons/react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import svgPaths from "../imports/svg-1wi5zx56yz";
@@ -18,31 +18,33 @@ const navItems = [
   { to: "/tab", label: "Tab" },
   { to: "/tag", label: "Tag" },
   { to: "/chip", label: "Chip" },
-  // { to: "/card", label: "Card" },
+  { to: "/checkbox", label: "Checkbox" },
+  { to: "/toggle", label: "Toggle" },
+  { to: "/radio", label: "Radio" },
+  { to: "/card", label: "Card" },
+  { to: "/table", label: "Table" },
+  { to: "/modal", label: "Modal" },
+  { to: "/bottom-sheet", label: "Bottom Sheet" },
+  { to: "/notification", label: "Notification" },
+  { to: "/badge", label: "Badge" },
+  { to: "/toast", label: "Toast Message" },
+  { to: "/alert", label: "Alert" },
+  { to: "/avatar", label: "Avatar" },
 ];
 
 function Logo() {
   return (
     <div className="h-[36px] overflow-clip relative shrink-0 w-[153px]">
       {/* Symbol icon */}
-      <div
-        className="absolute overflow-clip"
-        style={{ inset: "0 76.47% 0 0" }}
-      >
-        <div
-          className="absolute"
-          style={{ inset: "5.56% 5.55% 5.56% 5%" }}
-        >
+      <div className="absolute overflow-clip" style={{ inset: "0 76.47% 0 0" }}>
+        <div className="absolute" style={{ inset: "5.56% 5.55% 5.56% 5%" }}>
           <svg
             className="absolute block size-full"
             fill="none"
             preserveAspectRatio="none"
             viewBox="0 0 32.2021 32"
           >
-            <path
-              d={svgPaths.p97b7900}
-              fill="url(#logo_gradient)"
-            />
+            <path d={svgPaths.p97b7900} fill="url(#logo_gradient)" />
             <defs>
               <linearGradient
                 gradientUnits="userSpaceOnUse"
@@ -136,8 +138,7 @@ export function Root() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
-  // Close sidebar on route change (mobile)
-  React.useEffect(() => {
+  useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
 
