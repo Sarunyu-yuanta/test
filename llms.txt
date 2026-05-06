@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Tooltip, Popover as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel, Tooltip, Popover as raw HTML.
 2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
 3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
