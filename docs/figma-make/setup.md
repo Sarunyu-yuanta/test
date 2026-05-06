@@ -205,8 +205,43 @@ document.documentElement.classList.toggle('dark');
 ### 1. CSS import order reversed → unstyled components
 `@sarunyu/system-one/styles.css` must come **before** `@import 'tailwindcss'`. Reversing them causes the library's scale utilities to win over host-written ones.
 
-### 2. Missing `resolve.dedupe` → `forwardRef` console warnings / broken portals
-`vaul` (used by `BottomSheet`) and `@radix-ui/react-slot` / `@radix-ui/react-dialog` must appear in `resolve.dedupe`. Without this, two separate copies of React internals load and `SlotClone`'s `forwardRef` triggers a React warning; in severe cases, portals (Modal, BottomSheet) render in the wrong tree.
+### 2. `BottomSheet` triggers `SlotClone` ref warning on initial render
+Vaul mounts its `DrawerOverlay` portal **immediately** when `<BottomSheet>` enters the React tree — even with `open={false}`. In environments that can't dedupe React (e.g. Figma Make), this causes:
+```
+Warning: Function components cannot be given refs … Check the render method of `SlotClone`.
+```
+
+**Fix — lazy-mount pattern (always required):** never render `<BottomSheet>` until the user actually opens it.
+
+```tsx
+// ✅ button-triggered sheet
+const [everOpened, setEverOpened] = useState(false);
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => { setEverOpened(true); setOpen(true); }}>Open</Button>
+{everOpened && (
+  <BottomSheet open={open} onOpenChange={setOpen} title="Options">
+    {/* content */}
+  </BottomSheet>
+)}
+```
+
+```tsx
+// ✅ prop-driven sheet (e.g. FilterPanel receiving open from parent)
+function FilterPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [everOpened, setEverOpened] = useState(false);
+  useEffect(() => { if (open) setEverOpened(true); }, [open]);
+
+  if (!everOpened) return null;
+  return (
+    <BottomSheet open={open} onOpenChange={(v) => { if (!v) onClose(); }} title="Filters">
+      {/* content */}
+    </BottomSheet>
+  );
+}
+```
+
+Never write `<BottomSheet open={someState} …>` at the top level of a component that renders before the user interacts — always guard with the `everOpened` flag.
 
 ### 3. `Input.onChange` is not a DOM event handler
 ```tsx

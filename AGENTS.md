@@ -90,6 +90,24 @@ in this package.** This file is the short version: the rules you must follow.
    share one `const body = …` between the two branches. See the `LoginSheet`
    recipe in `llms.txt`.
 
+8. **`<BottomSheet>` MUST use the lazy-mount pattern.** Vaul mounts its portal
+   immediately when `<BottomSheet>` enters the React tree — even with
+   `open={false}`. Always guard with an `everOpened` flag so the component
+   never mounts until the user first opens it.
+   ```tsx
+   // button-triggered
+   const [everOpened, setEverOpened] = useState(false);
+   const [open, setOpen] = useState(false);
+   <Button onClick={() => { setEverOpened(true); setOpen(true); }}>Open</Button>
+   {everOpened && <BottomSheet open={open} onOpenChange={setOpen}>…</BottomSheet>}
+
+   // prop-driven (receiving open from parent)
+   const [everOpened, setEverOpened] = useState(false);
+   useEffect(() => { if (open) setEverOpened(true); }, [open]);
+   if (!everOpened) return null;
+   return <BottomSheet open={open} onOpenChange={…}>…</BottomSheet>;
+   ```
+
 ## Setup check
 
 Required one-liner in the app entry (App Router: `app/layout.tsx`,
