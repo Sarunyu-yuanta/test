@@ -26,6 +26,8 @@ import { AlertPage } from "./pages/AlertPage";
 import { AvatarPage } from "./pages/AvatarPage";
 import { BreadcrumbPage } from "./pages/BreadcrumbPage";
 import { PaginationPage } from "./pages/PaginationPage";
+import { TooltipPage } from "./pages/TooltipPage";
+import { PopoverPage } from "./pages/PopoverPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -66,6 +68,8 @@ export const router = createBrowserRouter([
       { path: "avatar", Component: AvatarPage },
       { path: "breadcrumb", Component: BreadcrumbPage },
       { path: "pagination", Component: PaginationPage },
+      { path: "tooltip", Component: TooltipPage },
+      { path: "popover", Component: PopoverPage },
     ],
   },
 ]);

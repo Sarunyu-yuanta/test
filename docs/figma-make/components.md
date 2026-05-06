@@ -10,6 +10,7 @@ import {
   Avatar, AvatarStack,
   Breadcrumb,
   Pagination, PaginationBanner, PaginationCarousel,
+  Tooltip, Popover,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
@@ -363,3 +364,52 @@ Props:
 - `Pagination` — `totalPages`, `currentPage`, `onPageChange?`, `className?`. When `totalPages > 5`, pages 4…(n-1) collapse behind a `…` dropdown.
 - `PaginationBanner` — `count`, `activeIndex`, `onIndexChange?`, `className?`.
 - `PaginationCarousel` — `progress` (0–1, clamped), `trackWidth?` (default 40px), `className?`.
+
+## Tooltip
+
+Dark-bubble hint shown on hover. `children` = trigger element; `content` = bubble text.
+
+```tsx
+<Tooltip content="Delete this item">
+  <Button variant="outline" size="icon-md" aria-label="Delete"><Trash size={16} /></Button>
+</Tooltip>
+```
+
+Props:
+- `children` — trigger (`ReactNode`, required)
+- `content` — bubble content (`ReactNode`, required)
+- `side` — `"top"` | `"bottom"` | `"left"` | `"right"` (default `"top"`)
+- `align` — `"start"` | `"center"` | `"end"` (default `"center"`)
+- `delayDuration` — ms before tooltip shows (default `300`)
+- `sideOffset` — gap in px between trigger and bubble (default `6`)
+- `className?` — layout-only classes on the bubble
+
+## Popover
+
+Floating panel that opens on **click** over any trigger element. Pass the trigger as `children` and the panel body as `content`.
+
+```tsx
+<Popover content={<div>Panel content here</div>}>
+  <Button variant="outline" size="md">Open</Button>
+</Popover>
+
+// With side and alignment
+<Popover side="top" align="center" content={<p className="text-sm text-foreground">Above</p>}>
+  <Button variant="outline" size="md">Open</Button>
+</Popover>
+
+// Controlled
+<Popover open={open} onOpenChange={setOpen} content={<p>Controlled panel</p>}>
+  <Button variant="outline" size="md">Open</Button>
+</Popover>
+```
+
+Props:
+- `children` — trigger element (`ReactNode`, required)
+- `content` — panel body (`ReactNode`, required)
+- `side` — `"top"` | `"bottom"` | `"left"` | `"right"` (default `"bottom"`)
+- `align` — `"start"` | `"center"` | `"end"` (default `"start"`)
+- `sideOffset` — gap in px between trigger and panel (default `4`)
+- `open` — controlled open state
+- `onOpenChange` — `(open: boolean) => void`
+- `className?` — layout-only classes on the panel bubble

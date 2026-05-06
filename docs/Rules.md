@@ -605,3 +605,97 @@ Each Pagination variant has a specific role. Use `<Pagination>` (numbered) for p
 | **Don't** | Avoid adjusting Height, Padding, color, stretching, or modifying the format in any way that deviates from the defined layout, because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Height, Padding, สี, การยืด หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
 
 Always use `<Pagination>`, `<PaginationBanner>`, and `<PaginationCarousel>` from `@sarunyu/system-one` without overriding their internal dimensions, colors, or spacing. Do not apply custom `height`, background colors, or border overrides to individual page cells. The active-page style (`bg-bg-brand` + `text-text-default-white` + `font-bold`) and cell size (`w-[39px] h-[32px]`) are fixed tokens that must remain consistent across the system.
+
+---
+
+## Tooltip
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Tooltip according to the layout defined by the Design System. / ใช้ Tooltip ตาม Layout ที่ Design System ที่กำหนด |
+| **Don't** | Avoid adjusting padding, height, colors, or any modification that causes the component to deviate from the defined layout, because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Padding, Height, สี, การยืด, หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use the `<Tooltip>` component from `@sarunyu/system-one`. Do not override the tooltip's internal `padding`, `border-radius`, or background color. The dark-surface style (`bg-bg-default-dark` + `rounded-lg` + `p-2`) and arrow dimensions are fixed tokens that must remain consistent across the system.
+
+---
+
+### Rule 2 — One Tooltip at a Time
+
+| | |
+|---|---|
+| **Do** | Show at most one Tooltip at a time to describe information in a given context clearly. / แสดง Tooltip ได้สูงสุด 1 Tooltip เพื่ออธิบายข้อมูลในบริบทนั้นอย่างชัดเจน |
+| **Don't** | Avoid showing more than one Tooltip simultaneously, because overlapping messages obstruct information and disrupt the display. / หลีกเลี่ยงการแสดง Tooltip มากกว่า 1 Tooltip พร้อมกัน เพราะทำให้การรับรู้ข้อมูลซ้อนกันและรบกวนการแสดงผล |
+
+Only one `<Tooltip>` should be visible at a time. Rendering multiple open tooltips simultaneously creates visual noise and makes it impossible for users to distinguish which tooltip describes which element.
+
+---
+
+### Rule 3 — Arrow Alignment
+
+| | |
+|---|---|
+| **Do** | Point the arrow at the element that is selected or being described. / แสดงลูกศรให้ตรงกับองค์ประกอบที่ถูกเลือกหรือชี้อยู่ |
+| **Don't** | Avoid placing the arrow at a position unrelated to what the user is viewing, because it misleads users into thinking the message describes a different element. / หลีกเลี่ยงการแสดงลูกศรในตำแหน่งที่ไม่เกี่ยวข้องกับสิ่งที่ผู้ใช้กำลังดู เพราะทำให้ผู้ใช้เข้าใจผิดว่าข้อความนั้นอธิบายข้อมูลส่วนอื่น |
+
+Use the `side` and `align` props together to ensure the tooltip arrow points directly at the trigger element. Misaligned arrows break the visual connection between the tooltip and its context, causing users to misread which element the message refers to.
+
+---
+
+### Rule 4 — Use the Correct Variant
+
+| | |
+|---|---|
+| **Do** | Use the Variant that matches the intended purpose of each use case. / ใช้ Variant ให้ตรงตามวัตถุประสงค์การใช้งานที่กำหนด |
+| **Don't** | Avoid using the wrong Variant, because it makes the style and meaning of the Tooltip inconsistent with the defined usage. / หลีกเลี่ยงใช้งาน Variant ที่ผิดวัตถุประสงค์ เพราะทำให้รูปแบบและความหมายของ Tooltip ไม่สอดคล้องกับการใช้งานที่กำหนดไว้ |
+
+Choose the tooltip `side` and `align` values based on the actual layout context — do not pick them for visual preference alone. Tooltip is designed for brief contextual labels; for richer content such as QR codes or multi-line descriptions, use the appropriate variant (e.g., a rich content tooltip) rather than stretching the default text tooltip beyond its intended scope.
+
+---
+
+## Popover
+
+
+### Rule 1 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Popover according to the layout defined by the Design System. / ใช้ Popover ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid adjusting border-radius, padding, background color, or box-shadow outside of what the Design System defines. / หลีกเลี่ยงการปรับ Border Radius, Padding, Background Color หรือ Box Shadow นอกเหนือจากที่ Design System กำหนดไว้ |
+
+Always use `<Popover>` from `@sarunyu/system-one`. Do not override the core visual tokens (`rounded-lg`, `p-3`, `bg-popover`, `shadow-popover`, `border-border`) — these are fixed values that must remain consistent across the system.
+
+---
+
+### Rule 2 — Popover vs Tooltip
+
+| | |
+|---|---|
+| **Do** | Use Popover for rich, interactive, or multi-element content (menus, forms, detail panels). Use Tooltip for brief hover-only labels. / ใช้ Popover สำหรับเนื้อหาที่ซับซ้อนหรือมีการโต้ตอบ เช่น เมนู, ฟอร์ม หรือข้อมูลรายละเอียด ส่วน Tooltip ใช้สำหรับป้ายกำกับสั้นๆ ที่แสดงขณะ hover |
+| **Don't** | Avoid using Popover for a single line of static text (use Tooltip instead), or using Tooltip for interactive content like buttons or forms (use Popover instead). / หลีกเลี่ยงการใช้ Popover สำหรับข้อความสั้นบรรทัดเดียว และหลีกเลี่ยงการใช้ Tooltip สำหรับเนื้อหาที่มีการโต้ตอบ |
+
+Popover opens on **click** and persists until dismissed. Tooltip opens on **hover** and closes automatically. Never swap these two components — the interaction model difference is fundamental to usability.
+
+---
+
+### Rule 3 — One Popover at a Time
+
+| | |
+|---|---|
+| **Do** | Show at most one Popover open at a time. / แสดง Popover ได้สูงสุดทีละ 1 รายการ |
+| **Don't** | Avoid opening multiple Popovers simultaneously, as overlapping panels obstruct content and confuse navigation. / หลีกเลี่ยงการเปิด Popover หลายรายการพร้อมกัน เพราะทำให้เนื้อหาซ้อนกันและสร้างความสับสน |
+
+Only one `<Popover>` should be visible at a time. Rendering multiple open popovers simultaneously creates layering conflicts and makes it difficult for users to understand which panel belongs to which trigger.
+
+---
+
+### Rule 4 — Placement Context
+
+| | |
+|---|---|
+| **Do** | Choose `side` and `align` props so the popover remains fully visible within the viewport. / เลือก `side` และ `align` ให้ Popover แสดงผลภายในพื้นที่หน้าจอได้ครบถ้วน |
+| **Don't** | Avoid placing the popover in a direction that consistently clips or overflows the viewport edge, forcing users to scroll to see the content. / หลีกเลี่ยงการวาง Popover ในทิศที่ทำให้เนื้อหาเกินขอบหน้าจอหรือถูกตัดออก |
+
+Select placement values based on the trigger's actual position in the layout. The Radix UI engine auto-adjusts within the viewport, but setting a sensible `side` default avoids jarring repositioning for most users.

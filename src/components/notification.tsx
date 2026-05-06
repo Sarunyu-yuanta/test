@@ -1,7 +1,7 @@
 "use client";
 
 import { Gift, ImageSquare } from "@phosphor-icons/react";
-import * as Popover from "@radix-ui/react-popover";
+import { Popover } from "./popover";
 import {
   forwardRef,
   useEffect,
@@ -248,39 +248,18 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
     };
 
     return (
-      <Popover.Root open={resolvedOpen} onOpenChange={handleOpenChange}>
-        <div ref={ref} className={cn("inline-flex", className)}>
-          <Popover.Trigger asChild>
-            <div ref={triggerRef} className="relative">
-              <Badge
-                variant="notification"
-                count={displayCount}
-                maxCount={99}
-                notificationState={
-                  displayCount > 0
-                    ? "noti"
-                    : resolvedOpen
-                      ? "active"
-                      : "default"
-                }
-                aria-label="Open notifications"
-              />
-            </div>
-          </Popover.Trigger>
-        </div>
-
-        <Popover.Portal>
-          <Popover.Content
-            align={mobileAlign ? "start" : "end"}
-            alignOffset={mobileAlign?.alignOffset ?? 0}
-            avoidCollisions={!mobileAlign}
-            sideOffset={10}
-            className={cn(
-              "z-50 overflow-hidden rounded-lg border border-border bg-background shadow-lg",
-              panelClassName,
-            )}
-            style={{ width: mobileAlign?.width ?? panelWidth }}
-          >
+      <div ref={ref} className={cn("inline-flex", className)}>
+        <Popover
+          open={resolvedOpen}
+          onOpenChange={handleOpenChange}
+          side="bottom"
+          align={mobileAlign ? "start" : "end"}
+          alignOffset={mobileAlign?.alignOffset ?? 0}
+          avoidCollisions={!mobileAlign}
+          sideOffset={10}
+          className={cn("overflow-hidden bg-background shadow-lg p-0", panelClassName)}
+          contentStyle={{ width: mobileAlign?.width ?? panelWidth }}
+          content={
             <div className="max-h-[480px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {!hasItems && (
                 <div className="px-4 py-8 text-center text-sm text-muted-foreground">
@@ -304,9 +283,25 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
                 </div>
               ))}
             </div>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+          }
+        >
+          <div ref={triggerRef} className="relative">
+            <Badge
+              variant="notification"
+              count={displayCount}
+              maxCount={99}
+              notificationState={
+                displayCount > 0
+                  ? "noti"
+                  : resolvedOpen
+                    ? "active"
+                    : "default"
+              }
+              aria-label="Open notifications"
+            />
+          </div>
+        </Popover>
+      </div>
     );
   },
 );

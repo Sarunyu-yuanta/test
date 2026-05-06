@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import type { DateRange, MonthCaptionProps } from "react-day-picker";
 import { DayPicker, useDayPicker } from "react-day-picker";
-import * as Popover from "@radix-ui/react-popover";
+import { Popover } from "./popover";
 import {
   CalendarBlank,
   CaretDoubleLeft,
@@ -1166,30 +1166,15 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
             </div>
           </BottomSheet>
         ) : (
-          <Popover.Root
+          <Popover
             open={open}
             onOpenChange={handleOpenChange}
+            align="start"
+            sideOffset={4}
+            content={<>{calendarContent}{actionButtons}</>}
           >
-            <Popover.Trigger asChild>
-              {triggerButton}
-            </Popover.Trigger>
-
-            <Popover.Portal>
-              <Popover.Content
-                align="start"
-                sideOffset={4}
-                className="z-50 rounded-[8px] bg-popover p-3 outline-none text-popover-foreground"
-                style={{
-                  boxShadow: "var(--elevation-popover)",
-                  border: "1px solid var(--border-default)",
-                }}
-                onOpenAutoFocus={(e) => e.preventDefault()}
-              >
-                {calendarContent}
-                {actionButtons}
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
+            {triggerButton}
+          </Popover>
         )}
 
         {belowMessage}

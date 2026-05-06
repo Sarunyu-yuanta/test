@@ -690,3 +690,151 @@ Pagination มี 3 รูปแบบ คือ Banner Slide, Carousel Free Scr
 ### Preview
 
 ตัวอย่างการใช้งานจริงแสดง Pagination (Default) อยู่ในหน้ารายการข่าวสาร โดยมีเลขหน้าปัจจุบันไฮไลต์ด้วยพื้นหลังสีน้ำเงิน เพื่อให้ผู้ใช้ทราบตำแหน่งปัจจุบันและสามารถเปลี่ยนหน้าได้ทันที / In a news list page, the current page is highlighted with a blue background so users always know where they are and can jump to any page instantly.
+
+---
+
+## Tooltip
+
+
+Tooltip คือองค์ประกอบที่แสดงข้อมูลเพิ่มเติมในลักษณะข้อความสั้นหรือเนื้อหาประกอบ เมื่อผู้ใช้ชี้เมาส์ กด หรือโฟกัสที่องค์ประกอบ เพื่อช่วยอธิบายความหมายหรือการใช้งานโดยไม่รบกวนหน้าหลัก / Tooltip is a component that displays additional information as a short label or supplemental content when the user hovers, taps, or focuses on an element — explaining its meaning or usage without disrupting the main page.
+
+### วิธีการใช้งาน
+
+#### 1. Tooltip สำหรับการใช้งานทั่วไป
+
+มี 2 รูปแบบ คือ Direction และ Arrow / Controlled by two props: `side` (direction) and `align` (arrow position).
+
+- **Direction (`side`)** — ใช้เลือกทิศทางของหัวลูกศร เพื่อชี้ไปยัง Content ที่ต้องการเพิ่มคำอธิบาย / Controls which side of the trigger the tooltip appears on: `top`, `bottom`, `left`, or `right`.
+- **Arrow (`align`)** — ใช้ปรับตำแหน่งลูกศร (start–center–end) ของ Tooltip ด้านนั้นๆ เพื่อรองรับการวางได้หลากหลายขึ้น / Adjusts where the arrow sits along the tooltip's edge: `start`, `center`, or `end`.
+
+> Component นี้รองรับฟีเจอร์ Slots สามารถปรับแต่งคอนเทนต์ได้ / This component supports content Slots for customization.
+
+#### 2. Tooltip สำหรับการใช้งานแบบ Coach marks
+
+รูปแบบหนึ่งของการแนะนำผู้ใช้งาน ในหน้าจอ Interface โดยมักจะปรากฏเป็นเลเยอร์โปร่งใสซ้อนทับหน้าจอปกติ (Overlay) เพื่อชี้เป้าหรืออธิบายการทำงานของปุ่มและฟีเจอร์สำคัญต่างๆ / A user-onboarding pattern where a semi-transparent overlay covers the screen and a rich tooltip (Tooltip-Rich) highlights and explains key buttons or features.
+
+> Component นี้รองรับฟีเจอร์ Slots สามารถปรับแต่งคอนเทนต์ได้ / This component supports content Slots for customization.
+
+### ประเภทของ Tooltip
+
+| Type | Usage / การใช้งาน |
+|---|---|
+| **Tooltip** | Tooltip พื้นฐานแสดงข้อความสั้น ๆ ใช้สำหรับอธิบายความหมายหรือชื่อขององค์ประกอบ / A short text label that explains the meaning or name of a UI element. |
+| **Tooltip-Rich** | Tooltip ที่รองรับเนื้อหายาวและลิงก์ Action ใช้เมื่อต้องการอธิบายรายละเอียดเพิ่มเติมหรือมี action ให้ผู้ใช้กด / Supports longer body text plus one or more action links; use when extra detail or a follow-up action is needed. |
+| **Tooltip-Image** | Tooltip ที่แสดงเนื้อหาเป็นรูปภาพหรือ QR code ใช้สำหรับ กรณีที่ต้องการแสดง visual content ภายใน Tooltip / Displays image or QR-code content inside the bubble; use when a visual asset is required (e.g., download QR). |
+
+### การออกแบบ Component
+
+| Component | Padding | Border Radius | Notes |
+|---|---|---|---|
+| **Tooltip** | 8 px (all sides) | 4 px (R4) | Dark surface (`bg-bg-default-dark`), white text, `text-sm leading-normal` |
+| **Tooltip-Rich** | 8 px (all sides) | 8 px (R8) | Body text + action row (gap 6 px between content blocks) |
+| **Tooltip-Image** | Top 24 px · Left/Right 32 px · Bottom 16 px | 8 px (R8) | QR or image area uses R16 inner rounding; arrow (beak) section is 8 px |
+
+#### Arrow (beak)
+
+| Property | Value |
+|---|---|
+| **Width** | 8 px |
+| **Height** | 4 px |
+| **Fill color** | `var(--bg-default-dark)` |
+
+### API (props)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `children` | `ReactNode` | — | Trigger element (the element hovered/focused to show the tooltip) |
+| `content` | `ReactNode` | — | Content rendered inside the tooltip bubble |
+| `side` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Which side of the trigger the tooltip appears on |
+| `align` | `"start" \| "center" \| "end"` | `"center"` | Arrow alignment along the tooltip edge |
+| `delayDuration` | `number` | `300` | Delay in ms before the tooltip appears on hover |
+| `sideOffset` | `number` | `6` | Gap in px between the trigger and the tooltip bubble |
+
+```tsx
+import { Tooltip } from "@sarunyu/system-one";
+
+export function Example() {
+  return (
+    <Tooltip content="คะแนนที่ใช้ได้ในระบบสะสมแต้ม" side="top" align="center">
+      <button className="rounded-full bg-bg-brand p-2 text-text-default-white">
+        ?
+      </button>
+    </Tooltip>
+  );
+}
+```
+
+### Preview
+
+ตัวอย่างการใช้งานจริงแสดง Tooltip อยู่ในหน้ากระเป๋าคะแนน (Reward Credits) โดย Tooltip ชี้ขึ้นจากปุ่มข้อมูลเพื่ออธิบายความหมายของ "คิดเป็น Points ที่ 10%" ทำให้ผู้ใช้เข้าใจโดยไม่ต้องออกจากหน้าปัจจุบัน / In the Reward Credits screen, a top-aligned Tooltip appears above the info icon next to "คิดเป็น Points ที่ 10%", giving users instant context without navigating away.
+
+---
+
+## Popover
+
+
+Popover คือแผงลอยที่เปิดขึ้นเมื่อผู้ใช้คลิกที่ Trigger Element เพื่อแสดงเนื้อหาเพิ่มเติมในรูปแบบที่ซับซ้อนกว่า Tooltip เช่น เมนู, ฟอร์ม, หรือรายละเอียดข้อมูล / Popover is a floating panel that opens on click to display richer content than a Tooltip — such as menus, forms, or detailed information.
+
+### วิธีการใช้งาน
+
+ใช้ `children` เป็น Trigger Element และ `content` เป็นเนื้อหาที่แสดงภายใน Popover / Pass `children` as the trigger and `content` as the panel body.
+
+### ประเภทของ Popover
+
+| Type | Usage / การใช้งาน |
+|---|---|
+| **Uncontrolled** | ใช้เมื่อต้องการให้ Popover จัดการสถานะเปิด/ปิดเอง / Let the component manage open state internally — no `open` or `onOpenChange` props needed. |
+| **Controlled** | ใช้เมื่อต้องการควบคุมสถานะ Popover จากภายนอก / Pass `open` and `onOpenChange` to drive the state externally (e.g. open via a separate button). |
+
+### การออกแบบ Component
+
+| Property | Value |
+|---|---|
+| **Background** | `bg-popover` (white surface) |
+| **Border** | `border border-border` |
+| **Border Radius** | `rounded-lg` (8px) |
+| **Padding** | `p-3` (12px) |
+| **Elevation** | `shadow-popover` |
+| **z-index** | `50` |
+
+### API (props)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `children` | `ReactNode` | — | Trigger element (the element clicked to open the popover) |
+| `content` | `ReactNode` | — | Content rendered inside the popover bubble |
+| `side` | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` | Which side of the trigger the popover appears on |
+| `align` | `"start" \| "center" \| "end"` | `"start"` | Alignment of the popover relative to the trigger edge |
+| `sideOffset` | `number` | `4` | Gap in px between the trigger and the popover bubble |
+| `open` | `boolean` | — | Controlled open state |
+| `onOpenChange` | `(open: boolean) => void` | — | Callback when the open state changes |
+| `className` | `string` | — | Extra classes applied to the popover content bubble |
+
+```tsx
+import { Popover, Button, OptionList } from "@sarunyu/system-one";
+import { useState } from "react";
+
+export function Example() {
+  const [action, setAction] = useState("");
+  return (
+    <Popover
+      content={
+        <OptionList
+          options={[
+            { label: "แก้ไข", value: "edit" },
+            { label: "ลบ", value: "delete" },
+          ]}
+          selectedValue={action}
+          onSelect={setAction}
+        />
+      }
+    >
+      <Button variant="outline" size="md">เปิดเมนู</Button>
+    </Popover>
+  );
+}
+```
+
+### Preview
+
+ตัวอย่างการใช้งานทั่วไปของ Popover ได้แก่ เมนูตัวเลือกเพิ่มเติม (More options), ปุ่มข้อมูลรายละเอียด, และ Dropdown ที่มีเนื้อหาซับซ้อน / Common uses include action menus (more-options), info panels, and rich dropdowns with complex content.

@@ -27,6 +27,8 @@ export { TimeInput } from "./components/time-input";
 export { Avatar } from "./components/avatar";
 export { AvatarStack } from "./components/avatar-stack";
 export { Breadcrumb } from "./components/breadcrumb";
+export { Tooltip } from "./components/tooltip";
+export { Popover } from "./components/popover";
 
 // Utilities
 export { cn } from "./lib/utils";
@@ -206,6 +208,12 @@ export type { AvatarStackSize, AvatarStackItem, AvatarStackProps } from "./compo
 // Types — Breadcrumb
 export type { BreadcrumbItem, BreadcrumbProps } from "./components/breadcrumb";
 
+// Types — Tooltip
+export type { TooltipSide, TooltipAlign, TooltipProps } from "./components/tooltip";
+
+// Types — Popover
+export type { PopoverSide, PopoverAlign, PopoverProps } from "./components/popover";
+
 // Default export — for tools that do `import SystemOne from '@sarunyu/system-one'`
 import { Button } from "./components/button";
 import { Badge } from "./components/badge";
@@ -233,6 +241,8 @@ import { TimeInput } from "./components/time-input";
 import { Avatar } from "./components/avatar";
 import { AvatarStack } from "./components/avatar-stack";
 import { Breadcrumb } from "./components/breadcrumb";
+import { Tooltip } from "./components/tooltip";
+import { Popover } from "./components/popover";
 import { cn } from "./lib/utils";
 import { useIsMobile } from "./components/ui/use-mobile";
 export default {
@@ -240,5 +250,5 @@ export default {
   DateInput, Dropdown, DropdownMultiple, Input, Modal, Notification,
   Toast, ToastStack, Toaster, BottomSheet, OptionList, SearchInput,
   Tab, TabGroup, Tag, StatusTag, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
-  TextArea, TimeInput, Avatar, AvatarStack, Breadcrumb, cn, useIsMobile,
+  TextArea, TimeInput, Avatar, AvatarStack, Breadcrumb, Tooltip, Popover, cn, useIsMobile,
 };
