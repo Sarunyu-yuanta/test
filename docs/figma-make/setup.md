@@ -13,7 +13,7 @@ Install these as **explicit** direct dependencies (not transitive):
 
 ```json
 {
-  "@sarunyu/system-one": "4.9.35",
+  "@sarunyu/system-one": "4.9.36",
   "@phosphor-icons/react": "^2.1.10"
 }
 ```
@@ -176,15 +176,26 @@ import type { DateRange } from '@sarunyu/system-one'; // re-exported from react-
 ```
 
 > **`Pagination` / `PaginationBanner` / `PaginationCarousel`** are available from **`4.9.35`** onward. They are absent in `4.9.34` — using that version will throw `SyntaxError: … does not provide an export named 'Pagination'`.
+>
+> **`data-theme="dark"` section theming** is available from **`4.9.36`** onward.
 
 ---
 
 ## Dark Mode
 
-Add `.dark` to any ancestor element (typically `<html>`). All CSS custom property tokens adapt automatically. No JS toggle library is required.
+**Global dark mode** — add `.dark` to `<html>`. All tokens adapt automatically. No JS toggle library required.
 
 ```tsx
 document.documentElement.classList.toggle('dark');
+```
+
+**Section-level dark mode** — add `data-theme="dark"` to any container with a dark background. All child components auto-switch to dark tokens. Never use `class="dark"` on a section.
+
+```tsx
+<div data-theme="dark" className="bg-bg-brand-primary rounded-2xl p-8">
+  <Button>ติดต่อ Online Service</Button>
+  <p className="text-text-default-primary">สีปรับอัตโนมัติตาม dark token</p>
+</div>
 ```
 
 ---
