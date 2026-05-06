@@ -408,6 +408,31 @@ Scrollable option list — used inside custom dropdown implementations.
 
 ---
 
+### Pagination
+
+Three variants for different scroll/paging patterns.
+
+```tsx
+// Numbered pagination with prev/next arrows
+<Pagination totalPages={10} currentPage={page} onPageChange={setPage} />
+
+// Banner slide dots (active slide = wider pill)
+<PaginationBanner count={5} activeIndex={slideIndex} onIndexChange={setSlideIndex} />
+
+// Carousel scrollbar — fill reflects scroll progress (0–1)
+<PaginationCarousel progress={0.5} />
+<PaginationCarousel progress={scrollProgress} trackWidth={60} />
+```
+
+When `totalPages > 5`, the numbered `<Pagination>` collapses middle pages behind a `…` dropdown.
+
+Props:
+- `Pagination` — `totalPages`, `currentPage`, `onPageChange?(page)`, `className?`
+- `PaginationBanner` — `count`, `activeIndex`, `onIndexChange?(index)`, `className?`
+- `PaginationCarousel` — `progress` (0–1, clamped), `trackWidth?` (default 40), `className?`
+
+---
+
 ## Dark Mode
 
 Add `.dark` to the `<html>` or any ancestor element to activate dark theme:

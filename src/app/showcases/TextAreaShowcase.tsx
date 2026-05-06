@@ -152,7 +152,7 @@ export function TextAreaShowcase() {
         Variants × States
       </p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="min-w-max">
           {/* ── Empty ── */}
           <div

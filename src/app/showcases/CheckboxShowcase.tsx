@@ -164,7 +164,7 @@ function ErrorInteractiveCard() {
 export function CheckboxShowcase() {
   return (
     <div className="bg-background min-h-full space-y-14">
-      <div className="space-y-12 overflow-x-auto">
+      <div className="space-y-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="min-w-[1100px] space-y-10">
           <VariantGrid variant="text" withDescription={false} />
           <VariantGrid variant="text" withDescription />
@@ -177,7 +177,7 @@ export function CheckboxShowcase() {
 
       <section className="space-y-8">
         <h2 className="text-sm font-semibold text-foreground">Error state</h2>
-        <div className="space-y-12 overflow-x-auto">
+        <div className="space-y-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="min-w-[600px] space-y-10">
             <ErrorGrid variant="text" withDescription={false} />
             <ErrorGrid variant="text" withDescription />

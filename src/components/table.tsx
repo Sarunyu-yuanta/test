@@ -186,7 +186,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
   if (!responsive) return table;
   return (
     <TableScrollShadowContext.Provider value={contextValue}>
-      <div ref={scrollRef} className="w-full overflow-x-auto">
+      <div ref={scrollRef} className="w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {table}
       </div>
     </TableScrollShadowContext.Provider>

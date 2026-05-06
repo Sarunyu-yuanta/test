@@ -695,7 +695,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
             <div
               className={cn(
                 "w-full flex flex-col",
-                filteredOptions.length > 10 && "overflow-y-auto",
+                filteredOptions.length > 10 && "overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
               )}
               style={
                 filteredOptions.length > 10

@@ -342,7 +342,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
             ref={menuRef}
             className={cn(
               "bg-popover rounded-lg overflow-clip p-2 flex flex-col items-start text-popover-foreground",
-              filteredOptions.length > 10 && "overflow-y-auto"
+              filteredOptions.length > 10 && "overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             )}
             style={{
               ...menuStyle,

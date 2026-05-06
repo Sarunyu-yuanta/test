@@ -580,3 +580,28 @@ All avatars within the same list or context must use the same `size` prop. Mixin
 | **Don't** | Avoid adjusting height, padding, gap, color, or any modification that causes the component to deviate from the defined layout. / หลีกเลี่ยงการปรับ Height, Padding, Gap, สี หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ |
 
 Always use the `<Breadcrumb>` component from `@sarunyu/system-one` without overriding its internal spacing, colors, or typography. Do not manually recreate breadcrumb trails with custom separators or styled anchors.
+
+---
+
+## Pagination
+
+
+### Rule 1 — Component Purpose
+
+| | |
+|---|---|
+| **Do** | Use Pagination according to the purpose defined by the Design System. / ใช้ Pagination ตามวัตถุประสงค์การใช้งานที่ Design System กำหนด |
+| **Don't** | Avoid using Pagination for the wrong purpose, as it will confuse users when scrolling or changing pages. / หลีกเลี่ยงการใช้งาน Pagination ผิดวัตถุประสงค์ เพราะจะทำให้ผู้ใช้สับสนการเลื่อน หรือเปลี่ยนหน้า |
+
+Each Pagination variant has a specific role. Use `<Pagination>` (numbered) for paging through large datasets (e.g., news lists, search results). Use `<PaginationBanner>` for banner/hero slide indicators. Use `<PaginationCarousel>` for free-scroll carousels. Do not place a numbered `<Pagination>` inside a horizontal card carousel — use `<PaginationCarousel>` instead.
+
+---
+
+### Rule 2 — Component Integrity
+
+| | |
+|---|---|
+| **Do** | Use Pagination according to the layout defined by the Design System. / ใช้ Pagination ตาม Layout ที่ Design System กำหนด |
+| **Don't** | Avoid adjusting Height, Padding, color, stretching, or modifying the format in any way that deviates from the defined layout, because it causes inconsistent rendering across the system. / หลีกเลี่ยงการปรับ Height, Padding, สี, การยืด หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบ |
+
+Always use `<Pagination>`, `<PaginationBanner>`, and `<PaginationCarousel>` from `@sarunyu/system-one` without overriding their internal dimensions, colors, or spacing. Do not apply custom `height`, background colors, or border overrides to individual page cells. The active-page style (`bg-bg-brand` + `text-text-default-white` + `font-bold`) and cell size (`w-[39px] h-[32px]`) are fixed tokens that must remain consistent across the system.

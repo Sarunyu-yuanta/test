@@ -26,6 +26,7 @@ in this package.** This file is the short version: the rules you must follow.
    - Notification bell + list panel → use `<Notification>`. Never use `<Badge variant="notification">` standalone or wire it to a custom `onClick` (toast, popover, etc.) — `<Notification>` handles both the bell and the panel.
    - User profile photos, initials circles, or silhouette placeholders → use `<Avatar>`. For grouped users, use `<AvatarStack>`. Never hand-roll `<img>` or `<div>` avatar shapes.
    - Custom breadcrumb / navigation trails → use `<Breadcrumb>`.
+   - Custom numbered pagination, banner slide dots, or carousel progress bars → use `<Pagination>` / `<PaginationBanner>` / `<PaginationCarousel>`.
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities

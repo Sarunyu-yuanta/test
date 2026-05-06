@@ -129,7 +129,7 @@ export function TimeInputShowcase() {
       <h1 className="mb-1" style={FONT}>Time Input Component</h1>
       <p className="text-muted-foreground mb-12 text-[14px]" style={FONT}>Variants × States</p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="min-w-max">
           <ColHeaders />
 

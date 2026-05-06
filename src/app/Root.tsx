@@ -6,31 +6,32 @@ import svgPaths from "../imports/svg-1wi5zx56yz";
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
 const navItems = [
-  { to: "/button", label: "Button" },
-  { to: "/input", label: "Input" },
-  { to: "/textarea", label: "Text Area" },
-  { to: "/dropdown", label: "Dropdown" },
-  { to: "/dropdown-multiple", label: "Dropdown Multiple" },
-  { to: "/date-input", label: "Date Input" },
-  { to: "/time-input", label: "Time Input" },
-  { to: "/search-input", label: "Search Input" },
-  { to: "/option-list", label: "Option List" },
-  { to: "/tab", label: "Tab" },
-  { to: "/tag", label: "Tag" },
-  { to: "/chip", label: "Chip" },
-  { to: "/checkbox", label: "Checkbox" },
-  { to: "/toggle", label: "Toggle" },
-  { to: "/radio", label: "Radio" },
-  { to: "/card", label: "Card" },
-  { to: "/table", label: "Table" },
-  { to: "/modal", label: "Modal" },
-  { to: "/bottom-sheet", label: "Bottom Sheet" },
-  { to: "/notification", label: "Notification" },
-  { to: "/badge", label: "Badge" },
-  { to: "/toast", label: "Toast Message" },
   { to: "/alert", label: "Alert" },
   { to: "/avatar", label: "Avatar" },
+  { to: "/badge", label: "Badge" },
+  { to: "/bottom-sheet", label: "Bottom Sheet" },
   { to: "/breadcrumb", label: "Breadcrumb" },
+  { to: "/button", label: "Button" },
+  { to: "/card", label: "Card" },
+  { to: "/checkbox", label: "Checkbox" },
+  { to: "/chip", label: "Chip" },
+  { to: "/date-input", label: "Date Input" },
+  { to: "/dropdown", label: "Dropdown" },
+  { to: "/dropdown-multiple", label: "Dropdown Multiple" },
+  { to: "/input", label: "Input" },
+  { to: "/modal", label: "Modal" },
+  { to: "/notification", label: "Notification" },
+  { to: "/option-list", label: "Option List" },
+  { to: "/pagination", label: "Pagination" },
+  { to: "/radio", label: "Radio" },
+  { to: "/search-input", label: "Search Input" },
+  { to: "/tab", label: "Tab" },
+  { to: "/table", label: "Table" },
+  { to: "/tag", label: "Tag" },
+  { to: "/textarea", label: "Text Area" },
+  { to: "/time-input", label: "Time Input" },
+  { to: "/toast", label: "Toast Message" },
+  { to: "/toggle", label: "Toggle" },
 ];
 
 function Logo() {
@@ -177,7 +178,7 @@ export function Root() {
         <aside
           className={`
             fixed top-[56px] left-0 z-10 h-[calc(100vh-56px)] w-[256px] shrink-0
-            bg-background overflow-y-auto border-r border-border
+            bg-background overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-r border-border
             transform transition-transform duration-200 ease-in-out
             ${sidebarOpen ? "translate-x-0 shadow-xl" : "-translate-x-full"}
             lg:sticky lg:translate-x-0 lg:shadow-none
@@ -187,7 +188,7 @@ export function Root() {
         </aside>
 
         {/* Body — 24px padding */}
-        <main className="flex-1 min-w-0 p-[24px] overflow-y-auto">
+        <main className="flex-1 min-w-0 p-[24px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <Outlet />
         </main>
       </div>

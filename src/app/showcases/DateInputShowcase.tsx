@@ -162,7 +162,7 @@ export function DateInputShowcase() {
         Variants × States
       </p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="min-w-max">
           <ColHeaders />
           {GROUPS.map((group, gi) => (

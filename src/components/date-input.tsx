@@ -1158,7 +1158,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
             rightSide="none"
             contentClassName="pt-0"
           >
-            <div className="overflow-auto px-4 pt-2 pb-8 w-full">
+            <div className="overflow-auto px-4 pt-2 pb-8 w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <DrawerRangeCtx.Provider value={mode === "range"}>
                 {calendarContent}
               </DrawerRangeCtx.Provider>

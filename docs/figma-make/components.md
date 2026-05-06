@@ -9,6 +9,7 @@ import {
   DateInput, TimeInput,
   Avatar, AvatarStack,
   Breadcrumb,
+  Pagination, PaginationBanner, PaginationCarousel,
   Tag, StatusTag, Chip,
   Tab, TabGroup,
   Card,
@@ -336,3 +337,29 @@ Horizontal navigation trail with `/` separators. Last item = current page (brand
 ```
 
 `items`: `{ label: string; href?: string }[]` — required. `className?` for layout overrides only.
+
+## Pagination
+
+Three variants — use the one that matches the content type.
+
+| Component | Use for |
+|---|---|
+| `<Pagination>` | Numbered pages — datasets, search results, news lists |
+| `<PaginationBanner>` | Banner/hero slide dot indicator |
+| `<PaginationCarousel>` | Free-scroll carousel progress bar |
+
+```tsx
+// Numbered pagination
+<Pagination totalPages={10} currentPage={currentPage} onPageChange={setCurrentPage} />
+
+// Banner slide dots (active dot is a wider pill)
+<PaginationBanner count={5} activeIndex={bannerIndex} onIndexChange={setBannerIndex} />
+
+// Carousel scrollbar (progress 0–1)
+<PaginationCarousel progress={scrollProgress} />
+```
+
+Props:
+- `Pagination` — `totalPages`, `currentPage`, `onPageChange?`, `className?`. When `totalPages > 5`, pages 4…(n-1) collapse behind a `…` dropdown.
+- `PaginationBanner` — `count`, `activeIndex`, `onIndexChange?`, `className?`.
+- `PaginationCarousel` — `progress` (0–1, clamped), `trackWidth?` (default 40px), `className?`.

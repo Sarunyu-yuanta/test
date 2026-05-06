@@ -71,7 +71,7 @@ export function OptionListShowcase() {
         4 States × 2 Variants
       </p>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="min-w-max">
           {/* ── Default (No Icon) ── */}
           <div
