@@ -157,7 +157,7 @@ export function PopoverShowcase() {
                 size="icon-md"
                 aria-label="เพิ่มเติม"
               >
-                <DotsThree size={18} weight="bold" />
+                <DotsThree size={18} weight="regular" />
               </Button>
             </Popover>
           </div>

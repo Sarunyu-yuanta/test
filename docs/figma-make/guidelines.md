@@ -10,17 +10,26 @@
    ```tsx
    import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react";
    ```
-   Props: `size`, `weight` (`regular` | `bold` | `fill` | `duotone` | `light` | `thin`), `className`.
+   Props: `size`, `weight` (`"regular"` | `"fill"` — no other weights), `className`.
 
-5. **No arbitrary bracket values for spacing/sizing/typography.**
+5. **Dark sections use `data-theme="dark"`.** When placing components on a dark
+   background, wrap the section with `data-theme="dark"` — child components
+   auto-switch to dark tokens. Never use `class="dark"` on a section.
+   ```tsx
+   <div data-theme="dark" className="bg-bg-brand-primary rounded-2xl p-8">
+     <Button>ติดต่อ Online Service</Button>
+   </div>
+   ```
+
+6. **No arbitrary bracket values for spacing/sizing/typography.**
    - Forbidden: `h-[317px]`, `w-[272px]`, `gap-[14px]`, `p-[10px]`, `text-[13px]`, `leading-[22px]`, `rounded-[10px]`, `top-[7px]`
    - Allowed: scale utilities (`h-80`, `w-64`, `gap-4`, `p-6`, `text-sm`, `leading-6`, `rounded-lg`)
    - 4px scale: `0.5 / 1 / 2 / 3 / 4 / 5 / 6 / 8 / 10 / 12 / 16 / 20 / 24`
    - Container-width safelist: `max-w-[480px]`, `max-w-[640px]`, `max-w-[720px]`, `max-w-[800px]`, `max-w-[960px]`, `max-w-[1024px]`, `max-w-[1200px]`, `max-w-[1280px]`, `max-w-[1440px]` — otherwise use `max-w-{xs…7xl}`
 
-6. **Layout = plain `<div>` + Tailwind utilities.** The library does NOT ship `Page`, `Section`, `Stack`, `CardGrid`, `Toolbar` — they don't exist. Use `flex`, `grid`, `container`, `max-w-*`, `gap-*`, `p-*`, `mx-auto`.
+7. **Layout = plain `<div>` + Tailwind utilities.** The library does NOT ship `Page`, `Section`, `Stack`, `CardGrid`, `Toolbar` — they don't exist. Use `flex`, `grid`, `container`, `max-w-*`, `gap-*`, `p-*`, `mx-auto`.
 
-7. **Never use `style={{}}` with raw colors or sizes.** Inline styles bypass the design system entirely and break dark mode. Use token classes from tokens.md instead.
+8. **Never use `style={{}}` with raw colors or sizes.** Inline styles bypass the design system entirely and break dark mode. Use token classes from tokens.md instead.
    ```tsx
    // ❌ wrong
    <div style={{ backgroundColor: "#F8F8F5", color: "#6A6A7A" }}>
@@ -28,7 +37,7 @@
    <div className="bg-default-secondary text-muted-foreground">
    ```
 
-8. **Never hardcode any color that isn't in tokens.md.** If you see a brand color in the design that differs from the library default, use the nearest library token — do NOT create `theme-overrides.css` or hardcode hex values.
+9. **Never hardcode any color that isn't in tokens.md.** If you see a brand color in the design that differs from the library default, use the nearest library token — do NOT create `theme-overrides.css` or hardcode hex values.
    ```tsx
    // ❌ wrong
    <p className="text-[#C48B3C]">ผลิตภัณฑ์ของเรา</p>

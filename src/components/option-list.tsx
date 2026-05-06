@@ -123,7 +123,7 @@ export const OptionList = forwardRef<HTMLDivElement, OptionListProps>(
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center">
                       <Check
                         size={16}
-                        weight="bold"
+                        weight="regular"
                         className="text-primary-action"
                       />
                     </span>

@@ -40,7 +40,7 @@ export function PaginationBanner({
             "h-1.5 rounded-[12px] transition-all duration-200",
             i === activeIndex
               ? "w-8 bg-bg-brand"
-              : "w-1.5 bg-black/10 hover:bg-black/20",
+              : "w-1.5 bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20",
           )}
         />
       ))}
@@ -77,7 +77,7 @@ export function PaginationCarousel({
       aria-valuemax={100}
     >
       <div
-        className="relative h-1.5 overflow-hidden rounded-[48px] bg-black/10"
+        className="relative h-1.5 overflow-hidden rounded-[48px] bg-black/10 dark:bg-white/10"
         style={{ width: trackWidth }}
       >
         <div

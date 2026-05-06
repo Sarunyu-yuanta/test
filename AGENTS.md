@@ -117,14 +117,26 @@ utilities (`p-6`, `gap-4`, `max-w-*`, etc.) win over host-written ones.
 
 ## Dark mode
 
-Add `.dark` to any ancestor (usually `<html>`). All tokens adapt automatically.
+**Global dark mode** — add `.dark` to `<html>`. All tokens adapt automatically.
+
+**Section-level dark mode** — add `data-theme="dark"` to any container with a
+dark background. All child components automatically switch to dark tokens.
+Never use `class="dark"` for sections — that resets the entire page theme.
+
+```tsx
+// ✅ section on a dark background
+<div data-theme="dark" className="bg-bg-brand-primary rounded-2xl p-8">
+  <Button>ติดต่อ Online Service</Button>
+  <p className="text-text-default-primary">สีปรับอัตโนมัติ</p>
+</div>
+```
 
 ## Theming
 
 Override CSS custom properties after the stylesheet import.
-**Both `:root` (light) and `.dark` (dark) must be overridden separately** —
-the library hard-codes dark-mode colors in its `.dark` block, so a `:root`-only
-override leaves dark mode unchanged.
+**Both `:root` (light) and `.dark, [data-theme="dark"]` (dark) must be overridden
+separately** — the library hard-codes dark-mode colors in its `.dark` block,
+so a `:root`-only override leaves dark mode unchanged.
 
 ```css
 :root {
@@ -134,7 +146,7 @@ override leaves dark mode unchanged.
   --font-sans: "Inter", sans-serif;
 }
 
-.dark {
+.dark, [data-theme="dark"] {
   --primary-action: #a78bfa;
   --primary-action-hover: #c4b5fd;
   --primary-action-active: #8b5cf6;

@@ -20,7 +20,7 @@ that uses this library. The rules are non-negotiable.
 4. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
    or any other icon library. Install with `npm install @phosphor-icons/react`.
    Import named icons: `import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react"`.
-   Every icon accepts `size`, `weight` (`"regular"` | `"bold"` | `"fill"` | `"duotone"` | `"light"` | `"thin"`), and `className` props.
+   Every icon accepts `size`, `weight` (`"regular"` | `"fill"` — no other weights), and `className` props.
 5. **No arbitrary bracket values for spacing / sizing / typography.**
    Use scale utilities, not pixel overrides. The library's shipped stylesheet
    only contains scale utilities + a fixed list of safelisted container widths,
@@ -41,6 +41,17 @@ that uses this library. The rules are non-negotiable.
    + Tailwind utilities (flex, grid, container, max-w-*, gap-*, p-*, mx-auto).
    The library does NOT ship layout primitives. Do not import `Page`, `Section`,
    `Stack`, `CardGrid`, `Toolbar` — they don't exist.
+7. **Dark sections use `data-theme="dark"`.** When a section has a dark background
+   (e.g. brand blue, charcoal, black), wrap it with `data-theme="dark"` — all
+   child components automatically switch to their dark-mode tokens. No props, no
+   variants needed.
+   ```tsx
+   <div data-theme="dark" className="bg-bg-brand-primary rounded-2xl p-8">
+     <Button>ติดต่อ Online Service</Button>
+     <p className="text-text-default-primary">อัตโนมัติ สีตาม token dark</p>
+   </div>
+   ```
+   Never use `class="dark"` for section-level theming — that resets the global theme.
 
 ---
 

@@ -148,7 +148,7 @@ export const Tag = forwardRef<HTMLDivElement, TagProps>(function Tag(
           className={cn(
             "inline-flex items-center justify-center rounded-[2px] transition-colors",
             s.closeButton,
-            !isDisabled && "cursor-pointer hover:bg-black/10"
+            !isDisabled && "cursor-pointer hover:bg-black/10 dark:hover:bg-white/10"
           )}
         >
           <CloseIcon disabled={isDisabled} className={s.closeIcon} />
