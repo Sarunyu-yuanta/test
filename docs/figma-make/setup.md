@@ -13,7 +13,7 @@ Install these as **explicit** direct dependencies (not transitive):
 
 ```json
 {
-  "@sarunyu/system-one": "4.9.36",
+  "@sarunyu/system-one": "4.9.37",
   "@phosphor-icons/react": "^2.1.10"
 }
 ```
