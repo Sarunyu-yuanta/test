@@ -1,6 +1,6 @@
 # System One — Core Rules
 
-1. **Use library components for every element it provides.** Never recreate Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput, Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge as raw HTML.
+1. **Use library components for every element it provides.** Never recreate Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput, Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel as raw HTML.
 
 2. **Never override component built-in styles.** Components manage their own colors, shadows, padding, radius, typography. `className` on library components is for **layout only** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, `border-*`.
 

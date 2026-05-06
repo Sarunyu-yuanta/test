@@ -614,3 +614,79 @@ Breadcrumb รองรับความลึกได้ไม่จำกั
 ### Preview
 
 ตัวอย่างการใช้งานจริงแสดง Breadcrumb อยู่ในหน้าบทความ โดยมีเส้นทาง หน้าหลัก / ข่าวสารทั้งหมด / ชื่อบทความ (สีแบรนด์) ซึ่งช่วยให้ผู้ใช้ย้อนกลับไปยังรายการข่าวได้ทันที
+
+---
+
+## Pagination
+
+Pagination คือองค์ประกอบที่ใช้สำหรับแบ่งข้อมูลออกเป็นหลายหน้า เพื่อช่วยให้ผู้ใช้ดูและนำทางข้อมูลจำนวนมากได้ง่ายขึ้น โดยสามารถเลือกเปลี่ยนหน้าไปมาได้ทีละหน้า / Pagination is a component used to split data across multiple pages, helping users navigate large amounts of content by moving between pages one at a time.
+
+### ประเภทของ Pagination
+
+Pagination มี 3 รูปแบบ คือ Banner Slide, Carousel Free Scroll, และ Pagination / Pagination has 3 variants: Banner Slide, Carousel Free Scroll, and Pagination.
+
+| Variant | Usage / การใช้งาน |
+|---|---|
+| **Banner Slide** | รูปแบบตัวบอกตำแหน่งสไลด์สำหรับแบนเนอร์ ใช้สำหรับแสดงลำดับของสไลด์และบอกผู้ใช้ว่ากำลังดูสไลด์ใดอยู่ / Dot-style slide indicator for banner carousels. The active slide renders as a wider pill; inactive slides render as small circles. |
+| **Carousel Free Scroll** | รูปแบบตัวบอกตำแหน่งสำหรับคอนเทนต์ที่เลื่อนแบบอิสระ ใช้สำหรับแสดงตำแหน่งการเลื่อนโดยรวมของรายการ / Scrollbar-style indicator for free-scroll carousels. A thin track where the filled portion reflects the current scroll position. |
+| **Pagination** | รูปแบบการแบ่งข้อมูลออกเป็นหลายหน้า ใช้สำหรับรายการหรือข้อมูลจำนวนมาก เพื่อให้ผู้ใช้สามารถเปลี่ยนหน้าและดูข้อมูลได้เป็นส่วนๆ / Numbered pagination control for large lists. Supports prev/next arrows and smart ellipsis collapsing for large page counts. |
+
+### การออกแบบ Component
+
+| Component | Key Dimension |
+|---|---|
+| **Banner Slide — active pill** | width 32 px, height 6 px, radius 12 px |
+| **Banner Slide — inactive dot** | 6 × 6 px, radius 12 px |
+| **Banner Slide — gap** | 4 px between items |
+| **Carousel Free Scroll — track** | height 6 px, radius 999 (fully rounded), 10 px padding on each side |
+| **Carousel Free Scroll — fill** | height 6 px, radius 12 px, width proportional to scroll progress |
+| **Pagination — cell** | width 39 px, height 32 px |
+| **Pagination — cell padding** | 16 px horizontal / 4 px vertical (page numbers), 8 px vertical (arrows) |
+| **Pagination — border radius** | 8 px (outer container) |
+| **Pagination — active page** | `bg-bg-brand-primary` (blue) + `text-text-default-white` + `font-bold` |
+| **Pagination — inactive page** | `bg-bg-default-primary` (white) + `text-text-default-primary` + `font-normal` |
+
+### API
+
+#### `PaginationBanner`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `count` | `number` | — | Total number of slides |
+| `activeIndex` | `number` | — | Zero-based index of the active slide |
+| `onIndexChange` | `(index: number) => void` | — | Called when the user clicks a dot |
+| `className` | `string` | — | Additional class names |
+
+```tsx
+<PaginationBanner count={3} activeIndex={0} onIndexChange={setIndex} />
+```
+
+#### `PaginationCarousel`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `progress` | `number` | — | Scroll progress from `0` (start) to `1` (end) |
+| `trackWidth` | `number` | `40` | Width of the track in pixels |
+| `className` | `string` | — | Additional class names |
+
+```tsx
+<PaginationCarousel progress={0.5} trackWidth={40} />
+```
+
+#### `Pagination`
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `totalPages` | `number` | — | Total number of pages |
+| `currentPage` | `number` | — | Currently active page (1-based) |
+| `onPageChange` | `(page: number) => void` | — | Called when the user selects a page |
+| `className` | `string` | — | Additional class names |
+
+```tsx
+<Pagination totalPages={10} currentPage={3} onPageChange={setPage} />
+// renders: < 1 2 [3] ... 10 >
+```
+
+### Preview
+
+ตัวอย่างการใช้งานจริงแสดง Pagination (Default) อยู่ในหน้ารายการข่าวสาร โดยมีเลขหน้าปัจจุบันไฮไลต์ด้วยพื้นหลังสีน้ำเงิน เพื่อให้ผู้ใช้ทราบตำแหน่งปัจจุบันและสามารถเปลี่ยนหน้าได้ทันที / In a news list page, the current page is highlighted with a blue background so users always know where they are and can jump to any page instantly.

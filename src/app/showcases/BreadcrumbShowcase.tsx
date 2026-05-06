@@ -88,7 +88,7 @@ export function BreadcrumbShowcase() {
         {/* Props reference */}
         <section className="rounded-lg border border-border p-4">
           <p className="mb-2 text-sm font-semibold text-foreground">Props</p>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border">

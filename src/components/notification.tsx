@@ -281,7 +281,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
             )}
             style={{ width: mobileAlign?.width ?? panelWidth }}
           >
-            <div className="max-h-[480px] overflow-y-auto">
+            <div className="max-h-[480px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {!hasItems && (
                 <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                   {emptyText}

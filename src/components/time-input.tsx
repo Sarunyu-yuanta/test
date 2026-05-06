@@ -240,7 +240,7 @@ function RangeSlotPicker({
 }) {
   return (
     <div
-      className="overflow-y-auto [&::-webkit-scrollbar]:hidden"
+      className="overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       style={{ maxHeight: 320, scrollbarWidth: "none", minWidth: 300 }}
     >
       <div
@@ -777,7 +777,7 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
             rightSide="none"
             contentClassName="pt-0"
           >
-            <div className="overflow-auto px-4 pt-2 pb-8 w-full">
+            <div className="overflow-auto px-4 pt-2 pb-8 w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {pickerContent}
               {actionButtons}
             </div>

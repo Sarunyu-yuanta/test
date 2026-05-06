@@ -317,7 +317,7 @@ export function TableShowcase() {
         <h2 className="text-[16px] text-nav-link">
           Fixed Preview (Default vs Fixed)
         </h2>
-        <div className="overflow-x-auto pb-1">
+        <div className="overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex min-w-[660px] items-start gap-[150px]">
             <Table responsive={false} className="w-[284px]">
               <thead>
@@ -364,7 +364,7 @@ export function TableShowcase() {
 
       <section className="space-y-4">
         <h2 className="text-[16px] text-nav-link">Sticky Behavior</h2>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <Table className="min-w-[1704px]">
             <thead>
               <TableRow>
