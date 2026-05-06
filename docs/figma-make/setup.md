@@ -295,12 +295,29 @@ const remove = (id) => setToasts(t => t.filter(x => x.id !== id));
 )}
 ```
 
-### 10. `BottomSheet` is mobile-only
-Use `useIsMobile()` to branch — `BottomSheet` on mobile, `Modal` on desktop. `BottomSheet` ships its own Vaul; never wrap it in your own overlay div.
+### 10. `BottomSheet` is mobile-only — combine with lazy-mount
+Use `useIsMobile()` to branch. On mobile, apply the lazy-mount pattern (see gotcha #2) so Vaul's portal never mounts until first opened.
 ```tsx
-const isMobile = useIsMobile();
-if (isMobile) return <BottomSheet open={open} onOpenChange={setOpen} …>{content}</BottomSheet>;
-return open ? <div className="fixed inset-0 …"><Modal …>{content}</Modal></div> : null;
+function MySheet({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const isMobile = useIsMobile();
+  const [everOpened, setEverOpened] = useState(false);
+  useEffect(() => { if (open) setEverOpened(true); }, [open]);
+
+  if (!isMobile) {
+    return open ? (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
+        <Modal variant="dialog" onClose={onClose}>…</Modal>
+      </div>
+    ) : null;
+  }
+
+  if (!everOpened) return null;
+  return (
+    <BottomSheet open={open} onOpenChange={(v) => { if (!v) onClose(); }} title="…">
+      {/* content */}
+    </BottomSheet>
+  );
+}
 ```
 
 ### 11. No arbitrary `[...]` values
