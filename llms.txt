@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 27 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 30 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -12,7 +12,7 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel, Tooltip, Popover as raw HTML.
 2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
 3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
@@ -157,7 +157,7 @@ import {
   Notification,
   Badge,
   // Overlay
-  Modal, BottomSheet,
+  Modal, BottomSheet, Tooltip, Popover,
   // Utility
   cn, useIsMobile,
 } from "@sarunyu/system-one";
@@ -1120,6 +1120,80 @@ layouts — use `<Modal>` instead.
 Props: `open`, `onOpenChange`, `trigger`, `headerType`, `showHeader`,
 `rightSide`, `title`, `actionLabel`, `imageSrc`, `leftIcon`, `rightIcon`,
 `onActionClick`, `showHandle`, `children`, `className`, `contentClassName`.
+
+---
+
+### Tooltip
+
+Dark-bubble contextual hint shown on hover over any trigger element.
+`children` is the trigger (must be a single focusable element); `content` is the bubble text.
+
+```tsx
+<Tooltip content="Delete this item">
+  <Button variant="outline" size="icon-md" aria-label="Delete"><Trash size={16} /></Button>
+</Tooltip>
+
+<Tooltip content="This field is required" side="right" align="start">
+  <Input placeholder="Email" value={email} onChange={setEmail} />
+</Tooltip>
+
+<Tooltip content="Appears immediately" side="top" delayDuration={0}>
+  <Button variant="plain" size="md">Instant</Button>
+</Tooltip>
+```
+
+Props:
+- `children` — trigger element (`ReactNode`, required). Must be a single element that accepts `onPointerEnter` / `onFocus`.
+- `content` — bubble content (`ReactNode`, required).
+- `side` — `"top"` | `"bottom"` | `"left"` | `"right"`. Default `"top"`.
+- `align` — `"start"` | `"center"` | `"end"`. Default `"center"`.
+- `delayDuration` — ms before tooltip shows on hover. Default `300`.
+- `sideOffset` — gap in px between trigger and bubble. Default `6`.
+- `className?` — extra classes on the bubble (layout only — never override colors or padding).
+
+---
+
+### Popover
+
+Floating panel that opens on **click** over any trigger element. Pass the trigger as `children` and the panel body as `content`. Scrollbar is hidden inside the bubble by default.
+
+```tsx
+<Popover content={<div>Panel content here</div>}>
+  <Button variant="outline" size="md">Open</Button>
+</Popover>
+
+// Side and alignment
+<Popover side="top" align="center" content={<p className="text-sm text-foreground">Centered above</p>}>
+  <Button variant="outline" size="md">Top center</Button>
+</Popover>
+
+// Controlled state
+<Popover open={open} onOpenChange={setOpen} content={<p>Controlled</p>}>
+  <Button variant="outline" size="md">Open</Button>
+</Popover>
+
+// Rich content
+<Popover
+  content={
+    <div className="flex flex-col gap-2 min-w-48">
+      <p className="text-sm font-medium text-foreground">Account</p>
+      <OptionList options={menuItems} selectedValue={null} onSelect={handleSelect} />
+    </div>
+  }
+>
+  <Button variant="outline" size="md" leftIcon={<User size={16} />}>Account</Button>
+</Popover>
+```
+
+Props:
+- `children` — trigger element (`ReactNode`, required). Must be a single element.
+- `content` — panel body (`ReactNode`, required).
+- `side` — `"top"` | `"bottom"` | `"left"` | `"right"`. Default `"bottom"`.
+- `align` — `"start"` | `"center"` | `"end"`. Default `"start"`.
+- `sideOffset` — gap in px between trigger and panel. Default `4`.
+- `open` — controlled open state. Omit for uncontrolled usage.
+- `onOpenChange` — `(open: boolean) => void`.
+- `className?` — extra classes on the panel bubble (layout only — never override `bg-*` or `p-*`).
 
 ---
 

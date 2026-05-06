@@ -248,9 +248,9 @@ Use sparingly. Corporate UIs prefer border separation over heavy elevation.
 
 ## Component library
 
-This design system ships 28 pre-built components. **Always use them — never recreate with raw HTML.**
+This design system ships 30 pre-built components. **Always use them — never recreate with raw HTML.**
 
-Key components: `Button`, `Input`, `TextArea`, `SearchInput`, `Dropdown`, `DropdownMultiple`, `Checkbox`, `Radio`, `Toggle`, `DateInput`, `TimeInput`, `Avatar`, `AvatarStack`, `Breadcrumb`, `Pagination`, `PaginationBanner`, `PaginationCarousel`, `Tag`, `StatusTag`, `Chip`, `TabGroup`, `Card`, `Table` + `TableRow` + `TableHeaderCell` + `TableCell`, `Modal`, `BottomSheet`, `Alert`, `Toast`, `ToastStack`, `Notification`, `Badge`.
+Key components: `Button`, `Input`, `TextArea`, `SearchInput`, `Dropdown`, `DropdownMultiple`, `Checkbox`, `Radio`, `Toggle`, `DateInput`, `TimeInput`, `Avatar`, `AvatarStack`, `Breadcrumb`, `Pagination`, `PaginationBanner`, `PaginationCarousel`, `Tag`, `StatusTag`, `Chip`, `TabGroup`, `Card`, `Table` + `TableRow` + `TableHeaderCell` + `TableCell`, `Modal`, `BottomSheet`, `Alert`, `Toast`, `ToastStack`, `Notification`, `Badge`, `Tooltip`, `Popover`.
 
 For props, variants, and usage rules → read `AGENTS.md` and `llms.txt` in this package.
 

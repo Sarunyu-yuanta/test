@@ -32,6 +32,8 @@ const navItems = [
   { to: "/time-input", label: "Time Input" },
   { to: "/toast", label: "Toast Message" },
   { to: "/toggle", label: "Toggle" },
+  { to: "/tooltip", label: "Tooltip" },
+  { to: "/popover", label: "Popover" },
 ];
 
 function Logo() {

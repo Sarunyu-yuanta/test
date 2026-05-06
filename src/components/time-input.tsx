@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Minus } from "@phosphor-icons/react";
-import * as Popover from "@radix-ui/react-popover";
+import { Popover } from "./popover";
 import {
   forwardRef,
   useCallback,
@@ -783,32 +783,16 @@ const TimeInput = forwardRef<HTMLDivElement, TimeInputProps>(
             </div>
           </BottomSheet>
         ) : (
-          <Popover.Root
+          <Popover
             open={open}
             onOpenChange={handleOpenChange}
+            align="start"
+            sideOffset={4}
+            className={cn("max-w-[340px]", mode === "single" && "min-w-[327px]")}
+            content={<>{pickerContent}{actionButtons}</>}
           >
-            <Popover.Trigger asChild>
-              {triggerButton}
-            </Popover.Trigger>
-
-            <Popover.Portal>
-              <Popover.Content
-                align="start"
-                sideOffset={4}
-                className="z-50 rounded-[8px] bg-popover p-3 outline-none max-w-[340px] text-popover-foreground"
-                style={{
-                  boxShadow: "var(--elevation-popover)",
-                  border: "1px solid var(--border-default)",
-                  minWidth:
-                    mode === "single" ? 327 : undefined,
-                }}
-                onOpenAutoFocus={(e) => e.preventDefault()}
-              >
-                {pickerContent}
-                {actionButtons}
-              </Popover.Content>
-            </Popover.Portal>
-          </Popover.Root>
+            {triggerButton}
+          </Popover>
         )}
         {belowMsg}
       </div>

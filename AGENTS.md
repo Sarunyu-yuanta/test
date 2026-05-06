@@ -27,6 +27,8 @@ in this package.** This file is the short version: the rules you must follow.
    - User profile photos, initials circles, or silhouette placeholders → use `<Avatar>`. For grouped users, use `<AvatarStack>`. Never hand-roll `<img>` or `<div>` avatar shapes.
    - Custom breadcrumb / navigation trails → use `<Breadcrumb>`.
    - Custom numbered pagination, banner slide dots, or carousel progress bars → use `<Pagination>` / `<PaginationBanner>` / `<PaginationCarousel>`.
+   - Custom tooltips, `title` attributes, or hand-rolled hover popovers → use `<Tooltip>`.
+   - Custom floating panels triggered by click, hand-rolled popovers with `useState` + absolute positioning → use `<Popover>`.
 
 2. **Use token-backed Tailwind classes for color.** Never emit hard-coded colors:
    - Hex (`#3b82f6`), arbitrary (`bg-[#...]`), and palette utilities
