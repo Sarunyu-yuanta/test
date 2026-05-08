@@ -28,6 +28,10 @@ import { BreadcrumbPage } from "./pages/BreadcrumbPage";
 import { PaginationPage } from "./pages/PaginationPage";
 import { TooltipPage } from "./pages/TooltipPage";
 import { PopoverPage } from "./pages/PopoverPage";
+import { SliderPage } from "./pages/SliderPage";
+import { ProgressPage } from "./pages/ProgressPage";
+import { UploadPage } from "./pages/UploadPage";
+import { ListPage } from "./pages/ListPage";
 import { InstallationPage } from "./pages/InstallationPage";
 import { Navigate } from "react-router";
 
@@ -72,6 +76,10 @@ export const router = createBrowserRouter([
       { path: "pagination", Component: PaginationPage },
       { path: "tooltip", Component: TooltipPage },
       { path: "popover", Component: PopoverPage },
+      { path: "slider", Component: SliderPage },
+      { path: "progress", Component: ProgressPage },
+      { path: "upload", Component: UploadPage },
+      { path: "list", Component: ListPage },
     ],
   },
 ]);

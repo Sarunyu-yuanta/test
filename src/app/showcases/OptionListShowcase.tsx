@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Circle } from "@phosphor-icons/react";
+import { StarIcon } from "@phosphor-icons/react";
 import { OptionList, type OptionItem } from "@/components/option-list";
 import { ShowcasePage } from "../components/ShowcasePage";
 import { ComponentPlayground } from "../components/ComponentPlayground";
@@ -9,7 +9,7 @@ function makeOptions(withIcon: boolean, total: number, allDisabled: boolean): Op
     label: `Option List ${i + 1}`,
     value: String(i + 1),
     disabled: allDisabled || i === 4,
-    icon: withIcon ? <Circle size={20} weight="regular" /> : undefined,
+    icon: withIcon ? <StarIcon size={20} weight="regular" /> : undefined,
   }));
 }
 
@@ -83,7 +83,7 @@ export function OptionListShowcase() {
           const isMulti = multi as boolean;
           const allDisabled = disabled as boolean;
           const iconPart = withIcon
-            ? "\n  // each item: { label, value, icon: <Circle size={20} /> }"
+            ? "\n  // each item: { label, value, icon: <StarIcon size={20} /> }"
             : "";
           const modePart = isMulti
             ? "\n  selectedValues={selected}\n  onToggle={handleToggle}"

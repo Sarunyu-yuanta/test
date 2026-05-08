@@ -203,11 +203,13 @@ export function MyComponent() {
             {[
               "Alert", "Avatar", "Badge", "BottomSheet",
               "Breadcrumb", "Button", "Card", "Checkbox",
-              "Chip", "DateInput", "Dropdown", "DropdownMultiple",
-              "Input", "Modal", "Notification", "OptionList",
-              "Pagination", "Popover", "Radio", "SearchInput",
-              "Tab", "Table", "Tag", "TextArea",
-              "TimeInput", "Toast", "Toggle", "Tooltip",
+              "Chip", "CircleProgress", "DateInput", "Dropdown",
+              "DropdownMultiple", "Input", "LinearProgress", "Modal",
+              "Notification", "OptionList", "Pagination", "Popover",
+              "Radio", "SearchInput", "Slider", "Tab",
+              "Table", "Tag", "TextArea", "TimeInput",
+              "Toast", "Toggle", "Tooltip", "UploadArea",
+              "UploadItem",
             ].map((name) => (
               <div key={name} className="px-3 py-2 font-mono text-foreground bg-background hover:bg-muted transition-colors cursor-default">
                 {name}

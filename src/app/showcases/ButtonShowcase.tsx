@@ -1,15 +1,14 @@
 import { Button, ButtonLabelSize, ButtonVariant } from "@/components/button";
 import { ShowcasePage } from "../components/ShowcasePage";
 import { ComponentPlayground } from "../components/ComponentPlayground";
-import { Circle } from "@phosphor-icons/react";
+import { StarIcon } from "@phosphor-icons/react";
 
-// ─── Icon pixel sizes per size token ─────────────────────────────────────────
 const labelIconPx: Record<ButtonLabelSize, number> = {
   xs: 16, sm: 18, md: 18, lg: 20, xl: 20,
 };
 
-function LabelCircle({ size, color = "currentColor" }: { size: ButtonLabelSize; color?: string }) {
-  return <Circle size={labelIconPx[size]} weight="regular" color={color} />;
+function LabelIcon({ size, color = "currentColor" }: { size: ButtonLabelSize; color?: string }) {
+  return <StarIcon size={labelIconPx[size]} weight="regular" color={color} />;
 }
 
 // ─── Showcase ─────────────────────────────────────────────────────────────────
@@ -71,8 +70,8 @@ export function ButtonShowcase() {
           const s = size as ButtonLabelSize;
           const isDisabled = disabled as boolean;
           const iconColor = v === "primary" && !isDisabled ? "white" : "var(--primary-action)";
-          const leftIcon = iconSlot === "left" ? <LabelCircle size={s} color={iconColor} /> : undefined;
-          const rightIcon = iconSlot === "right" ? <LabelCircle size={s} color={iconColor} /> : undefined;
+          const leftIcon = iconSlot === "left" ? <LabelIcon size={s} color={iconColor} /> : undefined;
+          const rightIcon = iconSlot === "right" ? <LabelIcon size={s} color={iconColor} /> : undefined;
           const iconPart = iconSlot === "left"
             ? `\n  leftIcon={<Icon size={${labelIconPx[s]}} />}`
             : iconSlot === "right"

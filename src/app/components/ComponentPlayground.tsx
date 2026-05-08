@@ -36,22 +36,13 @@ type Props = {
   noPadding?: boolean;
 };
 
-function initValues(controls: PlaygroundControl[]): PlaygroundValues {
-  const out: PlaygroundValues = {};
-  for (const c of controls) {
-    out[c.key] =
-      c.defaultValue !== undefined
-        ? c.defaultValue
-        : c.type === "select"
-        ? c.options[0]?.value ?? ""
-        : false;
-  }
-  return out;
-}
-
 function getDefaultValue(ctrl: PlaygroundControl): string | boolean {
   if (ctrl.defaultValue !== undefined) return ctrl.defaultValue;
   return ctrl.type === "select" ? ctrl.options[0]?.value ?? "" : false;
+}
+
+function initValues(controls: PlaygroundControl[]): PlaygroundValues {
+  return Object.fromEntries(controls.map((c) => [c.key, getDefaultValue(c)]));
 }
 
 /** Resolve effective values — hidden controls fall back to their defaultValue */

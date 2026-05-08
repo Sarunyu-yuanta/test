@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import { List, X } from "@phosphor-icons/react";
+import { ListIcon, XIcon } from "@phosphor-icons/react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import svgPaths from "../imports/svg-1wi5zx56yz";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
-const gettingStartedItems = [
-  { to: "/installation", label: "Installation" },
-];
+const gettingStartedItems = [{ to: "/installation", label: "Installation" }];
 
 const componentItems = [
   { to: "/alert", label: "Alert" },
@@ -23,13 +21,16 @@ const componentItems = [
   { to: "/dropdown", label: "Dropdown" },
   { to: "/dropdown-multiple", label: "Dropdown Multiple" },
   { to: "/input", label: "Input" },
+  { to: "/list", label: "List" },
   { to: "/modal", label: "Modal" },
   { to: "/notification", label: "Notification" },
   { to: "/option-list", label: "Option List" },
   { to: "/pagination", label: "Pagination" },
   { to: "/popover", label: "Popover" },
+  { to: "/progress", label: "Progress" },
   { to: "/radio", label: "Radio" },
   { to: "/search-input", label: "Search Input" },
+  { to: "/slider", label: "Slider" },
   { to: "/tab", label: "Tab" },
   { to: "/table", label: "Table" },
   { to: "/tag", label: "Tag" },
@@ -38,6 +39,7 @@ const componentItems = [
   { to: "/toast", label: "Toast Message" },
   { to: "/toggle", label: "Toggle" },
   { to: "/tooltip", label: "Tooltip" },
+  { to: "/upload", label: "Upload" },
 ];
 
 function Logo() {
@@ -115,21 +117,21 @@ function NavSection({
 }) {
   return (
     <div className="flex flex-col gap-[2px]">
-      <div className="text-[11px] font-semibold uppercase tracking-widest opacity-40 pt-4 pb-1 px-3">
+      <div className="text-[10px] font-medium tracking-widest opacity-40 pt-4 pb-1 px-3">
         {heading}
       </div>
       {items.map(({ to, label }) => (
         <NavLink key={to} to={to} style={FONT} onClick={onNavClick}>
           {({ isActive }) => (
             <div
-              className={`h-[36px] flex items-center px-[12px] rounded-[6px] transition-colors duration-150 ${
+              className={`h-[36px] flex items-center px-[12px] rounded-[10px] transition-colors duration-150 ${
                 isActive
                   ? "bg-[var(--overlay-primary-8)]"
                   : "hover:bg-[var(--overlay-primary-4)]"
               }`}
             >
               <span
-                className={`text-[14px] leading-[1.5] whitespace-nowrap ${
+                className={`text-[12px] font-medium leading-[1.5] whitespace-nowrap ${
                   isActive ? "text-nav-link-active" : "text-nav-link"
                 }`}
               >
@@ -145,9 +147,17 @@ function NavSection({
 
 function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
   return (
-    <nav className="flex flex-col gap-[2px] p-[12px]">
-      <NavSection heading="Getting Started" items={gettingStartedItems} onNavClick={onNavClick} />
-      <NavSection heading="Components" items={componentItems} onNavClick={onNavClick} />
+    <nav className="flex flex-col gap-[16px] p-[12px]">
+      <NavSection
+        heading="Getting Started"
+        items={gettingStartedItems}
+        onNavClick={onNavClick}
+      />
+      <NavSection
+        heading="Components"
+        items={componentItems}
+        onNavClick={onNavClick}
+      />
     </nav>
   );
 }
@@ -158,7 +168,7 @@ function MenuToggleIcon({ open }: { open: boolean }) {
     className: "text-nav-link",
     weight: "regular" as const,
   };
-  return open ? <X {...common} /> : <List {...common} />;
+  return open ? <XIcon {...common} /> : <ListIcon {...common} />;
 }
 
 export function Root() {

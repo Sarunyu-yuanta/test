@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import {
-  Briefcase as BriefcaseIcon,
-  Check as CheckIcon,
-  CheckCircle as CheckCircleIcon,
+  BriefcaseIcon,
+  CheckIcon,
+  CheckCircleIcon,
 } from "@phosphor-icons/react";
 import {
   Table,

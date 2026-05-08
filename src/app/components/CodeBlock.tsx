@@ -1,17 +1,17 @@
 import { useState, useCallback } from "react";
-import { Copy, Check, CaretDown, CaretUp } from "@phosphor-icons/react";
+import { CopyIcon, CheckIcon, CaretDownIcon, CaretUpIcon } from "@phosphor-icons/react";
 import { CODE_COLORS as C, tokenizeLine } from "../lib/highlight";
 
 const COLLAPSE_AT = 12;
 
 type Props = {
-  code: string;
+  code?: string;
   /** When provided, renders a tab strip for switching code snippets */
   tabs?: { label: string; code: string }[];
 };
 
 export function CodeBlock({ code, tabs }: Props) {
-  const allTabs = tabs ?? [{ label: "tsx", code }];
+  const allTabs = tabs ?? [{ label: "tsx", code: code ?? "" }];
   const hasMultiple = allTabs.length > 1;
 
   const [activeTab, setActiveTab] = useState(0);
@@ -65,7 +65,7 @@ export function CodeBlock({ code, tabs }: Props) {
           onMouseEnter={(e) => !copied && (e.currentTarget.style.color = C.hoverBtn)}
           onMouseLeave={(e) => !copied && (e.currentTarget.style.color = C.subtle)}
         >
-          {copied ? <Check size={12} weight="bold" /> : <Copy size={12} />}
+          {copied ? <CheckIcon size={12} weight="bold" /> : <CopyIcon size={12} />}
           {copied ? "Copied!" : "Copy"}
         </button>
       </div>
@@ -75,7 +75,12 @@ export function CodeBlock({ code, tabs }: Props) {
         <pre className="overflow-x-auto px-0 py-3 text-[13px] leading-[1.65]">
           <code>
             {visible.map((line, i) => (
-              <div key={`${activeTab}-${i}`} className="flex px-4 min-h-[1.65em]" style={{ ["--hover-line" as string]: C.hoverLine }} onMouseEnter={(e) => (e.currentTarget.style.background = C.hoverLine)} onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
+              <div
+                key={`${activeTab}-${i}`}
+                className="flex px-4 min-h-[1.65em]"
+                onMouseEnter={(e) => (e.currentTarget.style.background = C.hoverLine)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "")}
+              >
                 <span className="select-none shrink-0 w-9 text-right pr-4 text-[12px]" style={{ color: C.lineNum }}>
                   {i + 1}
                 </span>
@@ -98,8 +103,8 @@ export function CodeBlock({ code, tabs }: Props) {
             onMouseLeave={(e) => (e.currentTarget.style.color = C.subtle)}
           >
             {expanded
-              ? <><CaretUp size={11} weight="bold" /> Collapse</>
-              : <><CaretDown size={11} weight="bold" /> View full code ({lines.length} lines)</>}
+              ? <><CaretUpIcon size={11} weight="bold" /> Collapse</>
+              : <><CaretDownIcon size={11} weight="bold" /> View full code ({lines.length} lines)</>}
           </button>
         )}
       </div>

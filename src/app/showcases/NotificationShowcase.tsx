@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Gift, Bell, ShoppingCart } from "@phosphor-icons/react";
+import { GiftIcon, BellIcon, ShoppingCartIcon } from "@phosphor-icons/react";
 import {
   Notification,
   type NotificationGroup,
@@ -15,7 +15,7 @@ const ALL_ITEMS = [
     title: "โอนหุ้นมาหยวนต้า เทรดฟรี ไม่มีค่าคอม",
     description: "ลูกค้าเปิดบัญชีใหม่และโอนหุ้นเข้าพอร์ตหยวนต้า มูลค่าขั้นต่ำ 1,000,000 บาท ภายใน 7 วันหลังเปิดบัญชีสำเร็จ",
     time: "01 Oct 2025 - 13:08",
-    icon: <Gift size={20} />,
+    icon: <GiftIcon size={20} />,
     defaultStatus: "new" as NotificationItemStatus,
   },
   {
@@ -24,7 +24,7 @@ const ALL_ITEMS = [
     title: "งานสัมมนา Healthcare Revolution: From Innovation to Investment",
     description: "ลงทะเบียนด่วน! ตั้งแต่วันที่ 9 - 22 ต.ค. 68 (จำนวนจำกัด 40 ที่นั่งเท่านั้น)",
     time: "01 Oct 2025 - 13:08",
-    icon: <Bell size={20} />,
+    icon: <BellIcon size={20} />,
     defaultStatus: "unread" as NotificationItemStatus,
   },
   {
@@ -33,7 +33,7 @@ const ALL_ITEMS = [
     title: "แจ้งเตือนสิทธิประโยชน์สำหรับลูกค้าใหม่",
     description: "โปรดตรวจสอบสิทธิพิเศษของบัญชีใหม่ในแอปภายใน 24 ชั่วโมง",
     time: "30 Sep 2025 - 09:42",
-    icon: <ShoppingCart size={20} />,
+    icon: <ShoppingCartIcon size={20} />,
     defaultStatus: "read" as NotificationItemStatus,
   },
   {
@@ -42,7 +42,7 @@ const ALL_ITEMS = [
     title: "ประกาศวันหยุดทำการตลาดหลักทรัพย์",
     description: "ระบบซื้อขายจะปิดให้บริการในวันหยุดนักขัตฤกษ์ตามประกาศตลาดหลักทรัพย์",
     time: "29 Sep 2025 - 16:20",
-    icon: <Bell size={20} />,
+    icon: <BellIcon size={20} />,
     defaultStatus: "read" as NotificationItemStatus,
   },
 ];
@@ -95,7 +95,7 @@ export function NotificationShowcase() {
           const statusPart = s !== "mixed" ? `\n    status: "${s}",` : "";
           return {
             preview: <NotificationPreview status={s} />,
-            code: `<Notification\n  open={open}\n  onOpenChange={setOpen}\n  groups={[{\n    label: "",\n    items: [{\n      id: "1", type: "icon",${statusPart}\n      title: "...",\n      description: "...",\n      time: "01 Oct 2025 - 13:08",\n      icon: <Gift size={20} />,\n    }],\n  }]}\n/>`,
+            code: `<Notification\n  open={open}\n  onOpenChange={setOpen}\n  groups={[{\n    label: "",\n    items: [{\n      id: "1", type: "icon",${statusPart}\n      title: "...",\n      description: "...",\n      time: "01 Oct 2025 - 13:08",\n      icon: <GiftIcon size={20} />,\n    }],\n  }]}\n/>`,
           };
         }}
       />
