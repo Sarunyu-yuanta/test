@@ -11,7 +11,7 @@ Rules:
 
 ## @sarunyu/system-one — Setup Guide
 
-> Target version: **4.9.39** (minimum 4.9.35 for `Pagination` / `PaginationBanner` / `PaginationCarousel`; minimum 4.9.36 for `data-theme="dark"` section theming; minimum 4.9.39 for `Slider`, `LinearProgress`, `CircleProgress`, `UploadArea`, `UploadItem`, `List`, `ListItem`).
+> Target version: **4.9.40** (minimum 4.9.35 for `Pagination` / `PaginationBanner`; minimum 4.9.36 for `data-theme="dark"` section theming; minimum 4.9.39 for `Slider`, `LinearProgress`, `CircleProgress`, `UploadArea`, `UploadItem`, `List`, `ListItem`; minimum 4.9.40 for updated `PaginationCarousel` API).
 
 ---
 
@@ -21,7 +21,7 @@ Install these as **explicit** direct dependencies (not transitive):
 
 ```json
 {
-  "@sarunyu/system-one": "4.9.39",
+  "@sarunyu/system-one": "4.9.40",
   "@phosphor-icons/react": "^2.1.10"
 }
 ```
@@ -351,6 +351,26 @@ Bypasses design tokens and breaks dark mode. Use token classes instead.
 #### 8.14 `Pagination` / `PaginationBanner` / `PaginationCarousel` require ≥ 4.9.35
 
 These components are absent in `4.9.34` — using that version throws `SyntaxError: … does not provide an export named 'Pagination'`.
+
+#### 8.14a `PaginationCarousel` API changed in 4.9.40 — old props removed
+
+The `progress` and `trackWidth` props were removed. Use the new API:
+
+```tsx
+// ❌ old — removed in 4.9.40
+<PaginationCarousel progress={scrollProgress} trackWidth={60} />
+
+// ✅ new
+<PaginationCarousel
+  count={total}
+  activeIndex={activeIndex}
+  viewRatio={clientWidth / scrollWidth}   // pill width proportional to visible area
+  scrollProgress={scrollLeft / maxScroll} // pill position 0–1
+  onIndexChange={goToSlide}
+/>
+```
+
+`viewRatio` and `scrollProgress` are derived from the scroll container's DOM measurements. Navigation arrows are built-in — no separate prev/next buttons needed.
 
 #### 8.15 `data-theme="dark"` requires ≥ 4.9.36
 

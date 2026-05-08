@@ -926,17 +926,24 @@ Three variants for different scroll/paging patterns:
 // Banner slide dots
 <PaginationBanner count={5} activeIndex={bannerIndex} onIndexChange={setBannerIndex} />
 
-// Carousel scrollbar — progress 0 (start) to 1 (end)
-<PaginationCarousel progress={scrollProgress} />
-<PaginationCarousel progress={0.5} trackWidth={60} />
+// Carousel scrollbar — pill slides as user scrolls
+<PaginationCarousel
+  count={total}
+  activeIndex={activeIndex}
+  viewRatio={clientWidth / scrollWidth}   // pill width = viewRatio × 40px track
+  scrollProgress={scrollLeft / maxScroll} // pill position 0–1
+  onIndexChange={goToSlide}
+/>
 ```
 
 **Numbered pagination** — when `totalPages > 5`, pages 4…(n-1) collapse behind a `…` button that opens a scrollable dropdown to jump to any hidden page. Do not use `<Pagination>` inside a horizontal card carousel — use `<PaginationCarousel>` instead.
 
+**Carousel pagination** — a fixed-width sliding pill (width proportional to `viewRatio`) that moves along a 40 px track. Pair with a scrollable container: derive `viewRatio = clientWidth / scrollWidth` and `scrollProgress = scrollLeft / maxScroll` from the container's scroll events. Navigation arrows are built-in.
+
 Props:
 - `Pagination` — `totalPages`, `currentPage`, `onPageChange?(page: number)`, `className?`
 - `PaginationBanner` — `count`, `activeIndex`, `onIndexChange?(index: number)`, `className?`
-- `PaginationCarousel` — `progress` (0–1, clamped), `trackWidth?` (default 40), `className?`
+- `PaginationCarousel` — `count`, `activeIndex`, `viewRatio?` (pill width ratio, default `1/count`), `scrollProgress?` (0–1, overrides index-based pill position), `onIndexChange?(index: number)`, `className?`
 
 ---
 

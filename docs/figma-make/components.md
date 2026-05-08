@@ -360,14 +360,20 @@ Three variants — use the one that matches the content type.
 // Banner slide dots (active dot is a wider pill)
 <PaginationBanner count={5} activeIndex={bannerIndex} onIndexChange={setBannerIndex} />
 
-// Carousel scrollbar (progress 0–1)
-<PaginationCarousel progress={scrollProgress} />
+// Carousel — pill slides as user scrolls
+<PaginationCarousel
+  count={total}
+  activeIndex={activeIndex}
+  viewRatio={clientWidth / scrollWidth}
+  scrollProgress={scrollLeft / maxScroll}
+  onIndexChange={goToSlide}
+/>
 ```
 
 Props:
 - `Pagination` — `totalPages`, `currentPage`, `onPageChange?`, `className?`. When `totalPages > 5`, pages 4…(n-1) collapse behind a `…` dropdown.
 - `PaginationBanner` — `count`, `activeIndex`, `onIndexChange?`, `className?`.
-- `PaginationCarousel` — `progress` (0–1, clamped), `trackWidth?` (default 40px), `className?`.
+- `PaginationCarousel` — `count`, `activeIndex`, `viewRatio?` (pill width ratio, default `1/count`), `scrollProgress?` (0–1, overrides index-based position), `onIndexChange?`, `className?`.
 
 ## Tooltip
 

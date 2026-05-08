@@ -51,40 +51,82 @@ export function PaginationBanner({
 // ─── Carousel ─────────────────────────────────────────────────────────────────
 
 export interface PaginationCarouselProps {
-  /**
-   * Scroll progress from `0` (start) to `1` (end).
-   * Controls the width of the active fill inside the track.
-   */
-  progress: number;
-  /** Width of the track in pixels. Defaults to 40. */
-  trackWidth?: number;
+  /** Total number of slides/items. */
+  count: number;
+  /** Zero-based index of the active slide/item. */
+  activeIndex: number;
+  /** Ratio of visible width to total scroll width (0–1). Controls pill size. */
+  viewRatio?: number;
+  /** Scroll progress (0–1). When provided, positions the pill smoothly. */
+  scrollProgress?: number;
+  /** Called when users navigate with arrows or click an indicator. */
+  onIndexChange?: (index: number) => void;
   className?: string;
 }
 
 export function PaginationCarousel({
-  progress,
-  trackWidth = 40,
+  count,
+  activeIndex,
+  viewRatio,
+  scrollProgress,
+  onIndexChange,
   className,
 }: PaginationCarouselProps) {
-  const clamped = Math.min(1, Math.max(0, progress));
+  const clampedCount = Math.max(1, count);
+  const clampedIndex = Math.min(clampedCount - 1, Math.max(0, activeIndex));
+  const trackWidth = 40;
+  const pillWidth = Math.max(4, Math.round(trackWidth * (viewRatio ?? 1 / clampedCount)));
+  const maxSlide = trackWidth - pillWidth;
+  const pillLeft = scrollProgress !== undefined
+    ? Math.round(scrollProgress * maxSlide)
+    : clampedCount > 1
+      ? Math.round((clampedIndex / (clampedCount - 1)) * maxSlide)
+      : 0;
+
+  const goTo = (index: number) => {
+    const next = Math.min(clampedCount - 1, Math.max(0, index));
+    if (next !== clampedIndex) onIndexChange?.(next);
+  };
 
   return (
     <div
-      className={cn("flex items-center", className)}
-      role="progressbar"
-      aria-valuenow={Math.round(clamped * 100)}
-      aria-valuemin={0}
-      aria-valuemax={100}
+      className={cn("flex items-center gap-2", className)}
+      role="group"
+      aria-label="Carousel pagination"
     >
+      <button
+        type="button"
+        aria-label="Previous slide"
+        onClick={() => goTo(clampedIndex - 1)}
+        disabled={clampedIndex <= 0}
+        className="inline-flex h-6 w-6 items-center justify-center rounded-md text-icon-default transition-colors hover:bg-bg-default-hover disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <CaretLeft size={16} weight="regular" />
+      </button>
+
       <div
         className="relative h-1.5 overflow-hidden rounded-[48px] bg-black/10 dark:bg-white/10"
         style={{ width: trackWidth }}
+        role="progressbar"
+        aria-valuenow={clampedIndex + 1}
+        aria-valuemin={1}
+        aria-valuemax={clampedCount}
       >
         <div
-          className="absolute left-0 top-0 h-full rounded-[12px] bg-bg-brand transition-all duration-200"
-          style={{ width: Math.round(clamped * trackWidth) }}
+          className="absolute top-0 h-full rounded-[12px] bg-bg-brand transition-all duration-200"
+          style={{ width: pillWidth, left: pillLeft }}
         />
       </div>
+
+      <button
+        type="button"
+        aria-label="Next slide"
+        onClick={() => goTo(clampedIndex + 1)}
+        disabled={clampedIndex >= clampedCount - 1}
+        className="inline-flex h-6 w-6 items-center justify-center rounded-md text-icon-default transition-colors hover:bg-bg-default-hover disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        <CaretRight size={16} weight="regular" />
+      </button>
     </div>
   );
 }
@@ -142,8 +184,10 @@ export function Pagination({
     }
   };
 
-  const cell =
-    "flex h-8 w-[39px] shrink-0 items-center justify-center text-sm leading-5 transition-colors select-none";
+  const cellPage =
+    "box-border flex h-full min-h-0 shrink-0 items-center justify-center px-4 py-1 text-sm font-normal leading-5 text-text-default transition-colors select-none";
+  const cellNav =
+    "box-border inline-flex h-full min-h-0 w-[39px] shrink-0 items-center justify-center p-0 leading-none text-icon-default transition-colors select-none [&_svg]:block [&_svg]:shrink-0";
   const divider = "border-l border-border";
 
   const ellipsisLeft = ellipsisRef.current
@@ -154,7 +198,7 @@ export function Pagination({
     <div ref={containerRef} className={cn("relative inline-flex w-fit", className)}>
       <nav
         aria-label="Pagination"
-        className="inline-flex w-fit overflow-hidden rounded-lg border border-border"
+        className="box-border inline-flex h-8 w-fit items-stretch overflow-hidden rounded-lg border border-border"
       >
         {/* Previous */}
         <button
@@ -163,8 +207,8 @@ export function Pagination({
           disabled={currentPage <= 1}
           onClick={() => goTo(currentPage - 1)}
           className={cn(
-            cell,
-            "bg-bg-default text-icon-default hover:bg-bg-default-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer",
+            cellNav,
+            "bg-bg-default hover:bg-bg-default-hover disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer",
           )}
         >
           <CaretLeft size={16} weight="regular" />
@@ -182,9 +226,9 @@ export function Pagination({
               aria-haspopup="listbox"
               onClick={() => setDropdownOpen((v) => !v)}
               className={cn(
-                cell,
+                cellPage,
                 divider,
-                "bg-bg-default text-text-default cursor-pointer hover:bg-bg-default-hover",
+                "bg-bg-default cursor-pointer hover:bg-bg-default-hover",
               )}
             >
               ...
@@ -197,12 +241,12 @@ export function Pagination({
               aria-current={item === currentPage ? "page" : undefined}
               onClick={() => goTo(item)}
               className={cn(
-                cell,
+                cellPage,
                 divider,
                 "cursor-pointer",
                 item === currentPage
-                  ? "bg-bg-brand font-bold text-text-default-white"
-                  : "bg-bg-default font-normal text-text-default hover:bg-bg-default-hover",
+                  ? "bg-bg-default font-bold text-text-brand hover:bg-bg-default-hover"
+                  : "bg-bg-default hover:bg-bg-default-hover",
               )}
             >
               {item}
@@ -217,9 +261,9 @@ export function Pagination({
           disabled={currentPage >= totalPages}
           onClick={() => goTo(currentPage + 1)}
           className={cn(
-            cell,
+            cellNav,
             divider,
-            "bg-bg-default text-icon-default hover:bg-bg-default-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer",
+            "bg-bg-default hover:bg-bg-default-hover disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer",
           )}
         >
           <CaretRight size={16} weight="regular" />
@@ -231,7 +275,7 @@ export function Pagination({
         <div
           role="listbox"
           aria-label="Select page"
-          className="absolute bottom-full mb-1 z-50 flex w-[39px] flex-col overflow-y-auto rounded-lg border border-border bg-bg-default shadow-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="absolute bottom-full z-50 mb-1 flex min-w-[39px] w-max flex-col overflow-y-auto rounded-lg border border-border bg-bg-default shadow-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           style={{ left: ellipsisLeft, transform: "translateX(-50%)", maxHeight: 160 }}
         >
           {hiddenPages.map((page) => (
@@ -242,9 +286,9 @@ export function Pagination({
               aria-selected={page === currentPage}
               onClick={() => goTo(page)}
               className={cn(
-                "flex h-8 w-full shrink-0 cursor-pointer items-center justify-center text-sm leading-5 transition-colors select-none",
+                "box-border flex h-8 w-full min-w-full shrink-0 cursor-pointer items-center justify-center px-4 py-1 text-sm leading-5 transition-colors select-none",
                 page === currentPage
-                  ? "bg-bg-brand font-bold text-text-default-white"
+                  ? "bg-bg-default font-bold text-text-brand hover:bg-bg-default-hover"
                   : "bg-bg-default font-normal text-text-default hover:bg-bg-default-hover",
               )}
             >
