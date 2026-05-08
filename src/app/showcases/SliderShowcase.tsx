@@ -8,11 +8,13 @@ function SliderPreview({
   type,
   disabled,
   showSteps,
+  step,
 }: {
   size: SliderSize;
   type: SliderType;
   disabled: boolean;
   showSteps: boolean;
+  step: number;
 }) {
   const [value, setValue] = useState(50);
   const [range, setRange] = useState<[number, number]>([25, 75]);
@@ -25,6 +27,7 @@ function SliderPreview({
           type="range"
           disabled={disabled}
           showSteps={showSteps}
+          step={step}
           rangeValue={range}
           onRangeChange={setRange}
         />
@@ -42,6 +45,7 @@ function SliderPreview({
         type="single"
         disabled={disabled}
         showSteps={showSteps}
+        step={step}
         value={value}
         onChange={setValue}
       />
@@ -83,19 +87,33 @@ export function SliderShowcase() {
           },
           { type: "boolean", key: "disabled", label: "Disabled", defaultValue: false },
           { type: "boolean", key: "showSteps", label: "Show steps", defaultValue: false },
+          {
+            type: "select",
+            key: "step",
+            label: "Step",
+            options: [
+              { label: "1 (continuous)", value: "1" },
+              { label: "5", value: "5" },
+              { label: "10", value: "10" },
+              { label: "25", value: "25" },
+            ],
+            defaultValue: "1",
+          },
         ]}
-        render={({ size, type, disabled, showSteps }) => {
+        render={({ size, type, disabled, showSteps, step }) => {
           const s = size as SliderSize;
           const t = type as SliderType;
           const d = disabled as boolean;
           const steps = showSteps as boolean;
+          const stepVal = Number(step);
+          const stepProp = stepVal !== 1 ? `\n  step={${stepVal}}` : "";
 
-          const singleCode = `const [value, setValue] = useState(50)\n\n<Slider\n  size="${s}"\n  type="single"\n  value={value}\n  onChange={setValue}${d ? "\n  disabled" : ""}${steps ? "\n  showSteps" : ""}\n/>`;
-          const rangeCode = `const [range, setRange] = useState<[number, number]>([25, 75])\n\n<Slider\n  size="${s}"\n  type="range"\n  rangeValue={range}\n  onRangeChange={setRange}${d ? "\n  disabled" : ""}${steps ? "\n  showSteps" : ""}\n/>`;
+          const singleCode = `const [value, setValue] = useState(50)\n\n<Slider\n  size="${s}"\n  type="single"\n  value={value}\n  onChange={setValue}${stepProp}${d ? "\n  disabled" : ""}${steps ? "\n  showSteps" : ""}\n/>`;
+          const rangeCode = `const [range, setRange] = useState<[number, number]>([25, 75])\n\n<Slider\n  size="${s}"\n  type="range"\n  rangeValue={range}\n  onRangeChange={setRange}${stepProp}${d ? "\n  disabled" : ""}${steps ? "\n  showSteps" : ""}\n/>`;
 
           return {
             preview: (
-              <SliderPreview size={s} type={t} disabled={d} showSteps={steps} />
+              <SliderPreview size={s} type={t} disabled={d} showSteps={steps} step={stepVal} />
             ),
             code: t === "range" ? rangeCode : singleCode,
           };

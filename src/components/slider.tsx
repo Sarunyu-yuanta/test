@@ -5,6 +5,7 @@ import {
   KeyboardEvent,
   useCallback,
   useId,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -79,6 +80,13 @@ function valueToPct(value: number, min: number, max: number): number {
   return clamp(((value - min) / (max - min)) * 100, 0, 100);
 }
 
+function getStepLabels(min: number, max: number, step: number): number[] {
+  const n = step > 0 ? Math.round((max - min) / step) : 0;
+  return n > 0 && n <= 10
+    ? Array.from({ length: n + 1 }, (_, i) => clamp(min + i * step, min, max))
+    : [0, 0.25, 0.5, 0.75, 1].map((f) => Math.round(min + (max - min) * f));
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
@@ -118,6 +126,8 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   const range: [number, number] =
     rangeProp !== undefined ? rangeProp : internalRange;
 
+  const stepLabels = useMemo(() => getStepLabels(min, max, step), [min, max, step]);
+
   // ── Value helpers ────────────────────────────────────────────────────────────
 
   const getValueFromClientX = useCallback(
@@ -125,10 +135,13 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
       const track = trackRef.current;
       if (!track) return min;
       const { left, width } = track.getBoundingClientRect();
-      const pct = clamp(((clientX - left) / width) * 100, 0, 100);
-      return pctToValue(pct, min, max, step);
+      const raw = min + clamp((clientX - left) / width, 0, 1) * (max - min);
+      if (showSteps) {
+        return stepLabels.reduce((best, l) => (Math.abs(l - raw) < Math.abs(best - raw) ? l : best));
+      }
+      return snapToStep(raw, min, max, step);
     },
-    [min, max, step],
+    [min, max, step, showSteps, stepLabels],
   );
 
   const commitSingle = useCallback(
@@ -202,6 +215,26 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>, thumb: "start" | "end") => {
       if (disabled) return;
+
+      if (showSteps) {
+        const currentVal = isSingle ? value : range[thumb === "start" ? 0 : 1];
+        const idx = stepLabels.reduce(
+          (best, _, i) =>
+            Math.abs(stepLabels[i] - currentVal) < Math.abs(stepLabels[best] - currentVal) ? i : best,
+          0,
+        );
+        let nextVal: number | undefined;
+        if (e.key === "ArrowRight" || e.key === "ArrowUp") nextVal = stepLabels[Math.min(idx + 1, stepLabels.length - 1)];
+        else if (e.key === "ArrowLeft" || e.key === "ArrowDown") nextVal = stepLabels[Math.max(idx - 1, 0)];
+        else if (e.key === "Home") nextVal = stepLabels[0];
+        else if (e.key === "End") nextVal = stepLabels[stepLabels.length - 1];
+        if (nextVal === undefined) return;
+        e.preventDefault();
+        if (isSingle) commitSingle(nextVal);
+        else commitRange(nextVal, thumb);
+        return;
+      }
+
       let delta = 0;
       if (e.key === "ArrowRight" || e.key === "ArrowUp") delta = step;
       else if (e.key === "ArrowLeft" || e.key === "ArrowDown") delta = -step;
@@ -217,7 +250,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
         commitRange(clamp(thumbVal + delta, min, max), thumb);
       }
     },
-    [disabled, step, min, max, isSingle, value, range, commitSingle, commitRange],
+    [disabled, showSteps, stepLabels, min, max, isSingle, value, range, commitSingle, commitRange],
   );
 
   // ── Layout computations ──────────────────────────────────────────────────────
@@ -229,19 +262,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
 
 
   const thumbInteractive = cn(
-    "absolute rounded-full",
+    "absolute rounded-full bg-[var(--fill-white-1000)]",
     "shadow-[0px_1px_3px_0px_rgba(0,0,0,0.10),0px_1px_2px_-1px_rgba(0,0,0,0.10)]",
     THUMB_SIZE_CLASS[size],
-    disabled
-      ? "bg-[var(--bg-default-secondary)] cursor-not-allowed"
-      : "bg-[var(--fill-white-1000)] cursor-grab active:cursor-grabbing",
+    disabled ? "cursor-not-allowed" : "cursor-grab active:cursor-grabbing",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--bg-brand-primary)] focus-visible:ring-offset-2",
-  );
-
-  // ── Step label values ────────────────────────────────────────────────────────
-
-  const stepLabels = [0, 0.25, 0.5, 0.75, 1].map((f) =>
-    Math.round(min + (max - min) * f),
   );
 
   // ── Render ───────────────────────────────────────────────────────────────────
@@ -258,8 +283,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
         className={cn(
           "relative w-full rounded-full",
           TRACK_HEIGHT[size],
-          "bg-[var(--fill-gray-200)]",
-          disabled ? "cursor-not-allowed" : "cursor-pointer",
+          disabled
+            ? "bg-[var(--fill-gray-200)] dark:bg-[var(--fill-gray-700)] cursor-not-allowed"
+            : "bg-[var(--fill-gray-200)] cursor-pointer",
         )}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -339,20 +365,34 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(function Slider(
 
       {/* Step labels — absolutely positioned to match thumb centres */}
       {showSteps && (
-        <div
-          aria-hidden="true"
-          className="relative w-full h-4"
-        >
+        <div aria-hidden="true" className="relative w-full h-4">
           {stepLabels.map((label) => {
             const pct = valueToPct(label, min, max);
             return (
-              <span
+              <button
                 key={label}
-                className="absolute text-xs leading-4 text-[var(--text-default-primary)] whitespace-nowrap"
+                type="button"
+                tabIndex={-1}
+                disabled={disabled}
+                onClick={() => {
+                  if (isSingle) {
+                    commitSingle(label);
+                  } else {
+                    const thumb =
+                      Math.abs(label - range[0]) <= Math.abs(label - range[1]) ? "start" : "end";
+                    commitRange(label, thumb);
+                  }
+                }}
+                className={cn(
+                  "absolute text-xs leading-4 whitespace-nowrap",
+                  disabled
+                    ? "cursor-not-allowed text-[var(--text-default-disabled)]"
+                    : "cursor-pointer text-[var(--text-default-primary)]",
+                )}
                 style={{ left: `${pct}%`, transform: "translateX(-50%)" }}
               >
                 {label}
-              </span>
+              </button>
             );
           })}
         </div>

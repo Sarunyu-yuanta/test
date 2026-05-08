@@ -10,12 +10,12 @@ const DEMO_OPTIONS: DropdownOption[] = [
 ];
 
 function DropdownPreview({
-  state,
+  forceState,
   helperText,
   required,
   label,
 }: {
-  state: DropdownState;
+  forceState?: DropdownState;
   helperText?: string;
   required: boolean;
   label?: string;
@@ -29,7 +29,7 @@ function DropdownPreview({
         placeholder="Select option"
         options={DEMO_OPTIONS}
         value={value}
-        forceState={state !== "default" ? state : undefined}
+        forceState={forceState}
         helperText={helperText}
         required={required}
         label={label}
@@ -53,37 +53,33 @@ export function DropdownShowcase() {
       description="Select dropdown in four states with optional helper text, external label, and required indicator."
     >
       <ComponentPlayground
-        
+
         controls={[
-          {
-            type: "select",
-            key: "state",
-            label: "State",
-            options: [
-              { label: "default", value: "default" },
-              { label: "focus", value: "focus" },
-              { label: "error", value: "error" },
-              { label: "disabled", value: "disabled" },
-            ],
-            defaultValue: "default",
-          },
-          { type: "boolean", key: "hasHelper", label: "Helper text", defaultValue: false },
-          { type: "boolean", key: "required", label: "Required", defaultValue: false },
+          { type: "boolean", key: "error",       label: "Error",         defaultValue: false },
+          { type: "boolean", key: "disabled",    label: "Disabled",      defaultValue: false },
+          { type: "boolean", key: "hasHelper",   label: "Helper text",   defaultValue: false },
+          { type: "boolean", key: "required",    label: "Required",      defaultValue: false },
           { type: "boolean", key: "hasExternal", label: "External label", defaultValue: false },
         ]}
-        render={({ state, hasHelper, required, hasExternal }) => {
-          const s = state as DropdownState;
+        render={({ error, disabled, hasHelper, required, hasExternal }) => {
+          const isError = error as boolean;
+          const isDisabled = disabled as boolean;
+          const forceState: DropdownState | undefined = isDisabled
+            ? "disabled"
+            : isError
+            ? "error"
+            : undefined;
           const helperText = (hasHelper as boolean) ? "Please select one" : undefined;
           const label = (hasExternal as boolean) ? "Label" : undefined;
+          const statePart = forceState ? `\n  forceState="${forceState}"` : "";
+          const errPart = isError ? '\n  errorMessage="Please select an option"' : "";
           const helperPart = helperText ? `\n  helperText="${helperText}"` : "";
           const reqPart = (required as boolean) ? "\n  required" : "";
           const extPart = label ? `\n  label="${label}"` : "";
-          const statePart = s !== "default" ? `\n  forceState="${s}"` : "";
-          const errPart = s === "error" ? '\n  errorMessage="Please select an option"' : "";
           return {
             preview: (
               <DropdownPreview
-                state={s}
+                forceState={forceState}
                 helperText={helperText}
                 required={required as boolean}
                 label={label}

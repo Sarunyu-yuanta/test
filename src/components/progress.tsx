@@ -69,11 +69,11 @@ type SizeConfig = {
   showLabel: boolean;
 };
 
-// r/strokeWidth/fontSize derived from Figma: lg=128px, md=48px, sm=24px (no label)
+// r/strokeWidth/fontSize derived from Figma: lg=128px, md=48px, sm=18px (no label)
 const SIZE_CONFIG: Record<CircleProgressSize, SizeConfig> = {
   lg: { dimension: 128, r: 60, strokeWidth: 8, trackColor: "var(--bg-default-tertiary)", fontSize: 24, lineHeight: 36, showLabel: true  },
   md: { dimension: 48,  r: 22, strokeWidth: 3, trackColor: "var(--bg-default-tertiary)", fontSize: 14, lineHeight: 20, showLabel: true  },
-  sm: { dimension: 24,  r: 8,  strokeWidth: 2, trackColor: "var(--fill-black-200)",      fontSize: 0,  lineHeight: 0,  showLabel: false },
+  sm: { dimension: 18,  r: 8,  strokeWidth: 2, trackColor: "var(--fill-black-200)",      fontSize: 0,  lineHeight: 0,  showLabel: false },
 };
 
 export const CircleProgress = forwardRef<SVGSVGElement, CircleProgressProps>(

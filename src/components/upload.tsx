@@ -37,7 +37,7 @@ export const UploadArea = forwardRef<HTMLDivElement, UploadAreaProps>(
               }
         }
         className={cn(
-          "flex items-center justify-center gap-2 min-h-12 py-3.5 rounded-lg",
+          "flex h-12 items-center justify-center gap-2 rounded-lg",
           "border border-dashed border-border-default",
           disabled
             ? "bg-bg-default-secondary cursor-not-allowed"
@@ -157,7 +157,7 @@ export const UploadItem = forwardRef<HTMLDivElement, UploadItemProps>(
                 <TrashButton onDelete={onDelete} />
               </div>
               <div className="flex items-center gap-0.5 px-0.5 text-text-danger">
-                <span className="text-[7.74px] leading-none">*</span>
+                <span className="text-xs leading-4">*</span>
                 <p className="text-xs leading-4">{errorText}</p>
               </div>
             </>
@@ -169,7 +169,7 @@ export const UploadItem = forwardRef<HTMLDivElement, UploadItemProps>(
     // ── Card variant ──────────────────────────────────────────────────────────
     // text-base (16px) + leading-6 (24px) = Body1 per Figma spec
     const cardBase =
-      "flex-1 min-w-0 flex items-center gap-2 p-3.5 bg-background border border-border-default rounded-lg text-base leading-6 whitespace-nowrap";
+      "flex-1 min-w-0 flex h-[52px] items-center gap-2 px-3.5 bg-background border border-border-default rounded-lg text-base leading-6 whitespace-nowrap";
 
     return (
       <div
@@ -180,7 +180,7 @@ export const UploadItem = forwardRef<HTMLDivElement, UploadItemProps>(
         )}
       >
         {isLoading && (
-          <div className="w-full flex flex-col gap-1 px-3.5 py-2.5 bg-background border border-border-default rounded-lg">
+          <div className="w-full flex h-12 flex-col justify-center gap-1 px-3.5 bg-background border border-border-default rounded-lg">
             <div className="flex gap-2 items-center h-5 text-sm leading-5 text-text-default-placeholder">
               <p className="flex-1 min-w-0 truncate">{fileName}</p>
               <p className="shrink-0 text-right w-[46px]">{fileSize}</p>
@@ -238,7 +238,7 @@ function TrashButton({ onDelete }: { onDelete?: () => void }) {
     <button
       type="button"
       onClick={onDelete}
-      className="flex items-center justify-center w-5 h-5 shrink-0 text-text-danger cursor-pointer"
+      className="flex items-center justify-center w-5 h-5 shrink-0 text-icon-danger cursor-pointer"
       aria-label="ลบไฟล์"
     >
       <TrashIcon size={20} />

@@ -51,9 +51,9 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
         onPointerUp={() => setPressed(false)}
         onPointerLeave={() => setPressed(false)}
         className={cn(
-          "flex items-center gap-3 p-4 border-b border-border",
+          "flex items-center gap-3 p-4 h-[52px] border-b border-border",
           isHighlighted ? "bg-bg-default-pressed" : "bg-background",
-          onClick && "cursor-pointer select-none",
+          onClick && "cursor-pointer select-none hover:bg-bg-default-pressed",
           className,
         )}
       >
