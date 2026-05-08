@@ -9,7 +9,7 @@ import { ShowcasePage } from "../components/ShowcasePage";
 import { ComponentPlayground } from "../components/ComponentPlayground";
 
 const IMAGE_SRC =
-  "https://www.figma.com/api/mcp/asset/2af58abb-6922-446e-9575-46402f41d204";
+  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop";
 
 function BottomSheetPreview({
   headerType,

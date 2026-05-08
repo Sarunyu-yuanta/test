@@ -11,11 +11,11 @@ const DEMO_OPTIONS = [
 ];
 
 function DropdownMultiplePreview({
-  state,
+  forceState,
   helperText,
   required,
 }: {
-  state: string;
+  forceState?: string;
   helperText?: string;
   required: boolean;
 }) {
@@ -26,7 +26,7 @@ function DropdownMultiplePreview({
         placeholder="Select options"
         options={DEMO_OPTIONS}
         value={value}
-        forceState={state !== "default" ? state as any : undefined}
+        forceState={forceState as any}
         helperText={helperText}
         required={required}
         errorMessage="Please select at least one"
@@ -43,34 +43,26 @@ export function DropdownMultipleShowcase() {
       description="Multi-select dropdown with pill display and optional search."
     >
       <ComponentPlayground
-        
+
         controls={[
-          {
-            type: "select",
-            key: "state",
-            label: "State",
-            options: [
-              { label: "default", value: "default" },
-              { label: "focus", value: "focus" },
-              { label: "error", value: "error" },
-              { label: "disabled", value: "disabled" },
-            ],
-            defaultValue: "default",
-          },
+          { type: "boolean", key: "error",     label: "Error",       defaultValue: false },
+          { type: "boolean", key: "disabled",  label: "Disabled",    defaultValue: false },
           { type: "boolean", key: "hasHelper", label: "Helper text", defaultValue: false },
-          { type: "boolean", key: "required", label: "Required", defaultValue: false },
+          { type: "boolean", key: "required",  label: "Required",    defaultValue: false },
         ]}
-        render={({ state, hasHelper, required }) => {
-          const s = state as string;
+        render={({ error, disabled, hasHelper, required }) => {
+          const isError = error as boolean;
+          const isDisabled = disabled as boolean;
+          const forceState = isDisabled ? "disabled" : isError ? "error" : undefined;
           const helperText = (hasHelper as boolean) ? "Select all that apply" : undefined;
-          const statePart = s !== "default" ? `\n  forceState="${s}"` : "";
-          const errPart = s === "error" ? '\n  errorMessage="Please select at least one"' : "";
+          const statePart = forceState ? `\n  forceState="${forceState}"` : "";
+          const errPart = isError ? '\n  errorMessage="Please select at least one"' : "";
           const helperPart = helperText ? `\n  helperText="${helperText}"` : "";
           const reqPart = (required as boolean) ? "\n  required" : "";
           return {
             preview: (
               <DropdownMultiplePreview
-                state={s}
+                forceState={forceState}
                 helperText={helperText}
                 required={required as boolean}
               />

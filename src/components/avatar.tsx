@@ -11,7 +11,7 @@ export interface AvatarProps {
   type?: AvatarType;
   /** Size variant of the avatar. */
   size?: AvatarSize;
-  /** Show a green online-status indicator dot (photo type only). */
+  /** Show an online-status indicator dot. */
   status?: boolean;
   /** Image URL — used when type is `photo`. */
   src?: string;
@@ -30,7 +30,7 @@ const SIZE_CONFIG: Record<
   AvatarSize,
   { container: string; fontSize: string; dotSize: string; dotRing: string }
 > = {
-  xxs: { container: "size-4",  fontSize: "text-[11px]", dotSize: "size-[5px]",  dotRing: "ring-[1.5px]" },
+  xxs: { container: "size-4",  fontSize: "text-[11px]", dotSize: "size-1",      dotRing: "ring-[1.5px]" },
   xs:  { container: "size-5",  fontSize: "text-sm",     dotSize: "size-[5px]",  dotRing: "ring-[1.5px]" },
   s:   { container: "size-6",  fontSize: "text-base",   dotSize: "size-[6px]",  dotRing: "ring-[1.5px]" },
   m:   { container: "size-8",  fontSize: "text-xl",     dotSize: "size-[7px]",  dotRing: "ring-2"       },
@@ -89,7 +89,7 @@ export function Avatar({
         </div>
       )}
 
-      {status && type === "photo" && (
+      {status && (
         <span
           aria-label="Online"
           className={cn(

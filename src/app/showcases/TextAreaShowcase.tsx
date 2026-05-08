@@ -4,12 +4,12 @@ import { ShowcasePage } from "../components/ShowcasePage";
 import { ComponentPlayground } from "../components/ComponentPlayground";
 
 function TextAreaPreview({
-  state,
+  forceState,
   helperText,
   showCount,
   required,
 }: {
-  state: TextAreaState;
+  forceState?: TextAreaState;
   helperText?: string;
   showCount: boolean;
   required: boolean;
@@ -21,7 +21,7 @@ function TextAreaPreview({
         placeholder="Enter your message..."
         value={value}
         onChange={setValue}
-        forceState={state !== "default" ? state : undefined}
+        forceState={forceState}
         helperText={helperText}
         showCount={showCount}
         maxCount={500}
@@ -39,36 +39,32 @@ export function TextAreaShowcase() {
       description="Multi-line text input with states, helper text, and character count."
     >
       <ComponentPlayground
-        
+
         controls={[
-          {
-            type: "select",
-            key: "state",
-            label: "State",
-            options: [
-              { label: "default", value: "default" },
-              { label: "focus", value: "focus" },
-              { label: "error", value: "error" },
-              { label: "disabled", value: "disabled" },
-            ],
-            defaultValue: "default",
-          },
+          { type: "boolean", key: "error",     label: "Error",       defaultValue: false },
+          { type: "boolean", key: "disabled",  label: "Disabled",    defaultValue: false },
           { type: "boolean", key: "hasHelper", label: "Helper text", defaultValue: false },
-          { type: "boolean", key: "hasCount", label: "Count", defaultValue: false },
-          { type: "boolean", key: "required", label: "Required", defaultValue: false },
+          { type: "boolean", key: "hasCount",  label: "Count",       defaultValue: false },
+          { type: "boolean", key: "required",  label: "Required",    defaultValue: false },
         ]}
-        render={({ state, hasHelper, hasCount, required }) => {
-          const s = state as TextAreaState;
+        render={({ error, disabled, hasHelper, hasCount, required }) => {
+          const isError = error as boolean;
+          const isDisabled = disabled as boolean;
+          const forceState: TextAreaState | undefined = isDisabled
+            ? "disabled"
+            : isError
+            ? "error"
+            : undefined;
           const helperText = (hasHelper as boolean) ? "Helper text" : undefined;
+          const statePart = forceState ? `\n  forceState="${forceState}"` : "";
+          const errPart = isError ? '\n  errorMessage="Error message"' : "";
           const helperPart = helperText ? `\n  helperText="${helperText}"` : "";
           const countPart = (hasCount as boolean) ? "\n  showCount\n  maxCount={500}" : "";
           const reqPart = (required as boolean) ? "\n  required" : "";
-          const statePart = s !== "default" ? `\n  forceState="${s}"` : "";
-          const errPart = s === "error" ? '\n  errorMessage="Error message"' : "";
           return {
             preview: (
               <TextAreaPreview
-                state={s}
+                forceState={forceState}
                 helperText={helperText}
                 showCount={hasCount as boolean}
                 required={required as boolean}
