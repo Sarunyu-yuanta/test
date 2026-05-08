@@ -1,101 +1,71 @@
 import {
-  StatusTag,
   Tag,
-  type StatusTagType,
   type TagSize,
   type TagState,
   type TagVariant,
 } from "@/components/tag";
-
-const sizes: TagSize[] = ["large", "small"];
-const states: { label: string; value: TagState }[] = [
-  { label: "Default", value: "default" },
-  { label: "Hover/Pressed", value: "hover" },
-  { label: "Disable", value: "disabled" },
-];
-
-const variants: {
-  key: string;
-  label: string;
-  icon: boolean;
-  close: boolean;
-}[] = [
-  { key: "text", label: "Text", icon: false, close: false },
-  { key: "icon", label: "Icon", icon: true, close: false },
-  { key: "close", label: "Close", icon: false, close: true },
-];
-
-const colorVariants: { label: string; value: TagVariant }[] = [
-  { label: "Blue", value: "blue" },
-  { label: "Green", value: "green" },
-  { label: "Yellow", value: "yellow" },
-  { label: "Red", value: "red" },
-  { label: "Gray", value: "gray" },
-  { label: "Lime", value: "lime" },
-];
-
-const statusTagTypes: StatusTagType[] = ["stop", "success", "hold", "processing", "error"];
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
 export function TagShowcase() {
   return (
-    <div className="bg-background min-h-full">
-      <h1 className="mb-1">Tag Component</h1>
-      <p className="text-muted-foreground mb-10">Size x State x Variant</p>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Status Tag (Figma)</h2>
-        <div className="flex flex-wrap items-center gap-8">
-          {statusTagTypes.map((type) => (
-            <StatusTag key={type} type={type} />
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Figma Color Variants</h2>
-        <div className="flex flex-wrap gap-4">
-          {colorVariants.map((variant) => (
-            <Tag key={variant.value} text={variant.label} variant={variant.value} />
-          ))}
-        </div>
-      </section>
-
-      {sizes.map((size) => (
-        <section key={size} className="mb-12">
-          <h2 className="mb-5 text-[18px]">
-            {size === "large" ? "Large" : "Small"}
-          </h2>
-
-          <div className="grid grid-cols-4 gap-x-8 gap-y-4 mb-4">
-            <div />
-            {states.map((state) => (
-              <p
-                key={`${size}-${state.value}-header`}
-                className="text-[12px] text-muted-foreground uppercase tracking-wider"
-              >
-                {state.label}
-              </p>
-            ))}
-          </div>
-
-          {variants.map((variant) => (
-            <div key={`${size}-${variant.key}`} className="grid grid-cols-4 gap-x-8 items-center mb-4">
-              <p className="text-[13px] text-muted-foreground">{variant.label}</p>
-              {states.map((state) => (
-                <div key={`${size}-${variant.key}-${state.value}`} className="flex items-center">
-                  <Tag
-                    text="Tag"
-                    size={size}
-                    state={state.value}
-                    icon={variant.icon}
-                    close={variant.close}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </section>
-      ))}
-    </div>
+    <ShowcasePage
+      name="Tag"
+      description="Status tags and color variants with size × state × variant matrix."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "variant",
+            label: "Color",
+            options: [
+              { label: "blue", value: "blue" },
+              { label: "green", value: "green" },
+              { label: "yellow", value: "yellow" },
+              { label: "red", value: "red" },
+              { label: "gray", value: "gray" },
+              { label: "lime", value: "lime" },
+            ],
+            defaultValue: "blue",
+          },
+          {
+            type: "select",
+            key: "size",
+            label: "Size",
+            options: [{ label: "large", value: "large" }, { label: "small", value: "small" }],
+            defaultValue: "large",
+          },
+          {
+            type: "select",
+            key: "state",
+            label: "State",
+            options: [
+              { label: "default", value: "default" },
+              { label: "hover", value: "hover" },
+              { label: "disabled", value: "disabled" },
+            ],
+            defaultValue: "default",
+          },
+          { type: "boolean", key: "icon", label: "Icon", defaultValue: false },
+          { type: "boolean", key: "close", label: "Close btn", defaultValue: false },
+        ]}
+        render={({ variant, size, state, icon, close }) => {
+          const st = state as TagState;
+          const s = size as TagSize;
+          const v = variant as TagVariant;
+          const ic = icon as boolean;
+          const cl = close as boolean;
+          const statePart = st !== "default" ? `\n  state="${st}"` : "";
+          const iconPart = ic ? "\n  icon" : "";
+          const closePart = cl ? "\n  close" : "";
+          return {
+            preview: <Tag text="Tag" variant={v} size={s} state={st} icon={ic} close={cl} />,
+            code: `<Tag\n  text="Tag"\n  variant="${v}"\n  size="${s}"${statePart}${iconPart}${closePart}\n/>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }

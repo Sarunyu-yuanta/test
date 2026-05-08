@@ -30,6 +30,10 @@ export { Breadcrumb } from "./components/breadcrumb";
 export { Pagination, PaginationBanner, PaginationCarousel } from "./components/pagination";
 export { Tooltip } from "./components/tooltip";
 export { Popover } from "./components/popover";
+export { Slider } from "./components/slider";
+export { LinearProgress, CircleProgress } from "./components/progress";
+export { UploadArea, UploadItem } from "./components/upload";
+export { List, ListItem } from "./components/list";
 
 // Utilities
 export { cn } from "./lib/utils";
@@ -218,6 +222,18 @@ export type { TooltipSide, TooltipAlign, TooltipProps } from "./components/toolt
 // Types — Popover
 export type { PopoverSide, PopoverAlign, PopoverProps } from "./components/popover";
 
+// Types — Slider
+export type { SliderSize, SliderType, SliderProps } from "./components/slider";
+
+// Types — Progress
+export type { LinearProgressProps, CircleProgressSize, CircleProgressProps } from "./components/progress";
+
+// Types — Upload
+export type { UploadAreaProps, UploadItemVariant, UploadItemStatus, UploadItemProps } from "./components/upload";
+
+// Types — List
+export type { ListItemProps, ListProps } from "./components/list";
+
 // Default export — for tools that do `import SystemOne from '@sarunyu/system-one'`
 import { Button } from "./components/button";
 import { Badge } from "./components/badge";
@@ -248,6 +264,10 @@ import { Breadcrumb } from "./components/breadcrumb";
 import { Pagination, PaginationBanner, PaginationCarousel } from "./components/pagination";
 import { Tooltip } from "./components/tooltip";
 import { Popover } from "./components/popover";
+import { Slider } from "./components/slider";
+import { LinearProgress, CircleProgress } from "./components/progress";
+import { UploadArea, UploadItem } from "./components/upload";
+import { List, ListItem } from "./components/list";
 import { cn } from "./lib/utils";
 import { useIsMobile } from "./components/ui/use-mobile";
 export default {
@@ -255,5 +275,9 @@ export default {
   DateInput, Dropdown, DropdownMultiple, Input, Modal, Notification,
   Toast, ToastStack, Toaster, BottomSheet, OptionList, SearchInput,
   Tab, TabGroup, Tag, StatusTag, Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
-  TextArea, TimeInput, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel, Tooltip, Popover, cn, useIsMobile,
+  TextArea, TimeInput, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel,   Tooltip, Popover, Slider,
+  LinearProgress, CircleProgress,
+  UploadArea, UploadItem,
+  List, ListItem,
+  cn, useIsMobile,
 };

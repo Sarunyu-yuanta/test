@@ -1,134 +1,51 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { SearchInput } from "@/components/search-input";
-import { OptionList, OptionItem } from "@/components/option-list";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
-
-const SAMPLE_OPTIONS: OptionItem[] = Array.from(
-  { length: 12 },
-  (_, i) => ({
-    label: `Option List ${i + 1}`,
-    value: String(i + 1),
-  }),
-);
+function SearchInputPreview({ size }: { size: "lg" | "sm" }) {
+  const [value, setValue] = useState("");
+  return (
+    <div className="w-[280px]">
+      <SearchInput
+        value={value}
+        onChange={setValue}
+        placeholder="Search..."
+        size={size}
+      />
+    </div>
+  );
+}
 
 export function SearchInputShowcase() {
-  const [searchVal, setSearchVal] = useState("");
-  const [selectedVal, setSelectedVal] = useState("");
-  const [open, setOpen] = useState(false);
-  const [size, setSize] = useState<"lg" | "sm">("lg");
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const filtered = searchVal.trim()
-    ? SAMPLE_OPTIONS.filter((o) =>
-        o.label
-          .toLowerCase()
-          .includes(searchVal.trim().toLowerCase()),
-      )
-    : SAMPLE_OPTIONS;
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () =>
-      document.removeEventListener("mousedown", handler);
-  }, [open]);
-
-  const handleSelect = (val: string) => {
-    setSelectedVal(val);
-    const label =
-      SAMPLE_OPTIONS.find((o) => o.value === val)?.label ?? "";
-    setSearchVal(label);
-    setOpen(false);
-  };
-
-  const handleSearchChange = (val: string) => {
-    setSearchVal(val);
-    if (!open) setOpen(true);
-  };
-
-  const handleClear = () => {
-    setSearchVal("");
-    setSelectedVal("");
-    setOpen(false);
-  };
-
   return (
-    <div className="bg-background min-h-full">
-      <h1 className="mb-1" style={FONT}>
-        Search Input Component
-      </h1>
-      <p
-        className="text-muted-foreground mb-12 text-[14px]"
-        style={FONT}
-      >
-        Interactive Playground
-      </p>
-
-      <h2 className="mb-2" style={FONT}>
-        Interactive
-      </h2>
-      <p
-        className="text-muted-foreground mb-8 text-[13px]"
-        style={FONT}
-      >
-        Click input, type to filter, and select an option
-      </p>
-
-      <div className="flex gap-10 items-start pl-2 pb-2">
-        <div
-          ref={containerRef}
-          className="w-[343px] shrink-0 flex flex-col"
-        >
-          <SearchInput
-            placeholder="Placeholder"
-            value={searchVal}
-            onChange={handleSearchChange}
-            onClear={handleClear}
-            size={size}
-          />
-          {open && (
-            <OptionList
-              options={filtered}
-              selectedValue={selectedVal}
-              onSelect={handleSelect}
-              className="mt-[4px]"
-            />
-          )}
-        </div>
-
-        <div
-          className="flex flex-wrap gap-x-6 gap-y-3 text-[13px]"
-          style={FONT}
-        >
-          <label className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
-            <input
-              type="checkbox"
-              checked={size === "lg"}
-              onChange={() => setSize("lg")}
-              className="accent-primary-action w-[16px] h-[16px]"
-            />
-            lg
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer select-none text-nav-link">
-            <input
-              type="checkbox"
-              checked={size === "sm"}
-              onChange={() => setSize("sm")}
-              className="accent-primary-action w-[16px] h-[16px]"
-            />
-            sm
-          </label>
-        </div>
-      </div>
-    </div>
+    <ShowcasePage
+      name="Search Input"
+      description="Search field with optional dropdown autocomplete and keyboard navigation."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "size",
+            label: "Size",
+            options: [
+              { label: "lg", value: "lg" },
+              { label: "sm", value: "sm" },
+            ],
+            defaultValue: "lg",
+          },
+        ]}
+        render={({ size }) => {
+          const s = size as "lg" | "sm";
+          const sizePart = s !== "lg" ? `\n  size="${s}"` : "";
+          return {
+            preview: <SearchInputPreview size={s} />,
+            code: `const [search, setSearch] = useState("")\n\n<SearchInput\n  value={search}\n  onChange={setSearch}\n  placeholder="Search..."${sizePart}\n/>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }

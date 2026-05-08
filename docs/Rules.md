@@ -699,3 +699,36 @@ Only one `<Popover>` should be visible at a time. Rendering multiple open popove
 | **Don't** | Avoid placing the popover in a direction that consistently clips or overflows the viewport edge, forcing users to scroll to see the content. / หลีกเลี่ยงการวาง Popover ในทิศที่ทำให้เนื้อหาเกินขอบหน้าจอหรือถูกตัดออก |
 
 Select placement values based on the trigger's actual position in the layout. The Radix UI engine auto-adjusts within the viewport, but setting a sensible `side` default avoids jarring repositioning for most users.
+
+---
+
+## Slider
+
+
+### Rule 1 — Component Integrity
+
+|| | |
+|---|---|
+| **Do** | Use Slider according to the layout defined by the Design System. / ใช้ Slider ตาม Layout ที่ Design System ที่กำหนด |
+| **Don't** | Avoid adjusting Height, Padding, colors, or any modification that deviates from the defined layout, because it causes inconsistent rendering across the system and confuses users. / หลีกเลี่ยงการปรับ Height, Padding, สี หรือปรับรูปแบบที่ทำให้เกิดความแตกต่างจากรูปแบบที่กำหนดไว้ เพราะทำให้การแสดงผลไม่สม่ำเสมอทั้งระบบและทำให้ผู้ใช้สับสนเมื่อใช้งาน |
+
+Always use `<Slider>` from `@sarunyu/system-one` without overriding its track height, padding, thumb size, or token-based colors. The three defined sizes (`sm` / `md` / `lg`) and their corresponding track and thumb dimensions are fixed — do not detach or recreate the component to apply custom styling.
+
+---
+
+### Rule 2 — Match Slider Type to Use Case
+
+|| | |
+|---|---|
+| **Do** | Use the Slider type that matches the intended interaction purpose. / ใช้ Slider ให้ตรงตามวัตถุประสงค์การใช้งานที่กำหนด |
+| **Don't** | Avoid using the wrong Slider type for the use case — for example, using Fixed Slide when the user needs to freely adjust a value (Free Slide). / หลีกเลี่ยงการใช้ Slider ไม่ตรงตามวัตถุประสงค์ที่กำหนดไว้ เช่น กรณีที่ต้องให้ผู้ใช้ปรับค่าได้อย่างอิสระ (Free Slide) แต่เลือกใช้ Slider แบบ Fixed Slide |
+
+Choose the `type` and `showSteps` props based on the actual interaction requirement:
+
+- **`type="single"`** — when the user selects one continuous value (e.g., budget amount, volume level). Use this as the default free-slide mode.
+- **`type="range"`** — when the user selects a min/max range (e.g., price range filter).
+- **`showSteps`** — add step labels only when the value must snap to specific points (e.g., 25 / 50 / 75 / 100). Do not use `showSteps` in contexts where continuous, free-form input is expected.
+
+Mismatching the slider type to the interaction model reduces control precision and leads to user errors.
+
+---

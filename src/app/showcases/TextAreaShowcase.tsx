@@ -1,259 +1,83 @@
-import React, { useState } from "react";
-import { TextArea, TextAreaState } from "@/components/textarea";
+import { useState } from "react";
+import { TextArea, type TextAreaState } from "@/components/textarea";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
-
-const STATES: { label: string; state: TextAreaState }[] = [
-  { label: "Default", state: "default" },
-  { label: "Focus", state: "focus" },
-  { label: "Error", state: "error" },
-  { label: "Disabled", state: "disabled" },
-];
-
-interface RowDef {
-  label: string;
+function TextAreaPreview({
+  state,
+  helperText,
+  showCount,
+  required,
+}: {
+  state: TextAreaState;
   helperText?: string;
-  showCount?: boolean;
-}
-interface GroupDef {
-  title: string;
-  rows: RowDef[];
-}
-
-const GROUPS: GroupDef[] = [
-  {
-    title: "1. Default",
-    rows: [{ label: "Default" }],
-  },
-  {
-    title: "2. Helper + Count",
-    rows: [
-      {
-        label: "Default",
-        helperText: "Helper text",
-        showCount: true,
-      },
-    ],
-  },
-  {
-    title: "3. Count",
-    rows: [{ label: "Default", showCount: true }],
-  },
-  {
-    title: "4. Helper",
-    rows: [{ label: "Default", helperText: "Helper text" }],
-  },
-];
-
-function ColHeaders() {
-  return (
-    <div className="flex items-center gap-6 mb-5 pl-[120px]">
-      {STATES.map(({ label }) => (
-        <div
-          key={label}
-          className="w-[280px] text-[11px] text-caption uppercase tracking-wider"
-          style={FONT}
-        >
-          {label}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function ShowcaseRow({
-  row,
-  filledValue,
-}: {
-  row: RowDef;
-  filledValue?: string;
+  showCount: boolean;
+  required: boolean;
 }) {
+  const [value, setValue] = useState("");
   return (
-    <div className="flex items-start gap-6 mb-7">
-      <div
-        className="w-[108px] shrink-0 text-[13px] text-muted-foreground pt-[14px]"
-        style={FONT}
-      >
-        {row.label}
-      </div>
-
-      {STATES.map(({ state }) => (
-        <div key={state} className="w-[280px] shrink-0">
-          <TextArea
-            forceState={state}
-            placeholder="Text label"
-            value={filledValue}
-            helperText={row.helperText}
-            showCount={row.showCount}
-            errorMessage="Error message"
-          />
-        </div>
-      ))}
+    <div className="w-[320px]">
+      <TextArea
+        placeholder="Enter your message..."
+        value={value}
+        onChange={setValue}
+        forceState={state !== "default" ? state : undefined}
+        helperText={helperText}
+        showCount={showCount}
+        maxCount={500}
+        required={required}
+        errorMessage="Error message"
+      />
     </div>
-  );
-}
-
-function GroupBlock({
-  group,
-  filledValue,
-  isLast,
-}: {
-  group: GroupDef;
-  filledValue?: string;
-  isLast: boolean;
-}) {
-  return (
-    <>
-      <div
-        className="mb-5 text-[13px] text-nav-link"
-        style={{ ...FONT, fontWeight: 600 }}
-      >
-        {group.title}
-      </div>
-      <div className="flex flex-col">
-        {group.rows.map((row) => (
-          <ShowcaseRow
-            key={`${group.title}-${row.label}`}
-            row={row}
-            filledValue={filledValue}
-          />
-        ))}
-      </div>
-      {!isLast && (
-        <div className="border-t border-divider my-8" />
-      )}
-    </>
   );
 }
 
 export function TextAreaShowcase() {
-  const [interVal, setInterVal] = useState("");
-  const [helper, setHelper] = useState(false);
-  const [count, setCount] = useState(false);
-  const [required, setRequired] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  const forceState = isDisabled
-    ? ("disabled" as const)
-    : isError
-      ? ("error" as const)
-      : undefined;
-
   return (
-    <div className="bg-background min-h-full">
-      <h1 className="mb-1" style={FONT}>
-        Text Area Component
-      </h1>
-      <p
-        className="text-muted-foreground mb-12 text-[14px]"
-        style={FONT}
-      >
-        Variants × States
-      </p>
-
-      <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="min-w-max">
-          {/* ── Empty ── */}
-          <div
-            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
-            style={FONT}
-          >
-            Empty
-          </div>
-          <ColHeaders />
-          {GROUPS.map((group, gi) => (
-            <GroupBlock
-              key={group.title}
-              group={group}
-              isLast={gi === GROUPS.length - 1}
-            />
-          ))}
-
-          {/* ── Divider ── */}
-          <div className="border-t-2 border-divider my-12" />
-
-          {/* ── Filled ── */}
-          <div
-            className="mb-3 text-[11px] text-caption uppercase tracking-wider"
-            style={FONT}
-          >
-            Filled
-          </div>
-          <ColHeaders />
-          {GROUPS.map((group, gi) => (
-            <GroupBlock
-              key={`filled-${group.title}`}
-              group={group}
-              filledValue="Filled message"
-              isLast={gi === GROUPS.length - 1}
-            />
-          ))}
-
-          {/* ── Divider ── */}
-          <div className="border-t-2 border-divider my-12" />
-
-          {/* ── Interactive ── */}
-          <h2 className="mb-2" style={FONT}>
-            Interactive
-          </h2>
-          <p
-            className="text-muted-foreground mb-8 text-[13px]"
-            style={FONT}
-          >
-            Type into the textarea and toggle options to see
-            live behaviour
-          </p>
-
-          <div className="flex gap-10 items-start pl-2 pb-2">
-            <div className="w-[343px] shrink-0">
-              <TextArea
-                placeholder="Text label"
-                value={interVal}
-                onChange={setInterVal}
-                required={required}
-                forceState={forceState}
-                helperText={helper ? "Helper text" : undefined}
-                showCount={count}
-                maxCount={100}
-                errorMessage="Error message"
+    <ShowcasePage
+      name="Text Area"
+      description="Multi-line text input with states, helper text, and character count."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "state",
+            label: "State",
+            options: [
+              { label: "default", value: "default" },
+              { label: "focus", value: "focus" },
+              { label: "error", value: "error" },
+              { label: "disabled", value: "disabled" },
+            ],
+            defaultValue: "default",
+          },
+          { type: "boolean", key: "hasHelper", label: "Helper text", defaultValue: false },
+          { type: "boolean", key: "hasCount", label: "Count", defaultValue: false },
+          { type: "boolean", key: "required", label: "Required", defaultValue: false },
+        ]}
+        render={({ state, hasHelper, hasCount, required }) => {
+          const s = state as TextAreaState;
+          const helperText = (hasHelper as boolean) ? "Helper text" : undefined;
+          const helperPart = helperText ? `\n  helperText="${helperText}"` : "";
+          const countPart = (hasCount as boolean) ? "\n  showCount\n  maxCount={500}" : "";
+          const reqPart = (required as boolean) ? "\n  required" : "";
+          const statePart = s !== "default" ? `\n  forceState="${s}"` : "";
+          const errPart = s === "error" ? '\n  errorMessage="Error message"' : "";
+          return {
+            preview: (
+              <TextAreaPreview
+                state={s}
+                helperText={helperText}
+                showCount={hasCount as boolean}
+                required={required as boolean}
               />
-            </div>
-
-            <div
-              className="flex flex-wrap gap-x-6 gap-y-3 text-[13px]"
-              style={FONT}
-            >
-              {(
-                [
-                  ["Helper", helper, setHelper],
-                  ["Count", count, setCount],
-                  ["Required", required, setRequired],
-                  ["Error", isError, setIsError],
-                  ["Disabled", isDisabled, setIsDisabled],
-                ] as [
-                  string,
-                  boolean,
-                  React.Dispatch<React.SetStateAction<boolean>>,
-                ][]
-              ).map(([label, val, setter]) => (
-                <label
-                  key={label}
-                  className="flex items-center gap-2 cursor-pointer select-none text-nav-link"
-                >
-                  <input
-                    type="checkbox"
-                    checked={val}
-                    onChange={() => setter(!val)}
-                    className="accent-primary-action w-[16px] h-[16px]"
-                  />
-                  {label}
-                </label>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            ),
+            code: `const [value, setValue] = useState("")\n\n<TextArea\n  placeholder="Enter your message..."\n  value={value}\n  onChange={setValue}${statePart}${errPart}${helperPart}${countPart}${reqPart}\n/>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }

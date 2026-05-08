@@ -7,6 +7,8 @@ import {
   Dropdown, DropdownMultiple, OptionList,
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
+  Slider,
+  UploadArea, UploadItem,
   Avatar, AvatarStack,
   Breadcrumb,
   Pagination, PaginationBanner, PaginationCarousel,
@@ -15,11 +17,13 @@ import {
   Tab, TabGroup,
   Card,
   Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell,
+  LinearProgress, CircleProgress,
   Alert,
   Toast, Toaster,
   Notification,
   Badge,
   Modal, BottomSheet,
+  List, ListItem,
   cn, useIsMobile,
 } from "@sarunyu/system-one";
 ```
@@ -30,7 +34,7 @@ Sizes: `xs` `sm` `md` (desktop default) `lg` `xl` (mobile default) + icon varian
 
 ```tsx
 <Button variant="primary" size="md" leftIcon={<Plus />}>Add item</Button>
-<Button size="icon-md" aria-label="Settings"><Gear /></Button>
+<Button size="icon-md" aria-label="Settings"><GearIcon /></Button>
 ```
 
 ## Input / TextArea
@@ -371,7 +375,7 @@ Dark-bubble hint shown on hover. `children` = trigger element; `content` = bubbl
 
 ```tsx
 <Tooltip content="Delete this item">
-  <Button variant="outline" size="icon-md" aria-label="Delete"><Trash size={16} /></Button>
+  <Button variant="outline" size="icon-md" aria-label="Delete"><TrashIcon size={16} /></Button>
 </Tooltip>
 ```
 
@@ -413,3 +417,74 @@ Props:
 - `open` — controlled open state
 - `onOpenChange` — `(open: boolean) => void`
 - `className?` — layout-only classes on the panel bubble
+
+## Slider
+Range input in three track heights, single-thumb or two-thumb range. Never `<input type="range">`.
+
+```tsx
+// Single thumb
+const [value, setValue] = useState(50)
+<Slider value={value} onChange={setValue} />
+<Slider size="sm" value={value} onChange={setValue} />
+<Slider size="lg" showSteps value={value} onChange={setValue} />
+<Slider disabled value={value} onChange={setValue} />
+
+// Two-thumb range
+const [range, setRange] = useState<[number, number]>([25, 75])
+<Slider type="range" rangeValue={range} onRangeChange={setRange} />
+```
+
+Props: `size` (`"sm"` 4px | `"md"` 8px default | `"lg"` 12px), `type` (`"single"` default | `"range"`), `disabled`, `showSteps`, `min` (default 0), `max` (default 100), `step` (default 1), `value`, `rangeValue: [number, number]`, `defaultValue` (50), `defaultRangeValue` ([25, 75]), `onChange(value)`, `onRangeChange([start, end])`, `className`.
+
+## LinearProgress / CircleProgress
+Deterministic progress indicators. `value` is 0–100 (clamped). Never `<progress>` HTML.
+
+```tsx
+<LinearProgress value={65} />
+<LinearProgress value={30} className="w-64" />
+
+<CircleProgress value={75} />           // lg (128 px, default) — shows % label
+<CircleProgress value={50} size="md" /> // md (48 px) — shows % label
+<CircleProgress value={30} size="sm" /> // sm (24 px) — arc only, no label
+```
+
+Props `LinearProgress`: `value`, `className`.
+Props `CircleProgress`: `value`, `size` (`"sm"` | `"md"` | `"lg"` default), `className`.
+
+## UploadArea / UploadItem
+Upload dropzone and per-file status rows. Never hand-roll dashed upload areas.
+
+```tsx
+const inputRef = useRef<HTMLInputElement>(null)
+<UploadArea onClick={() => inputRef.current?.click()} />
+<UploadArea disabled />
+
+// Text variant — compact inline row
+<UploadItem variant="text" status="loading" fileName="report.pdf" progress={42} />
+<UploadItem variant="text" status="success" fileName="report.pdf" onDelete={handleDelete} />
+<UploadItem variant="text" status="error"   fileName="report.pdf" errorText="File too large" onDelete={handleDelete} />
+
+// Card variant — bordered card with file size + separate delete button
+<UploadItem variant="card" status="loading" fileName="photo.png" fileSize="1.66KB" progress={42} />
+<UploadItem variant="card" status="success" fileName="photo.png" fileSize="1.66KB" onDelete={handleDelete} />
+<UploadItem variant="card" status="error"   fileName="photo.png" fileSize="1.66KB" errorText="Upload failed" onDelete={handleDelete} />
+```
+
+Props `UploadArea`: `disabled`, `label` (default `"อัปโหลดไฟล์"`), plus native `<div>` props.
+Props `UploadItem`: `variant` (`"text"` default | `"card"`), `status` (`"loading"` | `"success"` | `"error"`), `fileName`, `fileSize` (card only), `errorText`, `progress` (0–100), `onDelete`, `className`.
+
+## List / ListItem
+
+Vertical list of rows with optional leading icon, action link, and trailing element. Never hand-roll `<ul>` / `<li>` rows for this pattern.
+
+```tsx
+<List>
+  <ListItem label="Settings" />
+  <ListItem label="Profile" leading={<UserIcon size={24} />} />
+  <ListItem label="Documents" trailing={<CaretRightIcon size={24} />} onClick={() => navigate("/docs")} />
+  <ListItem label="Account" action="Edit" onAction={openEdit} />
+</List>
+```
+
+Props `ListItem`: `label` (required), `leading?` (ReactNode — left slot, icon or avatar), `trailing?` (ReactNode — right slot), `action?` (string — link label on the right), `onAction?` (fires when action is clicked), `highlighted?` (gray background), `onClick?` (makes row tappable — press state applied automatically), `className`.
+Props `List`: `children`, `className`.

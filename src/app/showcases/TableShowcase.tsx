@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import {
-  Briefcase as BriefcaseIcon,
-  Check as CheckIcon,
-  CheckCircle as CheckCircleIcon,
+  BriefcaseIcon,
+  CheckIcon,
+  CheckCircleIcon,
 } from "@phosphor-icons/react";
 import {
   Table,
@@ -10,167 +10,118 @@ import {
   TableHeaderCell,
   TableRow,
 } from "@/components/table";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const BASIC_USAGE_IMAGE =
+const IMAGE_SRC =
   "https://images.unsplash.com/photo-1740252117044-2af197eea287?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
-const MOCK_IMAGE =
-  "https://images.unsplash.com/photo-1719157704385-65e35e0f635c?q=80&w=400&auto=format&fit=crop";
+const BASE_ROWS = [
+  { id: "r-01", name: "Naris",      role: "Product Designer",  status: "Active" as const },
+  { id: "r-02", name: "Ariya",      role: "Frontend Engineer", status: "Leave"  as const },
+  { id: "r-03", name: "Pimchanok",  role: "Data Analyst",      status: "Active" as const },
+  { id: "r-04", name: "Thanawat",   role: "Product Owner",     status: "Leave"  as const },
+];
 
-export function TableShowcase() {
-  const rows = Array.from({ length: 10 }, (_, i) => `Text label ${i + 1}`);
+function TablePreview({
+  selectable,
+  sortable,
+}: {
+  selectable: boolean;
+  sortable: boolean;
+}) {
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
   const [sortKey, setSortKey] = useState<"name" | "status" | "none">("none");
-  const [sortDirection, setSortDirection] = useState<"none" | "asc" | "desc">("none");
+  const [sortDir, setSortDir] = useState<"none" | "asc" | "desc">("none");
 
-  const baseRows = useMemo(
-    () => [
-      {
-        id: "r-01",
-        name: "Naris",
-        role: "Product Designer",
-        status: "Active" as const,
-      },
-      {
-        id: "r-02",
-        name: "Ariya",
-        role: "Frontend Engineer",
-        status: "Leave" as const,
-      },
-      {
-        id: "r-03",
-        name: "Pimchanok",
-        role: "Data Analyst",
-        status: "Active" as const,
-      },
-      {
-        id: "r-04",
-        name: "Thanawat",
-        role: "Product Owner",
-        status: "Leave" as const,
-      },
-    ],
-    [],
-  );
-
-  const basicRows = useMemo(() => {
-    if (sortDirection === "none" || sortKey === "none") return baseRows;
-    const sorted = [...baseRows].sort((a, b) =>
-      sortKey === "name"
-        ? a.name.localeCompare(b.name)
-        : a.status.localeCompare(b.status),
+  const rows = useMemo(() => {
+    if (sortDir === "none" || sortKey === "none") return BASE_ROWS;
+    const sorted = [...BASE_ROWS].sort((a, b) =>
+      sortKey === "name" ? a.name.localeCompare(b.name) : a.status.localeCompare(b.status),
     );
-    return sortDirection === "asc" ? sorted : sorted.reverse();
-  }, [baseRows, sortDirection, sortKey]);
+    return sortDir === "asc" ? sorted : sorted.reverse();
+  }, [sortKey, sortDir]);
 
-  const allSelected =
-    basicRows.length > 0 && selectedRowIds.length === basicRows.length;
+  const allSelected = rows.length > 0 && selectedRowIds.length === rows.length;
   const someSelected = selectedRowIds.length > 0 && !allSelected;
 
+  const toggleRow = (id: string) =>
+    setSelectedRowIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+    );
+
   return (
-    <div className="bg-background min-h-full space-y-10">
-      <h2 className="text-[16px] text-nav-link">Basic Usage</h2>
+    <div className="overflow-x-auto [scrollbar-width:none] w-full">
       <section
-        className="space-y-4 rounded-[12px] p-0 overflow-hidden"
-        style={{
-          boxShadow:
-            "0 0 2px 0 rgba(102, 102, 102, 0.16), 0 4px 8px 0 rgba(102, 102, 102, 0.12)",
-        }}
+        className="rounded-[12px] overflow-hidden"
+        style={{ boxShadow: "0 0 2px 0 rgba(102,102,102,0.16), 0 4px 8px 0 rgba(102,102,102,0.12)" }}
       >
-        <Table className="min-w-[1136px]">
+        <Table className="min-w-[800px]">
           <thead>
             <TableRow>
-              <TableHeaderCell
-                type="check"
-                fixed="left"
-                fixedOffset={0}
-                checkState={
-                  allSelected ? true : someSelected ? "indeterminate" : false
-                }
-                onCheckChange={(next) => {
-                  setSelectedRowIds(next ? basicRows.map((r) => r.id) : []);
-                }}
-              />
+              {selectable && (
+                <TableHeaderCell
+                  type="check"
+                  fixed="left"
+                  fixedOffset={0}
+                  checkState={allSelected ? true : someSelected ? "indeterminate" : false}
+                  onCheckChange={(next) =>
+                    setSelectedRowIds(next ? rows.map((r) => r.id) : [])
+                  }
+                />
+              )}
               <TableHeaderCell
                 type="icon"
                 fixed="left"
-                fixedOffset={56}
-                icon={
-                  <CheckIcon
-                    size={20}
-                    weight="regular"
-                    className="text-subtle-text"
-                  />
-                }
+                fixedOffset={selectable ? 56 : 0}
+                icon={<CheckIcon size={20} weight="regular" className="text-subtle-text" />}
               />
               <TableHeaderCell>Profile</TableHeaderCell>
               <TableHeaderCell
-                sortDirection={sortKey === "name" ? sortDirection : "none"}
-                onSortChange={(next) => {
-                  setSortKey(next === "none" ? "none" : "name");
-                  setSortDirection(next);
-                }}
+                sortDirection={sortable && sortKey === "name" ? sortDir : "none"}
+                onSortChange={sortable ? (next) => { setSortKey(next === "none" ? "none" : "name"); setSortDir(next); } : undefined}
               >
                 User
               </TableHeaderCell>
               <TableHeaderCell>Action</TableHeaderCell>
               <TableHeaderCell
-                sortDirection={sortKey === "status" ? sortDirection : "none"}
-                onSortChange={(next) => {
-                  setSortKey(next === "none" ? "none" : "status");
-                  setSortDirection(next);
-                }}
+                sortDirection={sortable && sortKey === "status" ? sortDir : "none"}
+                onSortChange={sortable ? (next) => { setSortKey(next === "none" ? "none" : "status"); setSortDir(next); } : undefined}
               >
                 Status
               </TableHeaderCell>
             </TableRow>
           </thead>
           <tbody>
-            {basicRows.map((row) => {
+            {rows.map((row) => {
               const checked = selectedRowIds.includes(row.id);
               return (
                 <TableRow key={row.id} selected={checked} hoverable>
-                  <TableCell
-                    type="checkbox"
-                    fixed="left"
-                    fixedOffset={0}
-                    onClick={() =>
-                      setSelectedRowIds((prev) =>
-                        checked
-                          ? prev.filter((id) => id !== row.id)
-                          : [...prev, row.id],
-                      )
-                    }
-                  />
+                  {selectable && (
+                    <TableCell
+                      type="checkbox"
+                      fixed="left"
+                      fixedOffset={0}
+                      onClick={() => toggleRow(row.id)}
+                    />
+                  )}
                   <TableCell
                     type="icon"
                     fixed="left"
-                    fixedOffset={56}
-                    icon={
-                      <CheckCircleIcon
-                        size={20}
-                        weight="regular"
-                        className="text-subtle-text"
-                      />
-                    }
+                    fixedOffset={selectable ? 56 : 0}
+                    icon={<CheckCircleIcon size={20} weight="regular" className="text-subtle-text" />}
                   />
                   <TableCell
                     type="text-icon"
                     label={row.role}
-                    icon={
-                      <BriefcaseIcon
-                        size={20}
-                        weight="regular"
-                        className="text-subtle-text"
-                      />
-                    }
+                    icon={<BriefcaseIcon size={20} weight="regular" className="text-subtle-text" />}
                   />
                   <TableCell
                     type="text-image"
                     textStyle="bold-description"
                     label={row.name}
                     description="Team Member"
-                    imageSrc={BASIC_USAGE_IMAGE}
+                    imageSrc={IMAGE_SRC}
                   />
                   <TableCell type="button" contentAlign="start" />
                   <TableCell
@@ -184,253 +135,58 @@ export function TableShowcase() {
           </tbody>
         </Table>
       </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[16px] text-nav-link">Header Types + States</h2>
-        <Table>
-          <thead>
-            <TableRow>
-              <TableHeaderCell type="text" state="default" />
-              <TableHeaderCell type="icon" state="default" />
-              <TableHeaderCell type="check" state="default" />
-              <TableHeaderCell type="text" state="hover" />
-              <TableHeaderCell type="icon" state="hover" />
-              <TableHeaderCell type="check" state="hover" />
-              <TableHeaderCell type="text" state="disabled" />
-              <TableHeaderCell type="icon" state="disabled" />
-              <TableHeaderCell type="check" state="disabled" />
-            </TableRow>
-            <TableRow>
-              <TableHeaderCell type="text" sortable={false}>
-                Sort Off
-              </TableHeaderCell>
-              <TableHeaderCell type="text" fixed="left">
-                Sticky Left
-              </TableHeaderCell>
-              <TableHeaderCell type="text" fixed="right">
-                Sticky Right
-              </TableHeaderCell>
-              <TableHeaderCell type="text" fixed="left" fixedOffset={56}>
-                Left + Offset
-              </TableHeaderCell>
-              <TableHeaderCell type="text" fixedShadow="left">
-                Shadow Left
-              </TableHeaderCell>
-              <TableHeaderCell type="text" fixedShadow="right">
-                Shadow Right
-              </TableHeaderCell>
-            </TableRow>
-          </thead>
-        </Table>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[16px] text-nav-link">Cell Types + Text Styles</h2>
-        <Table>
-          <thead>
-            <TableRow>
-              <TableHeaderCell type="text">Default</TableHeaderCell>
-              <TableHeaderCell type="text">Hover</TableHeaderCell>
-              <TableHeaderCell type="text">Selected</TableHeaderCell>
-            </TableRow>
-          </thead>
-          <tbody>
-            <TableRow>
-              <TableCell type="default" label="Text label" />
-              <TableCell type="default" label="Text label" hovered />
-              <TableCell type="default" label="Text label" selected />
-            </TableRow>
-            <TableRow>
-              <TableCell type="default" textStyle="bold" label="Text label" />
-              <TableCell
-                type="default"
-                textStyle="bold"
-                label="Text label"
-                hovered
-              />
-              <TableCell
-                type="default"
-                textStyle="bold"
-                label="Text label"
-                selected
-              />
-            </TableRow>
-            <TableRow>
-              <TableCell
-                type="default"
-                textStyle="bold-description"
-                label="Text label"
-                description="Text Description"
-              />
-              <TableCell
-                type="default"
-                textStyle="bold-description"
-                label="Text label"
-                description="Text Description"
-                hovered
-              />
-              <TableCell
-                type="default"
-                textStyle="bold-description"
-                label="Text label"
-                description="Text Description"
-                selected
-              />
-            </TableRow>
-            <TableRow>
-              <TableCell
-                type="text-icon"
-                textStyle="default"
-                label="Text label"
-              />
-              <TableCell
-                type="text-image"
-                textStyle="bold"
-                label="Text label"
-                imageSrc={MOCK_IMAGE}
-                hovered
-              />
-              <TableCell
-                type="text-image"
-                textStyle="bold-description"
-                label="Text label"
-                description="Text Description"
-                imageSrc={MOCK_IMAGE}
-                selected
-              />
-            </TableRow>
-            <TableRow>
-              <TableCell type="tag" tagText="Tag" />
-              <TableCell type="button" hovered />
-              <TableCell type="checkbox" selected />
-            </TableRow>
-            <TableRow>
-              <TableCell type="icon" />
-              <TableCell type="checkbox" />
-              <TableCell type="button" />
-            </TableRow>
-          </tbody>
-        </Table>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[16px] text-nav-link">
-          Fixed Preview (Default vs Fixed)
-        </h2>
-        <div className="overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-w-[660px] items-start gap-[150px]">
-            <Table responsive={false} className="w-[284px]">
-              <thead>
-                <TableRow>
-                  <TableHeaderCell>Title text</TableHeaderCell>
-                </TableRow>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <TableRow key={`default-${row}`}>
-                    <TableCell label={row} />
-                  </TableRow>
-                ))}
-              </tbody>
-            </Table>
-
-            <div className="relative w-[284px]">
-              <Table responsive={false} className="w-[284px]">
-                <thead>
-                  <TableRow>
-                    <TableHeaderCell>Title text</TableHeaderCell>
-                  </TableRow>
-                </thead>
-                <tbody>
-                  {rows.map((row) => (
-                    <TableRow key={`fixed-${row}`}>
-                      <TableCell label={row} />
-                    </TableRow>
-                  ))}
-                </tbody>
-              </Table>
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute right-[-10px] top-0 h-full w-2.5"
-                style={{
-                  background:
-                    "linear-gradient(90deg, rgba(16,24,40,0.06) 0%, rgba(16,24,40,0.02) 40%, rgba(16,24,40,0.00) 100%)",
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[16px] text-nav-link">Sticky Behavior</h2>
-        <div className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <Table className="min-w-[1704px]">
-            <thead>
-              <TableRow>
-                <TableHeaderCell fixed="left">Fixed Left</TableHeaderCell>
-                <TableHeaderCell fixed="left" fixedOffset={284}>
-                  Left + Offset
-                </TableHeaderCell>
-                <TableHeaderCell>Col 3</TableHeaderCell>
-                <TableHeaderCell>Col 4</TableHeaderCell>
-                <TableHeaderCell>Col 5</TableHeaderCell>
-                <TableHeaderCell>Col 6</TableHeaderCell>
-                <TableHeaderCell fixed="right">Fixed Right</TableHeaderCell>
-              </TableRow>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <TableRow key={`sticky-${row}`}>
-                  <TableCell fixed="left" label={row} />
-                  <TableCell
-                    fixed="left"
-                    fixedOffset={284}
-                    label={`Offset ${row}`}
-                  />
-                  <TableCell label={`Value ${row}`} />
-                  <TableCell type="text-icon" label={row} />
-                  <TableCell
-                    type="text-image"
-                    label={row}
-                    imageSrc={MOCK_IMAGE}
-                  />
-                  <TableCell type="tag" tagText="Tag" />
-                  <TableCell
-                    fixed="right"
-                    type="checkbox"
-                    selected={row.endsWith("1")}
-                  />
-                </TableRow>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </section>
-
-      <section className="space-y-4">
-        <h2 className="text-[16px] text-nav-link">Shadow Utility Props</h2>
-        <Table responsive={false} className="w-[852px]">
-          <thead>
-            <TableRow>
-              <TableHeaderCell>Default</TableHeaderCell>
-              <TableHeaderCell fixedShadow="left">
-                fixedShadow Left
-              </TableHeaderCell>
-              <TableHeaderCell fixedShadow="right">
-                fixedShadow Right
-              </TableHeaderCell>
-            </TableRow>
-          </thead>
-          <tbody>
-            <TableRow>
-              <TableCell label="No shadow" />
-              <TableCell label="Shadow left class" fixedShadow="left" />
-              <TableCell label="Shadow right class" fixedShadow="right" />
-            </TableRow>
-          </tbody>
-        </Table>
-      </section>
     </div>
+  );
+}
+
+export function TableShowcase() {
+  return (
+    <ShowcasePage
+      name="Table"
+      description="Data table with sorting, selection, and action column support."
+    >
+      <ComponentPlayground
+        
+        previewClassName="!items-start !justify-start p-6"
+        controls={[
+          { type: "boolean", key: "selectable", label: "Selectable", defaultValue: true },
+          { type: "boolean", key: "sortable",   label: "Sortable",   defaultValue: true },
+        ]}
+        render={({ selectable, sortable }) => {
+          const sel = selectable as boolean;
+          const sor = sortable as boolean;
+          const checkboxHeader = sel
+            ? `\n      <TableHeaderCell type="check" checkState={allSelected ? true : someSelected ? "indeterminate" : false} onCheckChange={handleSelectAll} />`
+            : "";
+          const checkboxCell = sel
+            ? `\n          <TableCell type="checkbox" onClick={() => toggleRow(row.id)} />`
+            : "";
+          const sortNameProp = sor ? `\n        sortDirection={sortKey === "name" ? sortDir : "none"}\n        onSortChange={(next) => handleSort("name", next)}` : "";
+          const sortStatusProp = sor ? `\n        sortDirection={sortKey === "status" ? sortDir : "none"}\n        onSortChange={(next) => handleSort("status", next)}` : "";
+
+          return {
+            preview: <TablePreview selectable={sel} sortable={sor} />,
+            code: `<Table>
+  <thead>
+    <TableRow>${checkboxHeader}
+      <TableHeaderCell${sortNameProp}>Name</TableHeaderCell>
+      <TableHeaderCell>Role</TableHeaderCell>
+      <TableHeaderCell${sortStatusProp}>Status</TableHeaderCell>
+    </TableRow>
+  </thead>
+  <tbody>
+    {rows.map((row) => (
+      <TableRow key={row.id} selected={selected.includes(row.id)} hoverable>${checkboxCell}
+        <TableCell type="text-image" label={row.name} imageSrc={row.avatar} />
+        <TableCell>{row.role}</TableCell>
+        <TableCell type="tag" tagText={row.status} tagVariant={row.status === "Active" ? "green" : "red"} />
+      </TableRow>
+    ))}
+  </tbody>
+</Table>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }

@@ -838,3 +838,107 @@ export function Example() {
 ### Preview
 
 ตัวอย่างการใช้งานทั่วไปของ Popover ได้แก่ เมนูตัวเลือกเพิ่มเติม (More options), ปุ่มข้อมูลรายละเอียด, และ Dropdown ที่มีเนื้อหาซับซ้อน / Common uses include action menus (more-options), info panels, and rich dropdowns with complex content.
+
+---
+
+## Slider
+
+
+Slider คือองค์ประกอบของส่วนติดต่อผู้ใช้ที่ใช้สำหรับเลือกหรือปรับค่าภายในช่วงที่กำหนด โดยผู้ใช้สามารถเลื่อนแถบเพื่อกำหนดค่าได้ / Slider is a UI component for selecting or adjusting a value within a defined range by dragging a thumb along a track.
+
+### วิธีการใช้งาน
+
+#### ประเภทของ Slider
+
+Slider มี 4 รูปแบบ คือ Single (Free Slide), Single (Fixed Slide), Range (Free Slide), และ Range (Fixed Slide)
+
+- **Single (Free Slide)** — Slider แบบเลือกค่าเดียว ใช้สำหรับปรับค่าได้อย่างอิสระภายในช่วงที่กำหนด โดยไม่จำกัดขั้นของค่า / Single-thumb slider with continuous, unrestricted value selection within the defined range.
+- **Single (Fixed Slide)** — Slider แบบเลือกค่าเดียว ใช้สำหรับปรับค่าเป็นขั้นหรือค่าที่กำหนดไว้ เช่น เพิ่ม–ลดทีละระดับ / Single-thumb slider that snaps to predefined step positions; use with `showSteps` to display the step labels.
+- **Range (Free Slide)** — Slider แบบกำหนดช่วงค่า ใช้สำหรับกำหนดค่าตั้งแต่–ถึง โดยสามารถปรับช่วงได้อย่างอิสระภายในช่วงที่กำหนด / Two-thumb range slider with continuous, free-form start/end selection.
+- **Range (Fixed Slide)** — Slider แบบกำหนดช่วงค่า ใช้สำหรับกำหนดค่าตั้งแต่–ถึง โดยปรับค่าเป็นขั้นหรือช่วงที่กำหนดไว้ / Two-thumb range slider that snaps to fixed step positions; use with `showSteps`.
+
+In code, map these to the `type` and `showSteps` props on `<Slider>`:
+
+| Figma variant | `type` | `showSteps` |
+|---|---|---|
+| Single (Free Slide) | `"single"` | `false` |
+| Single (Fixed Slide) | `"single"` | `true` |
+| Range (Free Slide) | `"range"` | `false` |
+| Range (Fixed Slide) | `"range"` | `true` |
+
+### สถานะของ Slider
+
+รูปแบบการแสดงผลของ Slider ในแต่ละช่วงของการใช้งาน เพื่อบอกผู้ใช้ว่า Slider อยู่ในสถานะ "พร้อมใช้งาน" หรือ "ไม่พร้อมใช้งาน" / States communicate whether the slider can be interacted with.
+
+| State | Description / คำอธิบาย |
+|---|---|
+| **Default** | สถานะปกติของ Slider เมื่อพร้อมให้ผู้ใช้เลื่อนเพื่อปรับค่า / The resting state — user can drag the thumb(s) to adjust the value. |
+| **Disabled** | สถานะเมื่อ Slider ไม่พร้อมใช้งาน และไม่สามารถปรับค่าได้ / The slider is locked; fill and thumb use muted token colors (`--fill-gray-300`, `--bg-default-secondary`). |
+
+Map to the `disabled` prop on `<Slider>`.
+
+### Sizes
+
+Slider มีทั้งหมด 3 ขนาด ได้แก่ Small, Medium, และ Large / Slider has 3 sizes: Small, Medium, and Large.
+
+| Size | `size` prop | Track height | Thumb diameter |
+|---|---|---|---|
+| **Small** | `"sm"` | 4 px | 16 px |
+| **Medium** | `"md"` | 8 px | 20 px |
+| **Large** | `"lg"` | 12 px | 24 px |
+
+### การออกแบบ Component
+
+| Component | Key Dimension |
+|---|---|
+| **Track — Small** | height 4 px, radius full (pill) |
+| **Track — Medium** | height 8 px, radius full (pill) |
+| **Track — Large** | height 12 px, radius full (pill) |
+| **Thumb — Small** | 16 × 16 px, radius full |
+| **Thumb — Medium** | 20 × 20 px, radius full |
+| **Thumb — Large** | 24 × 24 px, radius full |
+| **Thumb shadow** | `0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1)` (Elevation/sm) |
+| **Fill color (active)** | `var(--bg-brand-primary)` |
+| **Fill color (disabled)** | `var(--fill-gray-300)` |
+| **Track background** | `var(--fill-gray-200)` |
+
+### API (props)
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Track height and thumb size |
+| `type` | `"single" \| "range"` | `"single"` | Single thumb or two-thumb range |
+| `disabled` | `boolean` | `false` | Locks the slider |
+| `showSteps` | `boolean` | `false` | Shows step labels (25 / 50 / 75 / 100) below the track |
+| `min` | `number` | `0` | Minimum value |
+| `max` | `number` | `100` | Maximum value |
+| `step` | `number` | `1` | Step increment |
+| `value` | `number` | — | Controlled value (single) |
+| `rangeValue` | `[number, number]` | — | Controlled values (range) |
+| `defaultValue` | `number` | `50` | Uncontrolled default (single) |
+| `defaultRangeValue` | `[number, number]` | `[25, 75]` | Uncontrolled default (range) |
+| `onChange` | `(value: number) => void` | — | Fires on single value change |
+| `onRangeChange` | `(values: [number, number]) => void` | — | Fires on range value change |
+
+### Preview
+
+ตัวอย่างการใช้งานจริงแสดง Range Slider ในการ์ด "Price Range" โดยมีค่าที่เลือกแสดงเป็น "75 THB" ด้านล่าง เพื่อให้ผู้ใช้เห็นค่าที่ปรับได้ทันที / A real-world use case shows a Range Slider inside a "Price Range" card, with the selected value displayed as "75 THB" beneath the slider for immediate feedback.
+
+```tsx
+import { useState } from "react";
+import { Slider } from "@sarunyu/system-one";
+
+export function PriceRangeSlider() {
+  const [value, setValue] = useState(75);
+  return (
+    <div className="flex flex-col gap-4 rounded-3xl border border-border bg-bg-default-primary p-4 w-[343px]">
+      <p className="text-sm text-text-default-secondary">Price Range</p>
+      <Slider size="lg" type="single" value={value} onChange={setValue} />
+      <div className="flex items-center gap-1.5">
+        <span className="text-4xl font-bold text-text-brand-primary">{value}</span>
+        <span className="text-base text-text-default-tertiary">THB</span>
+      </div>
+    </div>
+  );
+}
+```

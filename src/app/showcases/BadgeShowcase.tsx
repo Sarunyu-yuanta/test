@@ -1,42 +1,73 @@
-import { FunnelSimple } from "@phosphor-icons/react";
 import { Badge } from "@/components/badge";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
 export function BadgeShowcase() {
   return (
-    <div className="min-h-screen bg-background px-6 py-8">
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
-        <div>
-          <h1 className="text-foreground">Badge Component</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Variant: `notification` และ `button`
-          </p>
-        </div>
-
-        <section className="rounded-lg border border-border p-4">
-          <p className="text-sm font-semibold text-foreground">Notification Variant</p>
-          <div className="mt-4 flex items-center gap-6">
-            <Badge variant="notification" notificationState="default" count={0} />
-            <Badge variant="notification" notificationState="active" count={0} />
-            <Badge variant="notification" notificationState="noti" count={2} />
-          </div>
-        </section>
-
-        <section className="rounded-lg border border-border p-4">
-          <p className="text-sm font-semibold text-foreground">Button Variant</p>
-          <div className="mt-4 flex flex-wrap items-center gap-6">
-            <Badge variant="button" iconOnly count={0} />
-            <Badge variant="button" iconOnly count={2} />
-            <Badge variant="button" label="Filter" count={0} />
-            <Badge variant="button" label="Filter" count={2} />
+    <ShowcasePage
+      name="Badge"
+      description="Variant: `notification` และ `button`"
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "variant",
+            label: "Variant",
+            options: [
+              { label: "notification", value: "notification" },
+              { label: "button", value: "button" },
+            ],
+            defaultValue: "notification",
+          },
+          {
+            type: "select",
+            key: "notificationState",
+            label: "State",
+            options: [
+              { label: "default", value: "default" },
+              { label: "active", value: "active" },
+              { label: "noti", value: "noti" },
+            ],
+            defaultValue: "noti",
+            visible: (v) => v.variant === "notification",
+          },
+          {
+            type: "select",
+            key: "count",
+            label: "Count",
+            options: [
+              { label: "0", value: "0" },
+              { label: "1", value: "1" },
+              { label: "5", value: "5" },
+              { label: "12", value: "12" },
+              { label: "99", value: "99" },
+            ],
+            defaultValue: "5",
+          },
+          { type: "boolean", key: "iconOnly",   label: "Icon only",   defaultValue: false, visible: (v) => v.variant === "button" },
+          { type: "boolean", key: "showLabel",  label: "Show label",  defaultValue: false, visible: (v) => v.variant === "button" },
+        ]}
+        render={({ variant, notificationState, count, iconOnly, showLabel }) => {
+          const c = Number(count);
+          const isNotif = variant === "notification";
+          const preview = isNotif ? (
+            <Badge variant="notification" notificationState={notificationState as any} count={c} />
+          ) : (
             <Badge
               variant="button"
-              label="Custom"
-              icon={<FunnelSimple size={18} weight="regular" />}
-              count={12}
+              iconOnly={iconOnly as boolean}
+              label={(showLabel as boolean) ? "Filter" : undefined}
+              count={c}
             />
-          </div>
-        </section>
-      </div>
-    </div>
+          );
+          const code = isNotif
+            ? `<Badge\n  variant="notification"\n  notificationState="${notificationState}"\n  count={${c}}\n/>`
+            : `<Badge\n  variant="button"${iconOnly ? "\n  iconOnly" : ""}${showLabel ? '\n  label="Filter"' : ""}\n  count={${c}}\n/>`;
+          return { preview, code };
+        }}
+      />
+    </ShowcasePage>
   );
 }

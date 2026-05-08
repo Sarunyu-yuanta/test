@@ -1,115 +1,76 @@
 import { useState } from "react";
 import { Radio } from "@/components/radio";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const stateVariants: {
-  key: string;
-  label: string;
-  checked: boolean;
+const RADIO_OPTIONS = ["Option A", "Option B", "Option C"] as const;
+
+function RadioGroupPreview({
+  variant,
+  disabled,
+  showLabel,
+  showDesc,
+}: {
+  variant: "text" | "button";
   disabled: boolean;
-}[] = [
-  { key: "default", label: "Default", checked: false, disabled: false },
-  { key: "checked", label: "Checked", checked: true, disabled: false },
-  { key: "default-disabled", label: "Default + Disabled", checked: false, disabled: true },
-  { key: "checked-disabled", label: "Checked + Disabled", checked: true, disabled: true },
-];
-
-const DESCRIPTION = "Lorem ipsum dolor sit amet consectetur.";
+  showLabel: boolean;
+  showDesc: boolean;
+}) {
+  const [selected, setSelected] = useState("Option A");
+  return (
+    <div className="flex flex-col gap-3">
+      {RADIO_OPTIONS.map((opt) => (
+        <Radio
+          key={opt}
+          variant={variant}
+          checked={selected === opt}
+          disabled={disabled}
+          label={showLabel ? opt : undefined}
+          description={showDesc && opt === "Option A" ? "Lorem ipsum dolor sit amet consectetur." : undefined}
+          onChange={() => setSelected(opt)}
+        />
+      ))}
+    </div>
+  );
+}
 
 export function RadioShowcase() {
-  const [selected, setSelected] = useState<string | null>(null);
-  const options = ["Option A", "Option B", "Option C"];
-
   return (
-    <div className="bg-background min-h-full">
-      <h1 className="mb-1">Radio Component</h1>
-      <p className="text-muted-foreground mb-10">State</p>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Bare (radio only)</h2>
-        <div className="flex flex-wrap items-center gap-8">
-          {stateVariants.map((s) => (
-            <div key={s.key} className="flex items-center gap-2">
-              <Radio checked={s.checked} disabled={s.disabled} />
-              <span className="text-[11px] text-muted-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Label</h2>
-        <div className="flex flex-wrap items-start gap-6">
-          {stateVariants.map((s) => (
-            <div key={s.key} className="flex flex-col gap-2">
-              <Radio checked={s.checked} disabled={s.disabled} label="Label" />
-              <span className="text-[11px] text-muted-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Label + Description</h2>
-        <div className="flex flex-wrap items-start gap-6">
-          {stateVariants.map((s) => (
-            <div key={s.key} className="flex flex-col gap-2">
-              <Radio
-                checked={s.checked}
-                disabled={s.disabled}
-                label="Label"
-                description={DESCRIPTION}
-              />
-              <span className="text-[11px] text-muted-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Button — Label</h2>
-        <div className="flex flex-wrap items-start gap-4">
-          {stateVariants.map((s) => (
-            <div key={s.key} className="flex flex-col gap-2">
-              <Radio variant="button" checked={s.checked} disabled={s.disabled} label="Label" />
-              <span className="text-[11px] text-muted-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Button — Label + Description</h2>
-        <div className="flex flex-wrap items-start gap-4">
-          {stateVariants.map((s) => (
-            <div key={s.key} className="flex flex-col gap-2">
-              <Radio
-                variant="button"
-                checked={s.checked}
-                disabled={s.disabled}
-                label="Label"
-                description={DESCRIPTION}
-              />
-              <span className="text-[11px] text-muted-foreground">{s.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mb-12">
-        <h2 className="mb-5 text-[18px]">Interactive — radio group</h2>
-        <div className="flex flex-col gap-2">
-          {options.map((opt) => (
-            <Radio
-              key={opt}
-              name="demo"
-              value={opt}
-              label={opt}
-              checked={selected === opt}
-              onChange={() => setSelected(opt)}
-            />
-          ))}
-        </div>
-      </section>
-    </div>
+    <ShowcasePage
+      name="Radio"
+      description="Radio input in text and button variants with full state coverage."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "variant",
+            label: "Variant",
+            options: [{ label: "text", value: "text" }, { label: "button", value: "button" }],
+            defaultValue: "text",
+          },
+          { type: "boolean", key: "disabled", label: "Disabled", defaultValue: false },
+          { type: "boolean", key: "hasLabel", label: "Show label", defaultValue: true },
+          { type: "boolean", key: "hasDesc", label: "Show description", defaultValue: false },
+        ]}
+        render={({ variant, disabled, hasLabel, hasDesc }) => {
+          const v = variant as "text" | "button";
+          const d = disabled as boolean;
+          const sl = hasLabel as boolean;
+          const sd = hasDesc as boolean;
+          const variantProp = v === "button" ? `\n  variant="button"` : "";
+          const labelPart = sl ? `\n  label="Option A"` : "";
+          const descPart = sd ? `\n  description="Lorem ipsum dolor sit amet consectetur."` : "";
+          const disabledPart = d ? "\n  disabled" : "";
+          return {
+            preview: (
+              <RadioGroupPreview variant={v} disabled={d} showLabel={sl} showDesc={sd} />
+            ),
+            code: `const [selected, setSelected] = useState("A")\n\n<Radio${variantProp}\n  checked={selected === "A"}${disabledPart}${labelPart}${descPart}\n  onChange={() => setSelected("A")}\n/>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }
