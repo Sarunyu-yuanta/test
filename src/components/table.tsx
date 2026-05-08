@@ -115,7 +115,7 @@ function StickyShadowEdge({ direction }: { direction: "left" | "right" }) {
         className="pointer-events-none absolute inset-y-0 left-[-10px] w-2.5"
         style={{
           background:
-            "linear-gradient(90deg, rgba(16,24,40,0.00) 0%, rgba(16,24,40,0.03) 55%, rgba(16,24,40,0.08) 100%)",
+            "linear-gradient(90deg, rgba(var(--scroll-shadow-rgb),0.00) 0%, rgba(var(--scroll-shadow-rgb),0.03) 55%, rgba(var(--scroll-shadow-rgb),0.08) 100%)",
         }}
       />
     );
@@ -127,7 +127,7 @@ function StickyShadowEdge({ direction }: { direction: "left" | "right" }) {
       className="pointer-events-none absolute inset-y-0 right-[-10px] w-2.5"
       style={{
         background:
-          "linear-gradient(90deg, rgba(16,24,40,0.08) 0%, rgba(16,24,40,0.03) 45%, rgba(16,24,40,0.00) 100%)",
+          "linear-gradient(90deg, rgba(var(--scroll-shadow-rgb),0.08) 0%, rgba(var(--scroll-shadow-rgb),0.03) 45%, rgba(var(--scroll-shadow-rgb),0.00) 100%)",
       }}
     />
   );

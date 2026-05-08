@@ -236,6 +236,7 @@ Use sparingly. Corporate UIs prefer border separation over heavy elevation.
 | Do | Don't |
 |---|---|
 | Use `bg-background`, `bg-card` for surfaces | Hard-code `#ffffff` or `bg-white` |
+| Use `data-theme="dark"` on dark-background sections | Use `class="dark"` on a section (resets the whole page) |
 | Use `text-foreground` for body text | Use `text-gray-900` or `text-black` |
 | Use `border-border` for dividers | Use `border-gray-200` |
 | Use `rounded` (4px) by default | Use `rounded-xl` or `rounded-2xl` on data elements |

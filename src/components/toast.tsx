@@ -104,7 +104,7 @@ function ToastCloseButton({
       )}
       onClick={onClose}
     >
-      <X size={12} weight="bold" />
+      <X size={12} weight="regular" />
     </button>
   );
 }

@@ -90,6 +90,24 @@ in this package.** This file is the short version: the rules you must follow.
    share one `const body = …` between the two branches. See the `LoginSheet`
    recipe in `llms.txt`.
 
+8. **`<BottomSheet>` MUST use the lazy-mount pattern.** Vaul mounts its portal
+   immediately when `<BottomSheet>` enters the React tree — even with
+   `open={false}`. Always guard with an `everOpened` flag so the component
+   never mounts until the user first opens it.
+   ```tsx
+   // button-triggered
+   const [everOpened, setEverOpened] = useState(false);
+   const [open, setOpen] = useState(false);
+   <Button onClick={() => { setEverOpened(true); setOpen(true); }}>Open</Button>
+   {everOpened && <BottomSheet open={open} onOpenChange={setOpen}>…</BottomSheet>}
+
+   // prop-driven (receiving open from parent)
+   const [everOpened, setEverOpened] = useState(false);
+   useEffect(() => { if (open) setEverOpened(true); }, [open]);
+   if (!everOpened) return null;
+   return <BottomSheet open={open} onOpenChange={…}>…</BottomSheet>;
+   ```
+
 ## Setup check
 
 Required one-liner in the app entry (App Router: `app/layout.tsx`,
@@ -117,14 +135,26 @@ utilities (`p-6`, `gap-4`, `max-w-*`, etc.) win over host-written ones.
 
 ## Dark mode
 
-Add `.dark` to any ancestor (usually `<html>`). All tokens adapt automatically.
+**Global dark mode** — add `.dark` to `<html>`. All tokens adapt automatically.
+
+**Section-level dark mode** — add `data-theme="dark"` to any container with a
+dark background. All child components automatically switch to dark tokens.
+Never use `class="dark"` for sections — that resets the entire page theme.
+
+```tsx
+// ✅ section on a dark background
+<div data-theme="dark" className="bg-bg-brand-primary rounded-2xl p-8">
+  <Button>ติดต่อ Online Service</Button>
+  <p className="text-text-default-primary">สีปรับอัตโนมัติ</p>
+</div>
+```
 
 ## Theming
 
 Override CSS custom properties after the stylesheet import.
-**Both `:root` (light) and `.dark` (dark) must be overridden separately** —
-the library hard-codes dark-mode colors in its `.dark` block, so a `:root`-only
-override leaves dark mode unchanged.
+**Both `:root` (light) and `.dark, [data-theme="dark"]` (dark) must be overridden
+separately** — the library hard-codes dark-mode colors in its `.dark` block,
+so a `:root`-only override leaves dark mode unchanged.
 
 ```css
 :root {
@@ -134,7 +164,7 @@ override leaves dark mode unchanged.
   --font-sans: "Inter", sans-serif;
 }
 
-.dark {
+.dark, [data-theme="dark"] {
   --primary-action: #a78bfa;
   --primary-action-hover: #c4b5fd;
   --primary-action-active: #8b5cf6;

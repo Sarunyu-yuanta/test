@@ -1,6 +1,7 @@
 # Tokens — use these classes, never raw colors
 
 All tokens adapt to light/dark mode automatically.
+Add `data-theme="dark"` to any container for section-level dark mode (components inside auto-switch).
 
 ## Text color
 - Body / heading: `text-foreground` (alias: `text-default`)

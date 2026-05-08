@@ -19,7 +19,7 @@
  * primitives or the --bg-brand-* / --text-brand-* semantics — not the aliases.
  */
 @import "./tokens-fill.css";
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *), &:is([data-theme="dark"] *));
 
 :root {
   /* ------------------------------------------------------------------ */
@@ -373,9 +373,10 @@
   --sidebar-accent-foreground: var(--text-default-primary);
   --sidebar-border: var(--border-default);
   --sidebar-ring: var(--fill-gray-400);
+  --scroll-shadow-rgb: 16, 24, 40;
 }
 
-.dark {
+.dark, [data-theme="dark"] {
   /* ================================================================== */
   /* Figma semantic tokens — Color.Dark (System One) — parity with :root */
   /* ================================================================== */
@@ -747,6 +748,7 @@
   --sidebar-accent-foreground: var(--text-default-primary);
   --sidebar-border: var(--border-default);
   --sidebar-ring: var(--fill-gray-500);
+  --scroll-shadow-rgb: 255, 255, 255;
 }
 
 @theme inline {

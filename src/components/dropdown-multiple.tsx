@@ -90,7 +90,7 @@ function RemovableTag({
         >
           <X
             size={12}
-            weight="bold"
+            weight="regular"
             color={iconColor}
             className="shrink-0"
           />
@@ -742,7 +742,7 @@ export const DropdownMultiple = forwardRef<HTMLDivElement, DropdownMultipleProps
                             {isSelected && (
                               <Check
                                 size={12}
-                                weight="bold"
+                                weight="regular"
                                 className="text-primary-action"
                               />
                             )}
