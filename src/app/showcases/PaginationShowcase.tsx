@@ -31,15 +31,18 @@ function PaginationPreview({ variant, total }: { variant: string; total: number 
     if (!container) return;
     const maxScroll = container.scrollWidth - container.clientWidth;
     const clampedIndex = Math.min(total - 1, Math.max(0, targetIndex));
+    const proportionalProgress = total > 1 ? clampedIndex / (total - 1) : 0;
 
     if (clampedIndex <= 0) {
       container.scrollTo({ left: 0, behavior: "smooth" });
+      setScrollProgress(0);
       setIndex(0);
       return;
     }
 
     if (clampedIndex >= total - 1) {
       container.scrollTo({ left: maxScroll, behavior: "smooth" });
+      setScrollProgress(1);
       setIndex(total - 1);
       return;
     }
@@ -54,7 +57,11 @@ function PaginationPreview({ variant, total }: { variant: string; total: number 
       container.scrollLeft +
       (itemRect.left - containerRect.left) -
       (container.clientWidth - item.offsetWidth) / 2;
-    container.scrollTo({ left: Math.max(0, Math.min(maxScroll, scrollTarget)), behavior: "smooth" });
+    const effectiveScroll = Math.max(0, Math.min(maxScroll, scrollTarget));
+    container.scrollTo({ left: effectiveScroll, behavior: "smooth" });
+    // Set proportional progress immediately so the pill moves even when the
+    // physical scroll doesn't change (items near edges can't be centered).
+    setScrollProgress(proportionalProgress);
     setIndex(clampedIndex);
   };
 
