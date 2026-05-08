@@ -1,137 +1,77 @@
-import { Tab, TabGroup, TabSize } from "@/components/tab";
 import { useState } from "react";
+import { TabGroup, type TabSize, type TabItem } from "@/components/tab";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const sizes: TabSize[] = ["lg", "md", "sm"];
-
-const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
-
-const demoTabs = [
-  { id: "overview",  title: "Overview" },
+const BASE_TABS: TabItem[] = [
+  { id: "overview", title: "Overview" },
   { id: "analytics", title: "Analytics" },
-  { id: "reports",   title: "Reports" },
-  { id: "settings",  title: "Settings", disabled: true },
+  { id: "reports", title: "Reports" },
 ];
 
-export function TabShowcase() {
-  const [activeIds, setActiveIds] = useState<Record<TabSize, string>>({
-    lg: "overview",
-    md: "overview",
-    sm: "overview",
-  });
-  const [showIcon, setShowIcon] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
+function TabGroupPreview({
+  size,
+  disabled,
+  icon,
+  notification,
+}: {
+  size: TabSize;
+  disabled: boolean;
+  icon: boolean;
+  notification?: number;
+}) {
+  const [active, setActive] = useState("overview");
 
-  const interactiveTabs = demoTabs.map((item, index) => ({
-    ...item,
-    icon: showIcon,
-    notification: showNotification ? index + 1 : undefined,
+  const items: TabItem[] = BASE_TABS.map((tab) => ({
+    ...tab,
+    disabled,
+    icon: icon ? true : undefined,
+    notification: tab.id === "overview" ? notification : undefined,
   }));
 
+  return <TabGroup size={size} items={items} activeId={active} onChange={setActive} />;
+}
+
+export function TabShowcase() {
   return (
-    <div className="bg-background min-h-full">
-      <h1 className="mb-1" style={FONT}>Tab Component</h1>
-      <p className="text-muted-foreground mb-12" style={FONT}>Sizes × States</p>
-
-      {/* ── States grid ── */}
-      {sizes.map((size) => (
-        <div key={size} className="mb-12">
-          <p className="text-[12px] text-caption uppercase tracking-wider mb-4" style={FONT}>
-            {size === "lg" ? "Large" : size === "md" ? "Medium" : "Small"}
-          </p>
-
-          {/* Header row */}
-          <div className="flex items-center gap-10 mb-3 pl-[100px]">
-            {["Default", "Active", "Disabled"].map((label) => (
-              <div
-                key={label}
-                className="w-[80px] text-center text-[11px] text-caption uppercase tracking-wider"
-                style={FONT}
-              >
-                {label}
-              </div>
-            ))}
-          </div>
-
-          {/* Tab row */}
-          <div className="flex items-center gap-10">
-            <div className="w-[90px] shrink-0 text-[13px] text-muted-foreground" style={FONT} />
-            <div className="w-[80px] flex justify-center">
-              <Tab title="Tab" size={size} active={false} />
-            </div>
-            <div className="w-[80px] flex justify-center">
-              <Tab title="Tab" size={size} active={true} />
-            </div>
-            <div className="w-[80px] flex justify-center">
-              <Tab title="Tab" size={size} disabled={true} />
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* ── Divider ── */}
-      <div className="border-t border-divider my-10" />
-
-      {/* ── Figma variants ── */}
-      <h2 className="mb-6" style={FONT}>Figma Variants</h2>
-      {sizes.map((size) => (
-        <div key={`variant-${size}`} className="mb-8">
-          <p className="text-[12px] text-caption uppercase tracking-wider mb-2" style={FONT}>
-            {size === "lg" ? "Large" : size === "md" ? "Medium" : "Small"}
-          </p>
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Tab title="Tab" size={size} icon />
-              <span className="text-[11px] text-muted-foreground" style={FONT}>Icon only</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Tab title="Tab" size={size} notification={1} />
-              <span className="text-[11px] text-muted-foreground" style={FONT}>Notification only</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Tab title="Tab" size={size} icon notification={1} />
-              <span className="text-[11px] text-muted-foreground" style={FONT}>Icon + Notification</span>
-            </div>
-          </div>
-        </div>
-      ))}
-
-      {/* ── Divider ── */}
-      <div className="border-t border-divider my-10" />
-
-      {/* ── Interactive TabGroup ── */}
-      <h2 className="mb-6" style={FONT}>Interactive</h2>
-      <div className="mb-6 flex flex-wrap items-center gap-6">
-        <label className="inline-flex items-center gap-2 text-[13px] text-subtle-text" style={FONT}>
-          <input
-            type="checkbox"
-            checked={showIcon}
-            onChange={(event) => setShowIcon(event.target.checked)}
-          />
-          Show icon
-        </label>
-        <label className="inline-flex items-center gap-2 text-[13px] text-subtle-text" style={FONT}>
-          <input
-            type="checkbox"
-            checked={showNotification}
-            onChange={(event) => setShowNotification(event.target.checked)}
-          />
-          Show notification
-        </label>
-      </div>
-
-      {sizes.map((size) => (
-        <div key={size} className="mb-8">
-          <p className="text-[12px] text-caption uppercase tracking-wider mb-2" style={FONT}>
-            {size === "lg" ? "Large" : size === "md" ? "Medium" : "Small"}
-          </p>
-          <TabGroup
-            items={interactiveTabs}
-            size={size}
-            activeId={activeIds[size]}
-            onChange={(id) => setActiveIds((prev) => ({ ...prev, [size]: id }))}
-          />
-        </div>
-      ))}
-    </div>
+    <ShowcasePage
+      name="Tab"
+      description="Navigation tabs in three sizes with optional icon and notification badge."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "size",
+            label: "Size",
+            options: [
+              { label: "lg", value: "lg" },
+              { label: "md", value: "md" },
+              { label: "sm", value: "sm" },
+            ],
+            defaultValue: "lg",
+          },
+          { type: "boolean", key: "disabled", label: "Disabled", defaultValue: false },
+          { type: "boolean", key: "icon", label: "Icon", defaultValue: false },
+          { type: "boolean", key: "notification", label: "Notification badge", defaultValue: false },
+        ]}
+        render={({ size, disabled, icon, notification }) => {
+          const s = size as TabSize;
+          const d = disabled as boolean;
+          const ic = icon as boolean;
+          const notif = (notification as boolean) ? 3 : undefined;
+          const disabledPart = d ? "\n  disabled" : "";
+          const iconPart = ic ? "\n  icon" : "";
+          const notifPart = notif ? `\n  notification={${notif}}` : "";
+          return {
+            preview: (
+              <TabGroupPreview size={s} disabled={d} icon={ic} notification={notif} />
+            ),
+            code: `const [active, setActive] = useState("overview")\n\n<TabGroup\n  size="${s}"\n  activeId={active}\n  onChange={setActive}\n  items={[\n    { id: "overview", title: "Overview"${disabledPart}${iconPart}${notifPart} },\n    { id: "analytics", title: "Analytics"${disabledPart}${iconPart} },\n    { id: "reports", title: "Reports"${disabledPart}${iconPart} },\n  ]}\n/>`,
+          };
+        }}
+      />
+    </ShowcasePage>
   );
 }

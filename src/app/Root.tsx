@@ -5,7 +5,11 @@ import svgPaths from "../imports/svg-1wi5zx56yz";
 
 const FONT = { fontFamily: "'Noto Sans Thai', sans-serif" };
 
-const navItems = [
+const gettingStartedItems = [
+  { to: "/installation", label: "Installation" },
+];
+
+const componentItems = [
   { to: "/alert", label: "Alert" },
   { to: "/avatar", label: "Avatar" },
   { to: "/badge", label: "Badge" },
@@ -23,6 +27,7 @@ const navItems = [
   { to: "/notification", label: "Notification" },
   { to: "/option-list", label: "Option List" },
   { to: "/pagination", label: "Pagination" },
+  { to: "/popover", label: "Popover" },
   { to: "/radio", label: "Radio" },
   { to: "/search-input", label: "Search Input" },
   { to: "/tab", label: "Tab" },
@@ -33,7 +38,6 @@ const navItems = [
   { to: "/toast", label: "Toast Message" },
   { to: "/toggle", label: "Toggle" },
   { to: "/tooltip", label: "Tooltip" },
-  { to: "/popover", label: "Popover" },
 ];
 
 function Logo() {
@@ -100,11 +104,21 @@ function Logo() {
   );
 }
 
-function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
+function NavSection({
+  heading,
+  items,
+  onNavClick,
+}: {
+  heading: string;
+  items: { to: string; label: string }[];
+  onNavClick?: () => void;
+}) {
   return (
-    <nav className="flex flex-col gap-[2px] p-[12px]">
-      <div className="text-[12px] opacity-60 pt-4 pb-2 px-3">Components</div>
-      {navItems.map(({ to, label }) => (
+    <div className="flex flex-col gap-[2px]">
+      <div className="text-[11px] font-semibold uppercase tracking-widest opacity-40 pt-4 pb-1 px-3">
+        {heading}
+      </div>
+      {items.map(({ to, label }) => (
         <NavLink key={to} to={to} style={FONT} onClick={onNavClick}>
           {({ isActive }) => (
             <div
@@ -125,6 +139,15 @@ function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
           )}
         </NavLink>
       ))}
+    </div>
+  );
+}
+
+function NavMenu({ onNavClick }: { onNavClick?: () => void }) {
+  return (
+    <nav className="flex flex-col gap-[2px] p-[12px]">
+      <NavSection heading="Getting Started" items={gettingStartedItems} onNavClick={onNavClick} />
+      <NavSection heading="Components" items={componentItems} onNavClick={onNavClick} />
     </nav>
   );
 }
@@ -189,8 +212,8 @@ export function Root() {
           <NavMenu onNavClick={() => setSidebarOpen(false)} />
         </aside>
 
-        {/* Body — 24px padding */}
-        <main className="flex-1 min-w-0 p-[24px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* Body */}
+        <main className="flex-1 min-w-0 px-[24px] pt-[48px] pb-[24px] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <Outlet />
         </main>
       </div>

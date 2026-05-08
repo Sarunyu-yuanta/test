@@ -28,6 +28,7 @@ import { BreadcrumbPage } from "./pages/BreadcrumbPage";
 import { PaginationPage } from "./pages/PaginationPage";
 import { TooltipPage } from "./pages/TooltipPage";
 import { PopoverPage } from "./pages/PopoverPage";
+import { InstallationPage } from "./pages/InstallationPage";
 import { Navigate } from "react-router";
 
 export const router = createBrowserRouter([
@@ -37,8 +38,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/button" replace />,
+        element: <Navigate to="/installation" replace />,
       },
+      { path: "installation", Component: InstallationPage },
       { path: "button", Component: ButtonPage },
       { path: "tab", Component: TabPage },
       { path: "input", Component: InputPage },

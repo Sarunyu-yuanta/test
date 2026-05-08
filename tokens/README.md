@@ -61,6 +61,6 @@ UI components use **Tailwind classes** wired to `theme.css` (not raw `bg-white` 
 | Borders                                          | `border-border`, `border-border-disabled`     | `--border`, `--border-disabled`           |
 | Muted / disabled text                            | `text-muted-foreground`, `text-disabled`      | `--muted-foreground`, `--disabled`        |
 | Elevation                                        | `shadow-card`, `shadow-popover` (where used)  | `--elevation-*` via `@theme`              |
-| Raw palette (tags, rare cases)                   | `bg-[var(--fill-*)]`                          | `tokens-fill.css`                         |
+| Raw palette (tags, rare cases)                   | e.g. `bg-[var(--fill-blue-50)]`               | `tokens-fill.css`                         |
 
 Primitives file: `color-primitives.fill.json` → `--fill-*` only; semantic meaning stays in `theme.css` and the classes above.

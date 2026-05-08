@@ -1,6 +1,6 @@
 # @sarunyu/system-one — AI usage guide
 
-React component library. Tailwind CSS v4 + CSS custom properties. 30 components.
+React component library. Tailwind CSS v4 + CSS custom properties. 35 components.
 Built for AI-powered UI generation (v0, Lovable, Figma Make, Cursor).
 
 **This file is the contract.** Read it top-to-bottom before generating any screen
@@ -12,14 +12,16 @@ that uses this library. The rules are non-negotiable.
 
 1. **Use library components for every element it provides.** Never recreate
    Button, Input, Tag, Dropdown, Card, Tab, Checkbox, Toggle, Radio, DateInput, TimeInput,
-   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel, Tooltip, Popover as raw HTML.
+   Table, SearchInput, TextArea, Chip, Modal, BottomSheet, Alert, Toast, Notification, Badge, Avatar, AvatarStack, Breadcrumb, Pagination, PaginationBanner, PaginationCarousel, Tooltip, Popover,
+   Slider, UploadArea, UploadItem, List, ListItem as raw HTML.
 2. **Never override a component's built-in styles.** Every library component manages its own colors, shadows, padding, radius, and typography internally. Only use `className` on library components for **layout** (`w-*`, `max-w-*`, `flex`, `grid`, `gap-*`, `m-*`, `col-span-*`). Never pass `bg-*`, `shadow-*`, `text-*`, `p-*`, `rounded-*`, or `border-*` in `className` on a library component.
 3. **Use design-token classes for color and typography.** Never `text-blue-600`,
    `bg-gray-100`, `text-[#3b82f6]`. The token table below is exhaustive — if a
    color you need is not in it, use `text-foreground` / `bg-card`.
 4. **Use `@phosphor-icons/react` for all icons.** Never import from `lucide-react`
    or any other icon library. Install with `npm install @phosphor-icons/react`.
-   Import named icons: `import { House, MagnifyingGlass, CaretDown } from "@phosphor-icons/react"`.
+   Import named icons: `import { HouseIcon, MagnifyingGlassIcon, CaretDownIcon } from "@phosphor-icons/react"`.
+   All icon names use the `Icon` suffix (e.g. `StarIcon`, `TrashIcon`, `ArrowUpIcon`). The un-suffixed names are deprecated.
    Every icon accepts `size`, `weight` (`"regular"` | `"fill"` — no other weights), and `className` props.
 5. **No arbitrary bracket values for spacing / sizing / typography.**
    Use scale utilities, not pixel overrides. The library's shipped stylesheet
@@ -153,6 +155,8 @@ import {
   Dropdown, DropdownMultiple, OptionList,
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
+  Slider,
+  UploadArea, UploadItem,
   // Navigation
   Breadcrumb,
   Pagination, PaginationBanner, PaginationCarousel,
@@ -162,6 +166,7 @@ import {
   Tab, TabGroup,
   Card,
   Table, TableRow, TableHeaderCell, TableCell,
+  LinearProgress, CircleProgress,
   // Feedback
   Alert,
   Toast, Toaster,
@@ -169,6 +174,8 @@ import {
   Badge,
   // Overlay
   Modal, BottomSheet, Tooltip, Popover,
+  // List
+  List, ListItem,
   // Utility
   cn, useIsMobile,
 } from "@sarunyu/system-one";
@@ -1159,7 +1166,7 @@ Dark-bubble contextual hint shown on hover over any trigger element.
 
 ```tsx
 <Tooltip content="Delete this item">
-  <Button variant="outline" size="icon-md" aria-label="Delete"><Trash size={16} /></Button>
+  <Button variant="outline" size="icon-md" aria-label="Delete"><TrashIcon size={16} /></Button>
 </Tooltip>
 
 <Tooltip content="This field is required" side="right" align="start">
@@ -1210,7 +1217,7 @@ Floating panel that opens on **click** over any trigger element. Pass the trigge
     </div>
   }
 >
-  <Button variant="outline" size="md" leftIcon={<User size={16} />}>Account</Button>
+  <Button variant="outline" size="md" leftIcon={<UserIcon size={16} />}>Account</Button>
 </Popover>
 ```
 
@@ -1223,6 +1230,102 @@ Props:
 - `open` — controlled open state. Omit for uncontrolled usage.
 - `onOpenChange` — `(open: boolean) => void`.
 - `className?` — extra classes on the panel bubble (layout only — never override `bg-*` or `p-*`).
+
+---
+
+### Slider
+
+Range input with a draggable thumb. Three track heights, single-thumb or two-thumb range. Never use `<input type="range">` directly.
+
+```tsx
+// Single thumb (uncontrolled default = 50)
+const [value, setValue] = useState(50)
+<Slider value={value} onChange={setValue} />
+<Slider size="sm" value={value} onChange={setValue} />
+<Slider size="lg" showSteps value={value} onChange={setValue} />
+<Slider disabled value={value} onChange={setValue} />
+
+// Two-thumb range
+const [range, setRange] = useState<[number, number]>([25, 75])
+<Slider type="range" rangeValue={range} onRangeChange={setRange} />
+<Slider type="range" size="lg" showSteps rangeValue={range} onRangeChange={setRange} />
+```
+
+Props: `size` (`"sm"` 4px | `"md"` 8px default | `"lg"` 12px), `type` (`"single"` default | `"range"`), `disabled`, `showSteps` (labels at 0 / 25 / 50 / 75 / 100), `min` (default 0), `max` (default 100), `step` (default 1), `value` (controlled single), `rangeValue` (controlled range `[start, end]`), `defaultValue` (50), `defaultRangeValue` ([25, 75]), `onChange(value)`, `onRangeChange([start, end])`, `className`.
+
+---
+
+### LinearProgress / CircleProgress
+
+Deterministic progress indicators. `value` is 0–100 (clamped automatically). Never use `<progress>` HTML element.
+
+```tsx
+// Linear bar — typically full-width or constrained by parent
+<LinearProgress value={65} />
+<LinearProgress value={30} className="w-64" />
+
+// Circle — three sizes
+<CircleProgress value={75} />           // lg (128 px) — default, shows % label
+<CircleProgress value={50} size="md" /> // md (48 px) — shows % label
+<CircleProgress value={30} size="sm" /> // sm (24 px) — arc only, no label
+```
+
+Props `LinearProgress`: `value`, `className`.
+Props `CircleProgress`: `value`, `size` (`"sm"` | `"md"` | `"lg"` default), `className`.
+
+`lg` and `md` sizes display a centred percentage label; `sm` is arc-only. The arc uses a brand cyan-to-navy gradient. At `value={0}`, `lg`/`md` show a placeholder-coloured `0%` label.
+
+---
+
+### UploadArea / UploadItem
+
+Upload dropzone and per-file status rows. Never hand-roll dashed upload areas or custom file progress rows.
+
+```tsx
+// Dropzone — wire onClick to open a file input
+const inputRef = useRef<HTMLInputElement>(null)
+<UploadArea onClick={() => inputRef.current?.click()} />
+<UploadArea disabled />
+<UploadArea label="Browse files" onClick={() => inputRef.current?.click()} />
+
+// Text variant — compact row, no card border
+<UploadItem variant="text" status="loading" fileName="report.pdf" progress={42} />
+<UploadItem variant="text" status="success" fileName="report.pdf" onDelete={handleDelete} />
+<UploadItem variant="text" status="error"   fileName="report.pdf" errorText="File too large" onDelete={handleDelete} />
+
+// Card variant — bordered card with file-size column and separate delete button
+<UploadItem variant="card" status="loading" fileName="photo.png" fileSize="1.66KB" progress={42} />
+<UploadItem variant="card" status="success" fileName="photo.png" fileSize="1.66KB" onDelete={handleDelete} />
+<UploadItem variant="card" status="error"   fileName="photo.png" fileSize="1.66KB" errorText="Upload failed" onDelete={handleDelete} />
+```
+
+Props `UploadArea`: `disabled`, `label` (default `"อัปโหลดไฟล์"`), plus all native `<div>` props (`onClick`, `className`, etc.).
+Props `UploadItem`: `variant` (`"text"` default | `"card"`), `status` (`"loading"` | `"success"` | `"error"`, default `"loading"`), `fileName`, `fileSize` (card variant — e.g. `"1.66KB"`), `errorText`, `progress` (0–100, shown while `status="loading"`), `onDelete`, `className`.
+
+---
+
+### List / ListItem
+
+Vertical list of rows. Each row has a label, optional leading/trailing slot, and optional action link or click handler. Never hand-roll `<ul>` / `<li>` rows for this pattern.
+
+```tsx
+<List>
+  <ListItem label="Settings" />
+  <ListItem label="Profile" leading={<UserIcon size={24} />} />
+  <ListItem label="Documents" trailing={<CaretRightIcon size={24} />} onClick={() => navigate("/docs")} />
+  <ListItem label="Billing" action="Manage" onAction={openBilling} />
+  <ListItem label="Disabled row" highlighted />
+</List>
+```
+
+**Slots:**
+- `leading` — left slot (icon, avatar, image). Rendered at 24×24 with `text-icon-default`.
+- `trailing` — right slot (icon, chevron, badge). Same sizing.
+- `action` — string label for an inline text-button on the right (e.g. "Edit", "View all"). Fires `onAction`.
+- `onClick` — makes the whole row tappable. Press state (gray background) is applied automatically.
+
+Props `ListItem`: `label` (required), `leading?`, `trailing?`, `action?`, `onAction?(e)`, `highlighted?`, `onClick?`, `className`.
+Props `List`: `children`, `className`.
 
 ---
 

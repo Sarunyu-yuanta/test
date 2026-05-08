@@ -11,7 +11,7 @@ Rules:
 
 ## @sarunyu/system-one — Setup Guide
 
-> Target version: **4.9.37** (minimum 4.9.35 for `Pagination` / `PaginationBanner` / `PaginationCarousel`; minimum 4.9.36 for `data-theme="dark"` section theming).
+> Target version: **4.9.39** (minimum 4.9.35 for `Pagination` / `PaginationBanner` / `PaginationCarousel`; minimum 4.9.36 for `data-theme="dark"` section theming; minimum 4.9.39 for `Slider`, `LinearProgress`, `CircleProgress`, `UploadArea`, `UploadItem`, `List`, `ListItem`).
 
 ---
 
@@ -21,7 +21,7 @@ Install these as **explicit** direct dependencies (not transitive):
 
 ```json
 {
-  "@sarunyu/system-one": "4.9.37",
+  "@sarunyu/system-one": "4.9.39",
   "@phosphor-icons/react": "^2.1.10"
 }
 ```
@@ -144,11 +144,15 @@ import {
   Dropdown, DropdownMultiple, OptionList,
   Checkbox, Toggle, Radio,
   DateInput, TimeInput,
+  Slider,
+  UploadArea, UploadItem,
 
   // Display
   Avatar, AvatarStack,
   Tag, StatusTag, Chip,
   TabGroup, Tab, Card, Badge,
+  LinearProgress, CircleProgress,
+  List, ListItem,
 
   // Data
   Table, TableHead, TableBody,
@@ -351,6 +355,10 @@ These components are absent in `4.9.34` — using that version throws `SyntaxErr
 #### 8.15 `data-theme="dark"` requires ≥ 4.9.36
 
 Section-level dark theming via `data-theme="dark"` is available from `4.9.36` onward.
+
+#### 8.16 `Slider`, `LinearProgress`, `CircleProgress`, `UploadArea`, `UploadItem`, `List`, `ListItem` require ≥ 4.9.39
+
+These components are absent in earlier versions — using them on `< 4.9.39` throws `SyntaxError: … does not provide an export named '…'`.
 
 ---
 

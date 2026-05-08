@@ -1,221 +1,145 @@
 import { useState } from "react";
 import { Checkbox, type CheckboxChecked, type CheckboxVariant } from "@/components/checkbox";
+import { ShowcasePage } from "../components/ShowcasePage";
+import { ComponentBlock } from "../components/ComponentBlock";
+import { ComponentPlayground } from "../components/ComponentPlayground";
 
-const stateVariants: {
-  key: string;
-  label: string;
-  checked: CheckboxChecked;
+function CheckboxPreview({
+  variant,
+  disabled,
+  error,
+  indeterminate,
+  description,
+}: {
+  variant: CheckboxVariant;
   disabled: boolean;
-}[] = [
-  { key: "default", label: "Default", checked: false, disabled: false },
-  { key: "check", label: "Checked", checked: true, disabled: false },
-  { key: "indeterminate", label: "Indeterminate", checked: "indeterminate", disabled: false },
-  { key: "default-disabled", label: "Default + Disabled", checked: false, disabled: true },
-  { key: "check-disabled", label: "Checked + Disabled", checked: true, disabled: true },
-  { key: "indeterminate-disabled", label: "Indeterminate + Disabled", checked: "indeterminate", disabled: true },
-];
-
-const errorVariants: {
-  key: string;
-  label: string;
-  checked: CheckboxChecked;
-}[] = [
-  { key: "error-default", label: "Error", checked: false },
-  { key: "error-checked", label: "Error + Checked", checked: true },
-  { key: "error-indeterminate", label: "Error + Indeterminate", checked: "indeterminate" },
-];
-
-const DESCRIPTION = "Lorem ipsum dolor sit amet consectetur.";
-
-function VariantGrid({
-  variant,
-  withDescription,
-}: {
-  variant: CheckboxVariant;
-  withDescription: boolean;
+  error: boolean;
+  indeterminate: boolean;
+  description?: string;
 }) {
+  const [checked, setChecked] = useState<CheckboxChecked>(false);
+  const displayChecked: CheckboxChecked = indeterminate ? "indeterminate" : checked;
   return (
-    <div className="grid grid-cols-6 gap-x-14">
-      {stateVariants.map((s) => (
-        <div key={s.key}>
-          <Checkbox
-            variant={variant}
-            checked={s.checked}
-            disabled={s.disabled}
-            label="Label"
-            description={withDescription ? DESCRIPTION : undefined}
-          />
-        </div>
-      ))}
-    </div>
+    <Checkbox
+      variant={variant}
+      checked={displayChecked}
+      disabled={disabled}
+      error={error}
+      errorMessage="This field is required"
+      label="Accept terms"
+      description={description}
+      onChange={(val) => {
+        if (!indeterminate) setChecked(val as boolean);
+      }}
+    />
   );
 }
 
-function ErrorGrid({
-  variant,
-  withDescription,
-}: {
-  variant: CheckboxVariant;
-  withDescription: boolean;
-}) {
-  return (
-    <div className="grid grid-cols-3 gap-x-14">
-      {errorVariants.map((s) => (
-        <div key={s.key}>
-          <Checkbox
-            variant={variant}
-            checked={s.checked}
-            error
-            errorMessage="This field is required"
-            label="Label"
-            description={withDescription ? DESCRIPTION : undefined}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
+const MULTI_ITEMS = ["Option A", "Option B", "Option C", "Option D"] as const;
 
-const ITEM_OPTIONS = ["Option A", "Option B", "Option C", "Option D"];
-
-function SelectAllGroup({ variant }: { variant: CheckboxVariant }) {
-  const [checked, setChecked] = useState<boolean[]>(ITEM_OPTIONS.map(() => false));
+function MultiCheckboxPreview({ variant }: { variant: CheckboxVariant }) {
+  const [checked, setChecked] = useState<boolean[]>(MULTI_ITEMS.map(() => false));
 
   const allChecked = checked.every(Boolean);
   const someChecked = checked.some(Boolean);
   const parentState: CheckboxChecked = allChecked ? true : someChecked ? "indeterminate" : false;
 
-  function toggleAll(next: boolean) {
-    setChecked(ITEM_OPTIONS.map(() => next));
-  }
+  const toggleAll = () => {
+    setChecked(MULTI_ITEMS.map(() => !allChecked));
+  };
 
-  function toggleOne(index: number, next: boolean) {
-    setChecked((prev) => prev.map((v, i) => (i === index ? next : v)));
-  }
+  const toggleItem = (i: number) => {
+    setChecked((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
+  };
 
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-3 min-w-[200px]">
       <Checkbox
         variant={variant}
-        checked={parentState}
         label="Select all"
-        onChange={(next) => toggleAll(parentState === "indeterminate" ? true : next)}
+        checked={parentState}
+        onChange={toggleAll}
       />
-      <div className={variant === "button" ? "flex flex-wrap gap-2 pl-6" : "flex flex-col gap-1 pl-6"}>
-        {ITEM_OPTIONS.map((opt, i) => (
-          <Checkbox
-            key={opt}
-            variant={variant}
-            checked={checked[i]}
-            label={opt}
-            onChange={(next) => toggleOne(i, next)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function IndividualGroup({ variant }: { variant: CheckboxVariant }) {
-  const [states, setStates] = useState<boolean[]>(ITEM_OPTIONS.map(() => false));
-
-  return (
-    <div className={variant === "button" ? "flex flex-wrap gap-2" : "flex flex-col gap-2"}>
-      {ITEM_OPTIONS.map((opt, i) => (
+      <div className="border-t border-border" />
+      {MULTI_ITEMS.map((item, i) => (
         <Checkbox
-          key={opt}
+          key={item}
           variant={variant}
-          checked={states[i]}
-          label={opt}
-          description={variant === "text" ? DESCRIPTION : undefined}
-          onChange={(next) => setStates((prev) => prev.map((v, j) => (j === i ? next : v)))}
+          label={item}
+          checked={checked[i]}
+          onChange={() => toggleItem(i)}
         />
       ))}
     </div>
   );
 }
 
-function ErrorInteractiveCard() {
-  const [checked, setChecked] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const hasError = submitted && !checked;
-
-  return (
-    <div className="space-y-3 rounded-lg border border-border p-4">
-      <p className="text-xs text-subtle-text">Error — form validation pattern</p>
-      <Checkbox
-        checked={checked}
-        error={hasError}
-        errorMessage="You must accept the terms"
-        label="I accept the terms and conditions"
-        onChange={(next) => setChecked(next)}
-      />
-      <button
-        type="button"
-        onClick={() => setSubmitted(true)}
-        className="mt-2 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"
-      >
-        Submit
-      </button>
-    </div>
-  );
-}
-
 export function CheckboxShowcase() {
   return (
-    <div className="bg-background min-h-full space-y-14">
-      <div className="space-y-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="min-w-[1100px] space-y-10">
-          <VariantGrid variant="text" withDescription={false} />
-          <VariantGrid variant="text" withDescription />
+    <ShowcasePage
+      name="Checkbox"
+      description="Text and button variants with indeterminate state and error handling."
+    >
+      <ComponentPlayground
+        
+        controls={[
+          {
+            type: "select",
+            key: "variant",
+            label: "Variant",
+            options: [{ label: "text", value: "text" }, { label: "button", value: "button" }],
+            defaultValue: "text",
+          },
+          { type: "boolean", key: "indeterminate", label: "Indeterminate", defaultValue: false },
+          { type: "boolean", key: "disabled", label: "Disabled", defaultValue: false },
+          { type: "boolean", key: "error", label: "Error", defaultValue: false },
+          { type: "boolean", key: "hasDesc", label: "Show description", defaultValue: false },
+        ]}
+        render={({ variant, indeterminate, disabled, error, hasDesc }) => {
+          const v = variant as CheckboxVariant;
+          const ind = indeterminate as boolean;
+          const d = disabled as boolean;
+          const e = error as boolean;
+          const description = (hasDesc as boolean) ? "Lorem ipsum dolor sit amet consectetur." : undefined;
+          const descPart = description ? `\n  description="${description}"` : "";
+          const disabledPart = d ? "\n  disabled" : "";
+          const errorPart = e ? '\n  error\n  errorMessage="This field is required"' : "";
+          const checkedStr = ind ? `"indeterminate"` : `{checked}`;
+          return {
+            preview: (
+              <CheckboxPreview
+                variant={v}
+                disabled={d}
+                error={e}
+                indeterminate={ind}
+                description={description}
+              />
+            ),
+            code: `const [checked, setChecked] = useState(false)\n\n<Checkbox\n  variant="${v}"\n  checked={${checkedStr}}\n  label="Accept terms"${disabledPart}${errorPart}${descPart}\n  onChange={setChecked}\n/>`,
+          };
+        }}
+      />
+
+      <ComponentBlock
+        title="Multi-select group"
+        codeTabs={[
+          {
+            label: "example",
+            code: `const items = ["Option A", "Option B", "Option C", "Option D"]\nconst [checked, setChecked] = useState(items.map(() => false))\n\nconst allChecked = checked.every(Boolean)\nconst someChecked = checked.some(Boolean)\nconst parentState = allChecked ? true : someChecked ? "indeterminate" : false\n\n<Checkbox\n  label="Select all"\n  checked={parentState}\n  onChange={() => setChecked(items.map(() => !allChecked))}\n/>\n{items.map((item, i) => (\n  <Checkbox\n    key={item}\n    label={item}\n    checked={checked[i]}\n    onChange={() => setChecked(prev => prev.map((v, idx) => idx === i ? !v : v))}\n  />\n))}`,
+          },
+        ]}
+      >
+        <div className="flex gap-10">
+          <div>
+            <p className="text-[11px] text-caption uppercase tracking-wider mb-3">text</p>
+            <MultiCheckboxPreview variant="text" />
+          </div>
+          <div>
+            <p className="text-[11px] text-caption uppercase tracking-wider mb-3">button</p>
+            <MultiCheckboxPreview variant="button" />
+          </div>
         </div>
-        <div className="min-w-[1100px] space-y-10">
-          <VariantGrid variant="button" withDescription={false} />
-          <VariantGrid variant="button" withDescription />
-        </div>
-      </div>
-
-      <section className="space-y-8">
-        <h2 className="text-sm font-semibold text-foreground">Error state</h2>
-        <div className="space-y-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <div className="min-w-[600px] space-y-10">
-            <ErrorGrid variant="text" withDescription={false} />
-            <ErrorGrid variant="text" withDescription />
-          </div>
-          <div className="min-w-[600px] space-y-10">
-            <ErrorGrid variant="button" withDescription={false} />
-            <ErrorGrid variant="button" withDescription />
-          </div>
-        </div>
-      </section>
-
-      <section className="space-y-8">
-        <h2 className="text-sm font-semibold text-foreground">Interactive</h2>
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div className="space-y-3 rounded-lg border border-border p-4">
-            <p className="text-xs text-subtle-text">Text — select all (indeterminate)</p>
-            <SelectAllGroup variant="text" />
-          </div>
-
-          <div className="space-y-3 rounded-lg border border-border p-4">
-            <p className="text-xs text-subtle-text">Button — select all (indeterminate)</p>
-            <SelectAllGroup variant="button" />
-          </div>
-
-          <div className="space-y-3 rounded-lg border border-border p-4">
-            <p className="text-xs text-subtle-text">Text — individual controlled</p>
-            <IndividualGroup variant="text" />
-          </div>
-
-          <div className="space-y-3 rounded-lg border border-border p-4">
-            <p className="text-xs text-subtle-text">Button — individual controlled</p>
-            <IndividualGroup variant="button" />
-          </div>
-
-          <ErrorInteractiveCard />
-        </div>
-      </section>
-    </div>
+      </ComponentBlock>
+    </ShowcasePage>
   );
 }
